@@ -4,7 +4,8 @@
   "Packages": [
     "github.com/rafecolton/builder/builder",
     "github.com/onsi/gomega",
-    "github.com/onsi/ginkgo/ginkgo"
+    "github.com/onsi/ginkgo/ginkgo",
+    "github.com/kr/fs"
   ],
   "Deps": [
     {
