@@ -59,6 +59,7 @@ godep:
 	go get -x github.com/tools/godep
 
 test: build fmtpolice
+	@echo "----------"
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
 
 fmtpolice:

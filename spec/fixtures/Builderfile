@@ -3,7 +3,7 @@ build_opts = "--rm --no-cache"
 
 [containers]
 
-[containers.Global]
+[containers.global]
 included = []
 excluded = [
   "/spec[s]?/",

@@ -6,7 +6,7 @@ import (
 )
 
 import (
-	color "github.com/wsxiaoys/terminal/color"
+	"github.com/wsxiaoys/terminal/color"
 )
 
 var (
