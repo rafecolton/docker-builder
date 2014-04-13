@@ -45,6 +45,8 @@ build: linkthis deps
 
 deps:
 	go get github.com/tools/godep
+	go get github.com/onsi/ginkgo
+	go get github.com/onsi/gomega
 
 savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
