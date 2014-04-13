@@ -51,8 +51,9 @@ build: linkthis deps
 deps:
 	#go get -x github.com/tools/godep
 	#godep restore
+	go get -x github.com/onsi/ginkgo
+	go get -x github.com/onsi/gomega
 	go install -x github.com/onsi/ginkgo
-	go install -x github.com/onsi/gomega
 	go get -x github.com/wsxiaoys/terminal/color
 	go get -x github.com/jessevdk/go-flags
 
