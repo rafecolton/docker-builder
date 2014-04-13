@@ -2,7 +2,11 @@ SHELL := /bin/bash
 DOCKER ?= docker
 B := github.com/rafecolton/builder
 TEST_LIBS := $(B)/spec
-TARGETS := $(B)/builder $(B)/linter $(B)/version
+TARGETS := \
+  $(B)/builder \
+  $(B)/linter \
+  $(B)/log \
+  $(B)/version
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
 BRANCH_VAR := $(B)/version.BranchString
@@ -47,12 +51,13 @@ deps:
 	go get github.com/tools/godep
 	go get github.com/onsi/ginkgo
 	go get github.com/onsi/gomega
+	go get github.com/wsxiaoys/terminal/color
 
 savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
 
 test: deps fmtpolice
-	ginkgo -cover -nodes=10 -noisyPendings -r -race -v spec
+	ginkgo -nodes=10 -noisyPendings -r -race -v spec
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done

@@ -1,9 +1,13 @@
 package version
 
 import (
-	"fmt"
 	"os"
 	"path"
+)
+
+import (
+	. "github.com/rafecolton/builder/config"
+	. "github.com/wsxiaoys/terminal/color"
 )
 
 var (
@@ -20,14 +24,16 @@ type VersionTrick struct {
 	revString         string
 	versionString     string
 	programnameString string
+	runtime           Runtime
 }
 
-func Init() *VersionTrick {
+func Init(runtime *Runtime) *VersionTrick {
 	return &VersionTrick{
 		branchString:      BranchString,
 		revString:         RevString,
 		versionString:     VersionString,
 		programnameString: path.Base(os.Args[0]),
+		runtime:           *runtime,
 	}
 }
 
@@ -35,7 +41,7 @@ func (me *VersionTrick) VersionAndExit() {
 	if me.versionString == "" {
 		me.versionString = "<unknown>"
 	}
-	fmt.Println(me.versionString)
+	me.runtime.Println(Sprint("@{!w}" + me.versionString))
 	os.Exit(0)
 }
 
@@ -43,7 +49,7 @@ func (me *VersionTrick) VersionFullAndExit() {
 	if me.versionString == "" {
 		me.versionString = "<unknown>"
 	}
-	fmt.Printf("%s, %s\n", me.programnameString, me.versionString)
+	me.runtime.Println(Sprintf("@{!w}%s, %s", me.programnameString, me.versionString))
 	os.Exit(0)
 }
 
@@ -51,7 +57,7 @@ func (me *VersionTrick) RevAndExit() {
 	if me.revString == "" {
 		me.revString = "<unknown>"
 	}
-	fmt.Println(me.revString)
+	me.runtime.Println(Sprint("@{!w}" + me.revString))
 	os.Exit(0)
 }
 
@@ -59,6 +65,6 @@ func (me *VersionTrick) BranchAndExit() {
 	if me.branchString == "" {
 		me.branchString = "<unknown>"
 	}
-	fmt.Println(me.branchString)
+	me.runtime.Println(Sprint("@{!w}" + me.branchString))
 	os.Exit(0)
 }
