@@ -3,6 +3,8 @@ builder
 
 builds a docker image from an arbitrary file
 
+# The rest of this doc is a WIP
+
 ## Goals
 
 Ideas:
