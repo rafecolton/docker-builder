@@ -49,12 +49,12 @@ build: linkthis deps
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 deps:
-	go get -x github.com/tools/godep
+	#go get -x github.com/tools/godep
 	#godep restore
-	godep go install -x github.com/onsi/ginkgo
-	godep go install -x github.com/onsi/gomega
-	godep go install -x github.com/wsxiaoys/terminal/color
-	godep go install -x github.com/jessevdk/go-flags
+	go install -x github.com/onsi/ginkgo
+	go install -x github.com/onsi/gomega
+	go get -x github.com/wsxiaoys/terminal/color
+	go get -x github.com/jessevdk/go-flags
 
 savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
