@@ -36,6 +36,7 @@ clean:
 
 linkthis:
 	which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
+	if [[ -n ${CI} ]] ; then gvm linkthis github.com/rafecolton/builder ; fi
 
 quick: build
 	@echo "----------"
