@@ -57,7 +57,7 @@ savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
 
 test: deps fmtpolice
-	ginkgo -nodes=10 -noisyPendings -r -race -v spec
+	ginkgo -nodes=10 -noisyPendings -r -race -v test
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done

@@ -25,6 +25,10 @@ type VersionTrick struct {
 	versionString     string
 	programnameString string
 	runtime           Runtime
+	BranchString      string
+	RevString         string
+	ProgramnameString string
+	VersionString     string
 }
 
 func Init(runtime *Runtime) *VersionTrick {
