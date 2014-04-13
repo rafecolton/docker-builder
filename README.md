@@ -3,6 +3,8 @@ builder
 
 builds a docker image from an arbitrary file
 
+[![Build Status](https://travis-ci.org/rafecolton/builder.svg?branch=master)](https://travis-ci.org/rafecolton/builder)
+
 # The rest of this doc is a WIP
 
 ## Goals
