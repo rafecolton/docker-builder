@@ -35,7 +35,7 @@ clean:
 	rm -rf $${GOPATH%%:*}/bin/builder
 
 linkthis:
-	@which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
+	which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
 
 quick: build
 	@echo "----------"
