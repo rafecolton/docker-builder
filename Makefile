@@ -24,7 +24,7 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 
 #GO_TAG_ARGS ?= -tags full
 
-GOPATH := "${PWD}/$(godep path)"
+GOPATH := $(PWD)/Godeps/_workspace
 
 help:
 	@echo "Usage: TODO"
@@ -36,10 +36,6 @@ clean:
 	rm -rf $${GOPATH%%:*}/src/github.com/rafecolton/builder
 	rm -rf $${GOPATH%%:*}/bin/builder
 
-linkthis:
-	which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
-	#if [ -n ${CI} ] ; then gvm linkthis github.com/rafecolton/builder ; fi
-
 quick: build
 	@echo "----------"
 	@builder --version
@@ -50,18 +46,22 @@ quick: build
 build: linkthis deps
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
-godep:
-	go get -x github.com/tools/godep
+linkthis:
+	which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
 
 deps: godep
 	godep restore
+	#go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
+
+godep:
+	go get -x github.com/tools/godep
 
 savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
 
-test: deps fmtpolice
+test: build fmtpolice
 	$${GOPATH%%:*}/bin/ginkgo -nodes=10 -noisyPendings -r -race .
 
 fmtpolice:
