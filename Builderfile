@@ -1,0 +1,38 @@
+[docker]
+build_opts = "--rm --no-cache"
+
+[containers]
+
+[containers.Global]
+included = []
+excluded = [
+  "/spec[s]?/",
+  "/test[s]?/"
+]
+registry = "quay.io/modcloth"
+project = "style-gallery"
+tags = [
+  "git+(describe --always)",
+  "git+(rev-parse -q --abbrev-ref HEAD)",
+  "git+(rev-parse -q HEAD)"
+]
+
+
+[containers.base]
+Dockerfile = "Dockerfile.base"
+included = []
+excluded = []
+tags = [
+  "base"
+]
+
+[containers.app]
+Dockerfile = "Dockerfile"
+included = []
+excluded = []
+
+# behavior
+# all are included ; if included is specified, then only those files are
+# included then, anything in exclude is removed (i.e. this is final!)
+
+# vim:ft=toml
