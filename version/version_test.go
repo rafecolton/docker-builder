@@ -1,4 +1,4 @@
-package builder
+package version
 
 import (
 	. "github.com/onsi/ginkgo"
@@ -7,8 +7,6 @@ import (
 	"path"
 	"testing"
 )
-
-import . "github.com/rafecolton/builder/version"
 
 func TestBuilder(t *testing.T) {
 	RegisterFailHandler(Fail)
