@@ -1,33 +1,31 @@
 package main
 
 import (
-	. "github.com/rafecolton/builder/config"
-	linter "github.com/rafecolton/builder/linter"
+	config "github.com/rafecolton/builder/config"
+	lint "github.com/rafecolton/builder/linter"
 	versiontrick "github.com/rafecolton/builder/version"
 	//. "github.com/wsxiaoys/terminal/color"
 )
 
-var (
-	opts Options
-)
-
 func main() {
 
-	runtime := Configure()
+	runtime := config.New()
 
 	// check for version/rev/branch options
 	version := versiontrick.Init(runtime)
 	infoAndExitCheck(runtime.Options, version)
 
-	_ = linter.Lint(opts.Lintfile)
+	linter := lint.New(runtime)
+	_ = linter.Lint()
+
+	//runtime.Println(data)
 	//Log.Println(data)
 
 	// parse file catch error and suggest -l / --lint
 	// run the build with parsed data
-
 }
 
-func infoAndExitCheck(opts Options, version *versiontrick.VersionTrick) {
+func infoAndExitCheck(opts config.Options, version *versiontrick.VersionTrick) {
 	if opts.Version {
 		version.VersionAndExit()
 	}

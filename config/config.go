@@ -14,7 +14,7 @@ var (
 	opts Options
 )
 
-func Configure() *Runtime {
+func New() *Runtime {
 
 	parser := flags.NewParser(&opts, flags.Default)
 	if _, err := parser.Parse(); err != nil {

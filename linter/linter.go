@@ -1,10 +1,21 @@
 package linter
 
 import (
-//"fmt"
+	//"fmt"
+	"github.com/rafecolton/builder/config"
 )
 
+type Linter struct {
+	*config.Runtime
+}
+
 // like init
-func Lint(filename string) string {
-	return "parsing + \"" + filename + "\""
+func New(runtime *config.Runtime) *Linter {
+	return &Linter{
+		runtime,
+	}
+}
+
+func (me *Linter) Lint() string {
+	return "parsing \"" + me.Options.Lintfile + "\""
 }
