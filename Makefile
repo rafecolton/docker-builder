@@ -24,8 +24,6 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 
 #GO_TAG_ARGS ?= -tags full
 
-GOPATH := "${PWD}:$(godep path)"
-
 help:
 	@echo "Usage: TODO"
 
@@ -53,7 +51,7 @@ build: linkthis deps
 deps:
 	go get -x github.com/tools/godep
 	#godep restore
-	godep go get -x github.com/onsi/ginkgo
+	godep go install -x github.com/onsi/ginkgo
 	godep go install -x github.com/onsi/gomega
 	godep go install -x github.com/wsxiaoys/terminal/color
 	godep go install -x github.com/jessevdk/go-flags
@@ -62,7 +60,7 @@ savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
 
 test: deps fmtpolice
-	$${GOPATH%%:*}/bin/ginkgo -nodes=10 -noisyPendings -r -race -v .
+	$${GOPATH%%:*}/bin/ginkgo -nodes=10 -noisyPendings -r -race .
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
