@@ -18,14 +18,11 @@ GOBUILD_VERSION_ARGS := -ldflags "\
   -X $(VERSION_VAR) $(REPO_VERSION) \
   -X $(BRANCH_VAR) $(REPO_BRANCH)"
 
-#SRC_DIR := src/github.com/rafecolton
-
-#BUILD_DIR := $(SRC_DIR)/builder
-
-#GO_TAG_ARGS ?= -tags full
-
 GOPATH := $(PWD)/Godeps/_workspace
 GOBIN := $(GOPATH)/bin
+
+export GOPATH
+export GOBIN
 
 help:
 	@echo "Usage: TODO"
@@ -52,7 +49,6 @@ linkthis:
 
 deps: godep
 	$(GOBIN)/godep restore
-	#go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
 
@@ -60,11 +56,10 @@ godep:
 	go get -x github.com/tools/godep
 
 test: build fmtpolice
-	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race .
+	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
-	#fail=0 ; for f in $(shell git ls-files '*.go'); do v="$$(golint $$f)" ; if [ ! -z "$$v" ] ; then echo "$$v" ; fail=1 ; fi ; done ; [ $$fail = 0 ]
 
 container:
 	#TODO: docker build

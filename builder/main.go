@@ -1,9 +1,10 @@
 package main
 
 import (
+	"fmt"
 	config "github.com/rafecolton/builder/config"
-	lint "github.com/rafecolton/builder/linter"
-	versiontrick "github.com/rafecolton/builder/version"
+	//lint "github.com/rafecolton/builder/linter"
+	"github.com/rafecolton/builder/version"
 	//. "github.com/wsxiaoys/terminal/color"
 )
 
@@ -12,11 +13,11 @@ func main() {
 	runtime := config.New()
 
 	// check for version/rev/branch options
-	version := versiontrick.Init(runtime)
-	infoAndExitCheck(runtime.Options, version)
+	ver := version.New()
+	infoCheck(runtime.Options, ver)
 
-	linter := lint.New(runtime)
-	_ = linter.Lint()
+	//lint := linter.New(runtime)
+	//_ = linter.Lint()
 
 	//runtime.Println(data)
 	//Log.Println(data)
@@ -25,20 +26,20 @@ func main() {
 	// run the build with parsed data
 }
 
-func infoAndExitCheck(opts config.Options, version *versiontrick.VersionTrick) {
+func infoCheck(opts config.Options, ver *version.Version) {
 	if opts.Version {
-		version.VersionAndExit()
+		fmt.Println(ver.Version)
 	}
 
 	if opts.VersionFull {
-		version.VersionFullAndExit()
+		fmt.Println(ver.VersionFull)
 	}
 
 	if opts.Branch {
-		version.BranchAndExit()
+		fmt.Println(ver.Branch)
 	}
 
 	if opts.Rev {
-		version.RevAndExit()
+		fmt.Println(ver.Rev)
 	}
 }
