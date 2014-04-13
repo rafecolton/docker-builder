@@ -24,7 +24,7 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 
 #GO_TAG_ARGS ?= -tags full
 
-GOPATH := "$(godep path)"
+GOPATH := "${PWD}:$(godep path)"
 
 help:
 	@echo "Usage: TODO"
