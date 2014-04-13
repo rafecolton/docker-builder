@@ -25,6 +25,7 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 #GO_TAG_ARGS ?= -tags full
 
 GOPATH := $(PWD)/Godeps/_workspace
+GOBIN := $(GOPATH)/bin
 
 help:
 	@echo "Usage: TODO"
@@ -50,7 +51,7 @@ linkthis:
 	which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
 
 deps: godep
-	godep restore
+	$(GOBIN)/godep restore
 	#go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
@@ -58,11 +59,8 @@ deps: godep
 godep:
 	go get -x github.com/tools/godep
 
-savedeps:
-	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
-
 test: build fmtpolice
-	$${GOPATH%%:*}/bin/ginkgo -nodes=10 -noisyPendings -r -race .
+	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race .
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
