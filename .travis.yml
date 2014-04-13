@@ -3,6 +3,9 @@ language: go
 go:
   - 1.2
 
+before_install:
+  - sudo apt-get install -qq -y --no-install-recommends tree
+
 install:
   - make build
 
