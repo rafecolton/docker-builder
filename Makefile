@@ -24,6 +24,8 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 
 #GO_TAG_ARGS ?= -tags full
 
+GOPATH := "${PWD}/Godeps/_workspace"
+
 help:
 	@echo "Usage: TODO"
 
@@ -49,13 +51,11 @@ build: linkthis deps
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 deps:
-	#go get -x github.com/tools/godep
-	#godep restore
-	go get -x github.com/onsi/ginkgo
+	godep restore
+	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
-	go install -x github.com/onsi/ginkgo
-	go get -x github.com/wsxiaoys/terminal/color
-	go get -x github.com/jessevdk/go-flags
+	#go get -x github.com/wsxiaoys/terminal/color
+	#go get -x github.com/jessevdk/go-flags
 
 savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
