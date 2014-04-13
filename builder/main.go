@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	config "github.com/rafecolton/builder/config"
-	//lint "github.com/rafecolton/builder/linter"
 	"github.com/rafecolton/builder/version"
-	//. "github.com/wsxiaoys/terminal/color"
 )
+
+var runtime config.Runtime
+var ver version.Version
 
 func main() {
 
@@ -28,18 +28,18 @@ func main() {
 
 func infoCheck(opts config.Options, ver *version.Version) {
 	if opts.Version {
-		fmt.Println(ver.Version)
+		runtime.Println(ver.Version)
 	}
 
 	if opts.VersionFull {
-		fmt.Println(ver.VersionFull)
+		runtime.Println(ver.VersionFull)
 	}
 
 	if opts.Branch {
-		fmt.Println(ver.Branch)
+		runtime.Println(ver.Branch)
 	}
 
 	if opts.Rev {
-		fmt.Println(ver.Rev)
+		runtime.Println(ver.Rev)
 	}
 }
