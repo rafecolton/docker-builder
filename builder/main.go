@@ -2,21 +2,22 @@ package main
 
 import (
 	config "github.com/rafecolton/builder/config"
-	lint "github.com/rafecolton/builder/linter"
-	versiontrick "github.com/rafecolton/builder/version"
-	//. "github.com/wsxiaoys/terminal/color"
+	"github.com/rafecolton/builder/version"
 )
+
+var runtime config.Runtime
+var ver version.Version
 
 func main() {
 
 	runtime := config.New()
 
 	// check for version/rev/branch options
-	version := versiontrick.Init(runtime)
-	infoAndExitCheck(runtime.Options, version)
+	ver := version.New()
+	infoCheck(runtime.Options, ver)
 
-	linter := lint.New(runtime)
-	_ = linter.Lint()
+	//lint := linter.New(runtime)
+	//_ = linter.Lint()
 
 	//runtime.Println(data)
 	//Log.Println(data)
@@ -25,20 +26,20 @@ func main() {
 	// run the build with parsed data
 }
 
-func infoAndExitCheck(opts config.Options, version *versiontrick.VersionTrick) {
+func infoCheck(opts config.Options, ver *version.Version) {
 	if opts.Version {
-		version.VersionAndExit()
+		runtime.Println(ver.Version)
 	}
 
 	if opts.VersionFull {
-		version.VersionFullAndExit()
+		runtime.Println(ver.VersionFull)
 	}
 
 	if opts.Branch {
-		version.BranchAndExit()
+		runtime.Println(ver.Branch)
 	}
 
 	if opts.Rev {
-		version.RevAndExit()
+		runtime.Println(ver.Rev)
 	}
 }

@@ -3,8 +3,7 @@ package version
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"os"
-	"path"
+	color "github.com/wsxiaoys/terminal/color"
 	"testing"
 )
 
@@ -15,23 +14,30 @@ func TestBuilder(t *testing.T) {
 
 var _ = Describe("Version", func() {
 	var (
-		subject *VersionTrick
+		subject *Version
 	)
 
 	BeforeEach(func() {
-		subject = &VersionTrick{
-			BranchString:      "bogus-branch",
-			RevString:         "",
-			ProgramnameString: path.Base(os.Args[0]),
-			VersionString:     "builder 12345",
-		}
+		BranchString = "bogus-branch"
+		RevString = "1234567890"
+		VersionString = "12345-test"
+
+		subject = New()
 	})
 
-	It("succeeds", func() {
-		Expect("foo").To(Equal("foo"))
+	It("prints the correct branch", func() {
+		Expect(subject.Branch).To(Equal(color.Sprint("@{!w}bogus-branch")))
 	})
 
-	XIt("fails", func() {
-		Expect("foo").To(Equal("bar"))
+	It("prints the correct rev", func() {
+		Expect(subject.Rev).To(Equal(color.Sprint("@{!w}1234567890")))
+	})
+
+	It("prints the correct version", func() {
+		Expect(subject.Version).To(Equal(color.Sprint("@{!w}12345-test")))
+	})
+
+	It("prints the correct full version", func() {
+		Expect(subject.VersionFull).To(Equal(color.Sprintf("@{!w}%s %s", "version.test", subject.Version)))
 	})
 })

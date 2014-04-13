@@ -42,8 +42,8 @@ type Options struct {
 	// Inform and Exit
 	Version     bool `short:"v" description:"Print version and exit"`
 	VersionFull bool `long:"version" description:"Print long version and exit"`
-	Branch      bool `short:"b" long:"branch" description:"Print branch and exit"`
-	Rev         bool `short:"r" long:"rev" description:"Print revision and exit"`
+	Branch      bool `long:"branch" description:"Print branch and exit"`
+	Rev         bool `long:"rev" description:"Print revision and exit"`
 
 	// Runtime Options
 	Quiet bool `short:"q" long:"quiet" description:"Produce no output, only exit codes" default:"false"`

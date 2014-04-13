@@ -6,69 +6,47 @@ import (
 )
 
 import (
-	. "github.com/rafecolton/builder/config"
-	. "github.com/wsxiaoys/terminal/color"
+	color "github.com/wsxiaoys/terminal/color"
 )
 
 var (
 	BranchString  string
 	VersionString string
 	RevString     string
-	branchFlag    = false
-	versionFlag   = false
-	revFlag       = false
 )
 
-type VersionTrick struct {
-	branchString      string
-	revString         string
-	versionString     string
-	programnameString string
-	runtime           Runtime
-	BranchString      string
-	RevString         string
-	ProgramnameString string
-	VersionString     string
+type Version struct {
+	Branch      string
+	Rev         string
+	Programname string
+	Version     string
+	VersionFull string
 }
 
-func Init(runtime *Runtime) *VersionTrick {
-	return &VersionTrick{
-		branchString:      BranchString,
-		revString:         RevString,
-		versionString:     VersionString,
-		programnameString: path.Base(os.Args[0]),
-		runtime:           *runtime,
+func New() *Version {
+	ver := &Version{
+		Programname: path.Base(os.Args[0]),
 	}
-}
 
-func (me *VersionTrick) VersionAndExit() {
-	if me.versionString == "" {
-		me.versionString = "<unknown>"
+	if BranchString == "" {
+		ver.Branch = "<unknown>"
+	} else {
+		ver.Branch = color.Sprintf("@{!w}%s", BranchString)
 	}
-	me.runtime.Println(Sprint("@{!w}" + me.versionString))
-	os.Exit(0)
-}
 
-func (me *VersionTrick) VersionFullAndExit() {
-	if me.versionString == "" {
-		me.versionString = "<unknown>"
+	if RevString == "" {
+		ver.Rev = "<unknown>"
+	} else {
+		ver.Rev = color.Sprintf("@{!w}%s", RevString)
 	}
-	me.runtime.Println(Sprintf("@{!w}%s, %s", me.programnameString, me.versionString))
-	os.Exit(0)
-}
 
-func (me *VersionTrick) RevAndExit() {
-	if me.revString == "" {
-		me.revString = "<unknown>"
+	if VersionString == "" {
+		ver.Version = ""
+		ver.VersionFull = ""
+	} else {
+		ver.Version = color.Sprintf("@{!w}%s", VersionString)
+		ver.VersionFull = color.Sprintf("@{!w}%s %s", ver.Programname, ver.Version)
 	}
-	me.runtime.Println(Sprint("@{!w}" + me.revString))
-	os.Exit(0)
-}
 
-func (me *VersionTrick) BranchAndExit() {
-	if me.branchString == "" {
-		me.branchString = "<unknown>"
-	}
-	me.runtime.Println(Sprint("@{!w}" + me.branchString))
-	os.Exit(0)
+	return ver
 }
