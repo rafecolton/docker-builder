@@ -36,7 +36,7 @@ clean:
 
 linkthis:
 	which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
-	if [[ -n ${CI} ]] ; then gvm linkthis github.com/rafecolton/builder ; fi
+	#if [ -n ${CI} ] ; then gvm linkthis github.com/rafecolton/builder ; fi
 
 quick: build
 	@echo "----------"
@@ -49,12 +49,12 @@ build: linkthis deps
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 deps:
+	godep restore
+	go get -x github.com/tools/godep
 	go get -x github.com/onsi/ginkgo
 	go get -x github.com/onsi/gomega
 	go get -x github.com/wsxiaoys/terminal/color
 	go get -x github.com/jessevdk/go-flags
-	@tree $${GOPATH%%:*}
-	#go get github.com/tools/godep
 
 savedeps:
 	godep save -copy=false $(TEST_LIBRARIES) $(TARGETS)
