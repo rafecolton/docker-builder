@@ -67,6 +67,7 @@ linkthis:
 
 deps: godep
 	$(GOBIN)/godep restore
+	go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
 
@@ -79,6 +80,7 @@ test: build fmtpolice
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
+	fail=0 ; for f in $(shell git ls-files '*.go'); do v="$$(golint $$f)" ; if [ ! -z "$$v" ] ; then echo "$$v" ; fail=1 ; fi ; done ; [ $$fail -eq 0 ]
 
 container:
 	#TODO: docker build

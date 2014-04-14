@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+/*
+Log is the interface for all general logging methods.
+*/
 type Log interface {
 	Print(v ...interface{})
 	Printf(format string, v ...interface{})
@@ -16,10 +19,18 @@ type Log interface {
 	Panicln(v ...interface{})
 }
 
+/*
+BuilderLogger is the implementation of the Log interface for this project.
+*/
 type BuilderLogger struct {
 	Log Log
 }
 
+/*
+Initialize returns a BuilderLogger that either contains a null logger (that
+prints nothing) or a standard logger (from the log package) with
+project-specific output.
+*/
 func Initialize(quiet bool) *BuilderLogger {
 	l := &BuilderLogger{}
 

@@ -17,9 +17,9 @@ var par *parser.Parser
 
 func main() {
 
-	runtime = config.New()
-	ver = version.New()
-	par = parser.New()
+	runtime = config.NewRuntime()
+	ver = version.NewVersion()
+	par = parser.NewParser()
 	opts := runtime.Options
 
 	// if user requests version/branch/rev

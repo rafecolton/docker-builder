@@ -15,13 +15,31 @@ var (
 	opts   Options
 )
 
+/*
+Usage is like running the builder with -h/--help - it simply prints the usage
+message to stderr.
+*/
 func Usage() {
 	parser.WriteHelp(os.Stderr)
 
 }
 
-func New() *Runtime {
+/*
+Runtime is a struct of convenience, used for keeping track of our conf options
+(i.e. passed on the command line or specified otherwise) as well as other
+useful, global-ish things.
+*/
+type Runtime struct {
+	Quiet bool
+	builderlogger.Log
+	Options
+}
 
+/*
+NewRuntime returns a new Runtime struct instance that contains all of the
+global-ish things specific to this invokation of builder.
+*/
+func NewRuntime() *Runtime {
 	parser = flags.NewParser(&opts, flags.Default)
 	if _, err := parser.Parse(); err != nil {
 		arg1 := os.Args[1]
@@ -35,15 +53,19 @@ func New() *Runtime {
 
 	logger := builderlogger.Initialize(opts.Quiet)
 
-	me := &Runtime{
+	runtime := &Runtime{
 		Quiet:   opts.Quiet,
 		Options: opts,
 		Log:     logger.Log,
 	}
 
-	return me
+	return runtime
 }
 
+/*
+Options are our command line options, set using the
+https://github.com/jessevdk/go-flags library.
+*/
 type Options struct {
 	// Inform and Exit
 	Version     bool `short:"v" description:"Print version and exit"`
@@ -59,20 +81,26 @@ type Options struct {
 	Builderfile string `short:"f" long:"builderfile" description:"The configuration file for Builder"`
 }
 
-type Runtime struct {
-	Quiet bool
-	builderlogger.Log
-	Options
+/*
+Print passes through calls to Print to logger owned by the Runtime object.
+Used primarily as a convenience.
+*/
+func (config *Runtime) Print(v ...interface{}) {
+	config.Log.Print(v...)
 }
 
-func (me *Runtime) Print(v ...interface{}) {
-	me.Log.Print(v...)
+/*
+Println passes through calls to Println to logger owned by the Runtime object.
+Used primarily as a convenience.
+*/
+func (config *Runtime) Println(v ...interface{}) {
+	config.Log.Println(v...)
 }
 
-func (me *Runtime) Println(v ...interface{}) {
-	me.Log.Println(v...)
-}
-
-func (me *Runtime) Printf(format string, v ...interface{}) {
-	me.Log.Printf(format, v...)
+/*
+Printf passes through calls to Printf to logger owned by the Runtime object.
+Used primarily as a convenience.
+*/
+func (config *Runtime) Printf(format string, v ...interface{}) {
+	config.Log.Printf(format, v...)
 }
