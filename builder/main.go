@@ -47,7 +47,5 @@ func main() {
 		os.Exit(0)
 	}
 
-	//runtime.Printf("%+v\n", bf)
-	//runtime.Println(bf.Docker.BuildOpts)
-
+	//TODO: building
 }
