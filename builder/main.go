@@ -4,12 +4,12 @@ import (
 	"github.com/rafecolton/builder/config"
 	"github.com/rafecolton/builder/parser"
 	"github.com/rafecolton/builder/version"
+	"github.com/wsxiaoys/terminal/color"
 )
 
-//import (
-//"os"
-//"path"
-//)
+import (
+	"os"
+)
 
 var runtime *config.Runtime
 var ver *version.Version
@@ -22,26 +22,32 @@ func main() {
 	par = parser.New()
 	opts := runtime.Options
 
+	// if user requests version/branch/rev
 	if opts.Version {
 		runtime.Println(ver.Version)
-	}
-
-	if opts.VersionFull {
+	} else if opts.VersionFull {
 		runtime.Println(ver.VersionFull)
-	}
-
-	if opts.Branch {
+	} else if opts.Branch {
 		runtime.Println(ver.Branch)
-	}
-
-	if opts.Rev {
+	} else if opts.Rev {
 		runtime.Println(ver.Rev)
 	}
 
-	par.Builderfile = "./spec/fixtures/Builderfile"
-	bf, _ := par.Parse()
+	//does linting!
+	if opts.Lintfile != "" {
+		par.Builderfile = opts.Lintfile
 
-	runtime.Printf("%+v\n", bf)
-	runtime.Println(bf.Docker.BuildOpts)
+		_, err := par.Parse()
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, %s is not a valid Builderfile!\n----> %+v", opts.Lintfile, err))
+			os.Exit(5)
+		}
+
+		runtime.Printf(color.Sprintf("@{g!}Hooray@{|}, %s is a valid Builderfile!", opts.Lintfile))
+		os.Exit(0)
+	}
+
+	//runtime.Printf("%+v\n", bf)
+	//runtime.Println(bf.Docker.BuildOpts)
 
 }
