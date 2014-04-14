@@ -44,13 +44,8 @@ func (me *Parser) IsOpenable() bool {
 	defer file.Close()
 
 	if err != nil {
-		//return nil, errors.New(fmt.Sprintf("Unable to open file: %s", me.Builderfile))
 		return false
 	}
-
-	//if _, err = os.Stat(file.Name()); os.IsNotExist(err) {
-	//return false
-	//}
 
 	return true
 }
