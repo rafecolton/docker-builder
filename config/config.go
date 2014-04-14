@@ -55,8 +55,8 @@ type Options struct {
 	Quiet bool `short:"q" long:"quiet" description:"Produce no output, only exit codes" default:"false"`
 
 	// Features
-	Lintfile    string `short:"l" long:"lint" descrpition:"Lint the provided file. Compatible with -q/--quiet"`
-	Builderfile string `short:"f" long:"builderfile" descrpition:"The configuration file for Builder"`
+	Lintfile    string `short:"l" long:"lint" description:"Lint the provided file. Compatible with -q/--quiet"`
+	Builderfile string `short:"f" long:"builderfile" description:"The configuration file for Builder"`
 }
 
 type Runtime struct {

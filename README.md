@@ -32,16 +32,16 @@ builds a docker image from an arbitrary file
 > builder -h/--help
 # Usage:
 #   builder [OPTIONS]
-#
+# 
 # Application Options:
 #   -v                 Print version and exit
 #       --version      Print long version and exit
 #       --branch       Print branch and exit
 #       --rev          Print revision and exit
 #   -q, --quiet        Produce no output, only exit codes (false)
-#   -l, --lint=
-#   -f, --builderfile=
-#
+#   -l, --lint=        Lint the provided file. Compatible with -q/--quiet
+#   -f, --builderfile= The configuration file for Builder
+# 
 # Help Options:
 #   -h, --help         Show this help message
 ```
