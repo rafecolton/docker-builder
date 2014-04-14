@@ -3,6 +3,8 @@ package parser
 import (
 	"errors"
 	"fmt"
+	"github.com/BurntSushi/toml"
+	"github.com/rafecolton/builder/builderfile"
 	"io/ioutil"
 	"os"
 )
@@ -20,6 +22,21 @@ func New() *Parser {
 var (
 	err error
 )
+
+func (me *Parser) Parse() (*builderfile.Builderfile, error) {
+	bf := &builderfile.Builderfile{}
+
+	raw, err := me.ParseRaw()
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := toml.Decode(raw, &bf); err != nil {
+		return nil, err
+	}
+
+	return bf, nil
+}
 
 func (me *Parser) ParseRaw() (string, error) {
 

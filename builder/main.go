@@ -39,4 +39,9 @@ func main() {
 	}
 
 	par.Builderfile = "./spec/fixtures/Builderfile"
+	bf, _ := par.Parse()
+
+	runtime.Printf("%+v\n", bf)
+	runtime.Println(bf.Docker.BuildOpts)
+
 }

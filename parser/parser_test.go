@@ -4,6 +4,7 @@ import (
 	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/rafecolton/builder/builderfile"
 	"os"
 	"testing"
 )
@@ -45,6 +46,49 @@ var _ = Describe("Parse", func() {
 			subject.Builderfile = validFile
 			_, err := subject.ParseRaw()
 			Expect(err).To(BeNil())
+		})
+
+		It("returns a fully parsed Builderfile", func() {
+			subject.Builderfile = validFile
+			actual, _ := subject.Parse()
+
+			expected := &builderfile.Builderfile{
+				Docker: *&builderfile.Docker{
+					BuildOpts: "--rm --no-cache",
+				},
+				Containers: map[string]builderfile.ContainerSection{
+					"global": *&builderfile.ContainerSection{
+						Dockerfile: "",
+						Included:   []string{},
+						Excluded:   []string{"spec", "tmp"},
+						Registry:   "quay.io/modcloth",
+						Project:    "style-gallery",
+						Tags: []string{
+							"git describe --always",
+							"git rev-parse -q --abbrev-ref HEAD",
+							"git rev-parse -q HEAD",
+						},
+					},
+					"base": *&builderfile.ContainerSection{
+						Dockerfile: "Dockerfile.base",
+						Included:   []string{},
+						Excluded:   []string{},
+						Registry:   "",
+						Project:    "",
+						Tags:       []string{"base"},
+					},
+					"app": *&builderfile.ContainerSection{
+						Dockerfile: "Dockerfile",
+						Included:   []string{},
+						Excluded:   []string{},
+						Registry:   "",
+						Project:    "",
+						Tags:       nil,
+					},
+				},
+			}
+
+			Expect(expected).To(Equal(actual))
 		})
 	})
 

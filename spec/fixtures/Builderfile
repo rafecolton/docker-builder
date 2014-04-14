@@ -6,15 +6,15 @@ build_opts = "--rm --no-cache"
 [containers.global]
 included = []
 excluded = [
-  "/spec[s]?/",
-  "/test[s]?/"
+  "spec",
+  "tmp"
 ]
 registry = "quay.io/modcloth"
 project = "style-gallery"
 tags = [
-  "git+(describe --always)",
-  "git+(rev-parse -q --abbrev-ref HEAD)",
-  "git+(rev-parse -q HEAD)"
+  "git describe --always",
+  "git rev-parse -q --abbrev-ref HEAD",
+  "git rev-parse -q HEAD"
 ]
 
 

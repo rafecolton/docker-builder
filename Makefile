@@ -4,6 +4,7 @@ B := github.com/rafecolton/builder
 #TEST_LIBS := $(B)/spec
 TARGETS := \
   $(B)/builder \
+  $(B)/builderfile \
   $(B)/linter \
   $(B)/log \
   $(B)/parser \
