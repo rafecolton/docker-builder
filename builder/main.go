@@ -47,6 +47,18 @@ func main() {
 		os.Exit(0)
 	}
 
+	if opts.Builderfile != "" {
+		par.Builderfile = opts.Builderfile
+		file, err := par.Parse()
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, cannot build %s, it is not a valid Builderfile!\n----> %+v", opts.Builderfile, err))
+			os.Exit(7)
+		}
+
+		bill := NewBuilder()
+
+		_ = bill.Build(file)
+	}
 
 	//otherwise, nothing to do!
 	config.Usage()
