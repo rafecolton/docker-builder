@@ -25,12 +25,16 @@ func main() {
 	// if user requests version/branch/rev
 	if opts.Version {
 		runtime.Println(ver.Version)
+		os.Exit(0)
 	} else if opts.VersionFull {
 		runtime.Println(ver.VersionFull)
+		os.Exit(0)
 	} else if opts.Branch {
 		runtime.Println(ver.Branch)
+		os.Exit(0)
 	} else if opts.Rev {
 		runtime.Println(ver.Rev)
+		os.Exit(0)
 	}
 
 	//does linting!
