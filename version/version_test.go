@@ -1,8 +1,9 @@
-package version
+package version_test
 
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/builder/version"
 	color "github.com/wsxiaoys/terminal/color"
 	"testing"
 )
