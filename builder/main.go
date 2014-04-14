@@ -1,45 +1,51 @@
 package main
 
 import (
-	config "github.com/rafecolton/builder/config"
+	"github.com/rafecolton/builder/config"
+	"github.com/rafecolton/builder/parser"
 	"github.com/rafecolton/builder/version"
+	"github.com/wsxiaoys/terminal/color"
 )
 
-var runtime config.Runtime
-var ver version.Version
+import (
+	"os"
+)
+
+var runtime *config.Runtime
+var ver *version.Version
+var par *parser.Parser
 
 func main() {
 
-	runtime := config.New()
+	runtime = config.New()
+	ver = version.New()
+	par = parser.New()
+	opts := runtime.Options
 
-	// check for version/rev/branch options
-	ver := version.New()
-	infoCheck(runtime.Options, ver)
-
-	//lint := linter.New(runtime)
-	//_ = linter.Lint()
-
-	//runtime.Println(data)
-	//Log.Println(data)
-
-	// parse file catch error and suggest -l / --lint
-	// run the build with parsed data
-}
-
-func infoCheck(opts config.Options, ver *version.Version) {
+	// if user requests version/branch/rev
 	if opts.Version {
 		runtime.Println(ver.Version)
-	}
-
-	if opts.VersionFull {
+	} else if opts.VersionFull {
 		runtime.Println(ver.VersionFull)
-	}
-
-	if opts.Branch {
+	} else if opts.Branch {
 		runtime.Println(ver.Branch)
-	}
-
-	if opts.Rev {
+	} else if opts.Rev {
 		runtime.Println(ver.Rev)
 	}
+
+	//does linting!
+	if opts.Lintfile != "" {
+		par.Builderfile = opts.Lintfile
+
+		_, err := par.Parse()
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, %s is not a valid Builderfile!\n----> %+v", opts.Lintfile, err))
+			os.Exit(5)
+		}
+
+		runtime.Printf(color.Sprintf("@{g!}Hooray@{|}, %s is a valid Builderfile!", opts.Lintfile))
+		os.Exit(0)
+	}
+
+	//TODO: building
 }

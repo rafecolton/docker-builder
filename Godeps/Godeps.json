@@ -2,10 +2,11 @@
   "ImportPath": "_/workspace",
   "GoVersion": "go1.2rc5",
   "Packages": [
-    "github.com/rafecolton/builder/builder",
-    "github.com/onsi/gomega",
+    "github.com/BurntSushi/toml",
+    "github.com/kr/fs",
     "github.com/onsi/ginkgo/ginkgo",
-    "github.com/kr/fs"
+    "github.com/onsi/gomega",
+    "github.com/rafecolton/builder/builder"
   ],
   "Deps": [
     {
@@ -24,6 +25,10 @@
     {
       "ImportPath": "github.com/wsxiaoys/terminal/color",
       "Rev": "a83cd00f6d7acf3554bc24f06d7f9e48a90d0a47"
+    },
+    {
+      "ImportPath": "github.com/BurntSushi/toml",
+      "Rev": "f87ce853111478914f0bcffa34d43a93643e6eda"
     }
   ]
 }

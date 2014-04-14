@@ -1,11 +1,12 @@
 SHELL := /bin/bash
 DOCKER ?= docker
 B := github.com/rafecolton/builder
-TEST_LIBS := $(B)/spec
+#TEST_LIBS := $(B)/spec
 TARGETS := \
   $(B)/builder \
-  $(B)/linter \
+  $(B)/builderfile \
   $(B)/log \
+  $(B)/parser \
   $(B)/version
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
@@ -32,7 +33,8 @@ all: clean build test
 clean:
 	go clean -x -i $(TARGETS)
 	rm -rf $${GOPATH%%:*}/src/github.com/rafecolton/builder
-	rm -rf $${GOPATH%%:*}/bin/builder
+	rm -f $${GOPATH%%:*}/bin/builder
+	rm -rf Godeps/_workspace/*
 
 quick: build
 	@echo "----------"
@@ -42,6 +44,7 @@ quick: build
 	@echo "----------"
 
 build: linkthis deps
+	rm -f $${GOPATH%%:*}/bin/builder
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 linkthis:
@@ -56,6 +59,7 @@ godep:
 	go get -x github.com/tools/godep
 
 test: build fmtpolice
+	@echo "----------"
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
 
 fmtpolice:
