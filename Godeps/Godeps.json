@@ -2,10 +2,11 @@
   "ImportPath": "_/workspace",
   "GoVersion": "go1.2rc5",
   "Packages": [
-    "github.com/rafecolton/builder/builder",
-    "github.com/onsi/gomega",
+    "github.com/BurntSushi/toml",
+    "github.com/kr/fs",
     "github.com/onsi/ginkgo/ginkgo",
-    "github.com/kr/fs"
+    "github.com/onsi/gomega",
+    "github.com/rafecolton/builder/builder"
   ],
   "Deps": [
     {
