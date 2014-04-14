@@ -5,7 +5,6 @@ B := github.com/rafecolton/builder
 TARGETS := \
   $(B)/builder \
   $(B)/builderfile \
-  $(B)/linter \
   $(B)/log \
   $(B)/parser \
   $(B)/version
