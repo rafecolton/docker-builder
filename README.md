@@ -29,7 +29,7 @@ builds a docker image from an arbitrary file
 ## Building
 
 ```bash
-> builder -h/--help/--
+> builder -h/--help
 # Usage:
 #   builder [OPTIONS]
 #
