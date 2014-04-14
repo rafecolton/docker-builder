@@ -26,7 +26,20 @@ export GOPATH
 export GOBIN
 
 help:
-	@echo "Usage: TODO"
+	@echo "Usage: make [target]"
+	@echo
+	@echo "Options:"
+	@echo
+	@echo "  help/default: display this message"
+	@echo
+	@echo "  all: clean build test"
+	@echo
+	@echo "  quick: build + invokes builder a couple times (good for debugging)"
+	@echo
+	@echo "  build: gvm linkthis plus installing libs plus installing deps"
+	@echo
+	@echo "  test: build fmtpolice and ginkgotests"
+	@echo
 
 all: clean build test
 
@@ -41,6 +54,8 @@ quick: build
 	@builder --version
 	@echo "----------"
 	@builder --help
+	@echo "----------"
+	@builder
 	@echo "----------"
 
 build: linkthis deps
