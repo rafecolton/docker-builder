@@ -47,5 +47,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	//TODO: building
+
+	//otherwise, nothing to do!
+	config.Usage()
 }

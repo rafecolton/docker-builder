@@ -11,12 +11,18 @@ import (
 )
 
 var (
-	opts Options
+	parser *flags.Parser
+	opts   Options
 )
+
+func Usage() {
+	parser.WriteHelp(os.Stderr)
+
+}
 
 func New() *Runtime {
 
-	parser := flags.NewParser(&opts, flags.Default)
+	parser = flags.NewParser(&opts, flags.Default)
 	if _, err := parser.Parse(); err != nil {
 		arg1 := os.Args[1]
 		if arg1 == "-h" || arg1 == "--help" {
