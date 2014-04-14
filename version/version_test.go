@@ -23,7 +23,7 @@ var _ = Describe("Version", func() {
 		RevString = "1234567890"
 		VersionString = "12345-test"
 
-		subject = New()
+		subject = NewVersion()
 	})
 
 	It("prints the correct branch", func() {

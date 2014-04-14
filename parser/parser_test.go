@@ -27,7 +27,7 @@ var _ = Describe("Parse", func() {
 	BeforeEach(func() {
 		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
-		subject = New()
+		subject = NewParser()
 	})
 
 	Context("with a valid Builderfile", func() {
