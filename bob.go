@@ -1,4 +1,4 @@
-package main
+package bob
 
 import (
 	"github.com/rafecolton/bob/builderfile"

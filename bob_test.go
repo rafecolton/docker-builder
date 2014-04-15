@@ -1,8 +1,9 @@
-package main_test
+package bob_test
 
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	//. "github.com/rafecolton/bob"
 	"testing"
 )
 

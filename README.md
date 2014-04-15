@@ -54,4 +54,4 @@ builds a docker image from an arbitrary file
 * can only add in one "Dockerfile"
 * can't easily exclude dirs / long file names (aufs limitation?)
 * generally make it more efficient to build in smaller layers to make
-  pushing and pulling faster
+  pushing and pulling faster, etc

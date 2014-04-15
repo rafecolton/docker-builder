@@ -15,6 +15,7 @@ type Log interface {
 	Println(v ...interface{})
 	Fatal(v ...interface{})
 	Fatalf(format string, v ...interface{})
+	Fatalln(v ...interface{})
 	Panicf(format string, v ...interface{})
 	Panicln(v ...interface{})
 }
