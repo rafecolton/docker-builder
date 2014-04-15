@@ -104,7 +104,7 @@ test: build fmtpolice ginkgo bats
 fmtpolice: deps fmt lint
 
 fmt:
-	@$(MAKE) line
+	@echo "----------"
 	@echo "checking fmt"
 	@set -e ; \
 	  for f in $(shell git ls-files '*.go'); do \
@@ -115,7 +115,7 @@ linter:
 	go get github.com/golang/lint/golint
 
 lint: linter
-	@$(MAKE) line
+	@echo "----------"
 	@echo "checking lint"
 	@for file in $(shell git ls-files '*.go') ; do \
 	  if [[ "$$($(GOBIN)/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
@@ -124,15 +124,12 @@ lint: linter
 	  done
 
 ginkgo:
-	@$(MAKE) line
+	@echo "----------"
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race .
 
 bats:
-	@$(MAKE) line
-	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
-
-line:
 	@echo "----------"
+	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
 
 gox:
 	@if which gox ; then \
