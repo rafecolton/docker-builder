@@ -44,6 +44,7 @@ help:
 	@echo
 	@echo "  test: build fmtpolice and ginkgotests"
 	@echo
+	@echo "  dev: set up the dev toolchain"
 
 all: clean build test
 
@@ -64,9 +65,14 @@ quick: build
 
 binclean:
 	rm -f $${GOPATH%%:*}/bin/builder
+	rm -f ./builds/builder-dev
 
 build: linkthis deps binclean
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+	gox -osarch="darwin/amd64" -output "bin/builder-dev" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+
+gox-build: linkthis deps binclean
+	gox -arch="amd64" -os="darwin linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 linkthis:
 	@echo "gvm linkthis'ing this..."
@@ -76,14 +82,14 @@ linkthis:
 	  fi
 
 godep:
-	go get -x github.com/tools/godep
+	go get github.com/tools/godep
 
 deps: godep
 	@echo "godep restoring..."
 	$(GOBIN)/godep restore
-	go get -x github.com/golang/lint/golint
-	go get -x github.com/onsi/ginkgo/ginkgo
-	go get -x github.com/onsi/gomega
+	go get github.com/golang/lint/golint
+	go get github.com/onsi/ginkgo/ginkgo
+	go get github.com/onsi/gomega
 	@echo "installing bats..."
 	@if ! which bats >/dev/null ; then \
 	  git clone https://github.com/sstephenson/bats.git && \
@@ -103,7 +109,10 @@ fmt:
 	  gofmt $$f | diff -u $$f - ; \
 	  done
 
-lint:
+linter:
+	go get github.com/golang/lint/golint
+
+lint: linter
 	@$(MAKE) line
 	@echo "checking lint"
 	@for file in $(shell git ls-files '*.go') ; do \
@@ -122,6 +131,16 @@ bats:
 
 line:
 	@echo "----------"
+
+gox:
+	@if which gox ; then \
+	  echo "not installing gox, gox already installed." ; \
+	  else \
+	  go get github.com/mitchellh/gox ; \
+	  gox -build-toolchain ; \
+	  fi \
+
+dev: deps gox
 
 container:
 	#TODO: docker build
