@@ -66,6 +66,8 @@ quick: build
 binclean:
 	rm -f $${GOPATH%%:*}/bin/builder
 	rm -f ./builds/builder-dev
+	rm -f ./builds/darwin_amd64
+	rm -f ./builds/linux_amd64
 
 build: linkthis deps binclean
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
