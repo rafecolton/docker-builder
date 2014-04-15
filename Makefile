@@ -78,15 +78,21 @@ deps: godep
 godep:
 	go get -x github.com/tools/godep
 
-test: build fmtpolice
-	@echo "----------"
-	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
-	@echo "----------"
-	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
+test: build fmtpolice ginkgo bats
 
 fmtpolice: deps
+	@echo "----------"
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
+	@echo "----------"
 	fail=0 ; for f in $(shell git ls-files '*.go'); do v="$$($(GOBIN)/golint $$f)" ; if [ ! -z "$$v" ] ; then echo "$$v" ; fail=1 ; fi ; done ; [ $$fail -eq 0 ]
+
+ginkgo:
+	@echo "----------"
+	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
+
+bats:
+	@echo "----------"
+	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
 
 container:
 	#TODO: docker build
