@@ -30,7 +30,6 @@ Runtime is a struct of convenience, used for keeping track of our conf options
 useful, global-ish things.
 */
 type Runtime struct {
-	Quiet bool
 	builderlogger.Log
 	Options
 }
@@ -54,7 +53,6 @@ func NewRuntime() *Runtime {
 	logger := builderlogger.Initialize(opts.Quiet)
 
 	runtime := &Runtime{
-		Quiet:   opts.Quiet,
 		Options: opts,
 		Log:     logger.Log,
 	}

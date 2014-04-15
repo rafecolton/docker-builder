@@ -30,31 +30,30 @@ var _ = Describe("Parse", func() {
 	BeforeEach(func() {
 		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
-		subject = NewParser()
 	})
 
 	Context("with a valid Builderfile", func() {
 
 		It("is an openable file", func() {
-			subject.Builderfile = validFile
+			subject = NewParser(validFile, nil)
 			Expect(subject.IsOpenable()).To(Equal(true))
 		})
 
 		It("returns a non empty string as raw data", func() {
-			subject.Builderfile = validFile
+			subject = NewParser(validFile, nil)
 			raw, _ := subject.ParseRaw()
 			Expect(len(raw)).ToNot(Equal(0))
 		})
 
 		It("returns a nil error", func() {
-			subject.Builderfile = validFile
+			subject = NewParser(validFile, nil)
 			_, err := subject.ParseRaw()
 			Expect(err).To(BeNil())
 		})
 
 		It("returns a fully parsed Builderfile", func() {
-			subject.Builderfile = validFile
-			actual, _ := subject.Parse()
+			subject = NewParser(validFile, nil)
+			actual, _ := subject.Parse(false)
 
 			expected := &builderfile.Builderfile{
 				Docker: *&builderfile.Docker{
@@ -98,18 +97,18 @@ var _ = Describe("Parse", func() {
 
 	Context("with an invalid Builderfile", func() {
 		It("returns an error", func() {
-			subject.Builderfile = invalidFile
+			subject = NewParser(invalidFile, nil)
 			Expect(subject.IsOpenable()).To(Equal(false))
 		})
 
 		It("returns an empty string as raw data", func() {
-			subject.Builderfile = invalidFile
+			subject = NewParser(invalidFile, nil)
 			raw, _ := subject.ParseRaw()
 			Expect(raw).To(Equal(""))
 		})
 
 		It("returns a non-nil error", func() {
-			subject.Builderfile = invalidFile
+			subject = NewParser(invalidFile, nil)
 			_, err := subject.ParseRaw()
 			Expect(err).ToNot(BeNil())
 		})

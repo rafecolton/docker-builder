@@ -11,6 +11,9 @@ func (nl *nullLogger) Println(v ...interface{})               {}
 func (nl *nullLogger) Fatal(v ...interface{}) {
 	stdlog.Fatal(v...)
 }
+func (nl *nullLogger) Fatalln(v ...interface{}) {
+	stdlog.Fatalln(v...)
+}
 func (nl *nullLogger) Fatalf(format string, v ...interface{}) {
 	stdlog.Fatalf(format, v...)
 }
