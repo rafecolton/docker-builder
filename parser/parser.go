@@ -3,7 +3,7 @@ package parser
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"github.com/rafecolton/builder/builderfile"
+	"github.com/rafecolton/bob/builderfile"
 	"io/ioutil"
 	"os"
 )

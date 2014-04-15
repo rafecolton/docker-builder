@@ -1,7 +1,7 @@
-builder
-=======
+bob
+===
 
-[![Build Status](https://travis-ci.org/rafecolton/builder.svg?branch=master)](https://travis-ci.org/rafecolton/builder)
+[![Build Status](https://travis-ci.org/rafecolton/bob.svg?branch=master)](https://travis-ci.org/rafecolton/bob)
 
 builds a docker image from an arbitrary file
 
@@ -45,3 +45,11 @@ builds a docker image from an arbitrary file
 # Help Options:
 #   -h, --help         Show this help message
 ```
+
+## Why?
+
+* base layers
+* can only add in one "Dockerfile"
+* can't easily exclude dirs / long file names (aufs limitation?)
+* generally make it more efficient to build in smaller layers to make
+  pushing and pulling faster

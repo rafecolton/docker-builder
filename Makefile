@@ -1,8 +1,7 @@
 SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
-B := github.com/rafecolton/builder
-#TEST_LIBS := $(B)/spec
+B := github.com/rafecolton/bob
 TARGETS := \
   $(B)/builder \
   $(B)/builderfile \
@@ -20,9 +19,11 @@ GOBUILD_VERSION_ARGS := -ldflags "\
   -X $(VERSION_VAR) $(REPO_VERSION) \
   -X $(BRANCH_VAR) $(REPO_BRANCH)"
 
+BATS_INSTALL_DIR := /usr/local
+
 GOPATH := $(PWD)/Godeps/_workspace
 GOBIN := $(GOPATH)/bin
-BATS_INSTALL_DIR := /usr/local
+PATH := $(GOPATH):$(PATH)
 
 export GOPATH
 export GOBIN
@@ -48,7 +49,7 @@ all: clean build test
 
 clean:
 	go clean -x -i $(TARGETS)
-	rm -rf $${GOPATH%%:*}/src/github.com/rafecolton/builder
+	rm -rf $${GOPATH%%:*}/src/github.com/rafecolton/bob
 	rm -f $${GOPATH%%:*}/bin/builder
 	rm -rf Godeps/_workspace/*
 
@@ -61,41 +62,68 @@ quick: build
 	@builder
 	@echo "----------"
 
-build: linkthis deps
+binclean:
 	rm -f $${GOPATH%%:*}/bin/builder
+
+build: linkthis deps binclean
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 linkthis:
-	which gvm >/dev/null && (test -d $${GOPATH%%:*}/src/github.com/rafecolton/builder || gvm linkthis github.com/rafecolton/builder)
+	if which gvm >/dev/null && \
+	  [[ ! -d $${GOPATH%%:*}/src/github.com/rafecolton/bob ]] ; then \
+	  gvm linkthis github.com/rafecolton/bob ; \
+	  fi
+
+godep:
+	go get -x github.com/tools/godep
 
 deps: godep
 	$(GOBIN)/godep restore
 	go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
-	if ! which bats >/dev/null ; then git clone https://github.com/sstephenson/bats.git && (cd bats && $(SUDO) ./install.sh ${BATS_INSTALL_DIR}) && rm -rf bats ; fi
-
-godep:
-	go get -x github.com/tools/godep
+	if ! which bats >/dev/null ; then \
+	  git clone https://github.com/sstephenson/bats.git && \
+	  (cd bats && $(SUDO) ./install.sh ${BATS_INSTALL_DIR}) && \
+	  rm -rf bats ; \
+	  fi
 
 test: build fmtpolice ginkgo bats
 
-fmtpolice: deps
-	@echo "----------"
-	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
-	@echo "----------"
-	fail=0 ; for f in $(shell git ls-files '*.go'); do v="$$($(GOBIN)/golint $$f)" ; if [ ! -z "$$v" ] ; then echo "$$v" ; fail=1 ; fi ; done ; [ $$fail -eq 0 ]
+fmtpolice: deps fmt lint
+
+fmt:
+	@$(MAKE) line
+	@echo "checking fmt"
+	@set -e ; \
+	  for f in $(shell git ls-files '*.go'); do \
+	  gofmt $$f | diff -u $$f - ; \
+	  done
+
+lint:
+	@$(MAKE) line
+	@echo "checking lint"
+	@for file in $(shell git ls-files '*.go') ; do \
+	  if [[ "$$($(GOBIN)/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
+	  echo yayyy >/dev/null ; \
+	  else exit 1 ; fi \
+	  done
 
 ginkgo:
-	@echo "----------"
+	@$(MAKE) line
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
 
 bats:
-	@echo "----------"
+	@$(MAKE) line
 	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
+
+line:
+	@echo "----------"
 
 container:
 	#TODO: docker build
 
-.PHONY: godep test
+.PHONY: container line bats ginkgo
+.PHONY:	lint fmt fmtpolice test deps
+.PHONY:	linkthis build quick clean all help
 default: help

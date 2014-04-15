@@ -3,7 +3,7 @@ package version_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/rafecolton/builder/version"
+	. "github.com/rafecolton/bob/version"
 	color "github.com/wsxiaoys/terminal/color"
 	"testing"
 )

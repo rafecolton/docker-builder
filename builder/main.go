@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/rafecolton/builder/config"
-	"github.com/rafecolton/builder/parser"
-	"github.com/rafecolton/builder/version"
+	"github.com/rafecolton/bob/config"
+	"github.com/rafecolton/bob/parser"
+	"github.com/rafecolton/bob/version"
 	"github.com/wsxiaoys/terminal/color"
 )
 
