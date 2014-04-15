@@ -5,6 +5,8 @@ bob
 
 builds a docker image from an arbitrary file
 
+**TODO:** the actual docker image building
+
 ## Hacking
 
 ```bash
@@ -23,7 +25,7 @@ builds a docker image from an arbitrary file
 #
 #   test: build fmtpolice and ginkgotests
 #
-#
+#   dev: set up the dev tool chain
 ```
 
 ## Building
