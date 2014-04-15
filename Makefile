@@ -21,9 +21,11 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 
 GOPATH := $(PWD)/Godeps/_workspace
 GOBIN := $(GOPATH)/bin
+BATS_INSTALL_DIR := /usr/local
 
 export GOPATH
 export GOBIN
+export BATS_INSTALL_DIR
 
 help:
 	@echo "Usage: make [target]"
@@ -70,6 +72,7 @@ deps: godep
 	go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
+	git clone https://github.com/sstephenson/bats.git && (cd bats && ./install.sh ${BATS_INSTALL_DIR}) && rm -rf bats
 
 godep:
 	go get -x github.com/tools/godep
@@ -77,6 +80,7 @@ godep:
 test: build fmtpolice
 	@echo "----------"
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
+	$(BATS_INSTALL_DIR)/bin/bats spec/**/*.bats
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
