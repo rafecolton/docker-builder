@@ -69,7 +69,8 @@ build: linkthis deps binclean
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 linkthis:
-	if which gvm >/dev/null && \
+	@echo "gvm linkthis'ing this..."
+	@if which gvm >/dev/null && \
 	  [[ ! -d $${GOPATH%%:*}/src/github.com/rafecolton/bob ]] ; then \
 	  gvm linkthis github.com/rafecolton/bob ; \
 	  fi
@@ -78,11 +79,13 @@ godep:
 	go get -x github.com/tools/godep
 
 deps: godep
+	@echo "godep restoring..."
 	$(GOBIN)/godep restore
 	go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
-	if ! which bats >/dev/null ; then \
+	@echo "installing bats..."
+	@if ! which bats >/dev/null ; then \
 	  git clone https://github.com/sstephenson/bats.git && \
 	  (cd bats && $(SUDO) ./install.sh ${BATS_INSTALL_DIR}) && \
 	  rm -rf bats ; \
@@ -111,7 +114,7 @@ lint:
 
 ginkgo:
 	@$(MAKE) line
-	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
+	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race .
 
 bats:
 	@$(MAKE) line
