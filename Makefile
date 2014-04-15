@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/rafecolton/builder
 #TEST_LIBS := $(B)/spec
@@ -72,7 +73,7 @@ deps: godep
 	go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
-	which bats || git clone https://github.com/sstephenson/bats.git && (cd bats && ./install.sh ${BATS_INSTALL_DIR}) && rm -rf bats
+	if ! which bats >/dev/null ; then git clone https://github.com/sstephenson/bats.git && (cd bats && $(SUDO) ./install.sh ${BATS_INSTALL_DIR}) && rm -rf bats ; fi
 
 godep:
 	go get -x github.com/tools/godep
