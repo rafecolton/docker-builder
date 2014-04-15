@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/rafecolton/builder/builderfile"
+	"github.com/rafecolton/bob/builderfile"
 )
 
 /*

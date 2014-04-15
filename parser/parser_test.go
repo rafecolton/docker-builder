@@ -1,13 +1,16 @@
 package parser_test
 
 import (
-	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/rafecolton/builder/builderfile"
-	. "github.com/rafecolton/builder/parser"
-	"os"
+	. "github.com/rafecolton/bob/parser"
 	"testing"
+)
+
+import (
+	"fmt"
+	"github.com/rafecolton/bob/builderfile"
+	"os"
 )
 
 func TestBuilder(t *testing.T) {
