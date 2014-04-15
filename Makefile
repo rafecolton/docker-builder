@@ -92,14 +92,16 @@ test: build fmtpolice ginkgo bats
 
 fmtpolice: deps fmt lint
 
-fmt: line
+fmt:
+	@$(MAKE) line
 	@echo "checking fmt"
 	@set -e ; \
 	  for f in $(shell git ls-files '*.go'); do \
 	  gofmt $$f | diff -u $$f - ; \
 	  done
 
-lint: line
+lint:
+	@$(MAKE) line
 	@echo "checking lint"
 	@for file in $(shell git ls-files '*.go') ; do \
 	  if [[ "$$($(GOBIN)/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
@@ -107,10 +109,12 @@ lint: line
 	  else exit 1 ; fi \
 	  done
 
-ginkgo: line
+ginkgo:
+	@$(MAKE) line
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
 
-bats: line
+bats:
+	@$(MAKE) line
 	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
 
 line:
