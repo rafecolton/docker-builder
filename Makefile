@@ -44,6 +44,7 @@ help:
 	@echo
 	@echo "  test: build fmtpolice and ginkgotests"
 	@echo
+	@echo "  dev: set up the dev toolchain"
 
 all: clean build test
 
@@ -64,25 +65,35 @@ quick: build
 
 binclean:
 	rm -f $${GOPATH%%:*}/bin/builder
+	rm -f ./builds/builder-dev
+	rm -f ./builds/darwin_amd64
+	rm -f ./builds/linux_amd64
 
 build: linkthis deps binclean
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
+gox-build: linkthis deps binclean
+	gox -osarch="darwin/amd64" -output "builds/builder-dev" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+	gox -output="builds/{{.OS}}_{{.Arch}}" -arch="amd64" -os="darwin linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+
 linkthis:
-	if which gvm >/dev/null && \
+	@echo "gvm linkthis'ing this..."
+	@if which gvm >/dev/null && \
 	  [[ ! -d $${GOPATH%%:*}/src/github.com/rafecolton/bob ]] ; then \
 	  gvm linkthis github.com/rafecolton/bob ; \
 	  fi
 
 godep:
-	go get -x github.com/tools/godep
+	go get github.com/tools/godep
 
 deps: godep
+	@echo "godep restoring..."
 	$(GOBIN)/godep restore
-	go get -x github.com/golang/lint/golint
-	go get -x github.com/onsi/ginkgo/ginkgo
-	go get -x github.com/onsi/gomega
-	if ! which bats >/dev/null ; then \
+	go get github.com/golang/lint/golint
+	go get github.com/onsi/ginkgo/ginkgo
+	go get github.com/onsi/gomega
+	@echo "installing bats..."
+	@if ! which bats >/dev/null ; then \
 	  git clone https://github.com/sstephenson/bats.git && \
 	  (cd bats && $(SUDO) ./install.sh ${BATS_INSTALL_DIR}) && \
 	  rm -rf bats ; \
@@ -93,15 +104,18 @@ test: build fmtpolice ginkgo bats
 fmtpolice: deps fmt lint
 
 fmt:
-	@$(MAKE) line
+	@echo "----------"
 	@echo "checking fmt"
 	@set -e ; \
 	  for f in $(shell git ls-files '*.go'); do \
 	  gofmt $$f | diff -u $$f - ; \
 	  done
 
-lint:
-	@$(MAKE) line
+linter:
+	go get github.com/golang/lint/golint
+
+lint: linter
+	@echo "----------"
 	@echo "checking lint"
 	@for file in $(shell git ls-files '*.go') ; do \
 	  if [[ "$$($(GOBIN)/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
@@ -110,15 +124,22 @@ lint:
 	  done
 
 ginkgo:
-	@$(MAKE) line
-	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
+	@echo "----------"
+	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race .
 
 bats:
-	@$(MAKE) line
+	@echo "----------"
 	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
 
-line:
-	@echo "----------"
+gox:
+	@if which gox ; then \
+	  echo "not installing gox, gox already installed." ; \
+	  else \
+	  go get github.com/mitchellh/gox ; \
+	  gox -build-toolchain ; \
+	  fi \
+
+dev: deps gox
 
 container:
 	#TODO: docker build

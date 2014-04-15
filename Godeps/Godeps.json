@@ -5,6 +5,7 @@
     "github.com/BurntSushi/toml",
     "github.com/golang/lint/golint",
     "github.com/kr/fs",
+    "github.com/mitchellh/gox",
     "github.com/onsi/ginkgo/ginkgo",
     "github.com/onsi/gomega",
     "github.com/rafecolton/bob/builder"
@@ -22,6 +23,10 @@
       "ImportPath": "github.com/jessevdk/go-flags",
       "Comment": "v1-154-gcee4db9",
       "Rev": "cee4db96aec1f7382a0b09d8249c09a8bb8d160b"
+    },
+    {
+      "ImportPath": "github.com/mitchellh/iochan",
+      "Rev": "b584a329b193e206025682ae6c10cdbe03b0cd77"
     },
     {
       "ImportPath": "github.com/wsxiaoys/terminal/color",
