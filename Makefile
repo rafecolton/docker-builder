@@ -72,7 +72,7 @@ deps: godep
 	go get -x github.com/golang/lint/golint
 	go get -x github.com/onsi/ginkgo/ginkgo
 	go get -x github.com/onsi/gomega
-	git clone https://github.com/sstephenson/bats.git && (cd bats && ./install.sh ${BATS_INSTALL_DIR}) && rm -rf bats
+	which bats || git clone https://github.com/sstephenson/bats.git && (cd bats && ./install.sh ${BATS_INSTALL_DIR}) && rm -rf bats
 
 godep:
 	go get -x github.com/tools/godep
