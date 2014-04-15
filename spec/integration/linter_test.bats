@@ -10,4 +10,4 @@
   [ "$status" -ne 0  ]
 }
 
-#vim:ft=sh
+#vim:ft=bats
