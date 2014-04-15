@@ -83,7 +83,7 @@ test: build fmtpolice
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
 	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
 
-fmtpolice:
+fmtpolice: deps
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
 	fail=0 ; for f in $(shell git ls-files '*.go'); do v="$$(golint $$f)" ; if [ ! -z "$$v" ] ; then echo "$$v" ; fail=1 ; fi ; done ; [ $$fail -eq 0 ]
 
