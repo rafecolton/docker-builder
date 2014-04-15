@@ -86,7 +86,7 @@ test: build fmtpolice
 
 fmtpolice: deps
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
-	fail=0 ; for f in $(shell git ls-files '*.go'); do v="$$(golint $$f)" ; if [ ! -z "$$v" ] ; then echo "$$v" ; fail=1 ; fi ; done ; [ $$fail -eq 0 ]
+	fail=0 ; for f in $(shell git ls-files '*.go'); do v="$$($(GOBIN)/golint $$f)" ; if [ ! -z "$$v" ] ; then echo "$$v" ; fail=1 ; fi ; done ; [ $$fail -eq 0 ]
 
 container:
 	#TODO: docker build
