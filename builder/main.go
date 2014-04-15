@@ -35,7 +35,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	//does linting!
+	// does linting
 	if runtime.Lintfile != "" {
 		par = parser.NewParser(runtime.Lintfile, runtime)
 		par.AssertLint()
@@ -43,6 +43,7 @@ func main() {
 		os.Exit(0)
 	}
 
+	// does building
 	if runtime.Builderfile != "" {
 		par = parser.NewParser(runtime.Builderfile, runtime)
 

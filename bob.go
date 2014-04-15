@@ -9,7 +9,6 @@ Builder is responsible for taking a Builderfile struct and knowing what to do
 with it to build docker containers.
 */
 type Builder struct {
-	file *builderfile.Builderfile
 }
 
 /*
@@ -24,7 +23,6 @@ func NewBuilder() *Builder {
 Build performs the actual building work of the Builder.
 */
 func (builder *Builder) Build(file *builderfile.Builderfile) error {
-	builder.file = file
 
 	return nil
 }

@@ -13,7 +13,7 @@ type Builderfile struct {
 Docker is a struct representation of the "docker" section of a Builderfile.
 */
 type Docker struct {
-	BuildOpts string `toml:"build_opts"`
+	BuildOpts []string `toml:"build_opts"`
 }
 
 /*

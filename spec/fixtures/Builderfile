@@ -1,5 +1,8 @@
 [docker]
-build_opts = "--rm --no-cache"
+build_opts = [
+  "--rm",
+  "--no-cache"
+]
 
 [containers]
 

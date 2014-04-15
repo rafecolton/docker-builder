@@ -57,7 +57,7 @@ var _ = Describe("Parse", func() {
 
 			expected := &builderfile.Builderfile{
 				Docker: *&builderfile.Docker{
-					BuildOpts: "--rm --no-cache",
+					BuildOpts: []string{"--rm", "--no-cache"},
 				},
 				Containers: map[string]builderfile.ContainerSection{
 					"global": *&builderfile.ContainerSection{
