@@ -27,7 +27,7 @@
     {
       "ImportPath": "github.com/mitchellh/iochan",
       "Rev": "b584a329b193e206025682ae6c10cdbe03b0cd77"
-    }
+    },
     {
       "ImportPath": "github.com/wsxiaoys/terminal/color",
       "Rev": "a83cd00f6d7acf3554bc24f06d7f9e48a90d0a47"
