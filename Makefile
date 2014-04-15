@@ -2,7 +2,6 @@ SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/rafecolton/builder
-#TEST_LIBS := $(B)/spec
 TARGETS := \
   $(B)/builder \
   $(B)/builderfile \
@@ -20,9 +19,11 @@ GOBUILD_VERSION_ARGS := -ldflags "\
   -X $(VERSION_VAR) $(REPO_VERSION) \
   -X $(BRANCH_VAR) $(REPO_BRANCH)"
 
+BATS_INSTALL_DIR := /usr/local
+
 GOPATH := $(PWD)/Godeps/_workspace
 GOBIN := $(GOPATH)/bin
-BATS_INSTALL_DIR := /usr/local
+PATH := $(GOPATH):$(PATH)
 
 export GOPATH
 export GOBIN
