@@ -81,7 +81,7 @@ godep:
 test: build fmtpolice
 	@echo "----------"
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
-	$(BATS_INSTALL_DIR)/bin/bats spec/**/*.bats
+	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
 
 fmtpolice:
 	set -e ; for f in $(shell git ls-files '*.go'); do gofmt $$f | diff -u $$f - ; done
