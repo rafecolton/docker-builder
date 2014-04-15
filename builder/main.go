@@ -17,20 +17,24 @@ var par *parser.Parser
 
 func main() {
 
-	runtime = config.New()
-	ver = version.New()
-	par = parser.New()
+	runtime = config.NewRuntime()
+	ver = version.NewVersion()
+	par = parser.NewParser()
 	opts := runtime.Options
 
 	// if user requests version/branch/rev
 	if opts.Version {
 		runtime.Println(ver.Version)
+		os.Exit(0)
 	} else if opts.VersionFull {
 		runtime.Println(ver.VersionFull)
+		os.Exit(0)
 	} else if opts.Branch {
 		runtime.Println(ver.Branch)
+		os.Exit(0)
 	} else if opts.Rev {
 		runtime.Println(ver.Rev)
+		os.Exit(0)
 	}
 
 	//does linting!
@@ -47,5 +51,19 @@ func main() {
 		os.Exit(0)
 	}
 
-	//TODO: building
+	if opts.Builderfile != "" {
+		par.Builderfile = opts.Builderfile
+		file, err := par.Parse()
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, cannot build %s, it is not a valid Builderfile!\n----> %+v", opts.Builderfile, err))
+			os.Exit(7)
+		}
+
+		bill := NewBuilder()
+
+		_ = bill.Build(file)
+	}
+
+	//otherwise, nothing to do!
+	config.Usage()
 }

@@ -10,4 +10,5 @@ install:
   - make build
 
 script:
+  - make fmtpolice
   - make test

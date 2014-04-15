@@ -1,8 +1,9 @@
-package version
+package version_test
 
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/builder/version"
 	color "github.com/wsxiaoys/terminal/color"
 	"testing"
 )
@@ -22,7 +23,7 @@ var _ = Describe("Version", func() {
 		RevString = "1234567890"
 		VersionString = "12345-test"
 
-		subject = New()
+		subject = NewVersion()
 	})
 
 	It("prints the correct branch", func() {

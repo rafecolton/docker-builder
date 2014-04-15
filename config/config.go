@@ -11,12 +11,36 @@ import (
 )
 
 var (
-	opts Options
+	parser *flags.Parser
+	opts   Options
 )
 
-func New() *Runtime {
+/*
+Usage is like running the builder with -h/--help - it simply prints the usage
+message to stderr.
+*/
+func Usage() {
+	parser.WriteHelp(os.Stderr)
 
-	parser := flags.NewParser(&opts, flags.Default)
+}
+
+/*
+Runtime is a struct of convenience, used for keeping track of our conf options
+(i.e. passed on the command line or specified otherwise) as well as other
+useful, global-ish things.
+*/
+type Runtime struct {
+	Quiet bool
+	builderlogger.Log
+	Options
+}
+
+/*
+NewRuntime returns a new Runtime struct instance that contains all of the
+global-ish things specific to this invokation of builder.
+*/
+func NewRuntime() *Runtime {
+	parser = flags.NewParser(&opts, flags.Default)
 	if _, err := parser.Parse(); err != nil {
 		arg1 := os.Args[1]
 		if arg1 == "-h" || arg1 == "--help" {
@@ -29,15 +53,19 @@ func New() *Runtime {
 
 	logger := builderlogger.Initialize(opts.Quiet)
 
-	me := &Runtime{
+	runtime := &Runtime{
 		Quiet:   opts.Quiet,
 		Options: opts,
 		Log:     logger.Log,
 	}
 
-	return me
+	return runtime
 }
 
+/*
+Options are our command line options, set using the
+https://github.com/jessevdk/go-flags library.
+*/
 type Options struct {
 	// Inform and Exit
 	Version     bool `short:"v" description:"Print version and exit"`
@@ -49,24 +77,30 @@ type Options struct {
 	Quiet bool `short:"q" long:"quiet" description:"Produce no output, only exit codes" default:"false"`
 
 	// Features
-	Lintfile    string `short:"l" long:"lint" descrpition:"Lint the provided file. Compatible with -q/--quiet"`
-	Builderfile string `short:"f" long:"builderfile" descrpition:"The configuration file for Builder"`
+	Lintfile    string `short:"l" long:"lint" description:"Lint the provided file. Compatible with -q/--quiet"`
+	Builderfile string `short:"f" long:"builderfile" description:"The configuration file for Builder"`
 }
 
-type Runtime struct {
-	Quiet bool
-	builderlogger.Log
-	Options
+/*
+Print passes through calls to Print to logger owned by the Runtime object.
+Used primarily as a convenience.
+*/
+func (config *Runtime) Print(v ...interface{}) {
+	config.Log.Print(v...)
 }
 
-func (me *Runtime) Print(v ...interface{}) {
-	me.Log.Print(v...)
+/*
+Println passes through calls to Println to logger owned by the Runtime object.
+Used primarily as a convenience.
+*/
+func (config *Runtime) Println(v ...interface{}) {
+	config.Log.Println(v...)
 }
 
-func (me *Runtime) Println(v ...interface{}) {
-	me.Log.Println(v...)
-}
-
-func (me *Runtime) Printf(format string, v ...interface{}) {
-	me.Log.Printf(format, v...)
+/*
+Printf passes through calls to Printf to logger owned by the Runtime object.
+Used primarily as a convenience.
+*/
+func (config *Runtime) Printf(format string, v ...interface{}) {
+	config.Log.Printf(format, v...)
 }

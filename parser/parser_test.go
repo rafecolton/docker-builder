@@ -1,10 +1,11 @@
-package parser
+package parser_test
 
 import (
 	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/rafecolton/builder/builderfile"
+	. "github.com/rafecolton/builder/parser"
 	"os"
 	"testing"
 )
@@ -26,7 +27,7 @@ var _ = Describe("Parse", func() {
 	BeforeEach(func() {
 		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
-		subject = New()
+		subject = NewParser()
 	})
 
 	Context("with a valid Builderfile", func() {

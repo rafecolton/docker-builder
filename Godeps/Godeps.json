@@ -3,6 +3,7 @@
   "GoVersion": "go1.2rc5",
   "Packages": [
     "github.com/BurntSushi/toml",
+    "github.com/golang/lint/golint",
     "github.com/kr/fs",
     "github.com/onsi/ginkgo/ginkgo",
     "github.com/onsi/gomega",
