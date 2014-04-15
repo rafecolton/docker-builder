@@ -81,6 +81,7 @@ godep:
 test: build fmtpolice
 	@echo "----------"
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race -v .
+	@echo "----------"
 	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
 
 fmtpolice: deps
