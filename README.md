@@ -2,6 +2,7 @@ bob
 ===
 
 [![Build Status](https://travis-ci.org/rafecolton/bob.svg?branch=master)](https://travis-ci.org/rafecolton/bob)
+[![GoDoc](https://godoc.org/github.com/rafecolton/bob?status.png)](https://godoc.org/github.com/rafecolton/bob)
 
 builds a docker image from an arbitrary file
 
