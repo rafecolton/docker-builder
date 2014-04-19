@@ -1,13 +1,18 @@
 #!/usr/bin/env bats
 
 @test "builder correct lints a valid Builderfile" {
-  run $GOBIN/builder --quiet --lint spec/integration/Builderfile
-  [ "$status" -ne 0  ]
+  run $GOBIN/builder -q --lint spec/fixtures/Builderfile
+  [ "$status" -eq 0  ]
 }
 
-@test "builder correct lints an invalid Builderfile" {
-  run $GOBIN/builder --quiet --lint README.md
-  [ "$status" -ne 0  ]
+@test "builder exits 5 when asked to lint an invalid file" {
+  run $GOBIN/builder -q --lint README.md
+  [ "$status" -eq 5  ]
+}
+
+@test "builder exits 17 when asked to lint an invalid file" {
+  run $GOBIN/builder -q --lint foo
+  [ "$status" -eq 17  ]
 }
 
 #vim:ft=bats

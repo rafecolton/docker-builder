@@ -27,6 +27,7 @@ PATH := $(GOPATH):$(PATH)
 
 export GOPATH
 export GOBIN
+export PATH
 export BATS_INSTALL_DIR
 
 help:
@@ -49,7 +50,7 @@ help:
 all: clean build test
 
 clean:
-	go clean -x -i $(TARGETS)
+	go clean -i -r $(TARGETS) || true
 	rm -rf $${GOPATH%%:*}/src/github.com/rafecolton/bob
 	rm -f $${GOPATH%%:*}/bin/builder
 	rm -rf Godeps/_workspace/*

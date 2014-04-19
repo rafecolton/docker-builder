@@ -14,6 +14,7 @@ Docker is a struct representation of the "docker" section of a Builderfile.
 */
 type Docker struct {
 	BuildOpts []string `toml:"build_opts"`
+	TagOpts   []string `toml:"tag_opts"`
 }
 
 /*

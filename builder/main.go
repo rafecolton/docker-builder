@@ -46,13 +46,13 @@ func main() {
 	// does building
 	if runtime.Builderfile != "" {
 		par = parser.NewParser(runtime.Builderfile, runtime)
+		instructions, _ := par.Parse()
 
 		//ignoring the error because we elect to blow up in the parser instead
-		file, _ := par.Parse(true)
 
 		bob := builder.NewBuilder()
 
-		_ = bob.Build(file)
+		_ = bob.Build(instructions)
 		os.Exit(0)
 	}
 
