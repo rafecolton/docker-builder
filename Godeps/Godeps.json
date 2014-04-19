@@ -3,6 +3,7 @@
   "GoVersion": "go1.2rc5",
   "Packages": [
     "github.com/BurntSushi/toml",
+    "github.com/fsouza/go-dockerclient",
     "github.com/golang/lint/golint",
     "github.com/kr/fs",
     "github.com/mitchellh/gox",
@@ -35,6 +36,10 @@
     {
       "ImportPath": "github.com/BurntSushi/toml",
       "Rev": "f87ce853111478914f0bcffa34d43a93643e6eda"
+    },
+    {
+      "ImportPath": "github.com/fsouza/go-dockerclient",
+      "Rev": "3814303c8a449216e5d504ae92c3115d19e878e1"
     }
   ]
 }
