@@ -126,7 +126,7 @@ lint: linter
 
 ginkgo:
 	@echo "----------"
-	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race .
+	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r .
 
 bats:
 	@echo "----------"

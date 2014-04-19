@@ -9,6 +9,7 @@ import (
 import (
 	"fmt"
 	"github.com/rafecolton/bob/builderfile"
+	"github.com/rafecolton/bob/log"
 	"os"
 	"os/exec"
 )
@@ -45,7 +46,7 @@ var _ = Describe("Parse", func() {
 					Args: []string{
 						"docker",
 						"tag",
-						"<IMAGE>",
+						"",
 						"quay.io/modcloth/style-gallery:base",
 					},
 					Stdout: nil,
@@ -128,38 +129,39 @@ var _ = Describe("Parse", func() {
 	BeforeEach(func() {
 		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
+		subject = nil
 	})
 
 	Context("with a valid Builderfile", func() {
 
-		It("is an openable file", func() {
-			subject = NewParser(validFile, nil)
+		It("produces an openable file", func() {
+			subject, _ := NewParser(validFile, &log.NullLogger{})
 			Expect(subject.IsOpenable()).To(Equal(true))
 		})
 
 		It("returns a non empty string and a nil error as raw data", func() {
-			subject = NewParser(validFile, nil)
+			subject, _ := NewParser(validFile, &log.NullLogger{})
 			raw, err := subject.getRaw()
 			Expect(len(raw)).ToNot(Equal(0))
 			Expect(err).To(BeNil())
 		})
 
 		It("returns a fully parsed Builderfile", func() {
-			subject = NewParser(validFile, nil)
+			subject, _ := NewParser(validFile, &log.NullLogger{})
 			actual, err := subject.rawToStruct()
 			Expect(expectedBuilderfile).To(Equal(actual))
 			Expect(err).To(BeNil())
 		})
 
 		It("further processes the Builderfile into an InstructionSet", func() {
-			subject = NewParser(validFile, nil)
+			subject, _ := NewParser(validFile, &log.NullLogger{})
 			actual, err := subject.structToInstructionSet()
 			Expect(expectedInstructionSet).To(Equal(actual))
 			Expect(err).To(BeNil())
 		})
 
 		It("further processes the InstructionSet into an CommandSequence", func() {
-			subject = NewParser(validFile, nil)
+			subject, _ := NewParser(validFile, &log.NullLogger{})
 			actual, err := subject.instructionSetToCommandSequence()
 			Expect(expectedCommandSequence).To(Equal(actual))
 			Expect(err).To(BeNil())
@@ -167,20 +169,10 @@ var _ = Describe("Parse", func() {
 	})
 
 	Context("with an invalid Builderfile", func() {
-		It("returns an error", func() {
-			subject = NewParser(invalidFile, nil)
-			Expect(subject.IsOpenable()).To(Equal(false))
-		})
-
-		It("returns an empty string as raw data", func() {
-			subject = NewParser(invalidFile, nil)
-			raw, _ := subject.getRaw()
+		It("returns an empty string and error as raw data", func() {
+			subject, _ := NewParser(invalidFile, &log.NullLogger{})
+			raw, err := subject.getRaw()
 			Expect(raw).To(Equal(""))
-		})
-
-		It("returns a non-nil error", func() {
-			subject = NewParser(invalidFile, nil)
-			_, err := subject.getRaw()
 			Expect(err).ToNot(BeNil())
 		})
 	})

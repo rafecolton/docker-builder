@@ -137,6 +137,12 @@ func (parser *Parser) structToInstructionSet() (*InstructionSet, error) {
 
 // Step 4 of Parse()
 func (parser *Parser) instructionSetToCommandSequence() (*CommandSequence, error) {
+	//latestID, err := parser.dclient.LatestImage()
+	_, err := parser.dclient.LatestImage()
+
+	if err != nil {
+		return nil, err
+	}
 
 	//TODO: fill this in
 

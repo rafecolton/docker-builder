@@ -8,6 +8,8 @@ import (
 )
 
 import (
+	"fmt"
+	//"github.com/wsxiaoys/terminal/color"
 	"os"
 )
 
@@ -37,7 +39,7 @@ func main() {
 
 	// does linting
 	if runtime.Lintfile != "" {
-		par = parser.NewParser(runtime.Lintfile, runtime)
+		par, _ = parser.NewParser(runtime.Lintfile, runtime)
 		par.AssertLint()
 
 		os.Exit(0)
@@ -45,17 +47,26 @@ func main() {
 
 	// does building
 	if runtime.Builderfile != "" {
-		par = parser.NewParser(runtime.Builderfile, runtime)
+		//par = parser.NewParser(runtime.Builderfile, runtime)
 
-		//TODO: handle this error
-		_, _ = par.Parse()
+		//instructions, err := par.Parse()
+		//if err != nil {
+		////TODO: print something here
+		//os.Exit(23)
+		//}
 
 		//bob := builder.NewBuilder()
 
 		//_ = bob.Build(instructions)
+
 		os.Exit(0)
 	}
 
+	fmt.Printf("runtime: %+v\n", runtime)
+	par, _ := parser.NewParser(runtime.Builderfile, runtime)
+
+	_, _ = par.Parse()
+
 	//otherwise, nothing to do!
-	config.Usage()
+	//config.Usage()
 }
