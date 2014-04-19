@@ -11,7 +11,7 @@ func (parser *Parser) printLintSuccessMessage() {
 }
 
 func (parser *Parser) printLintFailMessage(err error) {
-	parser.Println(color.Sprintf("@{r!}Alas@{|}, %s is not a valid Builderfile!\n----> %+v", parser.filename, err))
+	parser.Println(color.Sprintf("@{r!}Alas@{|}, %s is not a valid Builderfile\n----> %+v", parser.filename, err))
 }
 
 /*
