@@ -46,9 +46,9 @@ func main() {
 	// does building
 	if runtime.Builderfile != "" {
 		par = parser.NewParser(runtime.Builderfile, runtime)
-		instructions, _ := par.Parse()
 
-		//ignoring the error because we elect to blow up in the parser instead
+		//TODO: handle this error
+		instructions, _ := par.Parse()
 
 		bob := builder.NewBuilder()
 

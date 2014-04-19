@@ -58,11 +58,9 @@ func (parser *Parser) Lint() error {
 	_, err := parser.rawToStruct()
 
 	if err != nil {
-		parser.printLintFailMessage(err)
 		return err
 	}
 
-	parser.printLintSuccessMessage()
 	return nil
 }
 
@@ -80,5 +78,8 @@ func (parser *Parser) AssertLint() {
 	if err != nil {
 		parser.printLintFailMessage(err)
 		os.Exit(5)
+	} else {
+		parser.printLintSuccessMessage()
+		os.Exit(0)
 	}
 }

@@ -34,12 +34,12 @@ func (parser *Parser) rawToStruct() (*builderfile.Builderfile, error) {
 
 	raw, err := parser.getRaw()
 	if err != nil {
-		parser.printLintFailMessage(err)
+		//parser.printLintFailMessage(err)
 		return nil, err
 	}
 
 	if _, err := toml.Decode(raw, &file); err != nil {
-		parser.printLintFailMessage(err)
+		//parser.printLintFailMessage(err)
 		return nil, err
 	}
 
