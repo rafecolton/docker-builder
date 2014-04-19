@@ -1,11 +1,6 @@
 package parser
 
 import (
-	"errors"
-	"os"
-)
-
-import (
 	"github.com/rafecolton/bob/log"
 )
 
@@ -28,45 +23,5 @@ func NewParser(filename string, logger log.Log) *Parser {
 	return &Parser{
 		Log:      logger,
 		filename: filename,
-	}
-}
-
-var (
-	err error
-)
-
-/*
-Lint parses a builderfile and returns either nil if the file was parsed
-successfully or an error indicating that parsing failed and the file is
-invalid.
-*/
-func (parser *Parser) Lint() error {
-	//TODO: this should probably call Parse instead of the unexported method rawToStruct
-	_, err := parser.rawToStruct()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-/*
-AssertLint is like Lint except that instead of returning an nil/error to
-indicate success/failure, it exits nonzero if linting fails.
-*/
-func (parser *Parser) AssertLint() {
-	if !parser.IsOpenable() {
-		parser.printLintFailMessage(errors.New("unable to open file"))
-		os.Exit(17)
-	}
-
-	err := parser.Lint()
-	if err != nil {
-		parser.printLintFailMessage(err)
-		os.Exit(5)
-	} else {
-		parser.printLintSuccessMessage()
-		os.Exit(0)
 	}
 }

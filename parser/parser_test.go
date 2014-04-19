@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/rafecolton/bob/builderfile"
 	"os"
+	"os/exec"
 )
 
 func TestBuilder(t *testing.T) {
@@ -20,11 +21,39 @@ func TestBuilder(t *testing.T) {
 var _ = Describe("Parse", func() {
 
 	var (
-		subject              *Parser
-		validFile            string
-		invalidFile          string
-		top                  = os.ExpandEnv("${PWD}")
-		expectedInstructions = &InstructionSet{
+		subject                 *Parser
+		validFile               string
+		invalidFile             string
+		top                     = os.ExpandEnv("${PWD}")
+		expectedCommandSequence = &CommandSequence{
+			commands: map[string]exec.Cmd{
+				"baseBuild": *&exec.Cmd{
+					Path: "docker",
+					Args: []string{
+						"docker",
+						"build",
+						"-t",
+						"quay.io/modcloth/style-gallery:latest",
+						"--rm",
+						"--no-cache",
+					},
+					Stdout: nil,
+					Stderr: nil,
+				},
+				"baseTag0": *&exec.Cmd{
+					Path: "docker",
+					Args: []string{
+						"docker",
+						"tag",
+						"<IMAGE>",
+						"quay.io/modcloth/style-gallery:base",
+					},
+					Stdout: nil,
+					Stderr: nil,
+				},
+			},
+		}
+		expectedInstructionSet = &InstructionSet{
 			DockerBuildOpts: []string{"--rm", "--no-cache"},
 			DockerTagOpts:   []string{},
 			Containers: map[string]builderfile.ContainerSection{
@@ -108,28 +137,32 @@ var _ = Describe("Parse", func() {
 			Expect(subject.IsOpenable()).To(Equal(true))
 		})
 
-		It("returns a non empty string as raw data", func() {
+		It("returns a non empty string and a nil error as raw data", func() {
 			subject = NewParser(validFile, nil)
-			raw, _ := subject.getRaw()
+			raw, err := subject.getRaw()
 			Expect(len(raw)).ToNot(Equal(0))
-		})
-
-		It("returns a nil error", func() {
-			subject = NewParser(validFile, nil)
-			_, err := subject.getRaw()
 			Expect(err).To(BeNil())
 		})
 
 		It("returns a fully parsed Builderfile", func() {
 			subject = NewParser(validFile, nil)
-			actual, _ := subject.rawToStruct()
+			actual, err := subject.rawToStruct()
 			Expect(expectedBuilderfile).To(Equal(actual))
+			Expect(err).To(BeNil())
 		})
 
 		It("further processes the Builderfile into an InstructionSet", func() {
 			subject = NewParser(validFile, nil)
-			actual, _ := subject.Parse()
-			Expect(expectedInstructions).To(Equal(actual))
+			actual, err := subject.structToInstructionSet()
+			Expect(expectedInstructionSet).To(Equal(actual))
+			Expect(err).To(BeNil())
+		})
+
+		It("further processes the InstructionSet into an CommandSequence", func() {
+			subject = NewParser(validFile, nil)
+			actual, err := subject.instructionSetToCommandSequence()
+			Expect(expectedCommandSequence).To(Equal(actual))
+			Expect(err).To(BeNil())
 		})
 	})
 

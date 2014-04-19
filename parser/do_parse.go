@@ -10,18 +10,6 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-/*
-An InstructionSet is an intermediate datatype - once a Builderfile is parsed
-and the TOML is validated, the parser parses the data into an InstructionSet.
-The primary purpose of this step is to merge any global container options into
-the sections for the individual containers.
-*/
-type InstructionSet struct {
-	DockerBuildOpts []string
-	DockerTagOpts   []string
-	Containers      map[string]builderfile.ContainerSection
-}
-
 // Step 1 of Parse
 func (parser *Parser) getRaw() (string, error) {
 
@@ -147,15 +135,27 @@ func (parser *Parser) structToInstructionSet() (*InstructionSet, error) {
 	return ret, nil
 }
 
+// Step 4 of Parse()
+func (parser *Parser) instructionSetToCommandSequence() (*CommandSequence, error) {
+
+	//TODO: fill this in
+
+	return nil, nil
+}
+
+func (parser *Parser) finalStep() (interface{}, error) {
+	return parser.instructionSetToCommandSequence()
+}
+
 /*
 Parse further parses the Builderfile struct into an InstructionSet struct,
 merging the global container options into the individual container sections.
 */
-func (parser *Parser) Parse() (*InstructionSet, error) {
-	ret, err := parser.structToInstructionSet()
+func (parser *Parser) Parse() (*CommandSequence, error) {
+	ret, err := parser.finalStep()
 	if err != nil {
 		return nil, err
 	}
 
-	return ret, nil
+	return ret.(*CommandSequence), nil
 }

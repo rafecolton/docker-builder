@@ -1,7 +1,7 @@
 package main
 
 import (
-	builder "github.com/rafecolton/bob"
+	//builder "github.com/rafecolton/bob"
 	"github.com/rafecolton/bob/config"
 	"github.com/rafecolton/bob/parser"
 	"github.com/rafecolton/bob/version"
@@ -48,11 +48,11 @@ func main() {
 		par = parser.NewParser(runtime.Builderfile, runtime)
 
 		//TODO: handle this error
-		instructions, _ := par.Parse()
+		_, _ = par.Parse()
 
-		bob := builder.NewBuilder()
+		//bob := builder.NewBuilder()
 
-		_ = bob.Build(instructions)
+		//_ = bob.Build(instructions)
 		os.Exit(0)
 	}
 

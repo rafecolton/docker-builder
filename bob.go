@@ -12,12 +12,6 @@ type Builder struct {
 }
 
 /*
-CommandSequence does stuff .
-*/
-func CommandSequence() {
-}
-
-/*
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
