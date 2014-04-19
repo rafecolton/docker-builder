@@ -6,7 +6,6 @@ import (
 )
 
 import (
-	"github.com/rafecolton/bob/builderfile"
 	"github.com/rafecolton/bob/log"
 )
 
@@ -18,18 +17,6 @@ tell if the Builderfile is valid (openable) or nat.
 type Parser struct {
 	filename string
 	log.Log
-}
-
-/*
-An InstructionSet is an intermediate datatype - once a Builderfile is parsed
-and the TOML is validated, the parser parses the data into an InstructionSet.
-The primary purpose of this step is to merge any global container options into
-the sections for the individual containers.
-*/
-type InstructionSet struct {
-	DockerBuildOpts []string
-	DockerTagOpts   []string
-	Containers      map[string]builderfile.ContainerSection
 }
 
 /*

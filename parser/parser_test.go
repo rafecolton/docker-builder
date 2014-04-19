@@ -3,7 +3,6 @@ package parser
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	//. "github.com/rafecolton/bob/parser"
 	"testing"
 )
 
@@ -62,6 +61,7 @@ var _ = Describe("Parse", func() {
 		expectedBuilderfile = &builderfile.Builderfile{
 			Docker: *&builderfile.Docker{
 				BuildOpts: []string{"--rm", "--no-cache"},
+				TagOpts:   []string{},
 			},
 			Containers: map[string]builderfile.ContainerSection{
 				"global": *&builderfile.ContainerSection{
@@ -126,7 +126,7 @@ var _ = Describe("Parse", func() {
 			Expect(expectedBuilderfile).To(Equal(actual))
 		})
 
-		XIt("further processes the Builderfile into an InstructionSet", func() {
+		It("further processes the Builderfile into an InstructionSet", func() {
 			subject = NewParser(validFile, nil)
 			actual, _ := subject.Parse()
 			Expect(expectedInstructions).To(Equal(actual))
