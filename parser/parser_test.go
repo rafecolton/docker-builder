@@ -184,7 +184,7 @@ var _ = Describe("Parse", func() {
 			Expect(err).To(BeNil())
 		})
 
-		XIt("further processes the InstructionSet into an CommandSequence", func() {
+		It("further processes the InstructionSet into an CommandSequence", func() {
 			subject, _ := NewParser(validFile, &log.NullLogger{})
 			actual, err := subject.instructionSetToCommandSequence()
 			Expect(expectedCommandSequence).To(Equal(actual))

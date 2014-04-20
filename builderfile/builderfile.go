@@ -30,3 +30,17 @@ type ContainerSection struct {
 	Project    string
 	Tags       []string
 }
+
+/*
+Clean tidies up the structure of the Builderfile struct slightly by replacing
+some occurrences of nil arrays with empty arrays []string{}.
+*/
+func (file *Builderfile) Clean() {
+	if file.Docker.BuildOpts == nil {
+		file.Docker.BuildOpts = []string{}
+	}
+
+	if file.Docker.TagOpts == nil {
+		file.Docker.TagOpts = []string{}
+	}
+}
