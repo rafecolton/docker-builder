@@ -26,6 +26,7 @@ BATS_INSTALL_DIR := /usr/local
 GOPATH := $(PWD)/Godeps/_workspace
 GOBIN := $(GOPATH)/bin
 PATH := $(GOPATH):$(PATH)
+GINKGO_PATH ?= "."
 
 export GOPATH
 export GOBIN
@@ -128,6 +129,13 @@ lint: linter
 
 ginkgo:
 	@echo "----------"
+	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
+	  echo "$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r ." && \
+	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r . ; \
+	  else echo "$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH)" && \
+	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
+	  fi
+
 	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r .
 
 bats:
