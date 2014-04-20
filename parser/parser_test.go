@@ -29,52 +29,36 @@ var _ = Describe("Parse", func() {
 		expectedCommandSequence = &CommandSequence{
 			commands: []exec.Cmd{
 				*&exec.Cmd{
-					Path:   "docker",
-					Args:   []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
-					Stdout: nil,
-					Stderr: nil,
-				},
-				//*&exec.Cmd{
-				//Path:   "docker",
-				//Args:   []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
-				//Stdout: nil,
-				//Stderr: nil,
-				//},
-				*&exec.Cmd{
-					Path:   "docker",
-					Args:   []string{"docker", "push", "quay.io/modcloth/style-gallery"},
-					Stdout: nil,
-					Stderr: nil,
+					Path: "docker",
+					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
 				},
 				*&exec.Cmd{
-					Path:   "docker",
-					Args:   []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
-					Stdout: nil,
-					Stderr: nil,
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
 				},
-				//*&exec.Cmd{
-				//Path:   "docker",
-				//Args:   []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:<tag>"},
-				//Stdout: nil,
-				//Stderr: nil,
-				//},
-				//*&exec.Cmd{
-				//Path:   "docker",
-				//Args:   []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery<TAG>:"},
-				//Stdout: nil,
-				//Stderr: nil,
-				//},
-				//*&exec.Cmd{
-				//Path:   "docker",
-				//Args:   []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery<TAG>:"},
-				//Stdout: nil,
-				//Stderr: nil,
-				//},
 				*&exec.Cmd{
-					Path:   "docker",
-					Args:   []string{"docker", "push", "quay.io/modcloth/style-gallery"},
-					Stdout: nil,
-					Stderr: nil,
+					Path: "docker",
+					Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
 				},
 			},
 		}

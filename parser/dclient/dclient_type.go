@@ -15,7 +15,7 @@ DockerClient is a wrapper for the go docker library.
 */
 type DockerClient interface {
 	Host() string
-	LatestImageTaggedWith(uuid string) (string, error)
+	LatestImageTaggedWithUUID(uuid string) (string, error)
 }
 
 /*

@@ -11,8 +11,8 @@ func (null *nullDockerClient) Host() string {
 }
 
 /*
-LatestImageTaggedWith(uuid) is a mandatory method of the DockerClient interface.
+LatestImageTaggedWithUUID is a mandatory method of the DockerClient interface.
 */
-func (null *nullDockerClient) LatestImageTaggedWith(uuid string) (string, error) {
+func (null *nullDockerClient) LatestImageTaggedWithUUID(uuid string) (string, error) {
 	return "abcdef0123456789", nil
 }

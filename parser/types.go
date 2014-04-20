@@ -51,24 +51,30 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		buildArgs = append(buildArgs, ".")
 
 		ret = append(ret, *&exec.Cmd{
-			Path:   "docker",
-			Args:   buildArgs,
-			Stdout: nil,
-			Stderr: nil,
+			Path: "docker",
+			Args: buildArgs,
 		})
 		// END ADD BUILD COMMANDS
 
 		// ADD TAG COMMANDS
+		for _, tag := range v.Tags {
+			imageID := parser.LatestImageTaggedWithUUID(uuid)
+			tag = "<TAG>" // placeholder
+			fullTag := fmt.Sprintf("%s:%s", name, tag)
+			buildArgs = []string{"docker", "tag", imageID, fullTag}
 
+			ret = append(ret, *&exec.Cmd{
+				Path: "docker",
+				Args: buildArgs,
+			})
+		}
 		// END ADD TAG COMMANDS
 
 		// ADD PUSH COMMANDS
 		buildArgs = []string{"docker", "push", name}
 		ret = append(ret, *&exec.Cmd{
-			Path:   "docker",
-			Args:   buildArgs,
-			Stdout: nil,
-			Stderr: nil,
+			Path: "docker",
+			Args: buildArgs,
 		})
 		// END ADD PUSH COMMANDS
 

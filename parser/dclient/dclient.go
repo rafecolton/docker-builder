@@ -28,7 +28,7 @@ func (rtoo *realDockerClient) Host() string {
 LatestImageTaggedWith(uuid) returns the image id of the most recently created
 docker image that has been tagged with the specified uuid.
 */
-func (rtoo *realDockerClient) LatestImageTaggedWith(uuid string) (string, error) {
+func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, error) {
 	return "abc", nil
 	//[>
 	//LatestImage - figure out what this does...
