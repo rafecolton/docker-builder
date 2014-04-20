@@ -40,12 +40,12 @@ var _ = Describe("Parse", func() {
 				//Stdout: nil,
 				//Stderr: nil,
 				//},
-				//*&exec.Cmd{
-				//Path:   "docker",
-				//Args:   []string{"docker", "push", "quay.io/modcloth/style-gallery"},
-				//Stdout: nil,
-				//Stderr: nil,
-				//},
+				*&exec.Cmd{
+					Path:   "docker",
+					Args:   []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+					Stdout: nil,
+					Stderr: nil,
+				},
 				*&exec.Cmd{
 					Path:   "docker",
 					Args:   []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
@@ -70,12 +70,12 @@ var _ = Describe("Parse", func() {
 				//Stdout: nil,
 				//Stderr: nil,
 				//},
-				//*&exec.Cmd{
-				//Path:   "docker",
-				//Args:   []string{"docker", "push", "quay.io/modcloth/style-gallery"},
-				//Stdout: nil,
-				//Stderr: nil,
-				//},
+				*&exec.Cmd{
+					Path:   "docker",
+					Args:   []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+					Stdout: nil,
+					Stderr: nil,
+				},
 			},
 		}
 		expectedInstructionSet = &InstructionSet{

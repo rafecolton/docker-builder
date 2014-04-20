@@ -38,12 +38,16 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		//tag
 		//workdir := "/foo"
 
+		/*
+			ADD BUILD COMMANDS
+		*/
 		uuid, err := parser.NextUUID()
 		if err != nil {
 			return nil
 		}
 
-		initialTag := fmt.Sprintf("%s/%s:%s", v.Registry, v.Project, uuid)
+		name := fmt.Sprintf("%s/%s", v.Registry, v.Project)
+		initialTag := fmt.Sprintf("%s:%s", name, uuid)
 		buildArgs := []string{"docker", "build", "-t", initialTag}
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")
@@ -54,6 +58,33 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Stdout: nil,
 			Stderr: nil,
 		})
+		/*
+			END ADD BUILD COMMANDS
+		*/
+
+		/*
+			ADD TAG COMMANDS
+		*/
+
+		/*
+			END ADD TAG COMMANDS
+		*/
+
+		/*
+			ADD PUSH COMMANDS
+		*/
+		buildArgs = []string{"docker", "push", name}
+		ret = append(ret, *&exec.Cmd{
+			Path:   "docker",
+			Args:   buildArgs,
+			Stdout: nil,
+			Stderr: nil,
+		})
+
+		/*
+			END ADD PUSH COMMANDS
+		*/
+
 		//append teardown commands
 	}
 	/*
