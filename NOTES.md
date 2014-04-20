@@ -46,8 +46,3 @@ Builderfile = TOML config
 Accepts requests via:
 HTTP (MVP)
 git hook
-
-## TODO MVP:
-* tag `0.1.0`
-* https://github.com/sstephenson/bats for integration tests
-* https://github.com/mitchellh/gox for building binaries

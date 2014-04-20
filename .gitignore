@@ -21,6 +21,6 @@ _testmain.go
 
 *.exe
 *.test
-/Godeps/_workspace
-/Godeps/Readme
+Godeps
+!Godeps/Godeps.json
 builds/*

@@ -7,6 +7,8 @@ TARGETS := \
   $(B)/builderfile \
   $(B)/log \
   $(B)/parser \
+  $(B)/parser/dclient \
+  $(B)/parser/uuid \
   $(B)/version
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
@@ -24,9 +26,11 @@ BATS_INSTALL_DIR := /usr/local
 GOPATH := $(PWD)/Godeps/_workspace
 GOBIN := $(GOPATH)/bin
 PATH := $(GOPATH):$(PATH)
+GINKGO_PATH ?= "."
 
 export GOPATH
 export GOBIN
+export PATH
 export BATS_INSTALL_DIR
 
 help:
@@ -49,7 +53,7 @@ help:
 all: clean build test
 
 clean:
-	go clean -x -i $(TARGETS)
+	go clean -i -r $(TARGETS) || true
 	rm -rf $${GOPATH%%:*}/src/github.com/rafecolton/bob
 	rm -f $${GOPATH%%:*}/bin/builder
 	rm -rf Godeps/_workspace/*
@@ -123,13 +127,23 @@ lint: linter
 	  else exit 1 ; fi \
 	  done
 
+lintv: linter
+	@echo "checking lint"
+	@echo "----------"
+	@for file in $(shell git ls-files '*.go') ; do $(GOBIN)/golint $$file ; done
+
 ginkgo:
 	@echo "----------"
-	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -r -race .
+	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
+	  echo "$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r ." && \
+	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r . ; \
+	  else echo "$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH)" && \
+	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
+	  fi
 
 bats:
 	@echo "----------"
-	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
+	$(BATS_INSTALL_DIR)/bin/bats --pretty $(shell git ls-files '*.bats')
 
 gox:
 	@if which gox ; then \
