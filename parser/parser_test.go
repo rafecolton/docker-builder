@@ -89,9 +89,9 @@ var _ = Describe("Parse", func() {
 					Registry: "quay.io/modcloth",
 					Project:  "style-gallery",
 					Tags: []string{
-						"git describe --always",
-						"git rev-parse -q --abbrev-ref HEAD",
-						"git rev-parse -q HEAD",
+						"git:branch",
+						"git:rev",
+						"git:short",
 					},
 				},
 			},
@@ -109,9 +109,9 @@ var _ = Describe("Parse", func() {
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags: []string{
-						"git describe --always",
-						"git rev-parse -q --abbrev-ref HEAD",
-						"git rev-parse -q HEAD",
+						"git:branch",
+						"git:rev",
+						"git:short",
 					},
 				},
 				"base": *&builderfile.ContainerSection{
