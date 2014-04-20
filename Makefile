@@ -127,6 +127,11 @@ lint: linter
 	  else exit 1 ; fi \
 	  done
 
+lintv: linter
+	@echo "checking lint"
+	@echo "----------"
+	@for file in $(shell git ls-files '*.go') ; do $(GOBIN)/golint $$file ; done
+
 ginkgo:
 	@echo "----------"
 	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
