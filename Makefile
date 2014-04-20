@@ -136,8 +136,6 @@ ginkgo:
 	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
 	  fi
 
-	$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r .
-
 bats:
 	@echo "----------"
 	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
