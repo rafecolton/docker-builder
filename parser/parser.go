@@ -6,6 +6,17 @@ import (
 	"github.com/rafecolton/bob/parser/uuid"
 )
 
+import (
+	"github.com/onsi/gocleanup"
+	"os"
+)
+
+func init() {
+	gocleanup.Register(func() {
+		//do stuff
+	})
+}
+
 /*
 Parser is a struct that contains a Builderfile and knows how to parse it both
 as raw text and to convert toml to a Builderfile struct.  It also knows how to
@@ -14,8 +25,9 @@ tell if the Builderfile is valid (openable) or nat.
 type Parser struct {
 	filename string
 	log.Log
-	dclient       dclient.Dclient
+	dockerClient  dclient.DockerClient
 	uuidGenerator uuid.UUIDGenerator
+	top           string
 }
 
 /*
@@ -24,7 +36,7 @@ default values are assigned to a new Parser, but useful to have in case we need
 to change this.
 */
 func NewParser(filename string, logger log.Log) (*Parser, error) {
-	client, err := dclient.NewDclient(logger)
+	client, err := dclient.NewDockerClient(nil, false)
 	if err != nil {
 		return nil, err
 	}
@@ -32,8 +44,9 @@ func NewParser(filename string, logger log.Log) (*Parser, error) {
 	return &Parser{
 		Log:           logger,
 		filename:      filename,
-		dclient:       *client,
+		dockerClient:  client,
 		uuidGenerator: uuid.NewUUIDGenerator(true),
+		top:           os.ExpandEnv("${PWD}"),
 	}, nil
 }
 
