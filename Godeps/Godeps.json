@@ -7,6 +7,7 @@
     "github.com/golang/lint/golint",
     "github.com/kr/fs",
     "github.com/mitchellh/gox",
+    "github.com/nu7hatch/gouuid",
     "github.com/onsi/ginkgo/ginkgo",
     "github.com/onsi/gomega",
     "github.com/rafecolton/bob/builder"
@@ -40,6 +41,10 @@
     {
       "ImportPath": "github.com/fsouza/go-dockerclient",
       "Rev": "3814303c8a449216e5d504ae92c3115d19e878e1"
+    },
+    {
+      "ImportPath": "github.com/nu7hatch/gouuid",
+      "Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
     }
   ]
 }
