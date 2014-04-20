@@ -138,7 +138,7 @@ ginkgo:
 
 bats:
 	@echo "----------"
-	$(BATS_INSTALL_DIR)/bin/bats $(shell git ls-files '*.bats')
+	$(BATS_INSTALL_DIR)/bin/bats --pretty $(shell git ls-files '*.bats')
 
 gox:
 	@if which gox ; then \
