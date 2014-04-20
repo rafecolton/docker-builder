@@ -1,6 +1,9 @@
 package parser
 
-import "os/exec"
+import (
+	"fmt"
+	"os/exec"
+)
 
 import "github.com/rafecolton/bob/builderfile"
 
@@ -28,7 +31,46 @@ type CommandSequence struct {
 
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
-	return nil
+	ret := []exec.Cmd{}
+	for _, v := range is.Containers {
+		// append setup commands
+		//build
+		//tag
+		//workdir := "/foo"
+
+		uuid, err := parser.NextUUID()
+		if err != nil {
+			return nil
+		}
+
+		initialTag := fmt.Sprintf("%s/%s:%s", v.Registry, v.Project, uuid)
+		buildArgs := []string{"docker", "build", "-t", initialTag}
+		buildArgs = append(buildArgs, is.DockerBuildOpts...)
+		buildArgs = append(buildArgs, ".")
+
+		ret = append(ret, *&exec.Cmd{
+			Path:   "docker",
+			Args:   buildArgs,
+			Stdout: nil,
+			Stderr: nil,
+		})
+		//append teardown commands
+	}
+	/*
+		process:
+		1. create tmp dir in work dir
+		2. if include is empty, start with all, otherwise start with include
+			2a. remove excludes
+		3. copy results into tmpdir
+		4. copy dockerfile into tmpdir as 'Dockerfile'
+		5. build
+		6. tag
+		7. push
+	*/
+
+	return &CommandSequence{
+		commands: ret,
+	}
 }
 
 // turns Builderfile structs into InstructionSet structs
