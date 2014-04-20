@@ -9,6 +9,7 @@
     "github.com/mitchellh/gox",
     "github.com/nu7hatch/gouuid",
     "github.com/onsi/ginkgo/ginkgo",
+    "github.com/onsi/gocleanup",
     "github.com/onsi/gomega",
     "github.com/rafecolton/bob/builder"
   ],
@@ -45,6 +46,10 @@
     {
       "ImportPath": "github.com/nu7hatch/gouuid",
       "Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
+    },
+    {
+      "ImportPath": "github.com/onsi/gocleanup",
+      "Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
     }
   ]
 }
