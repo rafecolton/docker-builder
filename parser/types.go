@@ -38,9 +38,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		//tag
 		//workdir := "/foo"
 
-		/*
-			ADD BUILD COMMANDS
-		*/
+		// ADD BUILD COMMANDS
 		uuid, err := parser.NextUUID()
 		if err != nil {
 			return nil
@@ -58,21 +56,13 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Stdout: nil,
 			Stderr: nil,
 		})
-		/*
-			END ADD BUILD COMMANDS
-		*/
+		// END ADD BUILD COMMANDS
 
-		/*
-			ADD TAG COMMANDS
-		*/
+		// ADD TAG COMMANDS
 
-		/*
-			END ADD TAG COMMANDS
-		*/
+		// END ADD TAG COMMANDS
 
-		/*
-			ADD PUSH COMMANDS
-		*/
+		// ADD PUSH COMMANDS
 		buildArgs = []string{"docker", "push", name}
 		ret = append(ret, *&exec.Cmd{
 			Path:   "docker",
@@ -80,10 +70,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Stdout: nil,
 			Stderr: nil,
 		})
-
-		/*
-			END ADD PUSH COMMANDS
-		*/
+		// END ADD PUSH COMMANDS
 
 		//append teardown commands
 	}
