@@ -124,11 +124,10 @@ lint: linter
 	@for file in $(shell git ls-files '*.go') ; do \
 	  if [[ "$$($(GOBIN)/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
 	  echo yayyy >/dev/null ; \
-	  else exit 1 ; fi \
+	  else $(MAKE) lintv && exit 1 ; fi \
 	  done
 
-lintv: linter
-	@echo "checking lint"
+lintv:
 	@echo "----------"
 	@for file in $(shell git ls-files '*.go') ; do $(GOBIN)/golint $$file ; done
 
