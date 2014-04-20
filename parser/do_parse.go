@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"github.com/rafecolton/bob/builderfile"
+	"github.com/rafecolton/bob/parser/uuid"
 	"io/ioutil"
 )
 
@@ -12,6 +13,7 @@ import (
 
 // Step 1 of Parse
 func (parser *Parser) getRaw() (string, error) {
+	_ = uuid.NewUUIDGenerator(true)
 
 	if !parser.IsOpenable() {
 		return "", fmt.Errorf("%s is not openable", parser.filename)

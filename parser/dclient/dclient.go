@@ -11,24 +11,19 @@ import (
 	"sort"
 )
 
-//for _, img := range imgs {
-////runtime.Println("ID: ", img.ID)
-////runtime.Println("RepoTags: ", img.RepoTags)
-//runtime.Println("Created: ", img.Created)
-////runtime.Println("Size: ", img.Size)
-////runtime.Println("VirtualSize: ", img.VirtualSize)
-////runtime.Println("ParentId: ", img.ParentId)
-////runtime.Println("Repository: ", img.Repository)
-//}
-
 /*
- */
+Dclient is a wrapper for the go docker library.
+*/
 type Dclient struct {
 	client *docker.Client
 	host   string
 	log.Log
 }
 
+/*
+NewDclient returns a new Dclient (wrapper for a conneciton with a docker
+daemon), properly initialized.
+*/
 func NewDclient(logger log.Log) (*Dclient, error) {
 	var endpoint string
 
@@ -54,6 +49,9 @@ func NewDclient(logger log.Log) (*Dclient, error) {
 	}, nil
 }
 
+/*
+LatestImage - figure out what this does...
+*/
 func (dclient *Dclient) LatestImage() (string, error) {
 	var images APIImagesSlice
 	images, err := dclient.client.ListImages(false)

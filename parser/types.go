@@ -23,5 +23,5 @@ CommandSequence, which is essential an array of strings where each string is a
 command to be run.
 */
 type CommandSequence struct {
-	commands map[string]exec.Cmd
+	commands []exec.Cmd
 }

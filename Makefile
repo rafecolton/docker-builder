@@ -7,6 +7,8 @@ TARGETS := \
   $(B)/builderfile \
   $(B)/log \
   $(B)/parser \
+  $(B)/parser/dclient \
+  $(B)/parser/uuid \
   $(B)/version
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
