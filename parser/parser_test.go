@@ -144,7 +144,7 @@ var _ = Describe("Parse", func() {
 					},
 					*&exec.Cmd{
 						Path: "docker",
-						Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:base"},
+						Args: []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
 					},
 					*&exec.Cmd{
 						Path: "docker",
@@ -158,15 +158,15 @@ var _ = Describe("Parse", func() {
 					},
 					*&exec.Cmd{
 						Path: "docker",
-						Args: []string{"docker", "tag", "abcdef0123456789", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+						Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
 					},
 					*&exec.Cmd{
 						Path: "docker",
-						Args: []string{"docker", "tag", "abcdef0123456789", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+						Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
 					},
 					*&exec.Cmd{
 						Path: "docker",
-						Args: []string{"docker", "tag", "abcdef0123456789", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
+						Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
 					},
 					*&exec.Cmd{
 						Path: "docker",

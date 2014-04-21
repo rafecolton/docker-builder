@@ -39,8 +39,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 	for _, v := range is.Containers {
 		container = []exec.Cmd{}
-		// append setup commands
-		//workdir := "/foo"
 
 		// ADD BUILD COMMANDS
 		uuid, err := parser.NextUUID()
@@ -61,8 +59,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {
-			imageID := parser.LatestImageTaggedWithUUID(uuid)
-
 			var tagObj tag.Tag
 			tagArg := map[string]string{"tag": t}
 
@@ -73,7 +69,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			}
 
 			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
-			buildArgs = []string{"docker", "tag", imageID, fullTag}
+			buildArgs = []string{"docker", "tag", "<IMG>", fullTag}
 
 			container = append(container, *&exec.Cmd{
 				Path: "docker",
@@ -88,21 +84,8 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Args: buildArgs,
 		})
 
-		//append teardown commands
 		ret = append(ret, container)
 	}
-
-	/*
-		process:
-		1. create tmp dir in work dir
-		2. if include is empty, start with all, otherwise start with include
-			2a. remove excludes
-		3. copy results into tmpdir
-		4. copy dockerfile into tmpdir as 'Dockerfile'
-		5. build
-		6. tag
-		7. push
-	*/
 
 	return &CommandSequence{
 		commands: ret,
