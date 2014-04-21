@@ -62,6 +62,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 			var tagObj tag.Tag
 			tagArg := map[string]string{"tag": t}
+
 			if len(t) > 4 && t[0:4] == "git:" {
 				tagObj = tag.NewTag("git", tagArg)
 			} else {
