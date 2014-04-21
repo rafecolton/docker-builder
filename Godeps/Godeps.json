@@ -42,7 +42,7 @@
     },
     {
       "ImportPath": "github.com/fsouza/go-dockerclient",
-      "Rev": "3814303c8a449216e5d504ae92c3115d19e878e1"
+      "Rev": "adf31729f3d58b22a4bc20e1abc6c019445e11d1"
     },
     {
       "ImportPath": "github.com/nu7hatch/gouuid",
