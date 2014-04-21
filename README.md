@@ -10,6 +10,15 @@ builds a docker image from an arbitrary file
 
 ## Hacking
 
+If you're hacking, building bob from source, or using bob as a library,
+you'll need to install `libgit2`.  On Mac OSX, run the following:
+
+```bash
+brew install libgit2 --HEAD
+```
+
+For other systems, see the [.travis.yml](.travis.yml) or [libgit2](https://github.com/libgit2/libgit2)
+
 ```bash
 > make help
 # Usage: make [target]

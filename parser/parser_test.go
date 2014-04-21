@@ -25,44 +25,12 @@ var _ = Describe("Parse", func() {
 		subject                 *Parser
 		validFile               string
 		invalidFile             string
-		top                     = os.ExpandEnv("${PWD}")
-		expectedCommandSequence = &CommandSequence{
-			commands: []exec.Cmd{
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:<TAG>"},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
-				},
-			},
-		}
-		expectedInstructionSet = &InstructionSet{
+		branch                  string
+		rev                     string
+		short                   string
+		top                     string
+		expectedCommandSequence *CommandSequence
+		expectedInstructionSet  = &InstructionSet{
 			DockerBuildOpts: []string{"--rm", "--no-cache"},
 			DockerTagOpts:   []string{},
 			Containers: map[string]builderfile.ContainerSection{
@@ -89,9 +57,9 @@ var _ = Describe("Parse", func() {
 					Registry: "quay.io/modcloth",
 					Project:  "style-gallery",
 					Tags: []string{
-						"git describe --always",
-						"git rev-parse -q --abbrev-ref HEAD",
-						"git rev-parse -q HEAD",
+						"git:branch",
+						"git:rev",
+						"git:short",
 					},
 				},
 			},
@@ -109,9 +77,9 @@ var _ = Describe("Parse", func() {
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags: []string{
-						"git describe --always",
-						"git rev-parse -q --abbrev-ref HEAD",
-						"git rev-parse -q HEAD",
+						"git:branch",
+						"git:rev",
+						"git:short",
 					},
 				},
 				"base": *&builderfile.ContainerSection{
@@ -135,9 +103,74 @@ var _ = Describe("Parse", func() {
 	)
 
 	BeforeEach(func() {
+		top = os.ExpandEnv("${PWD}")
+		git, _ := exec.LookPath("git")
 		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
 		subject = nil
+		// branch
+		branchCmd := &exec.Cmd{
+			Path: git,
+			Dir:  top,
+			Args: []string{git, "rev-parse", "-q", "--abbrev-ref", "HEAD"},
+		}
+
+		branchBytes, _ := branchCmd.Output()
+		branch = string(branchBytes)[:len(branchBytes)-1]
+
+		// rev
+		revCmd := &exec.Cmd{
+			Path: git,
+			Dir:  top,
+			Args: []string{git, "rev-parse", "-q", "HEAD"},
+		}
+		revBytes, _ := revCmd.Output()
+		rev = string(revBytes)[:len(revBytes)-1]
+
+		// short
+		shortCmd := &exec.Cmd{
+			Path: git,
+			Dir:  top,
+			Args: []string{git, "describe", "--always"},
+		}
+		shortBytes, _ := shortCmd.Output()
+		short = string(shortBytes)[:len(shortBytes)-1]
+		expectedCommandSequence = &CommandSequence{
+			commands: []exec.Cmd{
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", "quay.io/modcloth/style-gallery:base"},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "tag", "abcdef0123456789", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
+				},
+				*&exec.Cmd{
+					Path: "docker",
+					Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+				},
+			},
+		}
 	})
 
 	Context("with a valid Builderfile", func() {

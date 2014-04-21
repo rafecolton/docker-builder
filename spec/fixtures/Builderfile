@@ -15,9 +15,9 @@ excluded = [
 registry = "quay.io/modcloth"
 project = "style-gallery"
 tags = [
-  "git describe --always",
-  "git rev-parse -q --abbrev-ref HEAD",
-  "git rev-parse -q HEAD"
+  "git:branch",
+  "git:rev",
+  "git:short"
 ]
 
 

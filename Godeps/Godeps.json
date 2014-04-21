@@ -6,6 +6,7 @@
     "github.com/fsouza/go-dockerclient",
     "github.com/golang/lint/golint",
     "github.com/kr/fs",
+    "github.com/libgit2/git2go",
     "github.com/mitchellh/gox",
     "github.com/nu7hatch/gouuid",
     "github.com/onsi/ginkgo/ginkgo",
@@ -41,7 +42,7 @@
     },
     {
       "ImportPath": "github.com/fsouza/go-dockerclient",
-      "Rev": "3814303c8a449216e5d504ae92c3115d19e878e1"
+      "Rev": "adf31729f3d58b22a4bc20e1abc6c019445e11d1"
     },
     {
       "ImportPath": "github.com/nu7hatch/gouuid",
@@ -50,6 +51,10 @@
     {
       "ImportPath": "github.com/onsi/gocleanup",
       "Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
+    },
+    {
+      "ImportPath": "github.com/libgit2/git2go",
+      "Rev": "9cd1d129bcd567ef65137783a603f8d898d8d933"
     }
   ]
 }
