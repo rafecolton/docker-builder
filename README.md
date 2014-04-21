@@ -11,6 +11,7 @@ builds a docker image from an arbitrary file
 ## Hacking
 
 ```bash
+> brew install libgit2 --HEAD # you may need to do this on mac
 > make help
 # Usage: make [target]
 #
