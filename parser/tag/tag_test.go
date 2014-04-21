@@ -61,7 +61,7 @@ var _ = Describe("Git Tag", func() {
 		}
 
 		branchBytes, _ := branchCmd.Output()
-		branch = string(branchBytes)
+		branch = string(branchBytes)[:len(branchBytes)-1]
 
 		// rev
 		revCmd := &exec.Cmd{
@@ -70,7 +70,7 @@ var _ = Describe("Git Tag", func() {
 			Args: []string{git, "rev-parse", "-q", "HEAD"},
 		}
 		revBytes, _ := revCmd.Output()
-		rev = string(revBytes)
+		rev = string(revBytes)[:len(revBytes)-1]
 
 		// short
 		shortCmd := &exec.Cmd{
@@ -79,7 +79,7 @@ var _ = Describe("Git Tag", func() {
 			Args: []string{git, "describe", "--always"},
 		}
 		shortBytes, _ := shortCmd.Output()
-		short = string(shortBytes)
+		short = string(shortBytes)[:len(shortBytes)-1]
 	})
 
 	Context("parsing git macros", func() {

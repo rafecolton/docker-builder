@@ -5,7 +5,10 @@ import (
 	"os/exec"
 )
 
-import "github.com/rafecolton/bob/builderfile"
+import (
+	"github.com/rafecolton/bob/builderfile"
+	"github.com/rafecolton/bob/parser/tag"
+)
 
 /*
 An InstructionSet is an intermediate datatype - once a Builderfile is parsed
@@ -34,8 +37,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 	ret := []exec.Cmd{}
 	for _, v := range is.Containers {
 		// append setup commands
-		//build
-		//tag
 		//workdir := "/foo"
 
 		// ADD BUILD COMMANDS
@@ -54,13 +55,20 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Path: "docker",
 			Args: buildArgs,
 		})
-		// END ADD BUILD COMMANDS
 
 		// ADD TAG COMMANDS
-		for _, tag := range v.Tags {
+		for _, t := range v.Tags {
 			imageID := parser.LatestImageTaggedWithUUID(uuid)
-			tag = "<TAG>" // placeholder
-			fullTag := fmt.Sprintf("%s:%s", name, tag)
+
+			var tagObj tag.Tag
+			tagArg := map[string]string{"tag": t}
+			if len(t) > 4 && t[0:4] == "git:" {
+				tagObj = tag.NewTag("git", tagArg)
+			} else {
+				tagObj = tag.NewTag("default", tagArg)
+			}
+
+			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
 			buildArgs = []string{"docker", "tag", imageID, fullTag}
 
 			ret = append(ret, *&exec.Cmd{
@@ -68,7 +76,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				Args: buildArgs,
 			})
 		}
-		// END ADD TAG COMMANDS
 
 		// ADD PUSH COMMANDS
 		buildArgs = []string{"docker", "push", name}
@@ -76,7 +83,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Path: "docker",
 			Args: buildArgs,
 		})
-		// END ADD PUSH COMMANDS
 
 		//append teardown commands
 	}
