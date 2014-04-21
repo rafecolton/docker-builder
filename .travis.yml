@@ -4,7 +4,18 @@ go:
   - 1.2
 
 before_install:
-  - sudo apt-get install -qq -y --no-install-recommends libgit2
+  - sudo apt-get install -qq -y --no-install-recommends cmake
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir -p deps
+  - cd deps
+  - git clone --depth 1 --single-branch https://github.com/libgit2/libgit2.git
+  - cd libgit2
+  - mkdir build && cd build
+  - sudo cmake ..
+  - sudo cmake --build .
+  - sudo cmake --build . --target install
+  - cd ${TRAVIS_BUILD_DIR}
+  - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 install:
   - make build
