@@ -29,13 +29,16 @@ CommandSequence, which is essential an array of strings where each string is a
 command to be run.
 */
 type CommandSequence struct {
-	commands []exec.Cmd
+	commands [][]exec.Cmd
 }
 
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
-	ret := []exec.Cmd{}
+	ret := [][]exec.Cmd{}
+	var container []exec.Cmd //:= []exec.Cmd{}
+
 	for _, v := range is.Containers {
+		container = []exec.Cmd{}
 		// append setup commands
 		//workdir := "/foo"
 
@@ -51,7 +54,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")
 
-		ret = append(ret, *&exec.Cmd{
+		container = append(container, *&exec.Cmd{
 			Path: "docker",
 			Args: buildArgs,
 		})
@@ -72,7 +75,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
 			buildArgs = []string{"docker", "tag", imageID, fullTag}
 
-			ret = append(ret, *&exec.Cmd{
+			container = append(container, *&exec.Cmd{
 				Path: "docker",
 				Args: buildArgs,
 			})
@@ -80,13 +83,15 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 		// ADD PUSH COMMANDS
 		buildArgs = []string{"docker", "push", name}
-		ret = append(ret, *&exec.Cmd{
+		container = append(container, *&exec.Cmd{
 			Path: "docker",
 			Args: buildArgs,
 		})
 
 		//append teardown commands
+		ret = append(ret, container)
 	}
+
 	/*
 		process:
 		1. create tmp dir in work dir
