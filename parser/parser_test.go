@@ -35,6 +35,7 @@ var _ = Describe("Parse", func() {
 			DockerTagOpts:   []string{},
 			Containers: map[string]builderfile.ContainerSection{
 				"base": *&builderfile.ContainerSection{
+					Name:       "base",
 					Dockerfile: "Dockerfile.base",
 					Included:   []string{},
 					Excluded: []string{
@@ -48,6 +49,7 @@ var _ = Describe("Parse", func() {
 					},
 				},
 				"app": *&builderfile.ContainerSection{
+					Name:       "app",
 					Dockerfile: "Dockerfile",
 					Included:   []string{},
 					Excluded: []string{

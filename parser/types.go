@@ -32,6 +32,9 @@ type CommandSequence struct {
 	commands [][]exec.Cmd
 }
 
+//type SubSequence struct {
+//}
+
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
 	ret := [][]exec.Cmd{}
@@ -158,6 +161,7 @@ func (parser *Parser) instructionSetFromBuilderfileStruct(file *builderfile.Buil
 			}
 
 			containerSection := &builderfile.ContainerSection{
+				Name:       k,
 				Dockerfile: dockerfile,
 				Included:   included,
 				Excluded:   excluded,
