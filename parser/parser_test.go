@@ -37,32 +37,20 @@ var _ = Describe("Parse", func() {
 				"base": *&builderfile.ContainerSection{
 					Name:       "base",
 					Dockerfile: "Dockerfile.base",
-					Included:   []string{},
-					Excluded: []string{
-						"spec",
-						"tmp",
-					},
-					Registry: "quay.io/modcloth",
-					Project:  "style-gallery",
-					Tags: []string{
-						"base",
-					},
+					Included:   []string{"Gemfile", "Gemfile.lock"},
+					Excluded:   []string{"spec", "tmp"},
+					Registry:   "quay.io/modcloth",
+					Project:    "style-gallery",
+					Tags:       []string{"base"},
 				},
 				"app": *&builderfile.ContainerSection{
 					Name:       "app",
 					Dockerfile: "Dockerfile",
 					Included:   []string{},
-					Excluded: []string{
-						"spec",
-						"tmp",
-					},
-					Registry: "quay.io/modcloth",
-					Project:  "style-gallery",
-					Tags: []string{
-						"git:branch",
-						"git:rev",
-						"git:short",
-					},
+					Excluded:   []string{"spec", "tmp"},
+					Registry:   "quay.io/modcloth",
+					Project:    "style-gallery",
+					Tags:       []string{"git:branch", "git:rev", "git:short"},
 				},
 			},
 		}
@@ -78,15 +66,11 @@ var _ = Describe("Parse", func() {
 					Excluded:   []string{"spec", "tmp"},
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
-					Tags: []string{
-						"git:branch",
-						"git:rev",
-						"git:short",
-					},
+					Tags:       []string{"git:branch", "git:rev", "git:short"},
 				},
 				"base": *&builderfile.ContainerSection{
 					Dockerfile: "Dockerfile.base",
-					Included:   []string{},
+					Included:   []string{"Gemfile", "Gemfile.lock"},
 					Excluded:   []string{},
 					Registry:   "",
 					Project:    "",
@@ -144,7 +128,7 @@ var _ = Describe("Parse", func() {
 						Name:       "base",
 						Dockerfile: "Dockerfile.base",
 						Excluded:   []string{"spec", "tmp"},
-						Included:   []string{},
+						Included:   []string{"Gemfile", "Gemfile.lock"},
 					},
 					SubCommand: []exec.Cmd{
 						*&exec.Cmd{
