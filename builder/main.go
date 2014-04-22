@@ -7,9 +7,10 @@ import (
 	"github.com/rafecolton/bob/version"
 )
 
+//import "github.com/wsxiaoys/terminal/color"
+
 import (
 	"fmt"
-	//"github.com/wsxiaoys/terminal/color"
 	"os"
 )
 

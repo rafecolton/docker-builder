@@ -35,7 +35,7 @@ type CommandSequence struct {
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
 	ret := [][]exec.Cmd{}
-	var container []exec.Cmd //:= []exec.Cmd{}
+	var container []exec.Cmd
 
 	for _, v := range is.Containers {
 		container = []exec.Cmd{}
@@ -69,7 +69,9 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			}
 
 			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
-			buildArgs = []string{"docker", "tag", "<IMG>", fullTag}
+			buildArgs = []string{"docker", "tag"}
+			buildArgs = append(buildArgs, is.DockerTagOpts...)
+			buildArgs = append(buildArgs, "<IMG>", fullTag)
 
 			container = append(container, *&exec.Cmd{
 				Path: "docker",

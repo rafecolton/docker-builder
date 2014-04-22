@@ -5,10 +5,13 @@ import (
 )
 
 import (
-	"errors"
-	"fmt"
 	"github.com/fsouza/go-dockerclient"
 	"github.com/wsxiaoys/terminal/color"
+)
+
+import (
+	"errors"
+	"fmt"
 	"os"
 	"regexp"
 	"sort"
@@ -81,5 +84,5 @@ func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, er
 		}
 	}
 
-	return "", errors.New(color.Sprintf("@{r!}Alas@{|} I am unable to find image tagged with uuid \"%s\"", uuid))
+	return "", errors.New(color.Sprintf("@{r!}Alas@{|}, I am unable to find image tagged with uuid \"%s\"", uuid))
 }
