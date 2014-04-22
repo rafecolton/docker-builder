@@ -138,41 +138,57 @@ var _ = Describe("Parse", func() {
 		shortBytes, _ := shortCmd.Output()
 		short = string(shortBytes)[:len(shortBytes)-1]
 		expectedCommandSequence = &CommandSequence{
-			commands: [][]exec.Cmd{
-				[]exec.Cmd{
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+			commands: []*SubSequence{
+				&SubSequence{
+					Metadata: &SubSequenceMetadata{
+						Name:       "base",
+						Dockerfile: "Dockerfile.base",
+						Excluded:   []string{"spec", "tmp"},
+						Included:   []string{},
 					},
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
-					},
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+					SubCommand: []exec.Cmd{
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+						},
 					},
 				},
-				[]exec.Cmd{
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+				&SubSequence{
+					Metadata: &SubSequenceMetadata{
+						Name:       "app",
+						Dockerfile: "Dockerfile",
+						Excluded:   []string{"spec", "tmp"},
+						Included:   []string{},
 					},
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
-					},
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
-					},
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
-					},
-					*&exec.Cmd{
-						Path: "docker",
-						Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+					SubCommand: []exec.Cmd{
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+						},
 					},
 				},
 			},

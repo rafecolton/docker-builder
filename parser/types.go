@@ -29,19 +29,41 @@ CommandSequence, which is essential an array of strings where each string is a
 command to be run.
 */
 type CommandSequence struct {
-	commands [][]exec.Cmd
+	commands []*SubSequence
 }
 
-//type SubSequence struct {
-//}
+/*
+SubSequenceMetadata contains any important metadata about the container build
+such as the name of the Dockerfile and which files/dirs to exclude.
+*/
+type SubSequenceMetadata struct {
+	Name       string
+	Dockerfile string
+	Included   []string
+	Excluded   []string
+}
+
+/*
+A SubSequence is a logical grouping of commands such as a sequence of build,
+tag, and push commands.  In addition, the subsequence metadata contains any
+important metadata about the container build such as the name of the Dockerfile
+and which files/dirs to exclude.
+*/
+type SubSequence struct {
+	Metadata   *SubSequenceMetadata
+	SubCommand []exec.Cmd
+}
 
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
-	ret := [][]exec.Cmd{}
-	var container []exec.Cmd
+	ret := &CommandSequence{
+		commands: []*SubSequence{},
+	}
+
+	var containerCommands []exec.Cmd
 
 	for _, v := range is.Containers {
-		container = []exec.Cmd{}
+		containerCommands = []exec.Cmd{}
 
 		// ADD BUILD COMMANDS
 		uuid, err := parser.NextUUID()
@@ -55,7 +77,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")
 
-		container = append(container, *&exec.Cmd{
+		containerCommands = append(containerCommands, *&exec.Cmd{
 			Path: "docker",
 			Args: buildArgs,
 		})
@@ -76,7 +98,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			buildArgs = append(buildArgs, is.DockerTagOpts...)
 			buildArgs = append(buildArgs, "<IMG>", fullTag)
 
-			container = append(container, *&exec.Cmd{
+			containerCommands = append(containerCommands, *&exec.Cmd{
 				Path: "docker",
 				Args: buildArgs,
 			})
@@ -84,17 +106,23 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 		// ADD PUSH COMMANDS
 		buildArgs = []string{"docker", "push", name}
-		container = append(container, *&exec.Cmd{
+		containerCommands = append(containerCommands, *&exec.Cmd{
 			Path: "docker",
 			Args: buildArgs,
 		})
 
-		ret = append(ret, container)
+		ret.commands = append(ret.commands, &SubSequence{
+			Metadata: &SubSequenceMetadata{
+				Name:       v.Name,
+				Dockerfile: v.Dockerfile,
+				Included:   v.Included,
+				Excluded:   v.Excluded,
+			},
+			SubCommand: containerCommands,
+		})
 	}
 
-	return &CommandSequence{
-		commands: ret,
-	}
+	return ret
 }
 
 // turns Builderfile structs into InstructionSet structs
