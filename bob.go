@@ -1,8 +1,20 @@
 package bob
 
 import (
+	"github.com/rafecolton/bob/dclient"
+	"github.com/rafecolton/bob/log"
 	"github.com/rafecolton/bob/parser"
 )
+
+import (
+	"github.com/onsi/gocleanup"
+)
+
+func init() {
+	gocleanup.Register(func() {
+		//do stuff
+	})
+}
 
 /*
 Builder is responsible for taking a Builderfile struct and knowing what to do
@@ -10,17 +22,28 @@ with it to build docker containers.
 */
 type Builder interface {
 	Build(commands *parser.CommandSequence) error
+	LatestImageTaggedWithUUID(uuid string) string
 }
 
 /*
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
-func NewBuilder(shouldBeRegular bool) Builder {
+func NewBuilder(logger log.Log, shouldBeRegular bool) Builder {
 	if !shouldBeRegular {
 		return &nullBob{}
 	}
-	return &regularBob{}
+
+	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
+
+	if err != nil {
+		return nil
+	}
+
+	return &regularBob{
+		dockerClient: client,
+		Log:          logger,
+	}
 }
 
 /*
@@ -29,6 +52,10 @@ output and be used for testing
 */
 func (nullbob *nullBob) Build(commands *parser.CommandSequence) error {
 	return nil
+}
+
+func (nullbob *nullBob) LatestImageTaggedWithUUID(uuid string) string {
+	return ""
 }
 
 type nullBob struct{}
@@ -56,4 +83,19 @@ func (bob *regularBob) Build(commands *parser.CommandSequence) error {
 	return nil
 }
 
-type regularBob struct{}
+type regularBob struct {
+	dockerClient dclient.DockerClient
+	log.Log
+}
+
+/*
+LatestImageTaggedWithUUID accepts a uuid and invokes the underlying utility
+DockerClient to determine the id of the most recently created image tagged with
+the provided uuid.
+*/
+func (bob *regularBob) LatestImageTaggedWithUUID(uuid string) string {
+	// eat the error and let it fail when we try to run the docker command
+	id, err := bob.dockerClient.LatestImageTaggedWithUUID(uuid)
+	bob.Println(err)
+	return id
+}
