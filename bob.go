@@ -180,6 +180,11 @@ func (bob *Builder) Workdir() string {
 	if err != nil {
 		return ""
 	}
+
+	gocleanup.Register(func() {
+		os.RemoveAll(tmp)
+	})
+
 	return tmp
 }
 
@@ -217,10 +222,6 @@ func (bob *Builder) CleanWorkdir() error {
 	if err != nil {
 		return err
 	}
-
-	gocleanup.Register(func() {
-		os.RemoveAll(workdir)
-	})
 
 	return nil
 }
