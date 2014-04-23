@@ -7,11 +7,14 @@ import (
 	"github.com/rafecolton/bob/version"
 )
 
-//import "github.com/wsxiaoys/terminal/color"
+import (
+	"github.com/onsi/gocleanup"
+	//"github.com/wsxiaoys/terminal/color"
+)
 
 import (
 	"fmt"
-	"os"
+	//"os"
 )
 
 var runtime *config.Runtime
@@ -26,16 +29,16 @@ func main() {
 	// if user requests version/branch/rev
 	if runtime.Version {
 		runtime.Println(ver.Version)
-		os.Exit(0)
+		gocleanup.Exit(0)
 	} else if runtime.VersionFull {
 		runtime.Println(ver.VersionFull)
-		os.Exit(0)
+		gocleanup.Exit(0)
 	} else if runtime.Branch {
 		runtime.Println(ver.Branch)
-		os.Exit(0)
+		gocleanup.Exit(0)
 	} else if runtime.Rev {
 		runtime.Println(ver.Rev)
-		os.Exit(0)
+		gocleanup.Exit(0)
 	}
 
 	// does linting
@@ -43,7 +46,7 @@ func main() {
 		par, _ = parser.NewParser(runtime.Lintfile, runtime)
 		par.AssertLint()
 
-		os.Exit(0)
+		gocleanup.Exit(0)
 	}
 
 	// does building
@@ -53,10 +56,10 @@ func main() {
 		//instructions, err := par.Parse()
 		//if err != nil {
 		////TODO: print something here
-		//os.Exit(23)
+		//gocleanup.Exit(23)
 		//}
 
-		os.Exit(0)
+		gocleanup.Exit(0)
 	}
 
 	bob := builder.NewBuilder(runtime, true)

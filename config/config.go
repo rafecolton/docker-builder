@@ -7,6 +7,7 @@ import (
 
 import (
 	flags "github.com/jessevdk/go-flags"
+	"github.com/onsi/gocleanup"
 	builderlogger "github.com/rafecolton/bob/log"
 )
 
@@ -43,10 +44,10 @@ func NewRuntime() *Runtime {
 	if _, err := parser.Parse(); err != nil {
 		arg1 := os.Args[1]
 		if arg1 == "-h" || arg1 == "--help" {
-			os.Exit(0)
+			gocleanup.Exit(0)
 		} else {
 			fmt.Println("Unable to parse args")
-			os.Exit(3)
+			gocleanup.Exit(3)
 		}
 	}
 
