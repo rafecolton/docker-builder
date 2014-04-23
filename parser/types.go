@@ -29,15 +29,41 @@ CommandSequence, which is essential an array of strings where each string is a
 command to be run.
 */
 type CommandSequence struct {
-	commands []exec.Cmd
+	Commands []*SubSequence
+}
+
+/*
+SubSequenceMetadata contains any important metadata about the container build
+such as the name of the Dockerfile and which files/dirs to exclude.
+*/
+type SubSequenceMetadata struct {
+	Name       string
+	Dockerfile string
+	Included   []string
+	Excluded   []string
+}
+
+/*
+A SubSequence is a logical grouping of commands such as a sequence of build,
+tag, and push commands.  In addition, the subsequence metadata contains any
+important metadata about the container build such as the name of the Dockerfile
+and which files/dirs to exclude.
+*/
+type SubSequence struct {
+	Metadata   *SubSequenceMetadata
+	SubCommand []exec.Cmd
 }
 
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
-	ret := []exec.Cmd{}
+	ret := &CommandSequence{
+		Commands: []*SubSequence{},
+	}
+
+	var containerCommands []exec.Cmd
+
 	for _, v := range is.Containers {
-		// append setup commands
-		//workdir := "/foo"
+		containerCommands = []exec.Cmd{}
 
 		// ADD BUILD COMMANDS
 		uuid, err := parser.NextUUID()
@@ -51,15 +77,13 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")
 
-		ret = append(ret, *&exec.Cmd{
+		containerCommands = append(containerCommands, *&exec.Cmd{
 			Path: "docker",
 			Args: buildArgs,
 		})
 
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {
-			imageID := parser.LatestImageTaggedWithUUID(uuid)
-
 			var tagObj tag.Tag
 			tagArg := map[string]string{"tag": t}
 
@@ -70,9 +94,11 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			}
 
 			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
-			buildArgs = []string{"docker", "tag", imageID, fullTag}
+			buildArgs = []string{"docker", "tag"}
+			buildArgs = append(buildArgs, is.DockerTagOpts...)
+			buildArgs = append(buildArgs, "<IMG>", fullTag)
 
-			ret = append(ret, *&exec.Cmd{
+			containerCommands = append(containerCommands, *&exec.Cmd{
 				Path: "docker",
 				Args: buildArgs,
 			})
@@ -80,28 +106,23 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 		// ADD PUSH COMMANDS
 		buildArgs = []string{"docker", "push", name}
-		ret = append(ret, *&exec.Cmd{
+		containerCommands = append(containerCommands, *&exec.Cmd{
 			Path: "docker",
 			Args: buildArgs,
 		})
 
-		//append teardown commands
+		ret.Commands = append(ret.Commands, &SubSequence{
+			Metadata: &SubSequenceMetadata{
+				Name:       v.Name,
+				Dockerfile: v.Dockerfile,
+				Included:   v.Included,
+				Excluded:   v.Excluded,
+			},
+			SubCommand: containerCommands,
+		})
 	}
-	/*
-		process:
-		1. create tmp dir in work dir
-		2. if include is empty, start with all, otherwise start with include
-			2a. remove excludes
-		3. copy results into tmpdir
-		4. copy dockerfile into tmpdir as 'Dockerfile'
-		5. build
-		6. tag
-		7. push
-	*/
 
-	return &CommandSequence{
-		commands: ret,
-	}
+	return ret
 }
 
 // turns Builderfile structs into InstructionSet structs
@@ -168,6 +189,7 @@ func (parser *Parser) instructionSetFromBuilderfileStruct(file *builderfile.Buil
 			}
 
 			containerSection := &builderfile.ContainerSection{
+				Name:       k,
 				Dockerfile: dockerfile,
 				Included:   included,
 				Excluded:   excluded,

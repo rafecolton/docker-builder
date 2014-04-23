@@ -38,7 +38,7 @@ func Initialize(quiet bool) *BuilderLogger {
 	if quiet {
 		l.Log = &nullLogger{}
 	} else {
-		l.Log = stdlog.New(os.Stderr, color.Sprint("@{g!}[builder] "), stdlog.LstdFlags)
+		l.Log = stdlog.New(os.Stderr, color.Sprint("@{g!}[bob] "), stdlog.LstdFlags)
 	}
 	return l
 }

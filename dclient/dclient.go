@@ -7,16 +7,15 @@ import (
 import (
 	"github.com/fsouza/go-dockerclient"
 	"github.com/wsxiaoys/terminal/color"
-	"os"
 )
 
-/*
-DockerClient is a wrapper for the go docker library.
-*/
-type DockerClient interface {
-	Host() string
-	LatestImageTaggedWithUUID(uuid string) (string, error)
-}
+import (
+	"errors"
+	"fmt"
+	"os"
+	"regexp"
+	"sort"
+)
 
 /*
 NewDockerClient returns a new DockerClient (wrapper for a conneciton with a docker
@@ -51,4 +50,39 @@ func NewDockerClient(logger log.Log, shouldBeReal bool) (DockerClient, error) {
 		host:   endpoint,
 		Log:    logger,
 	}, nil
+}
+
+/*
+LatestImageTaggedWith(uuid) returns the image id of the most recently created
+docker image that has been tagged with the specified uuid.
+*/
+func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, error) {
+	/*
+		LatestImage - figure out what this does...
+	*/
+	var images APIImagesSlice
+	images, err := rtoo.client.ListImages(false)
+
+	if err != nil {
+		rtoo.Println(color.Sprintf("@{r!}Alas@{|}, docker images could not be listed on  %s\n----> %+v", rtoo.host, err))
+		return "", err
+	}
+
+	// first is most recent
+	sort.Sort(images)
+
+	for _, image := range images {
+		for _, tag := range image.RepoTags {
+			matched, err := regexp.MatchString(fmt.Sprintf(":%s$", uuid), tag)
+			if err != nil {
+				return "", err
+			}
+
+			if matched {
+				return image.ID, nil
+			}
+		}
+	}
+
+	return "", errors.New(color.Sprintf("@{r!}Alas@{|}, I am unable to find image tagged with uuid \"%s\"", uuid))
 }

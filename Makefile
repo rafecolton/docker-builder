@@ -5,9 +5,9 @@ B := github.com/rafecolton/bob
 TARGETS := \
   $(B)/builder \
   $(B)/builderfile \
+  $(B)/dclient \
   $(B)/log \
   $(B)/parser \
-  $(B)/parser/dclient \
   $(B)/parser/uuid \
   $(B)/version
 REV_VAR := $(B)/version.RevString

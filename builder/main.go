@@ -1,15 +1,16 @@
 package main
 
 import (
-	//builder "github.com/rafecolton/bob"
+	builder "github.com/rafecolton/bob"
 	"github.com/rafecolton/bob/config"
 	"github.com/rafecolton/bob/parser"
 	"github.com/rafecolton/bob/version"
 )
 
+//import "github.com/wsxiaoys/terminal/color"
+
 import (
 	"fmt"
-	//"github.com/wsxiaoys/terminal/color"
 	"os"
 )
 
@@ -55,17 +56,13 @@ func main() {
 		//os.Exit(23)
 		//}
 
-		//bob := builder.NewBuilder()
-
-		//_ = bob.Build(instructions)
-
 		os.Exit(0)
 	}
 
-	fmt.Printf("runtime: %+v\n", runtime)
-	par, _ := parser.NewParser(runtime.Builderfile, runtime)
+	bob := builder.NewBuilder(runtime, true)
+	fmt.Println(bob.LatestImageTaggedWithUUID("foo"))
 
-	_, _ = par.Parse()
+	//_ = bob.Build(instructions)
 
 	//otherwise, nothing to do!
 	//config.Usage()

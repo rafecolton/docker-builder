@@ -23,7 +23,10 @@ tags = [
 
 [containers.base]
 Dockerfile = "Dockerfile.base"
-included = []
+included = [
+  "Gemfile",
+  "Gemfile.lock"
+]
 excluded = []
 tags = [
   "base"
