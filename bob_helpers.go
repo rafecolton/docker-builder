@@ -1,6 +1,7 @@
 package bob
 
 import (
+	"errors"
 	"io"
 	"io/ioutil"
 	"log"
@@ -28,7 +29,6 @@ func CopyFile(source string, dest string) (err error) {
 		if err != nil {
 			err = os.Chmod(dest, si.Mode())
 		}
-
 	}
 	return
 }
@@ -44,12 +44,12 @@ func CopyDir(source string, dest string) (err error) {
 		return err
 	}
 	if !fi.IsDir() {
-		return &CustomError{"Source is not a directory"}
+		return errors.New("Source is not a directory")
 	}
 	// ensure dest dir does not already exist
 	_, err = os.Open(dest)
 	if !os.IsNotExist(err) {
-		return &CustomError{"Destination already exists"}
+		return errors.New("Destination already exists")
 	}
 	// create dest dir
 	err = os.MkdirAll(dest, fi.Mode())
@@ -75,16 +75,4 @@ func CopyDir(source string, dest string) (err error) {
 
 	}
 	return
-}
-
-// CustomError is a struct for returning custom error messages.  Copied from
-// https://github.com/opesun/copyrecur.
-type CustomError struct {
-	What string
-}
-
-// Error returns the error message defined in What as a string.  Copied from
-// https://github.com/opesun/copyrecur
-func (e *CustomError) Error() string {
-	return e.What
 }
