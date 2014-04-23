@@ -7,6 +7,10 @@ import (
 	"os"
 )
 
+/*
+CopyFile copies one file from source to dest.  Copied from
+https://github.com/opesun/copyrecur.
+*/
 func CopyFile(source string, dest string) (err error) {
 	sf, err := os.Open(source)
 	if err != nil {
@@ -29,6 +33,10 @@ func CopyFile(source string, dest string) (err error) {
 	return
 }
 
+/*
+CopyDir recursively copies one dir from source to dest.  Copied from
+https://github.com/opesun/copyrecur.
+*/
 func CopyDir(source string, dest string) (err error) {
 	// get properties of source dir
 	fi, err := os.Stat(source)
@@ -69,12 +77,14 @@ func CopyDir(source string, dest string) (err error) {
 	return
 }
 
-// A struct for returning custom error messages
+// CustomError is a struct for returning custom error messages.  Copied from
+// https://github.com/opesun/copyrecur.
 type CustomError struct {
 	What string
 }
 
-// Returns the error message defined in What as a string
+// Error returns the error message defined in What as a string.  Copied from
+// https://github.com/opesun/copyrecur
 func (e *CustomError) Error() string {
 	return e.What
 }
