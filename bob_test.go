@@ -131,7 +131,7 @@ var _ = Describe("Setup", func() {
 			subject.Setup()
 
 			expectedFiles = []string{
-				"Dockerfile.base",
+				"Dockerfile",
 				"Gemfile",
 				"Gemfile.lock",
 				"README.txt",

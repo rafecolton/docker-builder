@@ -145,6 +145,10 @@ func (bob *Builder) Setup() error {
 		src := fmt.Sprintf("%s/%s", repodir, file)
 		dest := fmt.Sprintf("%s/%s", workdir, file)
 
+		if file == meta.Dockerfile {
+			dest = fmt.Sprintf("%s/%s", workdir, "Dockerfile")
+		}
+
 		fileInfo, err := os.Stat(src)
 		if err != nil {
 			return err
