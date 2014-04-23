@@ -231,9 +231,12 @@ LatestImageTaggedWithUUID accepts a uuid and invokes the underlying utility
 DockerClient to determine the id of the most recently created image tagged with
 the provided uuid.
 */
-func (bob *Builder) LatestImageTaggedWithUUID(uuid string) string {
-	// eat the error and let it fail when we try to run the docker command
+func (bob *Builder) LatestImageTaggedWithUUID(uuid string) (string, error) {
 	id, err := bob.dockerClient.LatestImageTaggedWithUUID(uuid)
-	bob.Println(err)
-	return id
+	if err != nil {
+		bob.Println(err)
+		return "", err
+	}
+
+	return id, nil
 }
