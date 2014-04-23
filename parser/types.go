@@ -29,7 +29,7 @@ CommandSequence, which is essential an array of strings where each string is a
 command to be run.
 */
 type CommandSequence struct {
-	commands []*SubSequence
+	Commands []*SubSequence
 }
 
 /*
@@ -57,7 +57,7 @@ type SubSequence struct {
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
 	ret := &CommandSequence{
-		commands: []*SubSequence{},
+		Commands: []*SubSequence{},
 	}
 
 	var containerCommands []exec.Cmd
@@ -111,7 +111,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Args: buildArgs,
 		})
 
-		ret.commands = append(ret.commands, &SubSequence{
+		ret.Commands = append(ret.Commands, &SubSequence{
 			Metadata: &SubSequenceMetadata{
 				Name:       v.Name,
 				Dockerfile: v.Dockerfile,

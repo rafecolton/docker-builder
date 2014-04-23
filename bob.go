@@ -7,31 +7,47 @@ import (
 )
 
 import (
+	"github.com/deckarep/golang-set"
 	"github.com/onsi/gocleanup"
 )
 
-func init() {
-	gocleanup.Register(func() {
-		//do stuff
-	})
+import (
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
+
+/*
+A Builder is the struct that actually does the work of moving files around and
+executing the commands that do the docker build.
+*/
+type Builder struct {
+	dockerClient dclient.DockerClient
+	log.Log
+	workdir         string
+	isRegular       bool
+	nextSubSequence *parser.SubSequence
 }
 
 /*
-Builder is responsible for taking a Builderfile struct and knowing what to do
-with it to build docker containers.
+SetNextSubSequence sets the next subsequence within bob to be processed. This
+function is exported because it is used explicitly in tests, but in Build(), it
+is intended to be used as a helper function.
 */
-type Builder interface {
-	Build(commands *parser.CommandSequence) error
-	LatestImageTaggedWithUUID(uuid string) string
+func (bob *Builder) SetNextSubSequence(subSeq *parser.SubSequence) {
+	bob.nextSubSequence = subSeq
 }
 
 /*
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
-func NewBuilder(logger log.Log, shouldBeRegular bool) Builder {
+func NewBuilder(logger log.Log, shouldBeRegular bool) *Builder {
 	if !shouldBeRegular {
-		return &nullBob{}
+		return &Builder{
+			isRegular: false,
+		}
 	}
 
 	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
@@ -40,31 +56,28 @@ func NewBuilder(logger log.Log, shouldBeRegular bool) Builder {
 		return nil
 	}
 
-	return &regularBob{
+	return &Builder{
 		dockerClient: client,
 		Log:          logger,
+		isRegular:    true,
 	}
 }
-
-/*
-Build is currently a placeholder function but will eventually have a fixed
-output and be used for testing
-*/
-func (nullbob *nullBob) Build(commands *parser.CommandSequence) error {
-	return nil
-}
-
-func (nullbob *nullBob) LatestImageTaggedWithUUID(uuid string) string {
-	return ""
-}
-
-type nullBob struct{}
 
 /*
 Build is currently a placeholder function but will eventually be used to do the
 actual work of building.
 */
-func (bob *regularBob) Build(commands *parser.CommandSequence) error {
+func (bob *Builder) Build(commands *parser.CommandSequence) error {
+	/*
+		  Steps:
+		  1. loop through command sequence
+		  2. for each sub array, do the following
+		  	a. make workdir
+			b. make list of all files or includes, subtract excludes, subtract any file named "Dockerfile"
+			c. add the specified "Dockerfile"
+			d. run the commands in the workdir
+		  3. clean up workdir
+	*/
 	/*
 		  TODO:
 		  - inject setup and teardown commands
@@ -83,9 +96,142 @@ func (bob *regularBob) Build(commands *parser.CommandSequence) error {
 	return nil
 }
 
-type regularBob struct {
-	dockerClient dclient.DockerClient
-	log.Log
+/*
+Setup moves all of the correct files into place in the temporary directory in
+order to perform the docker build.
+*/
+func (bob *Builder) Setup() error {
+	if bob.nextSubSequence == nil {
+		return errors.New("no command sub sequence set, cannot perform setup")
+	}
+
+	meta := bob.nextSubSequence.Metadata
+	fileSet := mapset.NewSet()
+
+	if len(meta.Included) == 0 {
+		files, err := ioutil.ReadDir(bob.Repodir())
+		if err != nil {
+			return err
+		}
+
+		for _, v := range files {
+			fileSet.Add(v.Name())
+		}
+	} else {
+		for _, v := range meta.Included {
+			fileSet.Add(v)
+		}
+	}
+
+	// subtract any excludes from fileSet
+	for _, exclude := range meta.Excluded {
+		if fileSet.Contains(exclude) {
+			fileSet.Remove(exclude)
+		}
+	}
+
+	if fileSet.Contains("Dockerfile") {
+		fileSet.Remove("Dockerfile")
+	}
+
+	// add the Dockerfile
+	fileSet.Add(meta.Dockerfile)
+
+	workdir := bob.Workdir()
+	repodir := bob.Repodir()
+
+	// copy the actual files over
+	for file := range fileSet.Iter() {
+		src := fmt.Sprintf("%s/%s", repodir, file)
+		dest := fmt.Sprintf("%s/%s", workdir, file)
+
+		fileInfo, err := os.Stat(src)
+		if err != nil {
+			return err
+		}
+
+		if fileInfo.IsDir() {
+			err = CopyDir(src, dest)
+		} else {
+			err = CopyFile(src, dest)
+		}
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+/*
+Repodir is the dir from which we are using files for our docker builds.
+*/
+func (bob *Builder) Repodir() string {
+	if !bob.isRegular {
+		repoDir := "spec/fixtures/repodir"
+		return fmt.Sprintf("%s/%s", os.ExpandEnv("${PWD}"), repoDir)
+	}
+	return fmt.Sprintf("%s", os.ExpandEnv("${PWD}"))
+}
+
+/*
+Workdir returns bob's working directory, creating one first if bob.workdir is
+currently set to empty string.
+*/
+func (bob *Builder) Workdir() string {
+	if !bob.isRegular {
+		specWorkdir := "spec/fixtures/workdir"
+		return fmt.Sprintf("%s/%s", os.ExpandEnv("${PWD}"), specWorkdir)
+	}
+
+	tmp, err := ioutil.TempDir("", "bob")
+	if err != nil {
+		return ""
+	}
+	return tmp
+}
+
+/*
+CleanWorkdir effectively does a rm -rf and mkdir -p on bob's workdir.  Intended
+to be used before using the workdir (i.e. before new command groups).
+*/
+func (bob *Builder) CleanWorkdir() error {
+	workdir := bob.Workdir()
+
+	if !bob.isRegular {
+		readme := fmt.Sprintf("%s/README.txt", workdir)
+		os.RemoveAll(workdir)
+		err := os.MkdirAll(workdir, 0755)
+		if err != nil {
+			return err
+		}
+
+		file, err := os.Create(readme)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+
+		bytes := []byte("This directory tree is used for specs - please do not modify.\n")
+		if _, err := file.Write(bytes); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	os.RemoveAll(workdir)
+	err := os.MkdirAll(workdir, 0755)
+	if err != nil {
+		return err
+	}
+
+	gocleanup.Register(func() {
+		os.RemoveAll(workdir)
+	})
+
+	return nil
 }
 
 /*
@@ -93,7 +239,7 @@ LatestImageTaggedWithUUID accepts a uuid and invokes the underlying utility
 DockerClient to determine the id of the most recently created image tagged with
 the provided uuid.
 */
-func (bob *regularBob) LatestImageTaggedWithUUID(uuid string) string {
+func (bob *Builder) LatestImageTaggedWithUUID(uuid string) string {
 	// eat the error and let it fail when we try to run the docker command
 	id, err := bob.dockerClient.LatestImageTaggedWithUUID(uuid)
 	bob.Println(err)

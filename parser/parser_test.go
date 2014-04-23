@@ -89,7 +89,7 @@ var _ = Describe("Parse", func() {
 	)
 
 	BeforeEach(func() {
-		top = os.ExpandEnv("${PWD}")
+		top = os.ExpandEnv("$PWD")
 		git, _ := exec.LookPath("git")
 		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
@@ -122,7 +122,7 @@ var _ = Describe("Parse", func() {
 		shortBytes, _ := shortCmd.Output()
 		short = string(shortBytes)[:len(shortBytes)-1]
 		expectedCommandSequence = &CommandSequence{
-			commands: []*SubSequence{
+			Commands: []*SubSequence{
 				&SubSequence{
 					Metadata: &SubSequenceMetadata{
 						Name:       "base",
