@@ -71,27 +71,14 @@ func (bob *Builder) Build(commands *parser.CommandSequence) error {
 	/*
 		  Steps:
 		  1. loop through command sequence
-		  2. for each sub array, do the following
-		  	a. make workdir
-			b. make list of all files or includes, subtract excludes, subtract any file named "Dockerfile"
-			c. add the specified "Dockerfile"
-			d. run the commands in the workdir
-		  3. clean up workdir
-	*/
-	/*
-		  TODO:
-		  - inject setup and teardown commands
-		  - integrate with gocleanup
-		  - take docker stuff out of parser and put here
-		  - setup/teardown process:
-			1. create tmp dir in work dir
-			2. if include is empty, start with all, otherwise start with include
-				2a. remove excludes
-			3. copy results into tmpdir
-			4. copy dockerfile into tmpdir as 'Dockerfile'
-			5. build
-			6. tag
-			7. push
+		  2. for each subsequence
+		  	a. CleanWorkdir()
+			b. set next subsequence()
+			c. Setup()
+			d. run build command (make sure it's in the right dir)
+			e. get uuid from build command, use to modify tag commands
+			f. run tag commands
+			g. run push commands
 	*/
 	return nil
 }
