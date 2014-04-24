@@ -77,5 +77,5 @@ type Options struct {
 
 	// Features
 	Lintfile    string `short:"l" long:"lint" description:"Lint the provided file. Compatible with -q/--quiet"`
-	Builderfile string `short:"f" long:"builderfile" description:"The configuration file for Builder"`
+	Builderfile string `short:"b" long:"build" description:"The configuration file for Builder"`
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 @test "builder correct lints a valid Builderfile" {
-  run $GOBIN/builder -q --lint spec/fixtures/Builderfile
+  run $GOBIN/builder -q --lint spec/fixtures/bob.toml
   [ "$status" -eq 0  ]
 }
 

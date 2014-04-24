@@ -91,7 +91,7 @@ var _ = Describe("Parse", func() {
 	BeforeEach(func() {
 		top = os.ExpandEnv("$PWD")
 		git, _ := exec.LookPath("git")
-		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
+		validFile = fmt.Sprintf("%s/spec/fixtures/bob.toml", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
 		subject = nil
 		// branch

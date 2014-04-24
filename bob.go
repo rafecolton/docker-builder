@@ -17,6 +17,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 )
 
 /*
@@ -61,8 +62,8 @@ func NewBuilder(logger log.Logger, shouldBeRegular bool) *Builder {
 		dockerClient: client,
 		Logger:       logger,
 		isRegular:    shouldBeRegular,
-		Stdout:       log.NewOutWriter(logger, "@{!w}-----> @{g}%s@{|}"),
-		Stderr:       log.NewOutWriter(logger, "@{!w}-----> @{r}%s@{|}"),
+		Stdout:       log.NewOutWriter(logger, "@{!w}  ----->  @{g}%s@{|}"),
+		Stderr:       log.NewOutWriter(logger, "@{!w}  ----->  @{r}%s@{|}"),
 	}
 }
 
@@ -87,6 +88,17 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			cmd.Stdout = bob.Stdout
 			cmd.Stderr = bob.Stderr
 			cmd.Dir = workdir
+
+			if cmd.Path == "docker" {
+				path, err := exec.LookPath("docker")
+				if err != nil {
+					return err
+				}
+
+				cmd.Path = path
+			}
+
+			bob.Printf("running command %s\n", cmd.Args)
 
 			switch cmd.Args[1] {
 			case "build":
