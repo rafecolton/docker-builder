@@ -18,6 +18,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 /*
@@ -32,6 +33,7 @@ type Builder struct {
 	nextSubSequence *parser.SubSequence
 	Stderr          io.Writer
 	Stdout          io.Writer
+	Builderfile     string
 }
 
 /*
@@ -98,10 +100,10 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				cmd.Path = path
 			}
 
-			bob.Printf("running command %s\n", cmd.Args)
-
 			switch cmd.Args[1] {
 			case "build":
+				bob.Printf("running command %s\n", cmd.Args)
+
 				if err := cmd.Run(); err != nil {
 					return err
 				}
@@ -112,18 +114,20 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				}
 			case "tag":
 				cmd.Args[2] = imageID
+				bob.Printf("running command %s\n", cmd.Args)
+
 				if err := cmd.Run(); err != nil {
 					return err
 				}
 			case "push":
+				bob.Printf("running command %s\n", cmd.Args)
+
 				if err := cmd.Run(); err != nil {
 					return err
 				}
 			default:
 				return fmt.Errorf("oops, looks like the command you're asking me to run is improperly formed: %s\n", cmd.Args)
 			}
-
-			bob.Write([]byte(fmt.Sprintf("%s", cmd.Args)))
 		}
 	}
 
@@ -209,12 +213,11 @@ func (bob *Builder) Repodir() string {
 		repoDir := "spec/fixtures/repodir"
 		return fmt.Sprintf("%s/%s", os.ExpandEnv("${PWD}"), repoDir)
 	}
-	return fmt.Sprintf("%s", os.ExpandEnv("${PWD}"))
+	return filepath.Dir(bob.Builderfile)
 }
 
 /*
-Workdir returns bob's working directory, creating one first if bob.workdir is
-currently set to empty string.
+Workdir returns bob's working directory.
 */
 func (bob *Builder) Workdir() string {
 	return bob.workdir

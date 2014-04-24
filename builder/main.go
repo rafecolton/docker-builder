@@ -64,6 +64,7 @@ func main() {
 		}
 
 		bob := builder.NewBuilder(runtime, true)
+		bob.Builderfile = runtime.Builderfile
 
 		if err = bob.Build(commandSequence); err != nil {
 			runtime.Println(err)
