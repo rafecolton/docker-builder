@@ -64,8 +64,8 @@ func NewBuilder(logger log.Logger, shouldBeRegular bool) *Builder {
 		dockerClient: client,
 		Logger:       logger,
 		isRegular:    shouldBeRegular,
-		Stdout:       log.NewOutWriter(logger, "@{!w}  ----->  @{g}%s@{|}"),
-		Stderr:       log.NewOutWriter(logger, "@{!w}  ----->  @{r}%s@{|}"),
+		Stdout:       log.NewOutWriter(logger, "@{!w} ----->  @{g}%s@{|}"),
+		Stderr:       log.NewOutWriter(logger, "@{!w} ----->  @{r}%s@{|}"),
 	}
 }
 
