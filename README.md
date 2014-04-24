@@ -44,18 +44,18 @@ For other systems, see the [.travis.yml](.travis.yml) or [libgit2](https://githu
 > builder -h/--help
 # Usage:
 #   builder [OPTIONS]
-#
+# 
 # Application Options:
-#   -v                 Print version and exit
-#       --version      Print long version and exit
-#       --branch       Print branch and exit
-#       --rev          Print revision and exit
-#   -q, --quiet        Produce no output, only exit codes (false)
-#   -l, --lint=        Lint the provided file. Compatible with -q/--quiet
-#   -f, --builderfile= The configuration file for Builder
-#
+#   -v             Print version and exit
+#       --version  Print long version and exit
+#       --branch   Print branch and exit
+#       --rev      Print revision and exit
+#   -q, --quiet    Produce no output, only exit codes (false)
+#   -l, --lint=    Lint the provided file. Compatible with -q/--quiet
+#   -b, --build=   The configuration file for Builder
+# 
 # Help Options:
-#   -h, --help         Show this help message
+#   -h, --help     Show this help message
 ```
 
 ## Why?
