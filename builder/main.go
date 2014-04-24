@@ -9,12 +9,12 @@ import (
 
 import (
 	"github.com/onsi/gocleanup"
-	//"github.com/wsxiaoys/terminal/color"
+	"github.com/wsxiaoys/terminal/color"
 )
 
 import (
-	"fmt"
-	//"os"
+//"fmt"
+//"os"
 )
 
 var runtime *config.Runtime
@@ -51,22 +51,35 @@ func main() {
 
 	// does building
 	if runtime.Builderfile != "" {
-		//par = parser.NewParser(runtime.Builderfile, runtime)
+		par, err := parser.NewParser(runtime.Builderfile, runtime)
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, could not generate parser\n----> %+v", err))
+			gocleanup.Exit(73)
+		}
 
-		//instructions, err := par.Parse()
-		//if err != nil {
-		////TODO: print something here
-		//gocleanup.Exit(23)
-		//}
+		commandSequence, err := par.Parse()
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, could not parse\n----> %+v", err))
+			gocleanup.Exit(23)
+		}
+
+		bob := builder.NewBuilder(runtime, true)
+
+		if err = bob.Build(commandSequence); err != nil {
+			runtime.Println(err)
+			gocleanup.Exit(29)
+		}
+
+		err = bob.Build(commandSequence)
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, I am unable to complete my assigned build\n----> %+v", err))
+			gocleanup.Exit(41)
+		}
 
 		gocleanup.Exit(0)
 	}
 
-	bob := builder.NewBuilder(runtime, true)
-	fmt.Println(bob.LatestImageTaggedWithUUID("foo"))
-
-	//_ = bob.Build(instructions)
-
 	//otherwise, nothing to do!
-	//config.Usage()
+	config.Usage()
+	gocleanup.Exit(2)
 }

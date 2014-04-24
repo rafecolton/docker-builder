@@ -24,7 +24,9 @@ pass in nil as your logger and false for shouldBeReal.
 */
 func NewDockerClient(logger log.Log, shouldBeReal bool) (DockerClient, error) {
 	if logger == nil && !shouldBeReal {
-		return &nullDockerClient{}, nil
+		return &nullDockerClient{
+			Log: &log.NullLogger{},
+		}, nil
 	}
 
 	var endpoint string

@@ -14,6 +14,7 @@ import (
 import (
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 )
@@ -24,10 +25,12 @@ executing the commands that do the docker build.
 */
 type Builder struct {
 	dockerClient dclient.DockerClient
-	log.Log
+	log.Logger
 	workdir         string
 	isRegular       bool
 	nextSubSequence *parser.SubSequence
+	Stderr          io.Writer
+	Stdout          io.Writer
 }
 
 /*
@@ -43,11 +46,9 @@ func (bob *Builder) SetNextSubSequence(subSeq *parser.SubSequence) {
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
-func NewBuilder(logger log.Log, shouldBeRegular bool) *Builder {
-	if !shouldBeRegular {
-		return &Builder{
-			isRegular: false,
-		}
+func NewBuilder(logger log.Logger, shouldBeRegular bool) *Builder {
+	if logger == nil {
+		logger = &log.NullLogger{}
 	}
 
 	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
@@ -58,8 +59,10 @@ func NewBuilder(logger log.Log, shouldBeRegular bool) *Builder {
 
 	return &Builder{
 		dockerClient: client,
-		Log:          logger,
-		isRegular:    true,
+		Logger:       logger,
+		isRegular:    shouldBeRegular,
+		Stdout:       log.NewOutWriter(logger, "@{!w}-----> @{g}%s@{|}"),
+		Stderr:       log.NewOutWriter(logger, "@{!w}-----> @{r}%s@{|}"),
 	}
 }
 
@@ -67,19 +70,51 @@ func NewBuilder(logger log.Log, shouldBeRegular bool) *Builder {
 Build is currently a placeholder function but will eventually be used to do the
 actual work of building.
 */
-func (bob *Builder) Build(commands *parser.CommandSequence) error {
-	/*
-		  Steps:
-		  1. loop through command sequence
-		  2. for each subsequence
-		  	a. CleanWorkdir()
-			b. set next subsequence()
-			c. Setup()
-			d. run build command (make sure it's in the right dir)
-			e. get uuid from build command, use to modify tag commands
-			f. run tag commands
-			g. run push commands
-	*/
+func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
+	for _, seq := range commandSequence.Commands {
+		bob.CleanWorkdir()
+		bob.SetNextSubSequence(seq)
+		bob.Setup()
+
+		workdir := bob.Workdir()
+
+		bob.Printf("Running commands for \"%s\"\n", seq.Metadata.Name)
+
+		var imageID string
+		var err error
+
+		for _, cmd := range seq.SubCommand {
+			cmd.Stdout = bob.Stdout
+			cmd.Stderr = bob.Stderr
+			cmd.Dir = workdir
+
+			switch cmd.Args[1] {
+			case "build":
+				if err := cmd.Run(); err != nil {
+					return err
+				}
+
+				imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
+				if err != nil {
+					return err
+				}
+			case "tag":
+				cmd.Args[2] = imageID
+				if err := cmd.Run(); err != nil {
+					return err
+				}
+			case "push":
+				if err := cmd.Run(); err != nil {
+					return err
+				}
+			default:
+				return fmt.Errorf("oops, looks like the command you're asking me to run is improperly formed: %s\n", cmd.Args)
+			}
+
+			bob.Write([]byte(fmt.Sprintf("%s", cmd.Args)))
+		}
+	}
+
 	return nil
 }
 
@@ -147,7 +182,6 @@ func (bob *Builder) Setup() error {
 			err = CopyFile(src, dest)
 		}
 		if err != nil {
-			fmt.Println(err)
 			return err
 		}
 	}
@@ -171,6 +205,10 @@ Workdir returns bob's working directory, creating one first if bob.workdir is
 currently set to empty string.
 */
 func (bob *Builder) Workdir() string {
+	return bob.workdir
+}
+
+func (bob *Builder) generateWorkDir() string {
 	if !bob.isRegular {
 		specWorkdir := "spec/fixtures/workdir"
 		return fmt.Sprintf("%s/%s", os.ExpandEnv("${PWD}"), specWorkdir)
@@ -193,7 +231,8 @@ CleanWorkdir effectively does a rm -rf and mkdir -p on bob's workdir.  Intended
 to be used before using the workdir (i.e. before new command groups).
 */
 func (bob *Builder) CleanWorkdir() error {
-	workdir := bob.Workdir()
+	workdir := bob.generateWorkDir()
+	bob.workdir = workdir
 
 	if !bob.isRegular {
 		readme := fmt.Sprintf("%s/README.txt", workdir)

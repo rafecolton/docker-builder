@@ -31,7 +31,7 @@ Runtime is a struct of convenience, used for keeping track of our conf options
 useful, global-ish things.
 */
 type Runtime struct {
-	builderlogger.Log
+	builderlogger.Logger
 	Options
 }
 
@@ -55,7 +55,7 @@ func NewRuntime() *Runtime {
 
 	runtime := &Runtime{
 		Options: opts,
-		Log:     logger.Log,
+		Logger:  logger,
 	}
 
 	return runtime
@@ -78,28 +78,4 @@ type Options struct {
 	// Features
 	Lintfile    string `short:"l" long:"lint" description:"Lint the provided file. Compatible with -q/--quiet"`
 	Builderfile string `short:"f" long:"builderfile" description:"The configuration file for Builder"`
-}
-
-/*
-Print passes through calls to Print to logger owned by the Runtime object.
-Used primarily as a convenience.
-*/
-func (config *Runtime) Print(v ...interface{}) {
-	config.Log.Print(v...)
-}
-
-/*
-Println passes through calls to Println to logger owned by the Runtime object.
-Used primarily as a convenience.
-*/
-func (config *Runtime) Println(v ...interface{}) {
-	config.Log.Println(v...)
-}
-
-/*
-Printf passes through calls to Printf to logger owned by the Runtime object.
-Used primarily as a convenience.
-*/
-func (config *Runtime) Printf(format string, v ...interface{}) {
-	config.Log.Printf(format, v...)
 }
