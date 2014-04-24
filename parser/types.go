@@ -41,6 +41,7 @@ type SubSequenceMetadata struct {
 	Dockerfile string
 	Included   []string
 	Excluded   []string
+	UUID       string
 }
 
 /*
@@ -117,6 +118,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				Dockerfile: v.Dockerfile,
 				Included:   v.Included,
 				Excluded:   v.Excluded,
+				UUID:       uuid,
 			},
 			SubCommand: containerCommands,
 		})

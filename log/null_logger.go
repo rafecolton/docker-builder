@@ -23,6 +23,9 @@ func (nl *nullLogger) Panicf(format string, v ...interface{}) {
 func (nl *nullLogger) Panicln(v ...interface{}) {
 	stdlog.Panicln(v...)
 }
+func (nl *nullLogger) Write(p []byte) (int, error) {
+	return len(p), nil
+}
 
 /*
 NullLogger is an exported symbol for the nullLogger struct.
@@ -61,4 +64,9 @@ func (nl *NullLogger) Panicf(format string, v ...interface{}) {
 // Panicln paniclns.
 func (nl *NullLogger) Panicln(v ...interface{}) {
 	stdlog.Panicln(v...)
+}
+
+// Write writes.
+func (nl *NullLogger) Write(p []byte) (int, error) {
+	return len(p), nil
 }
