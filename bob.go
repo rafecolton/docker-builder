@@ -9,6 +9,7 @@ import (
 import (
 	"github.com/deckarep/golang-set"
 	"github.com/onsi/gocleanup"
+	"github.com/wsxiaoys/terminal/color"
 )
 
 import (
@@ -64,8 +65,8 @@ func NewBuilder(logger log.Logger, shouldBeRegular bool) *Builder {
 		dockerClient: client,
 		Logger:       logger,
 		isRegular:    shouldBeRegular,
-		Stdout:       log.NewOutWriter(logger, "@{!w} ----->  @{g}%s@{|}"),
-		Stderr:       log.NewOutWriter(logger, "@{!w} ----->  @{r}%s@{|}"),
+		Stdout:       log.NewOutWriter(logger, "         @{g}%s@{|}"),
+		Stderr:       log.NewOutWriter(logger, "         @{r}%s@{|}"),
 	}
 }
 
@@ -81,7 +82,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 		workdir := bob.Workdir()
 
-		bob.Printf("Running commands for \"%s\"\n", seq.Metadata.Name)
+		bob.Println(color.Sprintf("@{w!}  ----->  Running commands for \"%s\"@{|}\n", seq.Metadata.Name))
 
 		var imageID string
 		var err error
@@ -102,8 +103,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 			switch cmd.Args[1] {
 			case "build":
-				bob.Printf("running command %s\n", cmd.Args)
-
+				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}\n", cmd.Args))
 				if err := cmd.Run(); err != nil {
 					return err
 				}
@@ -114,19 +114,19 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				}
 			case "tag":
 				cmd.Args[2] = imageID
-				bob.Printf("running command %s\n", cmd.Args)
+				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}\n", cmd.Args))
 
 				if err := cmd.Run(); err != nil {
 					return err
 				}
 			case "push":
-				bob.Printf("running command %s\n", cmd.Args)
+				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}\n", cmd.Args))
 
 				if err := cmd.Run(); err != nil {
 					return err
 				}
 			default:
-				return fmt.Errorf("oops, looks like the command you're asking me to run is improperly formed: %s\n", cmd.Args)
+				return errors.New(color.Sprintf("@{r!}oops, looks like the command you're asking me to run is improperly formed:@{|} %s\n", cmd.Args))
 			}
 		}
 	}

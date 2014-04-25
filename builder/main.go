@@ -67,7 +67,7 @@ func main() {
 		bob.Builderfile = runtime.Builderfile
 
 		if err = bob.Build(commandSequence); err != nil {
-			runtime.Println(color.Sprintf("@{r!}Alas@{|}, I am unable to complete my assigned build\n----> %+v", err))
+			runtime.Println(color.Sprintf("@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v", err))
 			gocleanup.Exit(29)
 		}
 
