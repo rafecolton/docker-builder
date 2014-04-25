@@ -82,7 +82,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 		workdir := bob.Workdir()
 
-		bob.Println(color.Sprintf("@{w!}  ----->  Running commands for \"%s\"@{|}\n", seq.Metadata.Name))
+		bob.Println(color.Sprintf("@{w!}  ----->  Running commands for \"%s\"@{|}", seq.Metadata.Name))
 
 		var imageID string
 		var err error
@@ -103,7 +103,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 			switch cmd.Args[1] {
 			case "build":
-				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}\n", cmd.Args))
+				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
 				if err := cmd.Run(); err != nil {
 					return err
 				}
@@ -114,13 +114,13 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				}
 			case "tag":
 				cmd.Args[2] = imageID
-				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}\n", cmd.Args))
+				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
 
 				if err := cmd.Run(); err != nil {
 					return err
 				}
 			case "push":
-				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}\n", cmd.Args))
+				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
 
 				if err := cmd.Run(); err != nil {
 					return err
