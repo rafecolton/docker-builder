@@ -16,7 +16,10 @@ builds a docker image from an arbitrary file
 
 ## Installing
 
-When the binaries are available, installing will look something like this:
+*When the binaries are available,* installing will look something like this:
+
+**NOTE:** The binaries are **NOT** available yet.  This message will be
+removed when they have been published.
 
 ```bash
 # on Mac OS X
