@@ -5,7 +5,7 @@ bob
 [![GoDoc](https://godoc.org/github.com/rafecolton/bob?status.png)](https://godoc.org/github.com/rafecolton/bob)
 
 :boom: bob, the `builder` builds, tags, and pushes multiple Docker
-images from a friendly config file :boom:
+images, all from a friendly config file :boom:
 
 (by convention, the config file is named `bob.toml`)
 
@@ -62,11 +62,10 @@ Example usage:
 builder --lint bob.toml
 
 # build your containers
-builder --build bob.toml
+builder # default behavior: `--build bob.toml`
+# or
+builder --build <app-name>.toml
 ```
-
-See [spec/fixtures/bob.toml](./spec/fixtures/bob.toml) for an example
-`bob.toml` file.
 
 For other uses:
 

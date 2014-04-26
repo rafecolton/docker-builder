@@ -39,7 +39,10 @@ func main() {
 		// lint
 		par, _ = parser.NewParser(runtime.Lintfile, runtime)
 		par.AssertLint()
-	} else if runtime.Builderfile != "" {
+	} else {
+		if runtime.Builderfile == "" {
+			runtime.Builderfile = "bob.toml"
+		}
 		// otherwise, build
 		par, err := parser.NewParser(runtime.Builderfile, runtime)
 		if err != nil {
@@ -67,10 +70,6 @@ func main() {
 			)
 			gocleanup.Exit(29)
 		}
-	} else {
-		//otherwise, nothing to do!
-		config.Usage()
-		gocleanup.Exit(2)
 	}
 
 	gocleanup.Exit(0)
