@@ -1,8 +1,8 @@
 package tag
 
 import (
-	"github.com/libgit2/git2go"
 	"os"
+	"os/exec"
 )
 
 /*
@@ -62,27 +62,41 @@ must be supplied as well.  If any of the conditions are not met, Tag returns
 "".
 */
 func (gt *gitTag) Tag() string {
-	repo, err := git.OpenRepository(gt.top)
-	if err != nil {
-		return ""
-	}
 
-	ref, err := repo.LookupReference("HEAD")
-	if err != nil {
-		return ""
+	top := gt.top
+	git, _ := exec.LookPath("git")
+
+	branchCmd := &exec.Cmd{
+		Path: git,
+		Dir:  top,
+		Args: []string{git, "rev-parse", "-q", "--abbrev-ref", "HEAD"},
 	}
-	ref, err = ref.Resolve()
-	if err != nil {
-		return ""
+	branchBytes, _ := branchCmd.Output()
+	revCmd := &exec.Cmd{
+		Path: git,
+		Dir:  top,
+		Args: []string{git, "rev-parse", "-q", "HEAD"},
 	}
+	revBytes, _ := revCmd.Output()
+	shortCmd := &exec.Cmd{
+		Path: git,
+		Dir:  top,
+		Args: []string{git, "describe", "--always"},
+	}
+	shortBytes, _ := shortCmd.Output()
+
+	// remove trailing newline
+	branch := string(branchBytes)[:len(branchBytes)-1]
+	rev := string(revBytes)[:len(revBytes)-1]
+	short := string(shortBytes)[:len(shortBytes)-1]
 
 	switch gt.tag {
 	case "git:branch":
-		return ref.Shorthand()
+		return branch
 	case "git:rev":
-		return ref.Target().String()
+		return rev
 	case "git:short":
-		return ref.Target().String()[0:7]
+		return short
 	default:
 		return ""
 	}

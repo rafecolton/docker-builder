@@ -42,7 +42,7 @@ help:
 	@echo
 	@echo "  help: display this message"
 	@echo
-	@echo "  all: clean build test"
+	@echo "  all: binclean clean build test"
 	@echo
 	@echo "  quick: build + invokes builder a couple times (good for debugging)"
 	@echo
@@ -53,7 +53,7 @@ help:
 	@echo "  dev: set up the dev toolchain (deps + gox)"
 
 .PHONY: all
-all: clean build test
+all: binclean clean build test
 
 .PHONY: clean
 clean:
@@ -75,18 +75,23 @@ quick: build
 .PHONY: binclean
 binclean:
 	rm -f $${GOPATH%%:*}/bin/builder
-	rm -f ./builds/builder-dev
 	rm -f ./builds/darwin_amd64
 	rm -f ./builds/linux_amd64
 
 .PHONY: build
-build: linkthis deps binclean
+build: linkthis deps
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
-.PHONY: gox-build
-gox-build: linkthis dev binclean
-	gox -osarch="darwin/amd64" -output "builds/builder-dev" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
-	gox -output="builds/{{.OS}}_{{.Arch}}" -arch="amd64" -os="darwin linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+.PHONY: gox-all
+gox-all: gox-linux gox-darwin
+
+.PHONY: gox-linux
+gox-linux: build dev
+	gox -output="builds/builder_{{.OS}}_{{.Arch}}" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+
+.PHONY: gox-darwin
+gox-darwin: build dev
+	gox -output="builds/builder_{{.OS}}_{{.Arch}}" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 .PHONY: linkthis
 linkthis:
@@ -165,7 +170,7 @@ bats:
 
 .PHONY: gox
 gox:
-	@if which gox ; then \
+	@if which gox >/dev/null ; then \
 	  echo "not installing gox, gox already installed." ; \
 	  else \
 	  go get github.com/mitchellh/gox ; \
