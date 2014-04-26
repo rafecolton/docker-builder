@@ -39,6 +39,8 @@ var _ = Describe("Version", func() {
 	})
 
 	It("prints the correct full version", func() {
-		Expect(subject.VersionFull).To(Equal(color.Sprintf("@{!w}%s %s", "version.test", subject.Version)))
+		Expect(subject.VersionFull).To(Equal(
+			color.Sprintf("@{!w}%s %s", "version.test", subject.Version)),
+		)
 	})
 })

@@ -8,7 +8,6 @@ import (
 )
 
 import (
-	//"github.com/rafecolton/bob/builderfile"
 	"github.com/rafecolton/bob/parser"
 )
 
@@ -43,7 +42,15 @@ var _ = Describe("Setup", func() {
 			SubCommand: []exec.Cmd{
 				*&exec.Cmd{
 					Path: "docker",
-					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+					Args: []string{
+						"docker",
+						"build",
+						"-t",
+						"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+						"--rm",
+						"--no-cache",
+						".",
+					},
 				},
 				*&exec.Cmd{
 					Path: "docker",
@@ -65,19 +72,42 @@ var _ = Describe("Setup", func() {
 			SubCommand: []exec.Cmd{
 				*&exec.Cmd{
 					Path: "docker",
-					Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+					Args: []string{
+						"docker",
+						"build",
+						"-t",
+						"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+						"--rm",
+						"--no-cache",
+						".",
+					},
 				},
 				*&exec.Cmd{
 					Path: "docker",
-					Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+					Args: []string{
+						"docker",
+						"tag",
+						"<IMG>",
+						fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
+					},
 				},
 				*&exec.Cmd{
 					Path: "docker",
-					Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+					Args: []string{
+						"docker",
+						"tag",
+						"<IMG>",
+						fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
+					},
 				},
 				*&exec.Cmd{
 					Path: "docker",
-					Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
+					Args: []string{
+						"docker",
+						"tag",
+						"<IMG>",
+						fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
+					},
 				},
 				*&exec.Cmd{
 					Path: "docker",
@@ -89,7 +119,7 @@ var _ = Describe("Setup", func() {
 
 	BeforeEach(func() {
 		subject = NewBuilder(nil, false)
-		top = os.ExpandEnv("${PWD}")
+		top = os.Getenv("PWD")
 		git, _ := exec.LookPath("git")
 		// branch
 		branchCmd := &exec.Cmd{

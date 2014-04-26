@@ -22,7 +22,9 @@ type realDockerClient struct {
 }
 
 // returns fixed output, used for testing
-type nullDockerClient struct{}
+type nullDockerClient struct {
+	log.Log
+}
 
 /*
 LatestImageTaggedWithUUID is a mandatory method of the DockerClient interface.

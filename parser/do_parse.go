@@ -67,6 +67,7 @@ func (parser *Parser) instructionSetToCommandSequence() (*CommandSequence, error
 	return parser.commandSequenceFromInstructionSet(is), nil
 }
 
+// wrapper function for the final step
 func (parser *Parser) finalStep() (interface{}, error) {
 	return parser.instructionSetToCommandSequence()
 }

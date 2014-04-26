@@ -7,6 +7,10 @@ UUID is currently a wrapper for the gouuid library with some extra functions
 */
 type UUID gouuid.UUID
 
+type seededUUIDGenerator struct {
+	UUID
+}
+
 /*
 A UUIDGenerator generates uuids either randomly or the same one every time (for
 test purposes)
@@ -38,10 +42,6 @@ func (gen *seededUUIDGenerator) NextUUID() (string, error) {
 		return "", err
 	}
 	return u.String(), nil
-}
-
-type seededUUIDGenerator struct {
-	UUID
 }
 
 func (gen *randomUUIDGenerator) NextUUID() (string, error) {

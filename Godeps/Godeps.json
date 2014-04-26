@@ -55,7 +55,7 @@
     },
     {
       "ImportPath": "github.com/libgit2/git2go",
-      "Rev": "9cd1d129bcd567ef65137783a603f8d898d8d933"
+      "Rev": "b3a160b0f8cb91c08b379ac3f3ed8a96a14836d1"
     },
     {
       "ImportPath": "github.com/deckarep/golang-set",

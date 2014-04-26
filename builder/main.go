@@ -7,11 +7,14 @@ import (
 	"github.com/rafecolton/bob/version"
 )
 
-//import "github.com/wsxiaoys/terminal/color"
+import (
+	"github.com/onsi/gocleanup"
+	"github.com/wsxiaoys/terminal/color"
+)
 
 import (
-	"fmt"
-	"os"
+//"fmt"
+//"os"
 )
 
 var runtime *config.Runtime
@@ -26,44 +29,49 @@ func main() {
 	// if user requests version/branch/rev
 	if runtime.Version {
 		runtime.Println(ver.Version)
-		os.Exit(0)
 	} else if runtime.VersionFull {
 		runtime.Println(ver.VersionFull)
-		os.Exit(0)
 	} else if runtime.Branch {
 		runtime.Println(ver.Branch)
-		os.Exit(0)
 	} else if runtime.Rev {
 		runtime.Println(ver.Rev)
-		os.Exit(0)
-	}
-
-	// does linting
-	if runtime.Lintfile != "" {
+	} else if runtime.Lintfile != "" {
+		// lint
 		par, _ = parser.NewParser(runtime.Lintfile, runtime)
 		par.AssertLint()
+	} else if runtime.Builderfile != "" {
+		// otherwise, build
+		par, err := parser.NewParser(runtime.Builderfile, runtime)
+		if err != nil {
+			runtime.Println(
+				color.Sprintf("@{r!}Alas@{|}, could not generate parser\n----> %+v", err),
+			)
+			gocleanup.Exit(73)
+		}
 
-		os.Exit(0)
+		commandSequence, err := par.Parse()
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas@{|}, could not parse\n----> %+v", err))
+			gocleanup.Exit(23)
+		}
+
+		bob := builder.NewBuilder(runtime, true)
+		bob.Builderfile = runtime.Builderfile
+
+		if err = bob.Build(commandSequence); err != nil {
+			runtime.Println(
+				color.Sprintf(
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					err,
+				),
+			)
+			gocleanup.Exit(29)
+		}
+	} else {
+		//otherwise, nothing to do!
+		config.Usage()
+		gocleanup.Exit(2)
 	}
 
-	// does building
-	if runtime.Builderfile != "" {
-		//par = parser.NewParser(runtime.Builderfile, runtime)
-
-		//instructions, err := par.Parse()
-		//if err != nil {
-		////TODO: print something here
-		//os.Exit(23)
-		//}
-
-		os.Exit(0)
-	}
-
-	bob := builder.NewBuilder(runtime, true)
-	fmt.Println(bob.LatestImageTaggedWithUUID("foo"))
-
-	//_ = bob.Build(instructions)
-
-	//otherwise, nothing to do!
-	//config.Usage()
+	gocleanup.Exit(0)
 }
