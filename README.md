@@ -6,8 +6,6 @@ bob
 
 builds a docker image from an arbitrary file
 
-**TODO:** the actual docker image building
-
 ## Hacking
 
 If you're hacking, building bob from source, or using bob as a library,
@@ -64,4 +62,4 @@ For other systems, see the [.travis.yml](.travis.yml) or [libgit2](https://githu
 * can only add in one "Dockerfile"
 * can't easily exclude dirs / long file names (aufs limitation?)
 * generally make it more efficient to build in smaller layers to make
-  pushing and pulling faster, etc
+  pushing and pulling faster, easier, more reliable, etc
