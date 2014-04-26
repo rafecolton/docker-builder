@@ -23,4 +23,4 @@ _testmain.go
 *.test
 Godeps
 !Godeps/Godeps.json
-builds/*
+releases/*

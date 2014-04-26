@@ -75,8 +75,8 @@ quick: build
 .PHONY: binclean
 binclean:
 	rm -f $${GOPATH%%:*}/bin/builder
-	rm -rf ./builds/*
-	touch ./builds/.gitkeep
+	rm -rf ./releases/*
+	touch ./releases/.gitkeep
 
 .PHONY: build
 build: linkthis deps
@@ -87,17 +87,17 @@ gox-all: binclean gox-linux gox-darwin
 
 .PHONY: gox-linux
 gox-linux: build dev
-	mkdir -p ./builds/linux/bin
-	gox -output="builds/linux/bin/builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
-	pushd builds >/dev/null && \
+	mkdir -p ./releases/linux/bin
+	gox -output="releases/linux/bin/builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+	pushd releases >/dev/null && \
 	  tar -czf linux-amd64.tar.gz linux/ && \
 	  popd >/dev/null
 
 .PHONY: gox-darwin
 gox-darwin: build dev
-	mkdir -p ./builds/darwin/bin
-	gox -output="builds/darwin/bin/builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
-	pushd builds >/dev/null && \
+	mkdir -p ./releases/darwin/bin
+	gox -output="releases/darwin/bin/builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+	pushd releases >/dev/null && \
 	  tar -czf darwin-amd64.tar.gz darwin/ && \
 	  popd >/dev/null
 
