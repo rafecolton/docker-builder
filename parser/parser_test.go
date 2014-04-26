@@ -89,7 +89,7 @@ var _ = Describe("Parse", func() {
 	)
 
 	BeforeEach(func() {
-		top = os.ExpandEnv("$PWD")
+		top = os.Getenv("PWD")
 		git, _ := exec.LookPath("git")
 		validFile = fmt.Sprintf("%s/spec/fixtures/bob.toml", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
@@ -134,11 +134,24 @@ var _ = Describe("Parse", func() {
 					SubCommand: []exec.Cmd{
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+							Args: []string{
+								"docker",
+								"build",
+								"-t",
+								"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+								"--rm",
+								"--no-cache",
+								".",
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								"quay.io/modcloth/style-gallery:base",
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
@@ -157,19 +170,42 @@ var _ = Describe("Parse", func() {
 					SubCommand: []exec.Cmd{
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+							Args: []string{
+								"docker",
+								"build",
+								"-t",
+								"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+								"--rm",
+								"--no-cache",
+								".",
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",

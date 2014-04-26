@@ -23,7 +23,7 @@ func NewTag(version string, args map[string]string) Tag {
 	case "git":
 		return &gitTag{
 			tag: args["tag"],
-			top: os.ExpandEnv("${PWD}"),
+			top: os.Getenv("PWD"),
 		}
 	default:
 		return &stringTag{

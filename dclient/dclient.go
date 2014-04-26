@@ -43,7 +43,11 @@ func NewDockerClient(logger log.Log, shouldBeReal bool) (DockerClient, error) {
 	dclient, err := docker.NewClient(endpoint)
 
 	if err != nil {
-		logger.Println(color.Sprintf("@{r!}Alas@{|}, docker host %s could not be reached\n----> %+v", endpoint, err))
+		logger.Println(
+			color.Sprintf(
+				"@{r!}Alas@{|}, docker host %s could not be reached\n----> %+v", endpoint, err,
+			),
+		)
 		return nil, err
 	}
 
@@ -66,7 +70,11 @@ func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, er
 	images, err := rtoo.client.ListImages(false)
 
 	if err != nil {
-		rtoo.Println(color.Sprintf("@{r!}Alas@{|}, docker images could not be listed on  %s\n----> %+v", rtoo.host, err))
+		rtoo.Println(
+			color.Sprintf(
+				"@{r!}Alas@{|}, docker images could not be listed on %s\n----> %+v", rtoo.host, err,
+			),
+		)
 		return "", err
 	}
 
@@ -86,5 +94,7 @@ func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, er
 		}
 	}
 
-	return "", errors.New(color.Sprintf("@{r!}Alas@{|}, I am unable to find image tagged with uuid \"%s\"", uuid))
+	return "", errors.New(
+		color.Sprintf("@{r!}Alas@{|}, I am unable to find image tagged with uuid \"%s\"", uuid),
+	)
 }

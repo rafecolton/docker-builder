@@ -31,7 +31,7 @@ func NewParser(filename string, logger log.Log) (*Parser, error) {
 		Log:           logger,
 		filename:      filename,
 		uuidGenerator: uuid.NewUUIDGenerator(true),
-		top:           os.ExpandEnv("${PWD}"),
+		top:           os.Getenv("PWD"),
 	}, nil
 }
 

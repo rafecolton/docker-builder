@@ -82,7 +82,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 		workdir := bob.Workdir()
 
-		bob.Println(color.Sprintf("@{w!}  ----->  Running commands for \"%s\"@{|}", seq.Metadata.Name))
+		bob.Println(color.Sprintf("@{w!}  ----->  Running commands for %q @{|}", seq.Metadata.Name))
 
 		var imageID string
 		var err error
@@ -126,7 +126,12 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					return err
 				}
 			default:
-				return errors.New(color.Sprintf("@{r!}oops, looks like the command you're asking me to run is improperly formed:@{|} %s\n", cmd.Args))
+				return errors.New(
+					color.Sprintf(
+						"@{r!}oops, looks like the command you're asking me to run is improperly formed:@{|} %s\n",
+						cmd.Args,
+					),
+				)
 			}
 		}
 	}
@@ -211,7 +216,7 @@ Repodir is the dir from which we are using files for our docker builds.
 func (bob *Builder) Repodir() string {
 	if !bob.isRegular {
 		repoDir := "spec/fixtures/repodir"
-		return fmt.Sprintf("%s/%s", os.ExpandEnv("${PWD}"), repoDir)
+		return fmt.Sprintf("%s/%s", os.Getenv("PWD"), repoDir)
 	}
 	return filepath.Dir(bob.Builderfile)
 }
@@ -226,7 +231,7 @@ func (bob *Builder) Workdir() string {
 func (bob *Builder) generateWorkDir() string {
 	if !bob.isRegular {
 		specWorkdir := "spec/fixtures/workdir"
-		return fmt.Sprintf("%s/%s", os.ExpandEnv("${PWD}"), specWorkdir)
+		return fmt.Sprintf("%s/%s", os.Getenv("PWD"), specWorkdir)
 	}
 
 	tmp, err := ioutil.TempDir("", "bob")

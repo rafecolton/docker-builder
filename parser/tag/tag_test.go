@@ -46,7 +46,7 @@ var _ = Describe("Git Tag", func() {
 	)
 
 	BeforeEach(func() {
-		top = os.ExpandEnv("${PWD}")
+		top = os.Getenv("PWD")
 		git, _ := exec.LookPath("git")
 		subject = NewTag("git", map[string]string{
 			"top": top,

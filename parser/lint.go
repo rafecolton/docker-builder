@@ -6,6 +6,7 @@ import (
 
 import (
 	"github.com/onsi/gocleanup"
+	"github.com/wsxiaoys/terminal/color"
 )
 
 /*
@@ -42,4 +43,17 @@ func (parser *Parser) AssertLint() {
 		parser.printLintSuccessMessage()
 		gocleanup.Exit(0)
 	}
+}
+
+// helper functions
+func (parser *Parser) printLintSuccessMessage() {
+	parser.Println(color.Sprintf("@{g!}Hooray@{|}, %s is a valid Builderfile!", parser.filename))
+}
+
+func (parser *Parser) printLintFailMessage(err error) {
+	parser.Println(
+		color.Sprintf(
+			"@{r!}Alas@{|}, %s is not a valid Builderfile\n----> %+v", parser.filename, err,
+		),
+	)
 }
