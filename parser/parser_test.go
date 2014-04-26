@@ -42,6 +42,7 @@ var _ = Describe("Parse", func() {
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"base"},
+					SkipPush:   true,
 				},
 				"app": *&builderfile.ContainerSection{
 					Name:       "app",
@@ -51,6 +52,7 @@ var _ = Describe("Parse", func() {
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"git:branch", "git:rev", "git:short"},
+					SkipPush:   false,
 				},
 			},
 		}
@@ -62,27 +64,30 @@ var _ = Describe("Parse", func() {
 			Containers: map[string]builderfile.ContainerSection{
 				"global": *&builderfile.ContainerSection{
 					Dockerfile: "",
-					Included:   []string{},
+					Included:   nil,
 					Excluded:   []string{"spec", "tmp"},
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"git:branch", "git:rev", "git:short"},
+					SkipPush:   false,
 				},
 				"base": *&builderfile.ContainerSection{
 					Dockerfile: "Dockerfile.base",
 					Included:   []string{"Gemfile", "Gemfile.lock"},
-					Excluded:   []string{},
+					Excluded:   nil,
 					Registry:   "",
 					Project:    "",
 					Tags:       []string{"base"},
+					SkipPush:   true,
 				},
 				"app": *&builderfile.ContainerSection{
 					Dockerfile: "Dockerfile",
-					Included:   []string{},
-					Excluded:   []string{},
+					Included:   nil,
+					Excluded:   nil,
 					Registry:   "",
 					Project:    "",
 					Tags:       nil,
+					SkipPush:   false,
 				},
 			},
 		}
@@ -152,10 +157,6 @@ var _ = Describe("Parse", func() {
 								"<IMG>",
 								"quay.io/modcloth/style-gallery:base",
 							},
-						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
 						},
 					},
 				},

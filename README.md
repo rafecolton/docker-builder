@@ -65,6 +65,9 @@ builder --lint bob.toml
 builder --build bob.toml
 ```
 
+See [spec/fixtures/bob.toml](./spec/fixtures/bob.toml) for an example
+`bob.toml` file.
+
 For other uses:
 
 ```bash

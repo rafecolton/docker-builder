@@ -30,6 +30,7 @@ type ContainerSection struct {
 	Registry   string
 	Project    string
 	Tags       []string
+	SkipPush   bool `toml:"skip_push"`
 }
 
 /*

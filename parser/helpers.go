@@ -78,11 +78,13 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		}
 
 		// ADD PUSH COMMANDS
-		buildArgs = []string{"docker", "push", name}
-		containerCommands = append(containerCommands, *&exec.Cmd{
-			Path: "docker",
-			Args: buildArgs,
-		})
+		if !v.SkipPush {
+			buildArgs = []string{"docker", "push", name}
+			containerCommands = append(containerCommands, *&exec.Cmd{
+				Path: "docker",
+				Args: buildArgs,
+			})
+		}
 
 		ret.Commands = append(ret.Commands, &SubSequence{
 			Metadata: &SubSequenceMetadata{
@@ -123,6 +125,7 @@ func (parser *Parser) instructionSetFromBuilderfileStruct(file *builderfile.Buil
 			registry := v.Registry
 			project := v.Project
 			tags := v.Tags
+			skipPush := v.SkipPush
 
 			if hasGlobals {
 				if dockerfile == "" {
@@ -170,6 +173,7 @@ func (parser *Parser) instructionSetFromBuilderfileStruct(file *builderfile.Buil
 				Registry:   registry,
 				Project:    project,
 				Tags:       tags,
+				SkipPush:   skipPush,
 			}
 
 			ret.Containers[k] = *containerSection

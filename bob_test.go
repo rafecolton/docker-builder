@@ -56,10 +56,6 @@ var _ = Describe("Setup", func() {
 					Path: "docker",
 					Args: []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
 				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
-				},
 			},
 		}
 		appSubSequence = &parser.SubSequence{

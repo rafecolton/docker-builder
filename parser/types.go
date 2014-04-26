@@ -40,6 +40,7 @@ type SubSequenceMetadata struct {
 	Included   []string
 	Excluded   []string
 	UUID       string
+	SkipPush   bool
 }
 
 /*

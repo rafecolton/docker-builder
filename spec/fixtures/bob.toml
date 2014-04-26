@@ -7,7 +7,6 @@ build_opts = [
 [containers]
 
 [containers.global]
-included = []
 excluded = [
   "spec",
   "tmp"
@@ -27,15 +26,11 @@ included = [
   "Gemfile",
   "Gemfile.lock"
 ]
-excluded = []
-tags = [
-  "base"
-]
+tags = ["base"]
+skip_push = true
 
 [containers.app]
 Dockerfile = "Dockerfile"
-included = []
-excluded = []
 
 # behavior
 # all are included ; if included is specified, then only those files are
