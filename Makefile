@@ -83,12 +83,10 @@ binclean:
 build: linkthis deps binclean
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
-
 .PHONY: gox-build
 gox-build: linkthis deps binclean
 	gox -osarch="darwin/amd64" -output "builds/builder-dev" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 	gox -output="builds/{{.OS}}_{{.Arch}}" -arch="amd64" -os="darwin linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
-
 
 .PHONY: linkthis
 linkthis:
@@ -101,7 +99,6 @@ linkthis:
 .PHONY: godep
 godep:
 	go get github.com/tools/godep
-
 
 .PHONY: deps
 deps: godep
@@ -117,14 +114,11 @@ deps: godep
 	  rm -rf bats ; \
 	  fi
 
-
 .PHONY: test
 test: build fmtpolice ginkgo bats
 
-
 .PHONY: fmtpolice
 fmtpolice: deps fmt lint
-
 
 .PHONY: fmt
 fmt:
@@ -135,11 +129,9 @@ fmt:
 	  gofmt $$f | diff -u $$f - ; \
 	  done
 
-
 .PHONY: linter
 linter:
 	go get github.com/golang/lint/golint
-
 
 .PHONY: lint
 lint: linter
@@ -151,12 +143,10 @@ lint: linter
 	  else $(MAKE) lintv && exit 1 ; fi \
 	  done
 
-
 .PHONY: lintv
 lintv:
 	@echo "----------"
 	@for file in $(shell git ls-files '*.go') ; do $(GOBIN)/golint $$file ; done
-
 
 .PHONY: ginkgo
 ginkgo:
@@ -168,12 +158,10 @@ ginkgo:
 	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
 	  fi
 
-
 .PHONY: bats
 bats:
 	@echo "----------"
 	$(BATS_INSTALL_DIR)/bin/bats --pretty $(shell git ls-files '*.bats')
-
 
 .PHONY: gox
 gox:
@@ -184,11 +172,5 @@ gox:
 	  gox -build-toolchain ; \
 	  fi \
 
-
 .PHONY: dev
 dev: deps gox
-
-
-.PHONY: container
-container:
-	#TODO: docker build
