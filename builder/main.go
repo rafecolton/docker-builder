@@ -29,31 +29,23 @@ func main() {
 	// if user requests version/branch/rev
 	if runtime.Version {
 		runtime.Println(ver.Version)
-		gocleanup.Exit(0)
 	} else if runtime.VersionFull {
 		runtime.Println(ver.VersionFull)
-		gocleanup.Exit(0)
 	} else if runtime.Branch {
 		runtime.Println(ver.Branch)
-		gocleanup.Exit(0)
 	} else if runtime.Rev {
 		runtime.Println(ver.Rev)
-		gocleanup.Exit(0)
-	}
-
-	// does linting
-	if runtime.Lintfile != "" {
+	} else if runtime.Lintfile != "" {
+		// lint
 		par, _ = parser.NewParser(runtime.Lintfile, runtime)
 		par.AssertLint()
-
-		gocleanup.Exit(0)
-	}
-
-	// does building
-	if runtime.Builderfile != "" {
+	} else if runtime.Builderfile != "" {
+		// otherwise, build
 		par, err := parser.NewParser(runtime.Builderfile, runtime)
 		if err != nil {
-			runtime.Println(color.Sprintf("@{r!}Alas@{|}, could not generate parser\n----> %+v", err))
+			runtime.Println(
+				color.Sprintf("@{r!}Alas@{|}, could not generate parser\n----> %+v", err),
+			)
 			gocleanup.Exit(73)
 		}
 
@@ -67,14 +59,19 @@ func main() {
 		bob.Builderfile = runtime.Builderfile
 
 		if err = bob.Build(commandSequence); err != nil {
-			runtime.Println(color.Sprintf("@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v", err))
+			runtime.Println(
+				color.Sprintf(
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					err,
+				),
+			)
 			gocleanup.Exit(29)
 		}
-
-		gocleanup.Exit(0)
+	} else {
+		//otherwise, nothing to do!
+		config.Usage()
+		gocleanup.Exit(2)
 	}
 
-	//otherwise, nothing to do!
-	config.Usage()
-	gocleanup.Exit(2)
+	gocleanup.Exit(0)
 }
