@@ -128,7 +128,7 @@ func main() {
 		runtime = config.NewRuntime()
 		ver = version.NewVersion()
 
-		allTheThings("")
+		_ = allTheThings("")
 	}
 
 	gocleanup.Exit(0)
