@@ -7,7 +7,7 @@ import (
 )
 
 import (
-	"github.com/deckarep/golang-set"
+	"github.com/hishboy/gocommons/lang"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
 )
@@ -149,7 +149,7 @@ func (bob *Builder) Setup() error {
 	}
 
 	meta := bob.nextSubSequence.Metadata
-	fileSet := mapset.NewSet()
+	fileSet := lang.NewHashSet()
 
 	if len(meta.Included) == 0 {
 		files, err := ioutil.ReadDir(bob.Repodir())
@@ -184,7 +184,7 @@ func (bob *Builder) Setup() error {
 	repodir := bob.Repodir()
 
 	// copy the actual files over
-	for file := range fileSet.Iter() {
+	for _, file := range fileSet.ToSlice() {
 		src := fmt.Sprintf("%s/%s", repodir, file)
 		dest := fmt.Sprintf("%s/%s", workdir, file)
 

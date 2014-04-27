@@ -4,9 +4,9 @@
   "Packages": [
     "github.com/benmanns/goworker",
     "github.com/BurntSushi/toml",
-    "github.com/deckarep/golang-set",
     "github.com/fsouza/go-dockerclient",
     "github.com/golang/lint/golint",
+    "github.com/hishboy/gocommons",
     "github.com/kr/fs",
     "github.com/mitchellh/gox",
     "github.com/nu7hatch/gouuid",
@@ -54,10 +54,6 @@
       "Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
     },
     {
-      "ImportPath": "github.com/deckarep/golang-set",
-      "Rev": "b8d944993561ded581fe326a9a75b5fdf3c5300a"
-    },
-    {
       "ImportPath": "code.google.com/p/vitess/go/pools",
       "Comment": "weekly:weekly.2012-08-23.go.4fdf6aa4f602-740",
       "Rev": "20aec5105bdc7ae2bc1f39deb44ec3fd5596716d"
@@ -79,6 +75,10 @@
     {
       "ImportPath": "github.com/benmanns/goworker",
       "Rev": "cc945f0d9d7b50ea0310de6ae0d3c0952a1e03c7"
+    },
+    {
+      "ImportPath": "github.com/hishboy/gocommons",
+      "Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
     }
   ]
 }
