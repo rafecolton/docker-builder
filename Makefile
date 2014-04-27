@@ -33,6 +33,9 @@ export GOPATH
 export GOBIN
 export PATH
 
+#.PHONY: worker
+#worker:
+
 .PHONY: default help
 default: help
 help:

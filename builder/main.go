@@ -8,20 +8,36 @@ import (
 )
 
 import (
+	"github.com/benmanns/goworker"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
 )
 
 import (
-//"fmt"
-//"os"
+	"flag"
+	"fmt"
+	"os"
 )
+
+func init() {
+	goworker.Register("DockerBuild", buildWorker)
+}
 
 var runtime *config.Runtime
 var ver *version.Version
 var par *parser.Parser
+var runAsWorker = flag.Bool("work", false, "Run as a Goworker")
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "-work" {
+		flag.Parse()
+		if err := goworker.Work(); err != nil {
+			fmt.Println(
+				color.Sprintf("@{r!}Alas, something went wrong :'(@{|}\n----> %+v", err),
+			)
+		}
+		gocleanup.Exit(0)
+	}
 
 	runtime = config.NewRuntime()
 	ver = version.NewVersion()
@@ -47,14 +63,14 @@ func main() {
 		par, err := parser.NewParser(runtime.Builderfile, runtime)
 		if err != nil {
 			runtime.Println(
-				color.Sprintf("@{r!}Alas@{|}, could not generate parser\n----> %+v", err),
+				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %+v", err),
 			)
 			gocleanup.Exit(73)
 		}
 
 		commandSequence, err := par.Parse()
 		if err != nil {
-			runtime.Println(color.Sprintf("@{r!}Alas@{|}, could not parse\n----> %+v", err))
+			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %+v", err))
 			gocleanup.Exit(23)
 		}
 
@@ -73,4 +89,9 @@ func main() {
 	}
 
 	gocleanup.Exit(0)
+}
+
+func buildWorker(queue string, args ...interface{}) error {
+	fmt.Printf("queue: %q\nargs: %q\n", queue, args)
+	return nil
 }
