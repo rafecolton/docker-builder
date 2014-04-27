@@ -4,33 +4,32 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
 /*
 CopyFile copies one file from source to dest.  Copied from
-https://github.com/opesun/copyrecur.
+https://gist.github.com/elazarl/5507969 and modified.
 */
-func CopyFile(source string, dest string) (err error) {
-	sf, err := os.Open(source)
+func CopyFile(s string, d string) (err error) {
+	source, err := os.Open(s)
 	if err != nil {
-		return err
+		return
 	}
-	defer sf.Close()
-	df, err := os.Create(dest)
+
+	defer source.Close()
+
+	dest, err := os.Create(d)
 	if err != nil {
-		return err
+		return
 	}
-	defer df.Close()
-	_, err = io.Copy(df, sf)
-	if err == nil {
-		si, err := os.Stat(source)
-		if err != nil {
-			err = os.Chmod(dest, si.Mode())
-		}
+
+	_, err = io.Copy(dest, source)
+	if err != nil {
+		return
 	}
-	return
+
+	return dest.Close()
 }
 
 /*
@@ -39,37 +38,36 @@ https://github.com/opesun/copyrecur.
 */
 func CopyDir(source string, dest string) (err error) {
 	// get properties of source dir
-	fi, err := os.Stat(source)
+	sourceInfo, err := os.Stat(source)
 	if err != nil {
 		return err
 	}
-	if !fi.IsDir() {
+	if !sourceInfo.IsDir() {
 		return errors.New("source is not a directory")
 	}
+
 	// ensure dest dir does not already exist
-	_, err = os.Open(dest)
-	if !os.IsNotExist(err) {
+	if _, err = os.Open(dest); !os.IsNotExist(err) {
 		return errors.New("destination already exists")
 	}
 	// create dest dir
-	err = os.MkdirAll(dest, fi.Mode())
-	if err != nil {
-		return err
+	if err = os.MkdirAll(dest, sourceInfo.Mode()); err != nil {
+		return
 	}
-	entries, err := ioutil.ReadDir(source)
-	for _, entry := range entries {
-		sfp := source + "/" + entry.Name()
-		dfp := dest + "/" + entry.Name()
-		if entry.IsDir() {
-			err = CopyDir(sfp, dfp)
-			if err != nil {
-				log.Println(err)
+
+	files, err := ioutil.ReadDir(source)
+
+	for _, file := range files {
+		sourceFilePath := source + "/" + file.Name()
+		destFilePath := dest + "/" + file.Name()
+
+		if file.IsDir() {
+			if err = CopyDir(sourceFilePath, destFilePath); err != nil {
+				return
 			}
 		} else {
-			// perform copy
-			err = CopyFile(sfp, dfp)
-			if err != nil {
-				log.Println(err)
+			if err = CopyFile(sourceFilePath, destFilePath); err != nil {
+				return
 			}
 		}
 
