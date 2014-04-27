@@ -34,9 +34,6 @@ func main() {
 			)
 		}
 	} else {
-		runtime = config.NewRuntime()
-		ver = version.NewVersion()
-
 		_ = allTheThings("")
 	}
 
