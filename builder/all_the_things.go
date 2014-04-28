@@ -3,21 +3,37 @@ package main
 import (
 	builder "github.com/rafecolton/bob"
 	"github.com/rafecolton/bob/config"
+	"github.com/rafecolton/bob/log"
 	"github.com/rafecolton/bob/parser"
 	"github.com/rafecolton/bob/version"
 )
 
 import (
+	"github.com/benmanns/goworker"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
 )
 
 import (
+	"errors"
+	"flag"
 	"fmt"
 	"os"
 )
 
-var allTheThings = func(queue string, args ...interface{}) (fake error) {
+var runWorker = func() {
+	logger = log.Initialize(false)
+	flag.Parse()
+	goworker.Register("DockerBuild", workerFunc)
+
+	if err := goworker.Work(); err != nil {
+		logger.Println(
+			color.Sprintf("@{r!}Alas, something went wrong :'(@{|}\n----> %+v", err),
+		)
+	}
+}
+
+var workerFunc = func(queue string, args ...interface{}) (fake error) {
 	if queue == "docker-build" {
 		first := args[0].(map[string]interface{})
 		pwd := first["pwd"].(string)
@@ -51,10 +67,13 @@ var allTheThings = func(queue string, args ...interface{}) (fake error) {
 			)
 			gocleanup.Exit(29)
 		}
-
 		return
 	}
 
+	return errors.New("invalid attempt to use as a goworker")
+}
+
+var allTheThings = func() {
 	runtime = config.NewRuntime()
 	ver = version.NewVersion()
 
@@ -105,5 +124,4 @@ var allTheThings = func(queue string, args ...interface{}) (fake error) {
 	}
 
 	gocleanup.Exit(0)
-	return
 }

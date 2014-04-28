@@ -8,9 +8,7 @@ import (
 )
 
 import (
-	"github.com/benmanns/goworker"
 	"github.com/onsi/gocleanup"
-	"github.com/wsxiaoys/terminal/color"
 )
 
 import (
@@ -25,19 +23,10 @@ var logger log.Logger
 var runAsWorker = flag.Bool("work", false, "Run as a Goworker")
 
 func main() {
-	logger = log.Initialize(false)
-
 	if len(os.Args) > 1 && os.Args[1] == "-work" {
-		flag.Parse()
-		goworker.Register("DockerBuild", allTheThings)
-
-		if err := goworker.Work(); err != nil {
-			logger.Println(
-				color.Sprintf("@{r!}Alas, something went wrong :'(@{|}\n----> %+v", err),
-			)
-		}
+		runWorker()
 	} else {
-		_ = allTheThings("")
+		allTheThings()
 	}
 
 	gocleanup.Exit(0)
