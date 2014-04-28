@@ -3,7 +3,6 @@ package main
 import (
 	builder "github.com/rafecolton/bob"
 	"github.com/rafecolton/bob/config"
-	"github.com/rafecolton/bob/log"
 	"github.com/rafecolton/bob/parser"
 	"github.com/rafecolton/bob/version"
 )
@@ -25,8 +24,6 @@ var allTheThings = func(queue string, args ...interface{}) (fake error) {
 		build := fmt.Sprintf("%s/%s", pwd, first["build"].(string))
 
 		os.Setenv("PWD", pwd)
-
-		logger := log.Initialize(false)
 
 		par, err := parser.NewParser(build, logger)
 		if err != nil {
