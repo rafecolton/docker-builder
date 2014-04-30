@@ -45,7 +45,7 @@ func NewDockerClient(logger log.Log, shouldBeReal bool) (DockerClient, error) {
 	if err != nil {
 		logger.Println(
 			color.Sprintf(
-				"@{r!}Alas@{|}, docker host %s could not be reached\n----> %+v", endpoint, err,
+				"@{r!}Alas@{|}, docker host %q could not be reached\n----> %+v", endpoint, err,
 			),
 		)
 		return nil, err

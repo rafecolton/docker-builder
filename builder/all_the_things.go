@@ -55,7 +55,16 @@ var workerFunc = func(queue string, args ...interface{}) (fake error) {
 			gocleanup.Exit(23)
 		}
 
-		bob := builder.NewBuilder(logger, true)
+		bob, err := builder.NewBuilder(logger, true)
+		if err != nil {
+			logger.Println(
+				color.Sprintf(
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					err,
+				),
+			)
+			gocleanup.Exit(61)
+		}
 		bob.Builderfile = build
 
 		if err = bob.Build(commandSequence); err != nil {
@@ -109,7 +118,17 @@ var allTheThings = func() {
 			gocleanup.Exit(23)
 		}
 
-		bob := builder.NewBuilder(runtime, true)
+		bob, err := builder.NewBuilder(runtime, true)
+		if err != nil {
+			runtime.Println(
+				color.Sprintf(
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					err,
+				),
+			)
+			gocleanup.Exit(61)
+		}
+
 		bob.Builderfile = runtime.Builderfile
 
 		if err = bob.Build(commandSequence); err != nil {

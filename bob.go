@@ -50,7 +50,7 @@ func (bob *Builder) SetNextSubSequence(subSeq *parser.SubSequence) {
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
-func NewBuilder(logger log.Logger, shouldBeRegular bool) *Builder {
+func NewBuilder(logger log.Logger, shouldBeRegular bool) (*Builder, error) {
 	if logger == nil {
 		logger = &log.NullLogger{}
 	}
@@ -58,7 +58,7 @@ func NewBuilder(logger log.Logger, shouldBeRegular bool) *Builder {
 	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
 
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	return &Builder{
@@ -67,7 +67,7 @@ func NewBuilder(logger log.Logger, shouldBeRegular bool) *Builder {
 		isRegular:    shouldBeRegular,
 		Stdout:       log.NewOutWriter(logger, "         @{g}%s@{|}"),
 		Stderr:       log.NewOutWriter(logger, "         @{r}%s@{|}"),
-	}
+	}, nil
 }
 
 /*
