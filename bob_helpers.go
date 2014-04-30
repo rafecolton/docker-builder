@@ -1,7 +1,10 @@
 package bob
 
 import (
+	//"errors"
+	//"fmt"
 	"io"
+	//"io/ioutil"
 	"os"
 	"os/exec"
 )
@@ -10,25 +13,34 @@ import (
 CopyFile copies one file from source to dest.  Copied from
 https://gist.github.com/elazarl/5507969 and modified.
 */
-func CopyFile(s string, d string) (err error) {
-	source, err := os.Open(s)
+func CopyFile(source string, dest string) (err error) {
+	sourceFile, err := os.Open(source)
 	if err != nil {
 		return
 	}
 
-	defer source.Close()
+	defer sourceFile.Close()
 
-	dest, err := os.Create(d)
+	destFile, err := os.Create(dest)
 	if err != nil {
 		return
 	}
+	defer destFile.Close()
 
-	if _, err = io.Copy(dest, source); err != nil {
-		dest.Close()
+	if _, err = io.Copy(destFile, sourceFile); err != nil {
 		return
 	}
 
-	return dest.Close()
+	sourceInfo, err := os.Stat(source)
+	if err != nil {
+		return err
+	}
+
+	if err = os.Chmod(dest, sourceInfo.Mode()); err != nil {
+		return
+	}
+
+	return destFile.Close()
 }
 
 /*
