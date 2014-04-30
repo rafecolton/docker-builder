@@ -5,7 +5,7 @@ import (
 )
 
 import (
-	"github.com/rafecolton/bob/builderfile"
+	"github.com/modcloth/bob/builderfile"
 )
 
 /*

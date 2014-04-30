@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/rafecolton/bob/config"
-	"github.com/rafecolton/bob/log"
-	"github.com/rafecolton/bob/parser"
-	"github.com/rafecolton/bob/version"
+	"github.com/modcloth/bob/config"
+	"github.com/modcloth/bob/log"
+	"github.com/modcloth/bob/parser"
+	"github.com/modcloth/bob/version"
 )
 
 import (

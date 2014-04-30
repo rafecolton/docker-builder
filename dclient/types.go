@@ -1,7 +1,7 @@
 package dclient
 
 import (
-	"github.com/rafecolton/bob/log"
+	"github.com/modcloth/bob/log"
 )
 
 import (

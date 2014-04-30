@@ -2,8 +2,8 @@ package parser
 
 import (
 	"fmt"
-	"github.com/rafecolton/bob/builderfile"
-	"github.com/rafecolton/bob/parser/uuid"
+	"github.com/modcloth/bob/builderfile"
+	"github.com/modcloth/bob/parser/uuid"
 	"io/ioutil"
 )
 

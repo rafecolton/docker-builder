@@ -7,8 +7,8 @@ import (
 
 import (
 	flags "github.com/jessevdk/go-flags"
+	builderlogger "github.com/modcloth/bob/log"
 	"github.com/onsi/gocleanup"
-	builderlogger "github.com/rafecolton/bob/log"
 )
 
 var (

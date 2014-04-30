@@ -1,17 +1,11 @@
 bob
 ===
 
-[![Build Status](https://travis-ci.org/rafecolton/bob.svg?branch=master)](https://travis-ci.org/rafecolton/bob)
-[![GoDoc](https://godoc.org/github.com/rafecolton/bob?status.png)](https://godoc.org/github.com/rafecolton/bob)
+[![Build Status](https://travis-ci.org/modcloth/bob.svg?branch=master)](https://travis-ci.org/modcloth/bob)
+[![GoDoc](https://godoc.org/github.com/modcloth/bob?status.png)](https://godoc.org/github.com/modcloth/bob)
 
 bob, the `builder` builds, tags, and pushes multiple Docker images, all
-from a friendly config file
-
-(by convention, the config file is named `bob.toml`)
-
-## IMPORTANT ANNOUNCEMENTS
-
-*none, currently*
+from a friendly config file (named `bob.toml` by convention)
 
 ## Why?
 
@@ -24,12 +18,13 @@ from a friendly config file
 
 ## Installing
 
-*When the binaries are available,* installing will look something like this:
+To install, retrieve the binaries as follows:
 
 ```bash
 # on Mac OS X
 curl -sL https://github.com/modcloth/bob/releases/download/v0.1.0-alpha/builder-v0.1.0-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
+
 # on Linux, note: you may need sudo
 curl -sL https://github.com/modcloth/bob/releases/download/v0.1.0-alpha/builder-v0.1.0-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1

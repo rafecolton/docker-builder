@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"github.com/rafecolton/bob/log"
-	"github.com/rafecolton/bob/parser/uuid"
+	"github.com/modcloth/bob/log"
+	"github.com/modcloth/bob/parser/uuid"
 )
 
 import (

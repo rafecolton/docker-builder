@@ -8,8 +8,8 @@ import (
 
 import (
 	"fmt"
-	"github.com/rafecolton/bob/builderfile"
-	"github.com/rafecolton/bob/log"
+	"github.com/modcloth/bob/builderfile"
+	"github.com/modcloth/bob/log"
 	"os"
 	"os/exec"
 )
