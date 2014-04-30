@@ -4,38 +4,20 @@ bob
 [![Build Status](https://travis-ci.org/rafecolton/bob.svg?branch=master)](https://travis-ci.org/rafecolton/bob)
 [![GoDoc](https://godoc.org/github.com/rafecolton/bob?status.png)](https://godoc.org/github.com/rafecolton/bob)
 
-:boom: bob, the `builder` builds, tags, and pushes multiple Docker
-images, all from a friendly config file :boom:
+bob, the `builder` builds, tags, and pushes multiple Docker images, all
+from a friendly config file
 
 (by convention, the config file is named `bob.toml`)
 
 ## IMPORTANT ANNOUNCEMENTS
 
-### Binary Availability
-
-The binaries are **NOT** yet available.  This message will be removed
-and the links below will be updated when the binaries have been published.
-
-### Project Status
-
-This project is considered to be in "**alpha**" - that means that any
-releases *should* have basic functionality.  However, you should expect
-that things may be buggy, broken, or simply changing quickly.
-
-At this stage, the best way to stay up to date is to build from source.
-Binaries should be used mainly for testing proof-of-concept uses.
-
-Builds can be done from the following sources:
-
-* [stable](https://github.com/rafecolton/bob)
-* [latest](https://github.com/modcloth/bob) (recommended)
-* [releases](https://github.com/rafecolton/bob/releases):
-  - [v0.0.1](https://github.com/modcloth/bob/tree/v0.0.1) *(note: currently in development not yet available)*
+*none, currently*
 
 ## Why?
 
 * base layers
-* can only add in one "Dockerfile"
+* impossible to build with context with Dockerfile not named
+  "Dockerfile"
 * can't easily exclude dirs / long file names (aufs limitation?)
 * generally make it more efficient to build in smaller layers to make
   pushing and pulling faster, easier, more reliable, etc
@@ -46,10 +28,10 @@ Builds can be done from the following sources:
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/darwin-amd64.tar.gz | \
+curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/builder-v0.1.0-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
 # on Linux, note: you may need sudo
-curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/linux-amd64.tar.gz | \
+curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/builder-v0.1.0-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1
 ```
 
