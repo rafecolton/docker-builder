@@ -4,23 +4,95 @@ bob
 [![Build Status](https://travis-ci.org/rafecolton/bob.svg?branch=master)](https://travis-ci.org/rafecolton/bob)
 [![GoDoc](https://godoc.org/github.com/rafecolton/bob?status.png)](https://godoc.org/github.com/rafecolton/bob)
 
-builds a docker image from an arbitrary file
+:boom: bob, the `builder` builds, tags, and pushes multiple Docker
+images, all from a friendly config file :boom:
 
-**TODO:** the actual docker image building
+(by convention, the config file is named `bob.toml`)
+
+## IMPORTANT ANNOUNCEMENTS
+
+### Binary Availability
+
+The binaries are **NOT** yet available.  This message will be removed
+and the links below will be updated when the binaries have been published.
+
+### Project Status
+
+This project is considered to be in "**alpha**" - that means that any
+releases *should* have basic functionality.  However, you should expect
+that things may be buggy, broken, or simply changing quickly.
+
+At this stage, the best way to stay up to date is to build from source.
+Binaries should be used mainly for testing proof-of-concept uses.
+
+Builds can be done from the following sources:
+
+* [stable](https://github.com/rafecolton/bob)
+* [latest](https://github.com/modcloth/bob) (recommended)
+* [releases](https://github.com/rafecolton/bob/releases):
+  - [v0.0.1](https://github.com/modcloth/bob/tree/v0.0.1) *(note: currently in development not yet available)*
+
+## Why?
+
+* base layers
+* can only add in one "Dockerfile"
+* can't easily exclude dirs / long file names (aufs limitation?)
+* generally make it more efficient to build in smaller layers to make
+  pushing and pulling faster, easier, more reliable, etc
+
+## Installing
+
+*When the binaries are available,* installing will look something like this:
+
+```bash
+# on Mac OS X
+curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/darwin-amd64.tar.gz | \
+  tar -xzf - -C /usr/local --strip-components=1
+# on Linux, note: you may need sudo
+curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/linux-amd64.tar.gz | \
+  sudo tar -xzf - -C /usr/local --strip-components=1
+```
+
+## Building Containers
+
+Example usage:
+
+```bash
+# verify your bob.toml file is valid
+builder --lint bob.toml
+
+# build your containers
+builder # default behavior: `--build bob.toml`
+# or
+builder --build <app-name>.toml
+```
+
+For other uses:
+
+```bash
+builder -h/--help
+
+# Usage:
+#   builder [OPTIONS]
+# 
+# Application Options:
+#   -v             Print version and exit
+#       --version  Print long version and exit
+#       --branch   Print branch and exit
+#       --rev      Print revision and exit
+#   -q, --quiet    Produce no output, only exit codes (false)
+#   -l, --lint=    Lint the provided file. Compatible with -q/--quiet
+#   -b, --build=   The configuration file for Builder
+# 
+# Help Options:
+#   -h, --help     Show this help message
+```
 
 ## Hacking
 
-If you're hacking, building bob from source, or using bob as a library,
-you'll need to install `libgit2`.  On Mac OSX, run the following:
-
 ```bash
-brew install libgit2 --HEAD
-```
+make help
 
-For other systems, see the [.travis.yml](.travis.yml) or [libgit2](https://github.com/libgit2/libgit2)
-
-```bash
-> make help
 # Usage: make [target]
 #
 # Options:
@@ -37,31 +109,3 @@ For other systems, see the [.travis.yml](.travis.yml) or [libgit2](https://githu
 #
 #   dev: set up the dev tool chain
 ```
-
-## Building
-
-```bash
-> builder -h/--help
-# Usage:
-#   builder [OPTIONS]
-#
-# Application Options:
-#   -v                 Print version and exit
-#       --version      Print long version and exit
-#       --branch       Print branch and exit
-#       --rev          Print revision and exit
-#   -q, --quiet        Produce no output, only exit codes (false)
-#   -l, --lint=        Lint the provided file. Compatible with -q/--quiet
-#   -f, --builderfile= The configuration file for Builder
-#
-# Help Options:
-#   -h, --help         Show this help message
-```
-
-## Why?
-
-* base layers
-* can only add in one "Dockerfile"
-* can't easily exclude dirs / long file names (aufs limitation?)
-* generally make it more efficient to build in smaller layers to make
-  pushing and pulling faster, etc

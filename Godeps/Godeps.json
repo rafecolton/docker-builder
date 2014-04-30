@@ -2,12 +2,12 @@
   "ImportPath": "_/workspace",
   "GoVersion": "go1.2rc5",
   "Packages": [
+    "github.com/benmanns/goworker",
     "github.com/BurntSushi/toml",
-    "github.com/deckarep/golang-set",
     "github.com/fsouza/go-dockerclient",
     "github.com/golang/lint/golint",
+    "github.com/hishboy/gocommons",
     "github.com/kr/fs",
-    "github.com/libgit2/git2go",
     "github.com/mitchellh/gox",
     "github.com/nu7hatch/gouuid",
     "github.com/onsi/ginkgo/ginkgo",
@@ -43,7 +43,7 @@
     },
     {
       "ImportPath": "github.com/fsouza/go-dockerclient",
-      "Rev": "adf31729f3d58b22a4bc20e1abc6c019445e11d1"
+      "Rev": "f0766f91fd69ca1806e3ff0598e40db938491dd7"
     },
     {
       "ImportPath": "github.com/nu7hatch/gouuid",
@@ -54,12 +54,31 @@
       "Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
     },
     {
-      "ImportPath": "github.com/libgit2/git2go",
-      "Rev": "9cd1d129bcd567ef65137783a603f8d898d8d933"
+      "ImportPath": "code.google.com/p/vitess/go/pools",
+      "Comment": "weekly:weekly.2012-08-23.go.4fdf6aa4f602-740",
+      "Rev": "20aec5105bdc7ae2bc1f39deb44ec3fd5596716d"
     },
     {
-      "ImportPath": "github.com/deckarep/golang-set",
-      "Rev": "b8d944993561ded581fe326a9a75b5fdf3c5300a"
+      "ImportPath": "code.google.com/p/vitess/go/sync2",
+      "Comment": "weekly:weekly.2012-08-23.go.4fdf6aa4f602-740",
+      "Rev": "20aec5105bdc7ae2bc1f39deb44ec3fd5596716d"
+    },
+    {
+      "ImportPath": "github.com/cihub/seelog",
+      "Comment": "go1.0",
+      "Rev": "239994af72cef28bd0e246cd6c7336244bcc8d19"
+    },
+    {
+      "ImportPath": "github.com/garyburd/redigo/redis",
+      "Rev": "856744a0d55bbc9f94897dcd29ed48a0d978feed"
+    },
+    {
+      "ImportPath": "github.com/benmanns/goworker",
+      "Rev": "cc945f0d9d7b50ea0310de6ae0d3c0952a1e03c7"
+    },
+    {
+      "ImportPath": "github.com/hishboy/gocommons",
+      "Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
     }
   ]
 }

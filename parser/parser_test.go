@@ -42,6 +42,7 @@ var _ = Describe("Parse", func() {
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"base"},
+					SkipPush:   true,
 				},
 				"app": *&builderfile.ContainerSection{
 					Name:       "app",
@@ -51,6 +52,7 @@ var _ = Describe("Parse", func() {
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"git:branch", "git:rev", "git:short"},
+					SkipPush:   false,
 				},
 			},
 		}
@@ -62,36 +64,39 @@ var _ = Describe("Parse", func() {
 			Containers: map[string]builderfile.ContainerSection{
 				"global": *&builderfile.ContainerSection{
 					Dockerfile: "",
-					Included:   []string{},
+					Included:   nil,
 					Excluded:   []string{"spec", "tmp"},
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"git:branch", "git:rev", "git:short"},
+					SkipPush:   false,
 				},
 				"base": *&builderfile.ContainerSection{
 					Dockerfile: "Dockerfile.base",
 					Included:   []string{"Gemfile", "Gemfile.lock"},
-					Excluded:   []string{},
+					Excluded:   nil,
 					Registry:   "",
 					Project:    "",
 					Tags:       []string{"base"},
+					SkipPush:   true,
 				},
 				"app": *&builderfile.ContainerSection{
 					Dockerfile: "Dockerfile",
-					Included:   []string{},
-					Excluded:   []string{},
+					Included:   nil,
+					Excluded:   nil,
 					Registry:   "",
 					Project:    "",
 					Tags:       nil,
+					SkipPush:   false,
 				},
 			},
 		}
 	)
 
 	BeforeEach(func() {
-		top = os.ExpandEnv("$PWD")
+		top = os.Getenv("PWD")
 		git, _ := exec.LookPath("git")
-		validFile = fmt.Sprintf("%s/spec/fixtures/Builderfile", top)
+		validFile = fmt.Sprintf("%s/spec/fixtures/bob.toml", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
 		subject = nil
 		// branch
@@ -129,19 +134,29 @@ var _ = Describe("Parse", func() {
 						Dockerfile: "Dockerfile.base",
 						Excluded:   []string{"spec", "tmp"},
 						Included:   []string{"Gemfile", "Gemfile.lock"},
+						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
 					SubCommand: []exec.Cmd{
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+							Args: []string{
+								"docker",
+								"build",
+								"-t",
+								"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+								"--rm",
+								"--no-cache",
+								".",
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
-						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								"quay.io/modcloth/style-gallery:base",
+							},
 						},
 					},
 				},
@@ -151,23 +166,47 @@ var _ = Describe("Parse", func() {
 						Dockerfile: "Dockerfile",
 						Excluded:   []string{"spec", "tmp"},
 						Included:   []string{},
+						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
 					SubCommand: []exec.Cmd{
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "build", "-t", "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3", "--rm", "--no-cache", "."},
+							Args: []string{
+								"docker",
+								"build",
+								"-t",
+								"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+								"--rm",
+								"--no-cache",
+								".",
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "tag", "<IMG>", fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
+							Args: []string{
+								"docker",
+								"tag",
+								"<IMG>",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
+							},
 						},
 						*&exec.Cmd{
 							Path: "docker",

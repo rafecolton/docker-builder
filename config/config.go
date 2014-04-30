@@ -7,6 +7,7 @@ import (
 
 import (
 	flags "github.com/jessevdk/go-flags"
+	"github.com/onsi/gocleanup"
 	builderlogger "github.com/rafecolton/bob/log"
 )
 
@@ -30,7 +31,7 @@ Runtime is a struct of convenience, used for keeping track of our conf options
 useful, global-ish things.
 */
 type Runtime struct {
-	builderlogger.Log
+	builderlogger.Logger
 	Options
 }
 
@@ -43,10 +44,10 @@ func NewRuntime() *Runtime {
 	if _, err := parser.Parse(); err != nil {
 		arg1 := os.Args[1]
 		if arg1 == "-h" || arg1 == "--help" {
-			os.Exit(0)
+			gocleanup.Exit(0)
 		} else {
 			fmt.Println("Unable to parse args")
-			os.Exit(3)
+			gocleanup.Exit(3)
 		}
 	}
 
@@ -54,7 +55,7 @@ func NewRuntime() *Runtime {
 
 	runtime := &Runtime{
 		Options: opts,
-		Log:     logger.Log,
+		Logger:  logger,
 	}
 
 	return runtime
@@ -76,29 +77,5 @@ type Options struct {
 
 	// Features
 	Lintfile    string `short:"l" long:"lint" description:"Lint the provided file. Compatible with -q/--quiet"`
-	Builderfile string `short:"f" long:"builderfile" description:"The configuration file for Builder"`
-}
-
-/*
-Print passes through calls to Print to logger owned by the Runtime object.
-Used primarily as a convenience.
-*/
-func (config *Runtime) Print(v ...interface{}) {
-	config.Log.Print(v...)
-}
-
-/*
-Println passes through calls to Println to logger owned by the Runtime object.
-Used primarily as a convenience.
-*/
-func (config *Runtime) Println(v ...interface{}) {
-	config.Log.Println(v...)
-}
-
-/*
-Printf passes through calls to Printf to logger owned by the Runtime object.
-Used primarily as a convenience.
-*/
-func (config *Runtime) Printf(format string, v ...interface{}) {
-	config.Log.Printf(format, v...)
+	Builderfile string `short:"b" long:"build" description:"The configuration file for Builder"`
 }

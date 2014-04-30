@@ -2,7 +2,11 @@ package parser
 
 import (
 	"errors"
-	"os"
+)
+
+import (
+	"github.com/onsi/gocleanup"
+	"github.com/wsxiaoys/terminal/color"
 )
 
 /*
@@ -28,15 +32,28 @@ indicate success/failure, it exits nonzero if linting fails.
 func (parser *Parser) AssertLint() {
 	if !parser.IsOpenable() {
 		parser.printLintFailMessage(errors.New("unable to open file"))
-		os.Exit(17)
+		gocleanup.Exit(17)
 	}
 
 	err := parser.Lint()
 	if err != nil {
 		parser.printLintFailMessage(err)
-		os.Exit(5)
+		gocleanup.Exit(5)
 	} else {
 		parser.printLintSuccessMessage()
-		os.Exit(0)
+		gocleanup.Exit(0)
 	}
+}
+
+// helper functions
+func (parser *Parser) printLintSuccessMessage() {
+	parser.Println(color.Sprintf("@{g!}Hooray@{|}, %s is a valid Builderfile!", parser.filename))
+}
+
+func (parser *Parser) printLintFailMessage(err error) {
+	parser.Println(
+		color.Sprintf(
+			"@{r!}Alas@{|}, %s is not a valid Builderfile\n----> %+v", parser.filename, err,
+		),
+	)
 }
