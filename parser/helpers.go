@@ -140,6 +140,8 @@ func (parser *Parser) instructionSetFromBuilderfileStruct(file *builderfile.Buil
 					project = globals.Project
 				}
 
+				skipPush = skipPush || globals.SkipPush
+
 				if included == nil || len(included) == 0 {
 					if globals.Included == nil {
 						included = []string{}
