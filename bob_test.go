@@ -30,7 +30,6 @@ var _ = Describe("Setup", func() {
 		rev             string
 		short           string
 		top             string
-		expectedFiles   []string
 		subject         *Builder
 		baseSubSequence = &parser.SubSequence{
 			Metadata: &parser.SubSequenceMetadata{
@@ -146,32 +145,27 @@ var _ = Describe("Setup", func() {
 		short = string(shortBytes)[:len(shortBytes)-1]
 	})
 
-	AfterEach(func() {
-		subject.CleanWorkdir()
-	})
-
 	Context("with the base container sequence", func() {
 		It("places the correct files in the workdir", func() {
 			subject.SetNextSubSequence(baseSubSequence)
 			subject.CleanWorkdir()
 			subject.Setup()
 
-			expectedFiles = []string{
+			expectedFiles := []string{
 				"Dockerfile",
 				"Gemfile",
 				"Gemfile.lock",
-				"README.txt",
 			}
 
 			files, _ := ioutil.ReadDir(subject.Workdir())
-			fileNames := []string{}
-			for _, v := range files {
-				fileNames = append(fileNames, v.Name())
+			fileNames := make([]string, len(files), len(files))
+
+			for i, v := range files {
+				fileNames[i] = v.Name()
 			}
 
 			sort.Strings(fileNames)
 			sort.Strings(expectedFiles)
-
 			Expect(fileNames).To(Equal(expectedFiles))
 		})
 	})
@@ -182,7 +176,7 @@ var _ = Describe("Setup", func() {
 			subject.CleanWorkdir()
 			subject.Setup()
 
-			expectedFiles = []string{
+			expectedFiles := []string{
 				"Dockerfile",
 				"Dockerfile.base",
 				"Gemfile",
@@ -193,9 +187,9 @@ var _ = Describe("Setup", func() {
 			}
 
 			files, _ := ioutil.ReadDir(subject.Workdir())
-			fileNames := []string{}
-			for _, v := range files {
-				fileNames = append(fileNames, v.Name())
+			fileNames := make([]string, len(files), len(files))
+			for i, v := range files {
+				fileNames[i] = v.Name()
 			}
 
 			sort.Strings(fileNames)
