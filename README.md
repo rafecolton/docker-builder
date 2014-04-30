@@ -28,10 +28,10 @@ from a friendly config file
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/builder-v0.1.0-darwin-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/bob/releases/download/v0.1.0-alpha/builder-v0.1.0-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
 # on Linux, note: you may need sudo
-curl -sL https://github.com/rafecolton/bob/releases/download/0.0.1-alpha/builder-v0.1.0-linux-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/bob/releases/download/v0.1.0-alpha/builder-v0.1.0-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1
 ```
 
