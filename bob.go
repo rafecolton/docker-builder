@@ -229,11 +229,6 @@ func (bob *Builder) Workdir() string {
 }
 
 func (bob *Builder) generateWorkDir() string {
-	if !bob.isRegular {
-		specWorkdir := "spec/fixtures/workdir"
-		return fmt.Sprintf("%s/%s", os.Getenv("PWD"), specWorkdir)
-	}
-
 	tmp, err := ioutil.TempDir("", "bob")
 	if err != nil {
 		return ""
@@ -254,31 +249,11 @@ func (bob *Builder) CleanWorkdir() error {
 	workdir := bob.generateWorkDir()
 	bob.workdir = workdir
 
-	if !bob.isRegular {
-		readme := fmt.Sprintf("%s/README.txt", workdir)
-		os.RemoveAll(workdir)
-		err := os.MkdirAll(workdir, 0755)
-		if err != nil {
-			return err
-		}
-
-		file, err := os.Create(readme)
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-
-		bytes := []byte("This directory tree is used for specs - please do not modify.\n")
-		if _, err := file.Write(bytes); err != nil {
-			return err
-		}
-
-		return nil
+	if err := os.RemoveAll(workdir); err != nil {
+		return err
 	}
 
-	os.RemoveAll(workdir)
-	err := os.MkdirAll(workdir, 0755)
-	if err != nil {
+	if err := os.MkdirAll(workdir, 0755); err != nil {
 		return err
 	}
 
