@@ -28,7 +28,7 @@ var runWorker = func() {
 
 	if err := goworker.Work(); err != nil {
 		logger.Println(
-			color.Sprintf("@{r!}Alas, something went wrong :'(@{|}\n----> %+v", err),
+			color.Sprintf("@{r!}Alas, something went wrong :'(@{|}\n----> %q", err),
 		)
 	}
 }
@@ -44,14 +44,14 @@ var workerFunc = func(queue string, args ...interface{}) (fake error) {
 		par, err := parser.NewParser(build, logger)
 		if err != nil {
 			logger.Println(
-				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %+v", err),
+				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %q", err),
 			)
 			gocleanup.Exit(73)
 		}
 
 		commandSequence, err := par.Parse()
 		if err != nil {
-			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %+v", err))
+			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %q", err))
 			gocleanup.Exit(23)
 		}
 
@@ -59,7 +59,7 @@ var workerFunc = func(queue string, args ...interface{}) (fake error) {
 		if err != nil {
 			logger.Println(
 				color.Sprintf(
-					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
 					err,
 				),
 			)
@@ -70,7 +70,7 @@ var workerFunc = func(queue string, args ...interface{}) (fake error) {
 		if err = bob.Build(commandSequence); err != nil {
 			logger.Println(
 				color.Sprintf(
-					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
 					err,
 				),
 			)
@@ -107,14 +107,14 @@ var allTheThings = func() {
 		par, err := parser.NewParser(runtime.Builderfile, runtime)
 		if err != nil {
 			runtime.Println(
-				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %+v", err),
+				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %q", err),
 			)
 			gocleanup.Exit(73)
 		}
 
 		commandSequence, err := par.Parse()
 		if err != nil {
-			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %+v", err))
+			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %q", err))
 			gocleanup.Exit(23)
 		}
 
@@ -122,7 +122,7 @@ var allTheThings = func() {
 		if err != nil {
 			runtime.Println(
 				color.Sprintf(
-					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
 					err,
 				),
 			)
@@ -134,7 +134,7 @@ var allTheThings = func() {
 		if err = bob.Build(commandSequence); err != nil {
 			runtime.Println(
 				color.Sprintf(
-					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %+v",
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
 					err,
 				),
 			)
