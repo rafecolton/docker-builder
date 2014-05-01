@@ -13,34 +13,45 @@ import (
 CopyFile copies one file from source to dest.  Copied from
 https://gist.github.com/elazarl/5507969 and modified.
 */
-func CopyFile(source string, dest string) (err error) {
-	sourceFile, err := os.Open(source)
+func CopyFile(src, dest string) (err error) {
+	//open source
+	in, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer in.Close()
+
+	//create dest
+	out, err := os.Create(dest)
+	if err != nil {
+		return
+	}
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+
+	//copy to dest from source
+	if _, err = io.Copy(out, in); err != nil {
+		return
+	}
+
+	//duplicate source permissions on dest
+	si, err := os.Stat(src)
 	if err != nil {
 		return
 	}
 
-	defer sourceFile.Close()
-
-	destFile, err := os.Create(dest)
-	if err != nil {
-		return
-	}
-	defer destFile.Close()
-
-	if _, err = io.Copy(destFile, sourceFile); err != nil {
+	if err = out.Chmod(si.Mode()); err != nil {
 		return
 	}
 
-	sourceInfo, err := os.Stat(source)
-	if err != nil {
-		return err
-	}
+	//sync dest to disk
+	err = out.Sync()
 
-	if err = os.Chmod(dest, sourceInfo.Mode()); err != nil {
-		return
-	}
-
-	return destFile.Close()
+	return
 }
 
 /*
@@ -48,7 +59,7 @@ CopyDir recursively copies one dir from source to dest.  Copied from
 https://github.com/opesun/copyrecur.
 */
 func CopyDir(source string, dest string) (err error) {
-	return exec.Command("cp", "-R", source, dest).Run()
+	return exec.Command("cp", "-af", source, dest).Run()
 
 	/*
 		THE CODE BELOW IS BROKEN - FIX IT!
