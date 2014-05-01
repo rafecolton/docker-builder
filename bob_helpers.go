@@ -1,12 +1,11 @@
 package bob
 
 import (
-	//"errors"
-	//"fmt"
+	"errors"
+	"fmt"
 	"io"
-	//"io/ioutil"
+	"io/ioutil"
 	"os"
-	"os/exec"
 )
 
 /*
@@ -58,48 +57,43 @@ func CopyFile(src, dest string) (err error) {
 CopyDir recursively copies one dir from source to dest.  Copied from
 https://github.com/opesun/copyrecur.
 */
-func CopyDir(source string, dest string) (err error) {
-	return exec.Command("cp", "-af", source, dest).Run()
+func CopyDir(source, dest string) (err error) {
+	// get properties of source dir
+	sourceInfo, err := os.Stat(source)
+	if err != nil {
+		return
+	}
 
-	/*
-		THE CODE BELOW IS BROKEN - FIX IT!
-	*/
+	if !sourceInfo.IsDir() {
+		return errors.New("source is not a directory")
+	}
 
-	//// get properties of source dir
-	//sourceInfo, err := os.Stat(source)
-	//if err != nil {
-	//return
-	//}
+	// ensure dest dir does not already exist
+	if _, err = os.Open(dest); !os.IsNotExist(err) {
+		return errors.New("destination already exists")
+	}
 
-	//if !sourceInfo.IsDir() {
-	//return errors.New("source is not a directory")
-	//}
+	// create dest dir
+	if err = os.MkdirAll(dest, sourceInfo.Mode()); err != nil {
+		return
+	}
 
-	//// ensure dest dir does not already exist
-	//if _, err = os.Open(dest); !os.IsNotExist(err) {
-	//return errors.New("destination already exists")
-	//}
-	//// create dest dir
-	//if err = os.MkdirAll(dest, sourceInfo.Mode()); err != nil {
-	//return
-	//}
+	files, err := ioutil.ReadDir(source)
 
-	//files, err := ioutil.ReadDir(source)
+	for _, file := range files {
+		sourceFilePath := fmt.Sprintf("%s/%s", source, file.Name())
+		destFilePath := fmt.Sprintf("%s/%s", dest, file.Name())
 
-	//for _, file := range files {
-	//sourceFilePath := fmt.Sprintf("%s/%s", source, file.Name())
-	//destFilePath := fmt.Sprintf("%s/%s", dest, file.Name())
+		if file.IsDir() {
+			if err = CopyDir(sourceFilePath, destFilePath); err != nil {
+				return
+			}
+		} else {
+			if err = CopyFile(sourceFilePath, destFilePath); err != nil {
+				return
+			}
+		}
 
-	//if file.IsDir() {
-	//if err = CopyDir(sourceFilePath, destFilePath); err != nil {
-	//return
-	//}
-	//} else {
-	//if err = CopyFile(sourceFilePath, destFilePath); err != nil {
-	//return
-	//}
-	//}
-
-	//}
-	//return
+	}
+	return
 }
