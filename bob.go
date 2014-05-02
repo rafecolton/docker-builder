@@ -76,9 +76,13 @@ actual work of building.
 */
 func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 	for _, seq := range commandSequence.Commands {
-		bob.CleanWorkdir()
+		if err := bob.CleanWorkdir(); err != nil {
+			return err
+		}
 		bob.SetNextSubSequence(seq)
-		bob.Setup()
+		if err := bob.Setup(); err != nil {
+			return err
+		}
 
 		workdir := bob.Workdir()
 
