@@ -8,6 +8,7 @@ import (
 
 import (
 	"github.com/hishboy/gocommons/lang"
+	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
 )
@@ -202,9 +203,9 @@ func (bob *Builder) Setup() error {
 		}
 
 		if fileInfo.IsDir() {
-			err = CopyDir(src, dest)
+			err = fileutils.CpR(src, dest)
 		} else {
-			err = CopyFile(src, dest)
+			err = fileutils.Cp(src, dest)
 		}
 		if err != nil {
 			return err
