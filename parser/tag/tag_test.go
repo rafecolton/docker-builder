@@ -11,6 +11,10 @@ import (
 	"os/exec"
 )
 
+import (
+	"github.com/modcloth/go-fileutils"
+)
+
 func TestBuilder(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Tag Specs")
@@ -47,7 +51,7 @@ var _ = Describe("Git Tag", func() {
 
 	BeforeEach(func() {
 		top = os.Getenv("PWD")
-		git, _ := exec.LookPath("git")
+		git, _ := fileutils.Which("git")
 		subject = NewTag("git", map[string]string{
 			"top": top,
 			"tag": "foo",

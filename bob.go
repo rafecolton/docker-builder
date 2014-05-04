@@ -19,7 +19,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 )
 
@@ -98,7 +97,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			cmd.Dir = workdir
 
 			if cmd.Path == "docker" {
-				path, err := exec.LookPath("docker")
+				path, err := fileutils.Which("docker")
 				if err != nil {
 					return err
 				}
@@ -240,7 +239,7 @@ func (bob *Builder) generateWorkDir() string {
 	}
 
 	gocleanup.Register(func() {
-		os.RemoveAll(tmp)
+		fileutils.RmRF(tmp)
 	})
 
 	return tmp
@@ -254,11 +253,11 @@ func (bob *Builder) CleanWorkdir() error {
 	workdir := bob.generateWorkDir()
 	bob.workdir = workdir
 
-	if err := os.RemoveAll(workdir); err != nil {
+	if err := fileutils.RmRF(workdir); err != nil {
 		return err
 	}
 
-	if err := os.MkdirAll(workdir, 0755); err != nil {
+	if err := fileutils.MkdirP(workdir, 0755); err != nil {
 		return err
 	}
 

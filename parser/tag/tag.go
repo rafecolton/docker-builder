@@ -5,6 +5,10 @@ import (
 	"os/exec"
 )
 
+import (
+	"github.com/modcloth/go-fileutils"
+)
+
 /*
 Tag is the interface for specifying tags for container builds.
 */
@@ -64,7 +68,7 @@ must be supplied as well.  If any of the conditions are not met, Tag returns
 func (gt *gitTag) Tag() string {
 
 	top := gt.top
-	git, _ := exec.LookPath("git")
+	git, _ := fileutils.Which("git")
 
 	branchCmd := &exec.Cmd{
 		Path: git,
