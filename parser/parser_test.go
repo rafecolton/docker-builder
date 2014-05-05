@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/modcloth/bob/builderfile"
 	"github.com/modcloth/bob/log"
+	"github.com/modcloth/go-fileutils"
 	"os"
 	"os/exec"
 )
@@ -95,7 +96,7 @@ var _ = Describe("Parse", func() {
 
 	BeforeEach(func() {
 		top = os.Getenv("PWD")
-		git, _ := exec.LookPath("git")
+		git, _ := fileutils.Which("git")
 		validFile = fmt.Sprintf("%s/spec/fixtures/bob.toml", top)
 		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
 		subject = nil

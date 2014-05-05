@@ -8,6 +8,7 @@ import (
 
 import (
 	"github.com/hishboy/gocommons/lang"
+	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
 )
@@ -18,7 +19,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 )
 
@@ -76,9 +76,13 @@ actual work of building.
 */
 func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 	for _, seq := range commandSequence.Commands {
-		bob.CleanWorkdir()
+		if err := bob.CleanWorkdir(); err != nil {
+			return err
+		}
 		bob.SetNextSubSequence(seq)
-		bob.Setup()
+		if err := bob.Setup(); err != nil {
+			return err
+		}
 
 		workdir := bob.Workdir()
 
@@ -93,7 +97,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			cmd.Dir = workdir
 
 			if cmd.Path == "docker" {
-				path, err := exec.LookPath("docker")
+				path, err := fileutils.Which("docker")
 				if err != nil {
 					return err
 				}
@@ -198,9 +202,9 @@ func (bob *Builder) Setup() error {
 		}
 
 		if fileInfo.IsDir() {
-			err = CopyDir(src, dest)
+			err = fileutils.CpR(src, dest)
 		} else {
-			err = CopyFile(src, dest)
+			err = fileutils.Cp(src, dest)
 		}
 		if err != nil {
 			return err
@@ -235,7 +239,7 @@ func (bob *Builder) generateWorkDir() string {
 	}
 
 	gocleanup.Register(func() {
-		os.RemoveAll(tmp)
+		fileutils.RmRF(tmp)
 	})
 
 	return tmp
@@ -249,11 +253,11 @@ func (bob *Builder) CleanWorkdir() error {
 	workdir := bob.generateWorkDir()
 	bob.workdir = workdir
 
-	if err := os.RemoveAll(workdir); err != nil {
+	if err := fileutils.RmRF(workdir); err != nil {
 		return err
 	}
 
-	if err := os.MkdirAll(workdir, 0755); err != nil {
+	if err := fileutils.MkdirP(workdir, 0755); err != nil {
 		return err
 	}
 

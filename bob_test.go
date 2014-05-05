@@ -9,6 +9,7 @@ import (
 
 import (
 	"github.com/modcloth/bob/parser"
+	"github.com/modcloth/go-fileutils"
 )
 
 import (
@@ -115,7 +116,7 @@ var _ = Describe("Setup", func() {
 	BeforeEach(func() {
 		subject, _ = NewBuilder(nil, false)
 		top = os.Getenv("PWD")
-		git, _ := exec.LookPath("git")
+		git, _ := fileutils.Which("git")
 		// branch
 		branchCmd := &exec.Cmd{
 			Path: git,

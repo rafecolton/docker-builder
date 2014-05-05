@@ -9,6 +9,7 @@
     "github.com/hishboy/gocommons",
     "github.com/kr/fs",
     "github.com/mitchellh/gox",
+    "github.com/modcloth/go-fileutils",
     "github.com/nu7hatch/gouuid",
     "github.com/onsi/ginkgo/ginkgo",
     "github.com/onsi/gocleanup",
@@ -79,6 +80,10 @@
     {
       "ImportPath": "github.com/hishboy/gocommons",
       "Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
+    },
+    {
+      "ImportPath": "github.com/modcloth/go-fileutils",
+      "Rev": "04e04d7b61ad4f0498652586ea10d650d2403fc7"
     }
   ]
 }
