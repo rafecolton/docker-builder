@@ -117,7 +117,11 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					return err
 				}
 			case "tag":
-				cmd.Args[2] = imageID
+				for k, v := range cmd.Args {
+					if v == "<IMG>" {
+						cmd.Args[k] = imageID
+					}
+				}
 				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
 
 				if err := cmd.Run(); err != nil {
