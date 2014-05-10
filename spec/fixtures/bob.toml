@@ -3,6 +3,7 @@ build_opts = [
   "--rm",
   "--no-cache"
 ]
+tag_opts = ["--force"]
 
 [containers]
 
