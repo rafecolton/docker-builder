@@ -10,3 +10,4 @@
 * consolidate TODO file and GitHub Issues
 * "integration" specs with actual container builds - make sure it
   catches the tag\_opts issue
+* DRY up the main

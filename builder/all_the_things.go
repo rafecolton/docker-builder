@@ -141,6 +141,4 @@ var allTheThings = func() {
 			gocleanup.Exit(29)
 		}
 	}
-
-	gocleanup.Exit(0)
 }

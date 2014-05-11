@@ -1,6 +1,7 @@
 package main
 
 import (
+	builder "github.com/modcloth/bob"
 	"github.com/modcloth/bob/config"
 	"github.com/modcloth/bob/log"
 	"github.com/modcloth/bob/parser"
@@ -8,11 +9,14 @@ import (
 )
 
 import (
+	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
+	"github.com/wsxiaoys/terminal/color"
 )
 
 import (
 	"flag"
+	"fmt"
 	"os"
 )
 
@@ -27,6 +31,21 @@ func main() {
 		runWorker()
 	} else {
 		allTheThings()
+	}
+
+	if builder.WaitForPush {
+	WaitForPush:
+		for {
+			select {
+			case <-runner.Done:
+				break WaitForPush
+			case err := <-runner.Errors:
+				fmt.Println(
+					color.Sprintf("@{r!}Uh oh, something went wrong while running %q@{|}\n----> %q", err, err.CommandStr),
+				)
+				gocleanup.Exit(1)
+			}
+		}
 	}
 
 	gocleanup.Exit(0)
