@@ -41,7 +41,7 @@ func main() {
 				break WaitForPush
 			case err := <-runner.Errors:
 				fmt.Println(
-					color.Sprintf("@{r!}Uh oh, something went wrong while running %q@{|}\n----> %q", err, err.CommandStr),
+					color.Sprintf("@{r!}Uh oh, something went wrong while running %q@{|}\n----> %q", err.CommandStr, err),
 				)
 				gocleanup.Exit(1)
 			}
