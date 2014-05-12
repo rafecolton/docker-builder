@@ -33,7 +33,7 @@ var runWorker = func() {
 	}
 }
 
-var workerFunc = func(queue string, args ...interface{}) (fake error) {
+var workerFunc = func(queue string, args ...interface{}) error {
 	if queue == "docker-build" {
 		first := args[0].(map[string]interface{})
 		pwd := first["pwd"].(string)
@@ -46,13 +46,13 @@ var workerFunc = func(queue string, args ...interface{}) (fake error) {
 			logger.Println(
 				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %q", err),
 			)
-			gocleanup.Exit(73)
+			return err
 		}
 
 		commandSequence, err := par.Parse()
 		if err != nil {
 			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %q", err))
-			gocleanup.Exit(23)
+			return err
 		}
 
 		bob, err := builder.NewBuilder(logger, true)
@@ -63,7 +63,7 @@ var workerFunc = func(queue string, args ...interface{}) (fake error) {
 					err,
 				),
 			)
-			gocleanup.Exit(61)
+			return err
 		}
 		bob.Builderfile = build
 
@@ -74,9 +74,9 @@ var workerFunc = func(queue string, args ...interface{}) (fake error) {
 					err,
 				),
 			)
-			gocleanup.Exit(29)
+			return err
 		}
-		return
+		return nil
 	}
 
 	return errors.New("invalid attempt to use as a goworker")
