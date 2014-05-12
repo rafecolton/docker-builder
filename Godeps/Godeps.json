@@ -1,6 +1,6 @@
 {
   "ImportPath": "_/workspace",
-  "GoVersion": "go1.2rc5",
+  "GoVersion": "go1.2.1",
   "Packages": [
     "github.com/benmanns/goworker",
     "github.com/BurntSushi/toml",
@@ -41,7 +41,7 @@
     },
     {
       "ImportPath": "github.com/BurntSushi/toml",
-      "Rev": "f87ce853111478914f0bcffa34d43a93643e6eda"
+      "Rev": "890ff2dcee0c5b7fc3c7453325d8146aaf1850c1"
     },
     {
       "ImportPath": "github.com/fsouza/go-dockerclient",
