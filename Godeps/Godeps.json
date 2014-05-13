@@ -1,6 +1,6 @@
 {
   "ImportPath": "_/workspace",
-  "GoVersion": "go1.2rc5",
+  "GoVersion": "go1.2.1",
   "Packages": [
     "github.com/benmanns/goworker",
     "github.com/BurntSushi/toml",
@@ -10,6 +10,7 @@
     "github.com/kr/fs",
     "github.com/mitchellh/gox",
     "github.com/modcloth/go-fileutils",
+    "github.com/modcloth/queued-command-runner",
     "github.com/nu7hatch/gouuid",
     "github.com/onsi/ginkgo/ginkgo",
     "github.com/onsi/gocleanup",
@@ -40,7 +41,7 @@
     },
     {
       "ImportPath": "github.com/BurntSushi/toml",
-      "Rev": "f87ce853111478914f0bcffa34d43a93643e6eda"
+      "Rev": "890ff2dcee0c5b7fc3c7453325d8146aaf1850c1"
     },
     {
       "ImportPath": "github.com/fsouza/go-dockerclient",
@@ -84,6 +85,10 @@
     {
       "ImportPath": "github.com/modcloth/go-fileutils",
       "Rev": "026489b5e68c7fbc5f96eb45d44afc444559993f"
+    },
+    {
+      "ImportPath": "github.com/modcloth/queued-command-runner",
+      "Rev": "cbfa18f62ea434e6e3b599987a2041445f79f114"
     }
   ]
 }

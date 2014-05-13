@@ -9,6 +9,7 @@ import (
 import (
 	"github.com/hishboy/gocommons/lang"
 	"github.com/modcloth/go-fileutils"
+	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
 )
@@ -21,6 +22,14 @@ import (
 	"os"
 	"path/filepath"
 )
+
+/*
+WaitForPush indicates to main() that a `docker push` command has been
+started.  Since those are run asynchronously, main() has to wait on the
+runner.Done channel.  However, if the build does not require a push, we
+don't want to wait or we'll just be stuck forever.
+*/
+var WaitForPush bool
 
 /*
 A Builder is the struct that actually does the work of moving files around and
@@ -117,7 +126,11 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					return err
 				}
 			case "tag":
-				cmd.Args[2] = imageID
+				for k, v := range cmd.Args {
+					if v == "<IMG>" {
+						cmd.Args[k] = imageID
+					}
+				}
 				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
 
 				if err := cmd.Run(); err != nil {
@@ -125,10 +138,9 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				}
 			case "push":
 				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
+				WaitForPush = true
 
-				if err := cmd.Run(); err != nil {
-					return err
-				}
+				runner.Run(&cmd)
 			default:
 				return errors.New(
 					color.Sprintf(

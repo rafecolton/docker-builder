@@ -27,6 +27,8 @@ GOPATH := $(PWD)/Godeps/_workspace
 GOBIN := $(GOPATH)/bin
 PATH := $(GOPATH):$(PATH)
 
+BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
+
 export BATS_INSTALL_DIR
 export GINKGO_PATH
 export GOPATH
@@ -177,7 +179,7 @@ ginkgo:
 .PHONY: bats
 bats:
 	@echo "----------"
-	$(BATS_INSTALL_DIR)/bin/bats --pretty $(shell git ls-files '*.bats')
+	$(BATS_INSTALL_DIR)/bin/bats $(BATS_OUT_FORMAT) $(shell git ls-files '*.bats')
 
 .PHONY: gox
 gox:

@@ -33,7 +33,7 @@ var _ = Describe("Parse", func() {
 		expectedCommandSequence *CommandSequence
 		expectedInstructionSet  = &InstructionSet{
 			DockerBuildOpts: []string{"--rm", "--no-cache"},
-			DockerTagOpts:   []string{},
+			DockerTagOpts:   []string{"--force"},
 			Containers: map[string]builderfile.ContainerSection{
 				"base": *&builderfile.ContainerSection{
 					Name:       "base",
@@ -60,7 +60,7 @@ var _ = Describe("Parse", func() {
 		expectedBuilderfile = &builderfile.Builderfile{
 			Docker: *&builderfile.Docker{
 				BuildOpts: []string{"--rm", "--no-cache"},
-				TagOpts:   []string{},
+				TagOpts:   []string{"--force"},
 			},
 			Containers: map[string]builderfile.ContainerSection{
 				"global": *&builderfile.ContainerSection{
@@ -155,6 +155,7 @@ var _ = Describe("Parse", func() {
 							Args: []string{
 								"docker",
 								"tag",
+								"--force",
 								"<IMG>",
 								"quay.io/modcloth/style-gallery:base",
 							},
@@ -187,6 +188,7 @@ var _ = Describe("Parse", func() {
 							Args: []string{
 								"docker",
 								"tag",
+								"--force",
 								"<IMG>",
 								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
 							},
@@ -196,6 +198,7 @@ var _ = Describe("Parse", func() {
 							Args: []string{
 								"docker",
 								"tag",
+								"--force",
 								"<IMG>",
 								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
 							},
@@ -205,6 +208,7 @@ var _ = Describe("Parse", func() {
 							Args: []string{
 								"docker",
 								"tag",
+								"--force",
 								"<IMG>",
 								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
 							},
