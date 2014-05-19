@@ -1,9 +1,9 @@
 package bob
 
 import (
-	"github.com/modcloth/bob/dclient"
-	"github.com/modcloth/bob/log"
-	"github.com/modcloth/bob/parser"
+	"github.com/modcloth/docker-builder/dclient"
+	"github.com/modcloth/docker-builder/log"
+	"github.com/modcloth/docker-builder/parser"
 )
 
 import (

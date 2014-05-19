@@ -2,7 +2,7 @@ package parser
 
 import (
 	"fmt"
-	"github.com/modcloth/bob/builderfile"
+	"github.com/modcloth/docker-builder/builderfile"
 	"io/ioutil"
 )
 

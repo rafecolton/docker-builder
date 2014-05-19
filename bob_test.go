@@ -1,14 +1,14 @@
 package bob_test
 
 import (
-	. "github.com/modcloth/bob"
+	. "github.com/modcloth/docker-builder"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"testing"
 )
 
 import (
-	"github.com/modcloth/bob/parser"
+	"github.com/modcloth/docker-builder/parser"
 	"github.com/modcloth/go-fileutils"
 )
 

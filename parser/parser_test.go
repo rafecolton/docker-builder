@@ -8,8 +8,8 @@ import (
 
 import (
 	"fmt"
-	"github.com/modcloth/bob/builderfile"
-	"github.com/modcloth/bob/log"
+	"github.com/modcloth/docker-builder/builderfile"
+	"github.com/modcloth/docker-builder/log"
 	"github.com/modcloth/go-fileutils"
 	"os"
 	"os/exec"

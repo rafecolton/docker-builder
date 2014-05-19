@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
-B := github.com/modcloth/bob
+B := github.com/modcloth/docker-builder
 TARGETS := \
   $(B)/builder \
   $(B)/builderfile \
@@ -63,7 +63,7 @@ all: binclean clean build test
 .PHONY: clean
 clean:
 	go clean -i -r $(TARGETS) || true
-	rm -rf $${GOPATH%%:*}/src/github.com/modcloth/bob
+	rm -rf $${GOPATH%%:*}/src/github.com/modcloth/docker-builder
 	rm -f $${GOPATH%%:*}/bin/builder
 	rm -rf Godeps/_workspace/*
 
@@ -110,8 +110,8 @@ gox-darwin: build dev
 linkthis:
 	@echo "gvm linkthis'ing this..."
 	@if which gvm >/dev/null && \
-	  [[ ! -d $${GOPATH%%:*}/src/github.com/modcloth/bob ]] ; then \
-	  gvm linkthis github.com/modcloth/bob ; \
+	  [[ ! -d $${GOPATH%%:*}/src/github.com/modcloth/docker-builder ]] ; then \
+	  gvm linkthis github.com/modcloth/docker-builder ; \
 	  fi
 
 .PHONY: godep

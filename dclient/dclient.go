@@ -1,7 +1,7 @@
 package dclient
 
 import (
-	"github.com/modcloth/bob/log"
+	"github.com/modcloth/docker-builder/log"
 )
 
 import (

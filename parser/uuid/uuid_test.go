@@ -1,7 +1,7 @@
 package uuid_test
 
 import (
-	. "github.com/modcloth/bob/parser/uuid"
+	. "github.com/modcloth/docker-builder/parser/uuid"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"testing"
