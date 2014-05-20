@@ -1,7 +1,7 @@
 package version_test
 
 import (
-	. "github.com/modcloth/bob/version"
+	. "github.com/modcloth/docker-builder/version"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	color "github.com/wsxiaoys/terminal/color"

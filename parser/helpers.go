@@ -7,8 +7,8 @@ import (
 )
 
 import (
-	"github.com/modcloth/bob/builderfile"
-	"github.com/modcloth/bob/parser/tag"
+	"github.com/modcloth/docker-builder/builderfile"
+	"github.com/modcloth/docker-builder/parser/tag"
 )
 
 /*

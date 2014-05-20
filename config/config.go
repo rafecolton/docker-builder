@@ -7,7 +7,7 @@ import (
 
 import (
 	flags "github.com/jessevdk/go-flags"
-	builderlogger "github.com/modcloth/bob/log"
+	builderlogger "github.com/modcloth/docker-builder/log"
 	"github.com/onsi/gocleanup"
 )
 

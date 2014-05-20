@@ -15,7 +15,7 @@
     "github.com/onsi/ginkgo/ginkgo",
     "github.com/onsi/gocleanup",
     "github.com/onsi/gomega",
-    "github.com/rafecolton/bob/builder"
+    "github.com/modcloth/docker-builder/builder"
   ],
   "Deps": [
     {

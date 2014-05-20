@@ -1,11 +1,11 @@
 package main
 
 import (
-	builder "github.com/modcloth/bob"
-	"github.com/modcloth/bob/config"
-	"github.com/modcloth/bob/log"
-	"github.com/modcloth/bob/parser"
-	"github.com/modcloth/bob/version"
+	builder "github.com/modcloth/docker-builder"
+	"github.com/modcloth/docker-builder/config"
+	"github.com/modcloth/docker-builder/log"
+	"github.com/modcloth/docker-builder/parser"
+	"github.com/modcloth/docker-builder/version"
 )
 
 import (
@@ -101,7 +101,7 @@ var allTheThings = func() {
 		par.AssertLint()
 	} else {
 		if runtime.Builderfile == "" {
-			runtime.Builderfile = "bob.toml"
+			runtime.Builderfile = "Bobfile"
 		}
 		// otherwise, build
 		par, err := parser.NewParser(runtime.Builderfile, runtime)
