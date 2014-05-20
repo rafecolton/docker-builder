@@ -80,6 +80,30 @@ func NewBuilder(logger log.Logger, shouldBeRegular bool) (*Builder, error) {
 }
 
 /*
+BuildFromFile combines Build() with parser.Parse() to reduce the number of
+steps needed to build with bob programatically.
+*/
+func (bob *Builder) BuildFromFile(file string) (err error) {
+	par, err := parser.NewParser(file, bob)
+	if err != nil {
+		return
+	}
+
+	commandSequence, err := par.Parse()
+	if err != nil {
+		return
+	}
+
+	bob.Builderfile = file
+
+	if err = bob.Build(commandSequence); err != nil {
+		return
+	}
+
+	return
+}
+
+/*
 Build is currently a placeholder function but will eventually be used to do the
 actual work of building.
 */
