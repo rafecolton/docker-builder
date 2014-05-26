@@ -1,7 +1,6 @@
 package tag
 
 import (
-	"os"
 	"os/exec"
 )
 
@@ -27,7 +26,7 @@ func NewTag(version string, args map[string]string) Tag {
 	case "git":
 		return &gitTag{
 			tag: args["tag"],
-			top: os.Getenv("PWD"),
+			top: args["top"],
 		}
 	default:
 		return &stringTag{
