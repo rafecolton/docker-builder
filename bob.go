@@ -104,8 +104,7 @@ func (bob *Builder) BuildFromFile(file string) error {
 }
 
 /*
-Build is currently a placeholder function but will eventually be used to do the
-actual work of building.
+Build does the building!
 */
 func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 	for _, seq := range commandSequence.Commands {
