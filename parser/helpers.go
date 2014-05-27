@@ -58,7 +58,10 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {
 			var tagObj tag.Tag
-			tagArg := map[string]string{"tag": t}
+			tagArg := map[string]string{
+				"tag": t,
+				"top": parser.top,
+			}
 
 			if len(t) > 4 && t[0:4] == "git:" {
 				tagObj = tag.NewTag("git", tagArg)

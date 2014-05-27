@@ -6,7 +6,7 @@ import (
 )
 
 import (
-	"os"
+	"path/filepath"
 )
 
 /*
@@ -31,7 +31,7 @@ func NewParser(filename string, logger log.Log) (*Parser, error) {
 		Log:           logger,
 		filename:      filename,
 		uuidGenerator: uuid.NewUUIDGenerator(true),
-		top:           os.Getenv("PWD"),
+		top:           filepath.Dir(filename),
 	}, nil
 }
 
