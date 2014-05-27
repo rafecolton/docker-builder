@@ -163,7 +163,9 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
 				WaitForPush = true
 
-				runner.Run(&cmd)
+				runner.Run(&runner.Command{
+					Cmd: &cmd,
+				})
 			default:
 				return errors.New(
 					color.Sprintf(
