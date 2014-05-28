@@ -3,8 +3,10 @@ SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/modcloth/docker-builder
 TARGETS := \
+  $(B) \
   $(B)/builder \
   $(B)/builderfile \
+  $(B)/config \
   $(B)/dclient \
   $(B)/log \
   $(B)/parser \
@@ -182,7 +184,7 @@ gopath:
 
 .PHONY: save
 save:
-	godep save -copy=false
+	godep save -copy=false ./...
 
 .PHONY: dev
 dev: deps gox
