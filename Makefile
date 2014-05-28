@@ -23,17 +23,11 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 
 BATS_INSTALL_DIR ?= /usr/local
 GINKGO_PATH ?= "."
-GOPATH := $(PWD)/Godeps/_workspace
-GOBIN := $(GOPATH)/bin
-PATH := $(GOPATH):$(PATH)
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 
 export BATS_INSTALL_DIR
 export GINKGO_PATH
-export GOPATH
-export GOBIN
-export PATH
 
 #.PHONY: worker
 #worker:
@@ -51,7 +45,7 @@ help:
 	@echo
 	@echo "  quick: build + invokes builder a couple times (good for debugging)"
 	@echo
-	@echo "  build: gvm linkthis plus installing libs plus installing deps"
+	@echo "  build: installing libs plus installing deps"
 	@echo
 	@echo "  test: build fmtpolice, ginkgo tests, and bats tests"
 	@echo
@@ -63,9 +57,7 @@ all: binclean clean build test
 .PHONY: clean
 clean:
 	go clean -i -r $(TARGETS) || true
-	rm -rf $${GOPATH%%:*}/src/github.com/modcloth/docker-builder
 	rm -f $${GOPATH%%:*}/bin/builder
-	rm -rf Godeps/_workspace/*
 
 .PHONY: quick
 quick: build
@@ -84,7 +76,7 @@ binclean:
 	touch ./releases/.gitkeep
 
 .PHONY: build
-build: linkthis deps
+build: deps
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 .PHONY: gox-all
@@ -106,14 +98,6 @@ gox-darwin: build dev
 	  tar -czf darwin-amd64.tar.gz darwin/ && \
 	  popd >/dev/null
 
-.PHONY: linkthis
-linkthis:
-	@echo "gvm linkthis'ing this..."
-	@if which gvm >/dev/null && \
-	  [[ ! -d $${GOPATH%%:*}/src/github.com/modcloth/docker-builder ]] ; then \
-	  gvm linkthis github.com/modcloth/docker-builder ; \
-	  fi
-
 .PHONY: godep
 godep:
 	go get github.com/tools/godep
@@ -121,7 +105,7 @@ godep:
 .PHONY: deps
 deps: godep
 	@echo "godep restoring..."
-	$(GOBIN)/godep restore
+	$(GOPATH)/bin/godep restore
 	go get github.com/golang/lint/golint
 	go get github.com/onsi/ginkgo/ginkgo
 	go get github.com/onsi/gomega
@@ -156,7 +140,7 @@ lint: linter
 	@echo "----------"
 	@echo "checking lint"
 	@for file in $(shell git ls-files '*.go') ; do \
-	  if [[ "$$($(GOBIN)/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
+	  if [[ "$$($(GOPATH)/bin/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
 	  echo yayyy >/dev/null ; \
 	  else $(MAKE) lintv && exit 1 ; fi \
 	  done
@@ -164,16 +148,16 @@ lint: linter
 .PHONY: lintv
 lintv:
 	@echo "----------"
-	@for file in $(shell git ls-files '*.go') ; do $(GOBIN)/golint $$file ; done
+	@for file in $(shell git ls-files '*.go') ; do $(GOPATH)/bin/golint $$file ; done
 
 .PHONY: ginkgo
 ginkgo:
 	@echo "----------"
 	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
-	  echo "$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r ." && \
-	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race -r . ; \
-	  else echo "$(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH)" && \
-	  $(GOBIN)/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
+	  echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r ." && \
+	  $(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r . ; \
+	  else echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH)" && \
+	  $(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
 	  fi
 
 .PHONY: bats

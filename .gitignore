@@ -21,6 +21,4 @@ _testmain.go
 
 *.exe
 *.test
-Godeps
-!Godeps/Godeps.json
 releases/*
