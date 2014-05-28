@@ -167,7 +167,7 @@ ginkgo:
 .PHONY: bats
 bats:
 	@echo "----------"
-	$(BATS_INSTALL_DIR)/bin/bats $(BATS_OUT_FORMAT) $(shell git ls-files '*.bats')
+	$(BATS_INSTALL_DIR)/bin/bats $(BATS_OUT_FORMAT) $(shell find . -type f -name '*.bats')
 
 .PHONY: gox
 gox:
