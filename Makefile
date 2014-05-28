@@ -25,9 +25,11 @@ BATS_INSTALL_DIR ?= /usr/local
 GINKGO_PATH ?= "."
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
+GOPATH := $(shell echo $${GOPATH%%:*})
 
 export BATS_INSTALL_DIR
 export GINKGO_PATH
+export GOPATH
 
 #.PHONY: worker
 #worker:
@@ -173,6 +175,14 @@ gox:
 	  go get github.com/mitchellh/gox ; \
 	  gox -build-toolchain ; \
 	  fi \
+
+.PHONY: gopath
+gopath:
+	@echo  "\$$GOPATH = $(GOPATH)"
+
+.PHONY: save
+save:
+	godep save -copy=false
 
 .PHONY: dev
 dev: deps gox
