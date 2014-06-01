@@ -39,12 +39,12 @@ func main() {
 		return nil
 	}
 	app.Commands = []cli.Command{
-		{
-			Name:      "init",
-			ShortName: "i",
-			Usage:     "",
-			Action:    initialize,
-		},
+		//{
+		//Name:      "init",
+		//ShortName: "i",
+		//Usage:     "",
+		//Action:    initialize,
+		//},
 		{
 			Name:        "build",
 			ShortName:   "b",
@@ -123,8 +123,8 @@ func build(c *cli.Context) {
 	}
 }
 
-func initialize(c *cli.Context) {
-}
+//func initialize(c *cli.Context) {
+//}
 
 func exitErr(exitCode int, fmtString string, args ...interface{}) {
 	logger.Println(color.Sprintf(fmtString, args...))
