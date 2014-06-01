@@ -5,10 +5,6 @@ import (
 	"path"
 )
 
-import (
-	"github.com/wsxiaoys/terminal/color"
-)
-
 var (
 	// BranchString is set by -ldflags in the Makefile - it contains the branch
 	// at the time the project was built.
@@ -31,7 +27,6 @@ type Version struct {
 	Rev         string
 	Programname string
 	Version     string
-	VersionFull string
 }
 
 /*
@@ -46,21 +41,19 @@ func NewVersion() *Version {
 	if BranchString == "" {
 		ver.Branch = "<unknown>"
 	} else {
-		ver.Branch = color.Sprintf("@{!w}%s", BranchString)
+		ver.Branch = BranchString
 	}
 
 	if RevString == "" {
 		ver.Rev = "<unknown>"
 	} else {
-		ver.Rev = color.Sprintf("@{!w}%s", RevString)
+		ver.Rev = RevString
 	}
 
 	if VersionString == "" {
 		ver.Version = ""
-		ver.VersionFull = ""
 	} else {
-		ver.Version = color.Sprintf("@{!w}%s", VersionString)
-		ver.VersionFull = color.Sprintf("@{!w}%s %s", ver.Programname, ver.Version)
+		ver.Version = VersionString
 	}
 
 	return ver

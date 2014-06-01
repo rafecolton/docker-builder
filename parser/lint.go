@@ -31,7 +31,11 @@ indicate success/failure, it exits nonzero if linting fails.
 */
 func (parser *Parser) AssertLint() {
 	if !parser.IsOpenable() {
-		parser.printLintFailMessage(errors.New("unable to open file"))
+		if parser.filename == "" {
+			parser.printLintFailMessage(errors.New("no file provided for linting"))
+		} else {
+			parser.printLintFailMessage(errors.New("unable to open file"))
+		}
 		gocleanup.Exit(17)
 	}
 
@@ -51,9 +55,11 @@ func (parser *Parser) printLintSuccessMessage() {
 }
 
 func (parser *Parser) printLintFailMessage(err error) {
-	parser.Println(
-		color.Sprintf(
-			"@{r!}Alas@{|}, %s is not a valid Builderfile\n----> %+v", parser.filename, err,
-		),
-	)
+	var errFmtString string
+	if parser.filename == "" {
+		errFmtString = "@{r!}Alas@{|}, no file provided for linting\n----> %s%+v"
+	} else {
+		errFmtString = "@{r!}Alas@{|}, %s is not a valid Builderfile\n----> %+v"
+	}
+	parser.Println(color.Sprintf(errFmtString, parser.filename, err))
 }

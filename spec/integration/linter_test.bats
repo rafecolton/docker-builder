@@ -1,17 +1,17 @@
 #!/usr/bin/env bats
 
 @test "builder correct lints a valid Builderfile" {
-  run $GOPATH/bin/builder -q --lint spec/fixtures/bob.toml
+  run $GOPATH/bin/builder -q lint spec/fixtures/bob.toml
   [ "$status" -eq 0  ]
 }
 
 @test "builder exits 5 when asked to lint an invalid file" {
-  run $GOPATH/bin/builder -q --lint README.md
+  run $GOPATH/bin/builder -q lint README.md
   [ "$status" -eq 5  ]
 }
 
 @test "builder exits 17 when asked to lint an invalid file" {
-  run $GOPATH/bin/builder -q --lint foo
+  run $GOPATH/bin/builder -q lint foo
   [ "$status" -eq 17  ]
 }
 

@@ -10,6 +10,11 @@
 			"Rev": "890ff2dcee0c5b7fc3c7453325d8146aaf1850c1"
 		},
 		{
+			"ImportPath": "github.com/codegangsta/cli",
+			"Comment": "1.0.0-65-g820deef",
+			"Rev": "820deefc9031d101f085ef773425fc6ca7a5363e"
+		},
+		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
 			"Comment": "0.2.1-129-g6062c6b",
 			"Rev": "6062c6b35beaffaf643b2f80f926b6337c3db63a"
@@ -17,11 +22,6 @@
 		{
 			"ImportPath": "github.com/hishboy/gocommons",
 			"Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
-		},
-		{
-			"ImportPath": "github.com/jessevdk/go-flags",
-			"Comment": "v1-172-g8ec9564",
-			"Rev": "8ec9564882e7923e632f012761c81c46dcf5bec1"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
