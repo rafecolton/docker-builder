@@ -33,7 +33,18 @@ func main() {
 		cli.BoolFlag{"version-short", "print long version and exit"},
 		cli.BoolFlag{"quiet, q", "produce no output, only exit codes"},
 	}
-	app.Action = checkInfo
+	app.Action = func(c *cli.Context) {
+		ver = version.NewVersion()
+		if c.GlobalBool("branch") {
+			fmt.Println(ver.Branch)
+		} else if c.GlobalBool("rev") {
+			fmt.Println(ver.Rev)
+		} else if c.GlobalBool("version-short") {
+			fmt.Println(ver.Version)
+		} else {
+			cli.ShowAppHelp(c)
+		}
+	}
 	app.Before = func(c *cli.Context) error {
 		logger = builderlogger.Initialize(c.GlobalBool("quiet"))
 		return nil
@@ -63,19 +74,6 @@ func main() {
 
 	app.Run(os.Args)
 	gocleanup.Exit(0)
-}
-
-func checkInfo(c *cli.Context) {
-	ver = version.NewVersion()
-	if c.GlobalBool("branch") {
-		fmt.Println(ver.Branch)
-	} else if c.GlobalBool("rev") {
-		fmt.Println(ver.Rev)
-	} else if c.GlobalBool("version-short") {
-		fmt.Println(ver.Version)
-	} else {
-		cli.ShowAppHelp(c)
-	}
 }
 
 func lint(c *cli.Context) {
