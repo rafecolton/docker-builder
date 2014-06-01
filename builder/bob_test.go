@@ -1,7 +1,7 @@
 package builder_test
 
 import (
-	. "github.com/modcloth/docker-builder"
+	. "github.com/modcloth/docker-builder/builder"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"testing"
