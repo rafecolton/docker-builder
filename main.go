@@ -1,7 +1,7 @@
 package main
 
 import (
-	builder "github.com/modcloth/docker-builder"
+	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/config"
 	"github.com/modcloth/docker-builder/log"
 	"github.com/modcloth/docker-builder/parser"

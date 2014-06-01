@@ -1,4 +1,4 @@
-package bob_test
+package builder_test
 
 import (
 	. "github.com/modcloth/docker-builder"
