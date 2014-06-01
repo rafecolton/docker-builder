@@ -9,28 +9,76 @@ import (
 )
 
 import (
+	"fmt"
+
 	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
-)
-
-import (
-	"flag"
-	"fmt"
-	"os"
 )
 
 var runtime *config.Runtime
 var ver *version.Version
 var par *parser.Parser
 var logger log.Logger
-var runAsWorker = flag.Bool("work", false, "Run as a Goworker")
 
 func main() {
-	if len(os.Args) > 1 && os.Args[1] == "-work" {
-		runWorker()
+	runtime = config.NewRuntime()
+	ver = version.NewVersion()
+
+	// if user requests version/branch/rev
+	if runtime.Version {
+		runtime.Println(ver.Version)
+	} else if runtime.VersionFull {
+		runtime.Println(ver.VersionFull)
+	} else if runtime.Branch {
+		runtime.Println(ver.Branch)
+	} else if runtime.Rev {
+		runtime.Println(ver.Rev)
+	} else if runtime.Lintfile != "" {
+		// lint
+		par, _ = parser.NewParser(runtime.Lintfile, runtime)
+		par.AssertLint()
 	} else {
-		allTheThings()
+		if runtime.Builderfile == "" {
+			runtime.Builderfile = "Bobfile"
+		}
+		// otherwise, build
+		par, err := parser.NewParser(runtime.Builderfile, runtime)
+		if err != nil {
+			runtime.Println(
+				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %q", err),
+			)
+			gocleanup.Exit(73)
+		}
+
+		commandSequence, err := par.Parse()
+		if err != nil {
+			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %q", err))
+			gocleanup.Exit(23)
+		}
+
+		bob, err := builder.NewBuilder(runtime, true)
+		if err != nil {
+			runtime.Println(
+				color.Sprintf(
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
+					err,
+				),
+			)
+			gocleanup.Exit(61)
+		}
+
+		bob.Builderfile = runtime.Builderfile
+
+		if err = bob.Build(commandSequence); err != nil {
+			runtime.Println(
+				color.Sprintf(
+					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
+					err,
+				),
+			)
+			gocleanup.Exit(29)
+		}
 	}
 
 	if builder.WaitForPush {
