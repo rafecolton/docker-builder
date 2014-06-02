@@ -88,7 +88,7 @@ gox-linux: build dev
 	mkdir -p ./releases/linux/bin
 	gox -output="releases/linux/bin/builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd releases >/dev/null && \
-	  tar -czf linux-amd64.tar.gz linux/ && \
+	  tar -czf docker-builder-$(REPO_VERSION)-linux-amd64.tar.gz linux/ && \
 	  popd >/dev/null
 
 .PHONY: gox-darwin
@@ -96,7 +96,7 @@ gox-darwin: build dev
 	mkdir -p ./releases/darwin/bin
 	gox -output="releases/darwin/bin/builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd releases >/dev/null && \
-	  tar -czf darwin-amd64.tar.gz darwin/ && \
+	  tar -czf docker-builder-$(REPO_VERSION)-darwin-amd64.tar.gz darwin/ && \
 	  popd >/dev/null
 
 .PHONY: godep
