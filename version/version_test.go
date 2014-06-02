@@ -4,7 +4,6 @@ import (
 	. "github.com/modcloth/docker-builder/version"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	color "github.com/wsxiaoys/terminal/color"
 	"testing"
 )
 
@@ -27,20 +26,14 @@ var _ = Describe("Version", func() {
 	})
 
 	It("prints the correct branch", func() {
-		Expect(subject.Branch).To(Equal(color.Sprint("@{!w}bogus-branch")))
+		Expect(subject.Branch).To(Equal("bogus-branch"))
 	})
 
 	It("prints the correct rev", func() {
-		Expect(subject.Rev).To(Equal(color.Sprint("@{!w}1234567890")))
+		Expect(subject.Rev).To(Equal("1234567890"))
 	})
 
 	It("prints the correct version", func() {
-		Expect(subject.Version).To(Equal(color.Sprint("@{!w}12345-test")))
-	})
-
-	It("prints the correct full version", func() {
-		Expect(subject.VersionFull).To(Equal(
-			color.Sprintf("@{!w}%s %s", "version.test", subject.Version)),
-		)
+		Expect(subject.Version).To(Equal("12345-test"))
 	})
 })

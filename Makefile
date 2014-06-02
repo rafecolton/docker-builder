@@ -5,7 +5,6 @@ B := github.com/modcloth/docker-builder
 TARGETS := \
   $(B)/builder \
   $(B)/builderfile \
-  $(B)/config \
   $(B)/dclient \
   $(B)/log \
   $(B)/parser \
