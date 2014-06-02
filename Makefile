@@ -80,13 +80,13 @@ build: binclean deps
 	go build -o $(GOPATH)/bin/builder $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
-.PHONY: gox-all
-gox-all: binclean gox-linux gox-darwin
+.PHONY: release
+release: binclean gox-linux gox-darwin
 
 .PHONY: gox-linux
 gox-linux: build dev
 	mkdir -p ./releases/linux/bin
-	gox -output="releases/linux/bin/builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+	gox -output="releases/linux/bin/builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd releases >/dev/null && \
 	  tar -czf linux-amd64.tar.gz linux/ && \
 	  popd >/dev/null
@@ -94,7 +94,7 @@ gox-linux: build dev
 .PHONY: gox-darwin
 gox-darwin: build dev
 	mkdir -p ./releases/darwin/bin
-	gox -output="releases/darwin/bin/builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+	gox -output="releases/darwin/bin/builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd releases >/dev/null && \
 	  tar -czf darwin-amd64.tar.gz darwin/ && \
 	  popd >/dev/null
