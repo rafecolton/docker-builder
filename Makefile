@@ -3,13 +3,13 @@ SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/modcloth/docker-builder
 TARGETS := \
-  $(B) \
   $(B)/builder \
   $(B)/builderfile \
   $(B)/config \
   $(B)/dclient \
   $(B)/log \
   $(B)/parser \
+  $(B)/parser/tag \
   $(B)/parser/uuid \
   $(B)/version
 REV_VAR := $(B)/version.RevString
@@ -32,9 +32,6 @@ GOPATH := $(shell echo $${GOPATH%%:*})
 export BATS_INSTALL_DIR
 export GINKGO_PATH
 export GOPATH
-
-#.PHONY: worker
-#worker:
 
 .PHONY: default help
 default: help
@@ -61,7 +58,7 @@ all: binclean clean build test
 .PHONY: clean
 clean:
 	go clean -i -r $(TARGETS) || true
-	rm -f $${GOPATH%%:*}/bin/builder
+	rm -f $(GOPATH)/bin/builder
 
 .PHONY: quick
 quick: build
@@ -75,12 +72,13 @@ quick: build
 
 .PHONY: binclean
 binclean:
-	rm -f $${GOPATH%%:*}/bin/builder
+	rm -f $(GOPATH)/bin/builder
 	rm -rf ./releases/*
 	touch ./releases/.gitkeep
 
 .PHONY: build
-build: deps
+build: binclean deps
+	go build -o $(GOPATH)/bin/builder $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
 
 .PHONY: gox-all

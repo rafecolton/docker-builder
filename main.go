@@ -1,7 +1,7 @@
 package main
 
 import (
-	builder "github.com/modcloth/docker-builder"
+	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/config"
 	"github.com/modcloth/docker-builder/log"
 	"github.com/modcloth/docker-builder/parser"
@@ -9,80 +9,19 @@ import (
 )
 
 import (
-	"github.com/benmanns/goworker"
+	"fmt"
+
+	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 	"github.com/wsxiaoys/terminal/color"
 )
 
-import (
-	"errors"
-	"flag"
-	"fmt"
-	"os"
-)
+var runtime *config.Runtime
+var ver *version.Version
+var par *parser.Parser
+var logger log.Logger
 
-var runWorker = func() {
-	logger = log.Initialize(false)
-	flag.Parse()
-	goworker.Register("DockerBuild", workerFunc)
-
-	if err := goworker.Work(); err != nil {
-		logger.Println(
-			color.Sprintf("@{r!}Alas, something went wrong :'(@{|}\n----> %q", err),
-		)
-	}
-}
-
-var workerFunc = func(queue string, args ...interface{}) error {
-	if queue == "docker-build" {
-		first := args[0].(map[string]interface{})
-		pwd := first["pwd"].(string)
-		build := fmt.Sprintf("%s/%s", pwd, first["build"].(string))
-
-		os.Setenv("PWD", pwd)
-
-		par, err := parser.NewParser(build, logger)
-		if err != nil {
-			logger.Println(
-				color.Sprintf("@{r!}Alas, could not generate parser@{|}\n----> %q", err),
-			)
-			return err
-		}
-
-		commandSequence, err := par.Parse()
-		if err != nil {
-			runtime.Println(color.Sprintf("@{r!}Alas, could not parse@{|}\n----> %q", err))
-			return err
-		}
-
-		bob, err := builder.NewBuilder(logger, true)
-		if err != nil {
-			logger.Println(
-				color.Sprintf(
-					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
-					err,
-				),
-			)
-			return err
-		}
-		bob.Builderfile = build
-
-		if err = bob.Build(commandSequence); err != nil {
-			logger.Println(
-				color.Sprintf(
-					"@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q",
-					err,
-				),
-			)
-			return err
-		}
-		return nil
-	}
-
-	return errors.New("invalid attempt to use as a goworker")
-}
-
-var allTheThings = func() {
+func main() {
 	runtime = config.NewRuntime()
 	ver = version.NewVersion()
 
@@ -141,4 +80,21 @@ var allTheThings = func() {
 			gocleanup.Exit(29)
 		}
 	}
+
+	if builder.WaitForPush {
+	WaitForPush:
+		for {
+			select {
+			case <-runner.Done:
+				break WaitForPush
+			case err := <-runner.Errors:
+				fmt.Println(
+					color.Sprintf("@{r!}Uh oh, something went wrong while running %q@{|}\n----> %q", err.CommandStr, err),
+				)
+				gocleanup.Exit(1)
+			}
+		}
+	}
+
+	gocleanup.Exit(0)
 }

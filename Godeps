@@ -1,42 +1,18 @@
 {
 	"ImportPath": "github.com/modcloth/docker-builder",
-	"GoVersion": "go1.2.1",
+	"GoVersion": "go1.2.2",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
 		{
-			"ImportPath": "code.google.com/p/vitess/go/pools",
-			"Comment": "weekly:weekly.2012-08-23.go.4fdf6aa4f602-740",
-			"Rev": "20aec5105bdc7ae2bc1f39deb44ec3fd5596716d"
-		},
-		{
-			"ImportPath": "code.google.com/p/vitess/go/sync2",
-			"Comment": "weekly:weekly.2012-08-23.go.4fdf6aa4f602-740",
-			"Rev": "20aec5105bdc7ae2bc1f39deb44ec3fd5596716d"
-		},
-		{
 			"ImportPath": "github.com/BurntSushi/toml",
 			"Rev": "890ff2dcee0c5b7fc3c7453325d8146aaf1850c1"
-		},
-		{
-			"ImportPath": "github.com/benmanns/goworker",
-			"Comment": "v0.1.0-14-ged77c6c",
-			"Rev": "ed77c6c17b88c15c0850b24236cac846b9179c26"
-		},
-		{
-			"ImportPath": "github.com/cihub/seelog",
-			"Comment": "go1.1-24-g83d0dca",
-			"Rev": "83d0dcad636b63c066856045962befa246e00c79"
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
 			"Comment": "0.2.1-129-g6062c6b",
 			"Rev": "6062c6b35beaffaf643b2f80f926b6337c3db63a"
-		},
-		{
-			"ImportPath": "github.com/garyburd/redigo/redis",
-			"Rev": "a6a0a737c00caf4d4c2bb589941ace0d688168bb"
 		},
 		{
 			"ImportPath": "github.com/hishboy/gocommons",
