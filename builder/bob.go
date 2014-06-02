@@ -32,6 +32,13 @@ don't want to wait or we'll just be stuck forever.
 var WaitForPush bool
 
 /*
+SkipPush, when set to true, will override any behavior set by a Bobfile and
+will cause builders *NOT* to run `docker push` commands.  SkipPush is also set
+by the `--skip-push` option when used on the command line.
+*/
+var SkipPush bool
+
+/*
 A Builder is the struct that actually does the work of moving files around and
 executing the commands that do the docker build.
 */
@@ -160,12 +167,14 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					return err
 				}
 			case "push":
-				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
-				WaitForPush = true
+				if !SkipPush {
+					bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
+					WaitForPush = true
 
-				runner.Run(&runner.Command{
-					Cmd: &cmd,
-				})
+					runner.Run(&runner.Command{
+						Cmd: &cmd,
+					})
+				}
 			default:
 				return errors.New(
 					color.Sprintf(

@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/log"
-	builderlogger "github.com/modcloth/docker-builder/log"
 	"github.com/modcloth/docker-builder/parser"
 	"github.com/modcloth/docker-builder/version"
 )
@@ -46,7 +45,7 @@ func main() {
 		}
 	}
 	app.Before = func(c *cli.Context) error {
-		logger = builderlogger.Initialize(c.GlobalBool("quiet"))
+		logger = log.Initialize(c.GlobalBool("quiet"))
 		return nil
 	}
 	app.Commands = []cli.Command{
@@ -59,14 +58,17 @@ func main() {
 		{
 			Name:        "build",
 			ShortName:   "b",
-			Usage:       "build <file> - build Docker images from the provided Bobfile",
+			Usage:       "build [file] - build Docker images from the provided Bobfile",
 			Description: "Build Docker images from the provided Bobfile.",
 			Action:      build,
+			Flags: []cli.Flag{
+				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
+			},
 		},
 		{
 			Name:        "lint",
 			ShortName:   "l",
-			Usage:       "lint <file> - validates whether or not your Bobfile is parsable",
+			Usage:       "lint [file] - validates whether or not your Bobfile is parsable",
 			Description: "Validate whether or not your Bobfile is parsable.",
 			Action:      lint,
 		},
@@ -82,6 +84,7 @@ func lint(c *cli.Context) {
 }
 
 func build(c *cli.Context) {
+	builder.SkipPush = c.Bool("skip-push")
 	builderfile := c.Args().First()
 	if builderfile == "" {
 		builderfile = "Bobfile"
