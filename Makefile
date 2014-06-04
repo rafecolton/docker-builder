@@ -3,6 +3,7 @@ SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/modcloth/docker-builder
 TARGETS := \
+  $(B)/analyzer \
   $(B)/builder \
   $(B)/builderfile \
   $(B)/dclient \

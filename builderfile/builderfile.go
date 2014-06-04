@@ -6,7 +6,7 @@ Builderfile.
 */
 type Builderfile struct {
 	Docker     `toml:"docker"`
-	Containers map[string]ContainerSection
+	Containers map[string]ContainerSection `toml:"containers"`
 }
 
 /*
@@ -24,13 +24,13 @@ be built and other related options.
 */
 type ContainerSection struct {
 	Name       string
-	Dockerfile string
-	Included   []string
-	Excluded   []string
-	Registry   string
-	Project    string
-	Tags       []string
-	SkipPush   bool `toml:"skip_push"`
+	Dockerfile string   `toml:"Dockerfile"`
+	Included   []string `toml:"included"`
+	Excluded   []string `toml:"excluded"`
+	Registry   string   `toml:"registry"`
+	Project    string   `toml:"project"`
+	Tags       []string `toml:"tags"`
+	SkipPush   bool     `toml:"skip_push"`
 }
 
 /*
