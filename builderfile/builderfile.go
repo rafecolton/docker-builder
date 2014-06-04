@@ -23,7 +23,7 @@ section of a Builderfile. Each of these sections defines a docker container to
 be built and other related options.
 */
 type ContainerSection struct {
-	Name       string
+	Name       string   `toml:"Name"`
 	Dockerfile string   `toml:"Dockerfile"`
 	Included   []string `toml:"included"`
 	Excluded   []string `toml:"excluded"`

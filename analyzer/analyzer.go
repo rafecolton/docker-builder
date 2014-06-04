@@ -149,19 +149,17 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 			BuildOpts: []string{"--rm", "--no-cache"},
 			TagOpts:   []string{"--force"},
 		},
-		Containers: map[string]builderfile.ContainerSection{
-			"app": *&builderfile.ContainerSection{
-				Dockerfile: "Dockerfile",
-				SkipPush:   false,
-			},
-		},
+		Containers: map[string]builderfile.ContainerSection{},
 	}
 
 	if analysis.IsGitRepo() {
 		// get registry
-		ret.Containers["global"] = *&builderfile.ContainerSection{
-			Registry: registryFromRemotes(analysis.GitRemotes()),
-			Project:  analysis.RepoBasename(),
+		ret.Containers["app"] = *&builderfile.ContainerSection{
+			Name:       "app",
+			Registry:   registryFromRemotes(analysis.GitRemotes()),
+			Dockerfile: "Dockerfile",
+			SkipPush:   false,
+			Project:    analysis.RepoBasename(),
 			Tags: []string{
 				"git:branch",
 				"git:rev",
@@ -170,12 +168,13 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 			},
 		}
 	} else {
-		ret.Containers["global"] = *&builderfile.ContainerSection{
-			Registry: "my-registry",
-			Project:  analysis.RepoBasename(),
-			Tags: []string{
-				"latest",
-			},
+		ret.Containers["app"] = *&builderfile.ContainerSection{
+			Name:       "app",
+			Registry:   "my-registry",
+			Dockerfile: "Dockerfile",
+			SkipPush:   false,
+			Project:    analysis.RepoBasename(),
+			Tags:       []string{"latest"},
 		}
 	}
 
