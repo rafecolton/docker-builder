@@ -33,6 +33,9 @@ export BATS_INSTALL_DIR
 export GINKGO_PATH
 export GOPATH
 
+.PHONY: all
+all: binclean clean build test
+
 .PHONY: default help
 default: help
 help:
@@ -51,9 +54,6 @@ help:
 	@echo "  test: build fmtpolice, ginkgo tests, and bats tests"
 	@echo
 	@echo "  dev: set up the dev toolchain (deps + gox)"
-
-.PHONY: all
-all: binclean clean build test
 
 .PHONY: clean
 clean:
