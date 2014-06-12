@@ -10,8 +10,16 @@ from a friendly `Bobfile` config file.
 
 Steps to quick start:
 
-0. Install `docker-builder`
-0. Create your first `Bobfile` with `docker-builder init`
+```bash
+# install docker-builder
+`go get github.com/modcloth/docker-builder`
+
+# create a Bobfile
+`docker-builder init .`
+
+# build the aforementioned Bobfile
+`docker-builder build Bobfile`
+```
 
 ## More Reasonably-Paced Start
 0. Install `docker-builder`
