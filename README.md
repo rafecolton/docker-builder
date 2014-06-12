@@ -24,11 +24,11 @@ quicker.  Stay tuned!)
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.2.0/docker-builder-v0.2.0-darwin-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.3.0/docker-builder-v0.3.0-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.2.0/docker-builder-v0.2.0-linux-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.3.0/docker-builder-v0.3.0-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1
 ```
 

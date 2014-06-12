@@ -23,8 +23,8 @@ var logger log.Logger
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "builder"
-	app.Usage = "builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"
+	app.Name = "docker-builder"
+	app.Usage = "docker-builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"
 	app.Version = fmt.Sprintf("%s %s", ver.Version, app.Compiled)
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{"branch", "print branch and exit"},

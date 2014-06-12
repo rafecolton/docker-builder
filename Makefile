@@ -2,7 +2,7 @@ SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/modcloth/docker-builder
-TARGETS := \
+PACKAGES := \
   $(B)/analyzer \
   $(B)/builder \
   $(B)/builderfile \
@@ -44,7 +44,7 @@ help:
 	@echo
 	@echo "  all: binclean clean build test"
 	@echo
-	@echo "  quick: build + invokes builder a couple times (good for debugging)"
+	@echo "  quick: build + invokes docker-builder a couple times (good for debugging)"
 	@echo
 	@echo "  build: installing libs plus installing deps"
 	@echo
@@ -57,29 +57,28 @@ all: binclean clean build test
 
 .PHONY: clean
 clean:
-	go clean -i -r $(TARGETS) || true
-	rm -f $(GOPATH)/bin/builder
+	go clean -i -r $(PACKAGES) || true
+	rm -f $(GOPATH)/bin/docker-builder
 
 .PHONY: quick
 quick: build
 	@echo "----------"
-	@builder --version
+	@docker-builder --version
 	@echo "----------"
-	@builder --help
+	@docker-builder --help
 	@echo "----------"
-	@builder
+	@docker-builder
 	@echo "----------"
 
 .PHONY: binclean
 binclean:
-	rm -f $(GOPATH)/bin/builder
+	rm -f $(GOPATH)/bin/docker-builder
 	rm -rf ./releases/*
 	touch ./releases/.gitkeep
 
 .PHONY: build
 build: binclean deps
-	go build -o $(GOPATH)/bin/builder $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(TARGETS)
+	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES) $(B)
 
 .PHONY: release
 release: binclean gox-linux gox-darwin
@@ -87,7 +86,7 @@ release: binclean gox-linux gox-darwin
 .PHONY: gox-linux
 gox-linux: build dev
 	mkdir -p ./releases/linux/bin
-	gox -output="releases/linux/bin/builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	gox -output="releases/linux/bin/docker-builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd releases >/dev/null && \
 	  tar -czf docker-builder-$(REPO_VERSION)-linux-amd64.tar.gz linux/ && \
 	  popd >/dev/null
@@ -95,7 +94,7 @@ gox-linux: build dev
 .PHONY: gox-darwin
 gox-darwin: build dev
 	mkdir -p ./releases/darwin/bin
-	gox -output="releases/darwin/bin/builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	gox -output="releases/darwin/bin/docker-builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd releases >/dev/null && \
 	  tar -czf docker-builder-$(REPO_VERSION)-darwin-amd64.tar.gz darwin/ && \
 	  popd >/dev/null
