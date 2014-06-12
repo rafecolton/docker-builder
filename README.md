@@ -12,13 +12,13 @@ Steps to quick start:
 
 ```bash
 # install docker-builder
-`go get github.com/modcloth/docker-builder`
+go get github.com/modcloth/docker-builder
 
 # create a Bobfile
-`docker-builder init .`
+docker-builder init .
 
 # build the aforementioned Bobfile
-`docker-builder build Bobfile`
+docker-builder build Bobfile
 ```
 
 ## More Reasonably-Paced Start
