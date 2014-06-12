@@ -27,6 +27,28 @@ type Analysis interface {
 }
 
 /*
+ParseAnalysisFromDir is a handy function that combines NewAnalysis with
+ParseAnalysis to make things a little easier.
+*/
+func ParseAnalysisFromDir(dir string) (*builderfile.Builderfile, error) {
+	if dir == "" {
+		dir = "."
+	}
+
+	a, err := NewAnalysis(dir)
+	if err != nil {
+		return nil, err
+	}
+
+	b, err := ParseAnalysis(a)
+	if err != nil {
+		return nil, err
+	}
+
+	return b, nil
+}
+
+/*
 NewAnalysis creates an Analysis of the provided directory.
 */
 func NewAnalysis(dir string) (Analysis, error) {
