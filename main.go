@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/modcloth/docker-builder/analyzer"
 	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/log"
 	"github.com/modcloth/docker-builder/parser"
@@ -10,7 +11,10 @@ import (
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
@@ -50,10 +54,11 @@ func main() {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:      "init",
-			ShortName: "i",
-			Usage:     "",
-			Action:    initialize,
+			Name:        "init",
+			ShortName:   "i",
+			Usage:       "init [dir] - initialize the given directory (default '.') with a Bobfile",
+			Description: "Make educated guesses to fill out a Bobfile given a directory with a Dockerfile",
+			Action:      initialize,
 		},
 		{
 			Name:        "build",
@@ -125,6 +130,46 @@ func build(c *cli.Context) {
 }
 
 func initialize(c *cli.Context) {
+	dir := c.Args().First()
+	if dir == "" {
+		dir = "."
+	}
+
+	file, err := analyzer.ParseAnalysisFromDir(dir)
+	if err != nil {
+		exitErr(1, "@{r!}Unable to initialize Bobfile@{|}\n----> %q", err)
+	}
+
+	bobfilePath := filepath.Join(dir, "Bobfile")
+
+	//no error when stating, file already exists, rename with timestamp
+	if _, err := os.Stat(bobfilePath); err == nil {
+		bobfilePath = fmt.Sprintf("%s.%d", bobfilePath, int32(time.Now().Unix()))
+	}
+
+	outfile, err := os.Create(bobfilePath)
+	if err != nil {
+		exitErr(86, "@{r!}Unable to create output file %q@{|}\n----> %q", bobfilePath, err)
+	}
+	defer outfile.Close()
+
+	// TODO: figure out why this isn't getting written by the toml encoder
+	dockerSectionHeader := []byte("[docker]\n\n")
+	if _, err := outfile.Write(dockerSectionHeader); err != nil {
+		exitErr(127, "@{r!}Unable to write to output file %q@{|}\n----> %q", bobfilePath, err)
+	}
+
+	encoder := toml.NewEncoder(outfile)
+	if err = encoder.Encode(file); err != nil {
+		exitErr(123, "@{r!}Unable to write to output file %q@{|}\n----> %q", bobfilePath, err)
+	}
+
+	vimFtComment := []byte("\n\n# vim:ft=toml")
+	if _, err := outfile.Write(vimFtComment); err != nil {
+		exitErr(127, "@{r!}Unable to write to output file %q@{|}\n----> %q", bobfilePath, err)
+	}
+
+	logger.Printf("Successfully created %q\n", bobfilePath)
 }
 
 func exitErr(exitCode int, fmtString string, args ...interface{}) {
