@@ -3,6 +3,7 @@ SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/modcloth/docker-builder
 PACKAGES := \
+  $(B)/analyzer \
   $(B)/builder \
   $(B)/builderfile \
   $(B)/dclient \
@@ -171,7 +172,7 @@ gox:
 	  echo "not installing gox, gox already installed." ; \
 	  else \
 	  go get github.com/mitchellh/gox ; \
-	  gox -build-toolchain ; \
+	  gox -build-toolchain -osarch="linux/amd64 darwin/amd64" ; \
 	  fi \
 
 .PHONY: gopath
