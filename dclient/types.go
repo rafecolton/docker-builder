@@ -5,6 +5,7 @@ import (
 )
 
 import (
+	"github.com/Sirupsen/logrus"
 	"github.com/fsouza/go-dockerclient"
 )
 
@@ -18,7 +19,7 @@ type DockerClient interface {
 type realDockerClient struct {
 	client *docker.Client
 	host   string
-	log.Log
+	*logrus.Logger
 }
 
 // returns fixed output, used for testing

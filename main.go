@@ -9,7 +9,6 @@ import (
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -23,15 +22,9 @@ import (
 
 var ver = version.NewVersion()
 var par *parser.Parser
-
-var log = logrus.New()
-var logger = struct {
-	*logrus.Logger
-	io.Writer
-}{log, log.Out}
+var logger = logrus.New()
 
 func main() {
-
 	app := cli.NewApp()
 	app.Name = "docker-builder"
 	app.Usage = "docker-builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"

@@ -1,8 +1,9 @@
 package log
 
 import (
-	"github.com/wsxiaoys/terminal/color"
 	"strings"
+
+	"github.com/wsxiaoys/terminal/color"
 )
 
 /*
