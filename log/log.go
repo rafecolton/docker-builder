@@ -2,9 +2,6 @@ package log
 
 import (
 	"github.com/wsxiaoys/terminal/color"
-	"io"
-	stdlog "log"
-	"os"
 	"strings"
 )
 
@@ -30,15 +27,6 @@ two types should probably be combined.
 type Logger interface {
 	Log
 	Write(p []byte) (int, error)
-}
-
-/*
-BuilderLogger is the implementation of the Log interface for this project.
-*/
-type BuilderLogger struct {
-	Log
-	Stderr io.Writer
-	Stdout io.Writer
 }
 
 /*
@@ -71,29 +59,6 @@ func (ow *OutWriter) Write(p []byte) (n int, err error) {
 	for _, line := range lines {
 		ow.Print(color.Sprintf(ow.fmtString, line))
 	}
-
-	return len(p), nil
-}
-
-/*
-Initialize returns a BuilderLogger that either contains a null logger (that
-prints nothing) or a standard logger (from the log package) with
-project-specific output.
-*/
-func Initialize(quiet bool) *BuilderLogger {
-	l := &BuilderLogger{}
-
-	if quiet {
-		l.Log = &NullLogger{}
-	} else {
-		l.Log = stdlog.New(os.Stderr, color.Sprint("@{g!}[bob] "), stdlog.LstdFlags)
-	}
-	return l
-}
-
-func (logger *BuilderLogger) Write(p []byte) (n int, err error) {
-	toPrint := color.Sprintf("@{!w}-----> %s@{|}", string(p))
-	logger.Log.Print(toPrint)
 
 	return len(p), nil
 }

@@ -3,18 +3,19 @@ package main
 import (
 	"github.com/modcloth/docker-builder/analyzer"
 	"github.com/modcloth/docker-builder/builder"
-	"github.com/modcloth/docker-builder/log"
 	"github.com/modcloth/docker-builder/parser"
 	"github.com/modcloth/docker-builder/version"
 )
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
@@ -23,9 +24,15 @@ import (
 
 var ver = version.NewVersion()
 var par *parser.Parser
-var logger log.Logger
+
+var log = logrus.New()
+var logger = struct {
+	*logrus.Logger
+	io.Writer
+}{log, log.Out}
 
 func main() {
+
 	app := cli.NewApp()
 	app.Name = "docker-builder"
 	app.Usage = "docker-builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"
@@ -49,7 +56,7 @@ func main() {
 		}
 	}
 	app.Before = func(c *cli.Context) error {
-		logger = log.Initialize(c.GlobalBool("quiet"))
+		logger.Level = logrus.Debug
 		return nil
 	}
 	app.Commands = []cli.Command{
