@@ -1,10 +1,6 @@
 package dclient
 
 import (
-	"github.com/modcloth/docker-builder/log"
-)
-
-import (
 	"github.com/Sirupsen/logrus"
 	"github.com/fsouza/go-dockerclient"
 )
@@ -24,7 +20,7 @@ type realDockerClient struct {
 
 // returns fixed output, used for testing
 type nullDockerClient struct {
-	log.Log
+	*logrus.Logger
 }
 
 /*

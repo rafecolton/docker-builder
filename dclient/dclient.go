@@ -21,7 +21,7 @@ func NewDockerClient(logger *logrus.Logger, shouldBeReal bool) (DockerClient, er
 		quietLogger.Level = logrus.Panic
 
 		return &nullDockerClient{
-			Log: quietLogger,
+			Logger: quietLogger,
 		}, nil
 	}
 

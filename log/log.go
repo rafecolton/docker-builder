@@ -3,38 +3,15 @@ package log
 import (
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/wsxiaoys/terminal/color"
 )
-
-/*
-Log is the interface for all general logging methods.
-*/
-type Log interface {
-	Print(v ...interface{})
-	Printf(format string, v ...interface{})
-	Println(v ...interface{})
-	Fatal(v ...interface{})
-	Fatalf(format string, v ...interface{})
-	Fatalln(v ...interface{})
-	Panicf(format string, v ...interface{})
-	Panicln(v ...interface{})
-}
-
-/*
-Logger is almost identical to Log except that it also contains the Write(p
-[]byte) method so it can satisfy tye io.Writer interface.  At some point, these
-two types should probably be combined.
-*/
-type Logger interface {
-	Log
-	Write(p []byte) (int, error)
-}
 
 /*
 An OutWriter is responsible for for implementing the io.Writer interface.
 */
 type OutWriter struct {
-	Log
+	*logrus.Logger
 	fmtString string
 }
 
@@ -44,9 +21,9 @@ When written to, the OutWriter will take the input, split it into lines, and
 print it to the logger using the provided format string.  The intended use case
 of this functionality is for printing nice, colorful messages
 */
-func NewOutWriter(logger Log, fmtString string) *OutWriter {
+func NewOutWriter(logger *logrus.Logger, fmtString string) *OutWriter {
 	return &OutWriter{
-		Log:       logger,
+		Logger:    logger,
 		fmtString: fmtString,
 	}
 }
