@@ -42,6 +42,8 @@ func main() {
 		cli.BoolFlag{"rev", "print revision and exit"},
 		cli.BoolFlag{"version-short", "print long version and exit"},
 		cli.BoolFlag{"quiet, q", "produce no output, only exit codes"},
+		cli.StringFlag{"log-level, l", "info", "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
+		cli.StringFlag{"log-format, f", "text", "log output format (options: text/t, json/j)"},
 	}
 	app.Action = func(c *cli.Context) {
 		ver = version.NewVersion()
@@ -56,7 +58,32 @@ func main() {
 		}
 	}
 	app.Before = func(c *cli.Context) error {
-		logger.Level = logrus.Debug
+		switch c.String("log-level") {
+		case "debug", "d":
+			logger.Level = logrus.Debug
+		case "info", "i":
+			logger.Level = logrus.Info
+		case "warn", "w":
+			logger.Level = logrus.Warn
+		case "error", "e":
+			logger.Level = logrus.Error
+		case "fatal", "f":
+			logger.Level = logrus.Fatal
+		case "panic", "p":
+			logger.Level = logrus.Panic
+		default:
+			logger.Level = logrus.Info
+		}
+
+		switch c.String("log-format") {
+		case "text", "t":
+			logger.Formatter = new(logrus.TextFormatter)
+		case "json", "j":
+			logger.Formatter = new(logrus.JSONFormatter)
+		default:
+			logger.Formatter = new(logrus.TextFormatter)
+		}
+
 		return nil
 	}
 	app.Commands = []cli.Command{
@@ -180,6 +207,6 @@ func initialize(c *cli.Context) {
 }
 
 func exitErr(exitCode int, fmtString string, args ...interface{}) {
-	logger.Println(color.Sprintf(fmtString, args...))
+	logger.Errorln(color.Sprintf(fmtString, args...))
 	gocleanup.Exit(exitCode)
 }
