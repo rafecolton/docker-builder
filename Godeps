@@ -25,7 +25,7 @@
 			"Rev": "6062c6b35beaffaf643b2f80f926b6337c3db63a"
 		},
 		{
-			"ImportPath": "github.com/hishboy/gocommons",
+			"ImportPath": "github.com/hishboy/gocommons/lang",
 			"Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
 		},
 		{
@@ -34,8 +34,8 @@
 		},
 		{
 			"ImportPath": "github.com/modcloth/queued-command-runner",
-			"Comment": "v0.2.1",
-			"Rev": "2db56c6b13501d703d66bf6b99c99a3956a252ac"
+			"Comment": "v0.2.1-4-ge1a2b35",
+			"Rev": "e1a2b3599c0e9c1e1b8933e99c8c2d302543d9ef"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",
