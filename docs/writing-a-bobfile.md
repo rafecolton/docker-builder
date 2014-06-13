@@ -1,8 +1,8 @@
 # Building with Bob (Writing a Bobfile)
 
-The basic ingredients to a Bob-build are the `builder` executable and a
+The basic ingredients to a Bob-build are the `docker-builder` executable and a
 `Bobfile` config file.  This page assumes that you have already
-downloaded or built the `builder` executable.  If you have not, please
+downloaded or built the `docker-builder` executable.  If you have not, please
 check out the other docs referenced
 
 ## Writing a `Bobfile` Config
@@ -146,14 +146,14 @@ of your application repo.
 Then, to validate your config:
 
 ```bash
-builder lint <path>/<to>/Bobfile
+docker-builder lint <path>/<to>/Bobfile
 ```
 
 and to build:
 
 ```bash
-builder build <path>/<to>/Bobfile.whatever
+docker-builder build <path>/<to>/Bobfile.whatever
 
 # or, if your config is just named "Bobfile", then from the repo top level...
-builder build
+docker-builder build
 ```
