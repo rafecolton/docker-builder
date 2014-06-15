@@ -156,7 +156,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			switch cmd.Args[1] {
 			case "build":
 				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, ""),
+					"command": strings.Join(cmd.Args, " "),
 				}).Info("running command")
 
 				if err := cmd.Run(); err != nil {
@@ -174,7 +174,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					}
 				}
 				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, ""),
+					"command": strings.Join(cmd.Args, " "),
 				}).Info("running command")
 
 				if err := cmd.Run(); err != nil {
@@ -183,7 +183,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			case "push":
 				if !SkipPush {
 					bob.WithFields(logrus.Fields{
-						"command": strings.Join(cmd.Args, ""),
+						"command": strings.Join(cmd.Args, " "),
 					}).Info("running command")
 
 					WaitForPush = true
@@ -194,10 +194,10 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				}
 			default:
 				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, ""),
+					"command": strings.Join(cmd.Args, " "),
 				}).Warn("improperly formatted command")
 
-				return fmt.Errorf("improperly formatted command %q", strings.Join(cmd.Args, ""))
+				return fmt.Errorf("improperly formatted command %q", strings.Join(cmd.Args, " "))
 			}
 		}
 	}
