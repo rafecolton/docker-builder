@@ -35,7 +35,11 @@ into the provided format string, to the provided logger.
 func (ow *OutWriter) Write(p []byte) (n int, err error) {
 	lines := strings.Split(string(p), "\n")
 	for _, line := range lines {
-		ow.Print(color.Sprintf(ow.fmtString, line))
+		if logrus.IsTerminal() {
+			ow.Print(color.Sprintf(ow.fmtString, line))
+		} else {
+			ow.Infof(ow.fmtString, line)
+		}
 	}
 
 	return len(p), nil

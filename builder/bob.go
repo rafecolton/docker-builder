@@ -77,12 +77,22 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 		return nil, err
 	}
 
+	if logrus.IsTerminal() {
+		return &Builder{
+			dockerClient: client,
+			Logger:       logger,
+			isRegular:    shouldBeRegular,
+			Stdout:       log.NewOutWriter(logger, "         @{g}%s@{|}"),
+			Stderr:       log.NewOutWriter(logger, "         @{r}%s@{|}"),
+		}, nil
+	}
+
 	return &Builder{
 		dockerClient: client,
 		Logger:       logger,
 		isRegular:    shouldBeRegular,
-		Stdout:       log.NewOutWriter(logger, "         @{g}%s@{|}"),
-		Stderr:       log.NewOutWriter(logger, "         @{r}%s@{|}"),
+		Stdout:       log.NewOutWriter(logger, "         %s"),
+		Stderr:       log.NewOutWriter(logger, "         %s"),
 	}, nil
 }
 
