@@ -2,11 +2,9 @@ package parser
 
 import (
 	"errors"
-)
 
-import (
+	"github.com/Sirupsen/logrus"
 	"github.com/onsi/gocleanup"
-	"github.com/wsxiaoys/terminal/color"
 )
 
 /*
@@ -51,15 +49,18 @@ func (parser *Parser) AssertLint() {
 
 // helper functions
 func (parser *Parser) printLintSuccessMessage() {
-	parser.Println(color.Sprintf("@{g!}Hooray@{|}, %s is a valid Builderfile!", parser.filename))
+	//parser.WithFields(logrus.Fields{"file": parser.filename}).Info("file is a valid Bobfile")
 }
 
 func (parser *Parser) printLintFailMessage(err error) {
-	var errFmtString string
+	//var errMsg string
+	fields := logrus.Fields{"error": err}
+
 	if parser.filename == "" {
-		errFmtString = "@{r!}Alas@{|}, no file provided for linting\n----> %s%+v"
+		//errMsg = "no file provided for linting"
 	} else {
-		errFmtString = "@{r!}Alas@{|}, %s is not a valid Builderfile\n----> %+v"
+		fields["filename"] = parser.filename
+		//errMsg = "file provided is not a valid Bobfile"
 	}
-	parser.Println(color.Sprintf(errFmtString, parser.filename, err))
+	//parser.WithFields(fields).Error(errMsg)
 }

@@ -1,20 +1,13 @@
 package dclient
 
 import (
-	"github.com/modcloth/docker-builder/log"
-)
-
-import (
-	"github.com/fsouza/go-dockerclient"
-	"github.com/wsxiaoys/terminal/color"
-)
-
-import (
-	"errors"
 	"fmt"
 	"os"
 	"regexp"
 	"sort"
+
+	"github.com/Sirupsen/logrus"
+	"github.com/fsouza/go-dockerclient"
 )
 
 /*
@@ -22,10 +15,13 @@ NewDockerClient returns a new DockerClient (wrapper for a conneciton with a dock
 daemon), properly initialized.  If you want a nullDockerClient for testing,
 pass in nil as your logger and false for shouldBeReal.
 */
-func NewDockerClient(logger log.Log, shouldBeReal bool) (DockerClient, error) {
+func NewDockerClient(logger *logrus.Logger, shouldBeReal bool) (DockerClient, error) {
 	if logger == nil && !shouldBeReal {
+		quietLogger := logrus.New()
+		quietLogger.Level = logrus.Panic
+
 		return &nullDockerClient{
-			Log: &log.NullLogger{},
+			Logger: quietLogger,
 		}, nil
 	}
 
@@ -43,18 +39,18 @@ func NewDockerClient(logger log.Log, shouldBeReal bool) (DockerClient, error) {
 	dclient, err := docker.NewClient(endpoint)
 
 	if err != nil {
-		logger.Println(
-			color.Sprintf(
-				"@{r!}Alas@{|}, docker host %q could not be reached\n----> %+v", endpoint, err,
-			),
-		)
+		logger.WithFields(logrus.Fields{
+			"docker_host": endpoint,
+			"error":       err,
+		}).Error("docker host %q could not be reached")
+
 		return nil, err
 	}
 
 	return &realDockerClient{
 		client: dclient,
 		host:   endpoint,
-		Log:    logger,
+		Logger: logger,
 	}, nil
 }
 
@@ -70,11 +66,11 @@ func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, er
 	images, err := rtoo.client.ListImages(false)
 
 	if err != nil {
-		rtoo.Println(
-			color.Sprintf(
-				"@{r!}Alas@{|}, docker images could not be listed on %s\n----> %+v", rtoo.host, err,
-			),
-		)
+		rtoo.WithFields(logrus.Fields{
+			"docker_host": rtoo.host,
+			"error":       err,
+		}).Error("docker images could not be listed")
+
 		return "", err
 	}
 
@@ -94,7 +90,5 @@ func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, er
 		}
 	}
 
-	return "", errors.New(
-		color.Sprintf("@{r!}Alas@{|}, I am unable to find image tagged with uuid \"%s\"", uuid),
-	)
+	return "", fmt.Errorf("unable to find image tagged with uuid %q", uuid)
 }

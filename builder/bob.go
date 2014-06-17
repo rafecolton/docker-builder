@@ -7,20 +7,19 @@ import (
 )
 
 import (
-	"github.com/hishboy/gocommons/lang"
-	"github.com/modcloth/go-fileutils"
-	"github.com/modcloth/queued-command-runner"
-	"github.com/onsi/gocleanup"
-	"github.com/wsxiaoys/terminal/color"
-)
-
-import (
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/Sirupsen/logrus"
+	"github.com/hishboy/gocommons/lang"
+	"github.com/modcloth/go-fileutils"
+	"github.com/modcloth/queued-command-runner"
+	"github.com/onsi/gocleanup"
 )
 
 /*
@@ -44,7 +43,7 @@ executing the commands that do the docker build.
 */
 type Builder struct {
 	dockerClient dclient.DockerClient
-	log.Logger
+	*logrus.Logger
 	workdir         string
 	isRegular       bool
 	nextSubSequence *parser.SubSequence
@@ -66,9 +65,10 @@ func (bob *Builder) SetNextSubSequence(subSeq *parser.SubSequence) {
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
-func NewBuilder(logger log.Logger, shouldBeRegular bool) (*Builder, error) {
+func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 	if logger == nil {
-		logger = &log.NullLogger{}
+		logger = logrus.New()
+		logger.Level = logrus.Panic
 	}
 
 	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
@@ -87,11 +87,18 @@ func NewBuilder(logger log.Logger, shouldBeRegular bool) (*Builder, error) {
 }
 
 /*
+BuilderLogger is an accessor method for bob's internal logger
+*/
+func (bob *Builder) BuilderLogger() *logrus.Logger {
+	return bob.Logger
+}
+
+/*
 BuildFromFile combines Build() with parser.Parse() to reduce the number of
 steps needed to build with bob programatically.
 */
 func (bob *Builder) BuildFromFile(file string) error {
-	par, err := parser.NewParser(file, bob)
+	par, err := parser.NewParser(file, bob.BuilderLogger())
 	if err != nil {
 		return err
 	}
@@ -125,7 +132,9 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 		workdir := bob.Workdir()
 
-		bob.Println(color.Sprintf("@{w!}  ----->  Running commands for %q @{|}", seq.Metadata.Name))
+		bob.WithFields(logrus.Fields{
+			"container_section": seq.Metadata.Name,
+		}).Info("running commands for container section")
 
 		var imageID string
 		var err error
@@ -146,7 +155,10 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 			switch cmd.Args[1] {
 			case "build":
-				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
+				bob.WithFields(logrus.Fields{
+					"command": strings.Join(cmd.Args, " "),
+				}).Info("running command")
+
 				if err := cmd.Run(); err != nil {
 					return err
 				}
@@ -161,14 +173,19 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 						cmd.Args[k] = imageID
 					}
 				}
-				bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
+				bob.WithFields(logrus.Fields{
+					"command": strings.Join(cmd.Args, " "),
+				}).Info("running command")
 
 				if err := cmd.Run(); err != nil {
 					return err
 				}
 			case "push":
 				if !SkipPush {
-					bob.Println(color.Sprintf("@{w!}  ----->  Running command %s @{|}", cmd.Args))
+					bob.WithFields(logrus.Fields{
+						"command": strings.Join(cmd.Args, " "),
+					}).Info("running command")
+
 					WaitForPush = true
 
 					runner.Run(&runner.Command{
@@ -176,12 +193,11 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					})
 				}
 			default:
-				return errors.New(
-					color.Sprintf(
-						"@{r!}oops, looks like the command you're asking me to run is improperly formed:@{|} %s\n",
-						cmd.Args,
-					),
-				)
+				bob.WithFields(logrus.Fields{
+					"command": strings.Join(cmd.Args, " "),
+				}).Warn("improperly formatted command")
+
+				return fmt.Errorf("improperly formatted command %q", strings.Join(cmd.Args, " "))
 			}
 		}
 	}

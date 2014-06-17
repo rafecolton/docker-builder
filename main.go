@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/modcloth/docker-builder/analyzer"
 	"github.com/modcloth/docker-builder/builder"
-	"github.com/modcloth/docker-builder/log"
 	"github.com/modcloth/docker-builder/parser"
 	"github.com/modcloth/docker-builder/version"
 )
@@ -15,15 +14,15 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
-	"github.com/wsxiaoys/terminal/color"
 )
 
 var ver = version.NewVersion()
 var par *parser.Parser
-var logger log.Logger
+var logger = logrus.New()
 
 func main() {
 	app := cli.NewApp()
@@ -35,6 +34,8 @@ func main() {
 		cli.BoolFlag{"rev", "print revision and exit"},
 		cli.BoolFlag{"version-short", "print long version and exit"},
 		cli.BoolFlag{"quiet, q", "produce no output, only exit codes"},
+		cli.StringFlag{"log-level, l", "info", "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
+		cli.StringFlag{"log-format, f", "text", "log output format (options: text/t, json/j)"},
 	}
 	app.Action = func(c *cli.Context) {
 		ver = version.NewVersion()
@@ -49,7 +50,32 @@ func main() {
 		}
 	}
 	app.Before = func(c *cli.Context) error {
-		logger = log.Initialize(c.GlobalBool("quiet"))
+		switch c.String("log-level") {
+		case "debug", "d":
+			logger.Level = logrus.Debug
+		case "info", "i":
+			logger.Level = logrus.Info
+		case "warn", "w":
+			logger.Level = logrus.Warn
+		case "error", "e":
+			logger.Level = logrus.Error
+		case "fatal", "f":
+			logger.Level = logrus.Fatal
+		case "panic", "p":
+			logger.Level = logrus.Panic
+		default:
+			logger.Level = logrus.Info
+		}
+
+		switch c.String("log-format") {
+		case "text", "t":
+			logger.Formatter = new(logrus.TextFormatter)
+		case "json", "j":
+			logger.Formatter = new(logrus.JSONFormatter)
+		default:
+			logger.Formatter = new(logrus.TextFormatter)
+		}
+
 		return nil
 	}
 	app.Commands = []cli.Command{
@@ -97,23 +123,23 @@ func build(c *cli.Context) {
 
 	par, err := parser.NewParser(builderfile, logger)
 	if err != nil {
-		exitErr(73, "@{r!}Alas, could not generate parser@{|}\n----> %q", err)
+		exitErr(73, "unable to generate parser", err)
 	}
 
 	commandSequence, err := par.Parse()
 	if err != nil {
-		exitErr(23, "@{r!}Alas, could not parse@{|}\n----> %q", err)
+		exitErr(23, "unable to parse", err)
 	}
 
 	bob, err := builder.NewBuilder(logger, true)
 	if err != nil {
-		exitErr(61, "@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q", err)
+		exitErr(61, "unable to build", err)
 	}
 
 	bob.Builderfile = builderfile
 
 	if err = bob.Build(commandSequence); err != nil {
-		exitErr(29, "@{r!}Alas, I am unable to complete my assigned build because of...@{|}\n----> %q", err)
+		exitErr(29, "unable to build", err)
 	}
 
 	if builder.WaitForPush {
@@ -123,7 +149,7 @@ func build(c *cli.Context) {
 			case <-runner.Done:
 				break WaitForPush
 			case err := <-runner.Errors:
-				exitErr(1, "@{r!}Uh oh, something went wrong while running %q@{|}\n----> %q", err.CommandStr, err)
+				exitErr(1, "error when running push command", map[string]interface{}{"command": err.CommandStr, "error": err})
 			}
 		}
 	}
@@ -137,7 +163,7 @@ func initialize(c *cli.Context) {
 
 	file, err := analyzer.ParseAnalysisFromDir(dir)
 	if err != nil {
-		exitErr(1, "@{r!}Unable to initialize Bobfile@{|}\n----> %q", err)
+		exitErr(1, "unable to create Bobfile", err)
 	}
 
 	bobfilePath := filepath.Join(dir, "Bobfile")
@@ -149,30 +175,41 @@ func initialize(c *cli.Context) {
 
 	outfile, err := os.Create(bobfilePath)
 	if err != nil {
-		exitErr(86, "@{r!}Unable to create output file %q@{|}\n----> %q", bobfilePath, err)
+		exitErr(86, "unable to create output file", map[string]interface{}{"output_file": bobfilePath, "error": err})
 	}
 	defer outfile.Close()
 
 	// TODO: figure out why this isn't getting written by the toml encoder
 	dockerSectionHeader := []byte("[docker]\n\n")
 	if _, err := outfile.Write(dockerSectionHeader); err != nil {
-		exitErr(127, "@{r!}Unable to write to output file %q@{|}\n----> %q", bobfilePath, err)
+		exitErr(127, "unable to write to output file", map[string]interface{}{"output_file": bobfilePath, "error": err})
 	}
 
 	encoder := toml.NewEncoder(outfile)
 	if err = encoder.Encode(file); err != nil {
-		exitErr(123, "@{r!}Unable to write to output file %q@{|}\n----> %q", bobfilePath, err)
+		exitErr(123, "unable to write to output file", map[string]interface{}{"output_file": bobfilePath, "error": err})
 	}
 
 	vimFtComment := []byte("\n\n# vim:ft=toml")
 	if _, err := outfile.Write(vimFtComment); err != nil {
-		exitErr(127, "@{r!}Unable to write to output file %q@{|}\n----> %q", bobfilePath, err)
+		exitErr(127, "unable to write to output file", map[string]interface{}{"output_file": bobfilePath, "error": err})
 	}
 
-	logger.Printf("Successfully created %q\n", bobfilePath)
+	logger.WithFields(logrus.Fields{"output_file": bobfilePath}).Info("successfully initialized")
 }
 
-func exitErr(exitCode int, fmtString string, args ...interface{}) {
-	logger.Println(color.Sprintf(fmtString, args...))
+func exitErr(exitCode int, message string, args interface{}) {
+	var fields logrus.Fields
+
+	switch args.(type) {
+	case error:
+		fields = logrus.Fields{
+			"error": args,
+		}
+	case map[string]interface{}:
+		fields = args.(map[string]interface{})
+	}
+
+	logger.WithFields(fields).Error(message)
 	gocleanup.Exit(exitCode)
 }

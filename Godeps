@@ -10,6 +10,11 @@
 			"Rev": "890ff2dcee0c5b7fc3c7453325d8146aaf1850c1"
 		},
 		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.2.0-9-g97978e5",
+			"Rev": "97978e5e5483a3f926c2bb6e19f9e2ff344e81f0"
+		},
+		{
 			"ImportPath": "github.com/codegangsta/cli",
 			"Comment": "1.0.0-65-g820deef",
 			"Rev": "820deefc9031d101f085ef773425fc6ca7a5363e"
@@ -20,7 +25,7 @@
 			"Rev": "6062c6b35beaffaf643b2f80f926b6337c3db63a"
 		},
 		{
-			"ImportPath": "github.com/hishboy/gocommons",
+			"ImportPath": "github.com/hishboy/gocommons/lang",
 			"Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
 		},
 		{
@@ -29,8 +34,8 @@
 		},
 		{
 			"ImportPath": "github.com/modcloth/queued-command-runner",
-			"Comment": "v0.2.1",
-			"Rev": "2db56c6b13501d703d66bf6b99c99a3956a252ac"
+			"Comment": "v0.2.1-4-ge1a2b35",
+			"Rev": "e1a2b3599c0e9c1e1b8933e99c8c2d302543d9ef"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",
