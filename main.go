@@ -73,7 +73,7 @@ func main() {
 		case "json", "j":
 			logger.Formatter = new(logrus.JSONFormatter)
 		default:
-			logger.Formatter = new(logrus.TextFormatter)
+			logger.Formatter = &logrus.TextFormatter{ForceColors: true}
 		}
 
 		return nil
