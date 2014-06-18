@@ -69,7 +69,7 @@ func main() {
 
 		switch c.String("log-format") {
 		case "text", "t":
-			logger.Formatter = new(logrus.TextFormatter)
+			logger.Formatter = &logrus.TextFormatter{ForceColors: true}
 		case "json", "j":
 			logger.Formatter = new(logrus.JSONFormatter)
 		default:
