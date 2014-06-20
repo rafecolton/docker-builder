@@ -135,6 +135,9 @@ func (bob *Builder) BuildFromFile(file string) error {
 Build does the building!
 */
 func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
+	// docker build -t name:uuid
+	var imageID string
+
 	for _, seq := range commandSequence.Commands {
 		if err := bob.CleanWorkdir(); err != nil {
 			return err
@@ -150,7 +153,6 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			"container_section": seq.Metadata.Name,
 		}).Info("running commands for container section")
 
-		var imageID string
 		var err error
 
 		for _, cmd := range seq.SubCommand {
@@ -223,6 +225,18 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 				return fmt.Errorf("improperly formatted command %q", strings.Join(cmd.Args, " "))
 			}
+		}
+
+		repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(seq.Metadata.UUID)
+		if err != nil {
+			bob.WithField("err", err).Warn("error getting repo taggged with temporary tag")
+		}
+
+		bob.WithField("tag", repoWithTag).Info("deleting temporary tag")
+
+		if err = bob.dockerClient.RemoveImage(repoWithTag); err != nil {
+			bob.WithField("err", err).Warn("error deleting temporary tag")
+
 		}
 	}
 
