@@ -12,7 +12,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/Sirupsen/logrus"
@@ -21,6 +23,8 @@ import (
 	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 )
+
+var imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
 
 /*
 WaitForPush indicates to main() that a `docker push` command has been
@@ -191,16 +195,26 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					return err
 				}
 			case "push":
+				// do final transformation
+				runnerCmd := makeRunnerCommandForPush(cmd)
+
 				if !SkipPush {
+					// log
 					bob.WithFields(logrus.Fields{
 						"command": strings.Join(cmd.Args, " "),
 					}).Info("running command")
 
+					// set necessary var
 					WaitForPush = true
 
-					runner.Run(&runner.Command{
-						Cmd: &cmd,
-					})
+					// run
+					runner.Run(runnerCmd)
+
+				} else {
+					bob.WithFields(logrus.Fields{
+						"key": runnerCmd.Key,
+						"cmd": strings.Join(runnerCmd.Cmd.Args, " "),
+					}).Warn("not running push command")
 				}
 			default:
 				bob.WithFields(logrus.Fields{
@@ -213,6 +227,24 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 	}
 
 	return nil
+}
+
+func makeRunnerCommandForPush(cmd exec.Cmd) *runner.Command {
+
+	imageGiven := cmd.Args[2]
+	matches := imageWithTagRegex.FindStringSubmatch(imageGiven)
+
+	// if image includes a tag
+	if len(matches) >= 3 {
+		return &runner.Command{
+			Cmd: &cmd,
+			Key: matches[1], // image without tag
+		}
+	}
+
+	return &runner.Command{
+		Cmd: &cmd,
+	}
 }
 
 /*
