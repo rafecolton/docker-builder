@@ -222,7 +222,27 @@ var _ = Describe("Parse", func() {
 						},
 						*&exec.Cmd{
 							Path: "docker",
-							Args: []string{"docker", "push", "quay.io/modcloth/style-gallery"},
+							Args: []string{
+								"docker",
+								"push",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
+							},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{
+								"docker",
+								"push",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
+							},
+						},
+						*&exec.Cmd{
+							Path: "docker",
+							Args: []string{
+								"docker",
+								"push",
+								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
+							},
 						},
 					},
 				},
