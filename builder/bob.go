@@ -171,7 +171,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			case "build":
 				bob.WithFields(logrus.Fields{
 					"command": strings.Join(cmd.Args, " "),
-				}).Info("running command")
+				}).Info("running build command")
 
 				if err := cmd.Run(); err != nil {
 					return err
@@ -189,7 +189,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				}
 				bob.WithFields(logrus.Fields{
 					"command": strings.Join(cmd.Args, " "),
-				}).Info("running command")
+				}).Info("running tag command")
 
 				if err := cmd.Run(); err != nil {
 					return err
@@ -202,7 +202,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					// log
 					bob.WithFields(logrus.Fields{
 						"command": strings.Join(cmd.Args, " "),
-					}).Info("running command")
+					}).Info("running push command")
 
 					// set necessary var
 					WaitForPush = true
