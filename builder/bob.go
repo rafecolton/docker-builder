@@ -135,9 +135,6 @@ func (bob *Builder) BuildFromFile(file string) error {
 Build does the building!
 */
 func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
-	// docker build -t name:uuid
-	var imageID string
-
 	for _, seq := range commandSequence.Commands {
 		if err := bob.CleanWorkdir(); err != nil {
 			return err
@@ -153,6 +150,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			"container_section": seq.Metadata.Name,
 		}).Info("running commands for container section")
 
+		var imageID string
 		var err error
 
 		for _, cmd := range seq.SubCommand {
