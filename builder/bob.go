@@ -12,7 +12,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/Sirupsen/logrus"
@@ -21,6 +23,8 @@ import (
 	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 )
+
+var imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
 
 /*
 WaitForPush indicates to main() that a `docker push` command has been
@@ -167,7 +171,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			case "build":
 				bob.WithFields(logrus.Fields{
 					"command": strings.Join(cmd.Args, " "),
-				}).Info("running command")
+				}).Info("running build command")
 
 				if err := cmd.Run(); err != nil {
 					return err
@@ -185,22 +189,32 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				}
 				bob.WithFields(logrus.Fields{
 					"command": strings.Join(cmd.Args, " "),
-				}).Info("running command")
+				}).Info("running tag command")
 
 				if err := cmd.Run(); err != nil {
 					return err
 				}
 			case "push":
+				// do final transformation
+				runnerCmd := makeRunnerCommandForPush(cmd)
+
 				if !SkipPush {
+					// log
 					bob.WithFields(logrus.Fields{
 						"command": strings.Join(cmd.Args, " "),
-					}).Info("running command")
+					}).Info("running push command")
 
+					// set necessary var
 					WaitForPush = true
 
-					runner.Run(&runner.Command{
-						Cmd: &cmd,
-					})
+					// run
+					runner.Run(runnerCmd)
+
+				} else {
+					bob.WithFields(logrus.Fields{
+						"key": runnerCmd.Key,
+						"cmd": strings.Join(runnerCmd.Cmd.Args, " "),
+					}).Warn("not running push command")
 				}
 			default:
 				bob.WithFields(logrus.Fields{
@@ -210,9 +224,39 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				return fmt.Errorf("improperly formatted command %q", strings.Join(cmd.Args, " "))
 			}
 		}
+
+		repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(seq.Metadata.UUID)
+		if err != nil {
+			bob.WithField("err", err).Warn("error getting repo taggged with temporary tag")
+		}
+
+		bob.WithField("tag", repoWithTag).Info("deleting temporary tag")
+
+		if err = bob.dockerClient.RemoveImage(repoWithTag); err != nil {
+			bob.WithField("err", err).Warn("error deleting temporary tag")
+
+		}
 	}
 
 	return nil
+}
+
+func makeRunnerCommandForPush(cmd exec.Cmd) *runner.Command {
+
+	imageGiven := cmd.Args[2]
+	matches := imageWithTagRegex.FindStringSubmatch(imageGiven)
+
+	// if image includes a tag
+	if len(matches) >= 3 {
+		return &runner.Command{
+			Cmd: &cmd,
+			Key: matches[1], // image without tag
+		}
+	}
+
+	return &runner.Command{
+		Cmd: &cmd,
+	}
 }
 
 /*

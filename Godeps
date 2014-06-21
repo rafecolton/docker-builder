@@ -34,8 +34,8 @@
 		},
 		{
 			"ImportPath": "github.com/modcloth/queued-command-runner",
-			"Comment": "v0.2.1-4-ge1a2b35",
-			"Rev": "e1a2b3599c0e9c1e1b8933e99c8c2d302543d9ef"
+			"Comment": "v0.2.3",
+			"Rev": "2f3d49fb2970aa398b94c991253bd83eb123b8aa"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",

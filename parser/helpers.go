@@ -55,6 +55,8 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Args: buildArgs,
 		})
 
+		var tagList = []string{}
+
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {
 			var tagObj tag.Tag
@@ -70,6 +72,9 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			}
 
 			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
+
+			tagList = append(tagList, fullTag)
+
 			buildArgs = []string{"docker", "tag"}
 			buildArgs = append(buildArgs, is.DockerTagOpts...)
 			buildArgs = append(buildArgs, "<IMG>", fullTag)
@@ -82,11 +87,14 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 		// ADD PUSH COMMANDS
 		if !v.SkipPush {
-			buildArgs = []string{"docker", "push", name}
-			containerCommands = append(containerCommands, *&exec.Cmd{
-				Path: "docker",
-				Args: buildArgs,
-			})
+			for _, fullTag := range tagList {
+				buildArgs = []string{"docker", "push", fullTag}
+
+				containerCommands = append(containerCommands, *&exec.Cmd{
+					Path: "docker",
+					Args: buildArgs,
+				})
+			}
 		}
 
 		ret.Commands = append(ret.Commands, &SubSequence{

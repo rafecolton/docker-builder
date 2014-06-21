@@ -31,6 +31,7 @@ func init() {
 
 	//set logger defaults from env
 	setLogger(os.Getenv("DOCKER_BUILDER_LOG_LEVEL"), os.Getenv("DOCKER_BUILDER_LOG_FORMAT"))
+	runner.Logger = logger
 }
 
 func setLogger(level, format string) {
