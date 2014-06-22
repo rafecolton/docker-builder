@@ -54,28 +54,19 @@ func NewDockerClient(logger *logrus.Logger, shouldBeReal bool) (DockerClient, er
 	}, nil
 }
 
+func (rtoo *realDockerClient) RemoveImage(name string) error {
+	return rtoo.client.RemoveImage(name)
+}
+
 /*
 LatestImageTaggedWith(uuid) returns the image id of the most recently created
 docker image that has been tagged with the specified uuid.
 */
 func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, error) {
-	/*
-		LatestImage - figure out what this does...
-	*/
-	var images APIImagesSlice
-	images, err := rtoo.client.ListImages(false)
-
+	images, err := rtoo.sortedImages()
 	if err != nil {
-		rtoo.WithFields(logrus.Fields{
-			"docker_host": rtoo.host,
-			"error":       err,
-		}).Error("docker images could not be listed")
-
 		return "", err
 	}
-
-	// first is most recent
-	sort.Sort(images)
 
 	for _, image := range images {
 		for _, tag := range image.RepoTags {
@@ -91,4 +82,48 @@ func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, er
 	}
 
 	return "", fmt.Errorf("unable to find image tagged with uuid %q", uuid)
+}
+
+func (rtoo *realDockerClient) LatestRepoTaggedWithUUID(uuid string) (string, error) {
+	images, err := rtoo.sortedImages()
+	if err != nil {
+		return "", err
+	}
+
+	for _, image := range images {
+		for _, tag := range image.RepoTags {
+			matched, err := regexp.MatchString(fmt.Sprintf(":%s$", uuid), tag)
+			if err != nil {
+				return "", err
+			}
+
+			if matched {
+				return tag, nil
+			}
+		}
+	}
+
+	return "", fmt.Errorf("unable to find image tagged with uuid %q", uuid)
+}
+
+func (rtoo *realDockerClient) sortedImages() (APIImagesSlice, error) {
+	/*
+		LatestImage - figure out what this does...
+	*/
+	var images APIImagesSlice
+	images, err := rtoo.client.ListImages(false)
+
+	if err != nil {
+		rtoo.WithFields(logrus.Fields{
+			"docker_host": rtoo.host,
+			"error":       err,
+		}).Error("docker images could not be listed")
+
+		return nil, err
+	}
+
+	// first is most recent
+	sort.Sort(images)
+
+	return images, nil
 }
