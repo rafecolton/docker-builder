@@ -19,8 +19,10 @@ import (
 
 var ver = version.NewVersion()
 var par *parser.Parser
-var Logger *logrus.Logger
 var config Config
+
+//Logger is the logger for the docker-builder main
+var Logger *logrus.Logger
 
 func init() {
 	// parse env config
