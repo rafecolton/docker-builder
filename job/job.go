@@ -20,6 +20,9 @@ type job struct {
 	Logger         *logrus.Logger
 }
 
+/*
+JobConfig contains global configuration options for jobs
+*/
 type JobConfig struct {
 	Workdir        string
 	Logger         *logrus.Logger

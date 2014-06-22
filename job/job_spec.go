@@ -5,6 +5,9 @@ import (
 	"errors"
 )
 
+/*
+JobSpec contains the specs for a job, retrieved from parsed JSON
+*/
 type JobSpec struct {
 	RepoOwner      string `json:"account"`
 	RepoName       string `json:"repo"`
@@ -21,6 +24,9 @@ func NewJobSpec(args ...interface{}) (*JobSpec, error) {
 	return extractJobSpecFromRawArgs(args...)
 }
 
+/*
+Validate checks that required fields are present in the spec.
+*/
 func (spec *JobSpec) Validate() error {
 
 	if spec.RepoOwner == "" {
