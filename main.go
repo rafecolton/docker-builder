@@ -9,12 +9,34 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
+	"github.com/kelseyhightower/envconfig"
+	"github.com/modcloth/kamino"
+	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 )
 
 var ver = version.NewVersion()
 var par *parser.Parser
+var Logger *logrus.Logger
+var config Config
+
+func init() {
+	// parse env config
+	if err := envconfig.Process("docker_builder", &config); err != nil {
+		Logger.WithField("err", err).Fatal("envconfig error")
+	}
+
+	// set default config port
+	if config.Port == 0 {
+		config.Port = 5000
+	}
+
+	// set logger defaults
+	Logger = logrus.New()
+	Logger.Formatter = &logrus.TextFormatter{ForceColors: true}
+}
 
 func main() {
 	app := cli.NewApp()
@@ -26,8 +48,8 @@ func main() {
 		cli.BoolFlag{"rev", "print revision and exit"},
 		cli.BoolFlag{"version-short", "print long version and exit"},
 		cli.BoolFlag{"quiet, q", "produce no output, only exit codes"},
-		cli.StringFlag{"log-level, l", "info", "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
-		cli.StringFlag{"log-format, f", "text", "log output format (options: text/t, json/j)"},
+		cli.StringFlag{"log-level, l", config.LogLevel, "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
+		cli.StringFlag{"log-format, f", config.LogFormat, "log output format (options: text/t, json/j)"},
 	}
 	app.Action = func(c *cli.Context) {
 		ver = version.NewVersion()
@@ -42,7 +64,13 @@ func main() {
 		}
 	}
 	app.Before = func(c *cli.Context) error {
-		setLogger(c.String("log-level"), c.String("log-format"))
+		logLevel := c.String("log-level")
+		logFormat := c.String("log-format")
+
+		setLogger(logLevel, logFormat)
+		runner.Logger = Logger
+		kamino.Logger = Logger
+
 		return nil
 	}
 	app.Commands = []cli.Command{
@@ -77,8 +105,9 @@ func main() {
 			Description: "Start a small HTTP web server for receiving build requests",
 			Action:      serve,
 			Flags: []cli.Flag{
-				cli.IntFlag{"port, P", 5000, "port on which to serve"},
+				cli.IntFlag{"port, P", config.Port, "port on which to serve"},
 				cli.StringFlag{"api-token, T", "", "GitHub API token"},
+				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
 			},
 		},
 	}

@@ -53,5 +53,5 @@ func initialize(c *cli.Context) {
 		exitErr(127, "unable to write to output file", map[string]interface{}{"output_file": bobfilePath, "error": err})
 	}
 
-	logger.WithFields(logrus.Fields{"output_file": bobfilePath}).Info("successfully initialized")
+	Logger.WithFields(logrus.Fields{"output_file": bobfilePath}).Info("successfully initialized")
 }

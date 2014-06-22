@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/job"
 
 	"github.com/codegangsta/cli"
@@ -23,6 +24,12 @@ func serve(c *cli.Context) {
 
 	apiToken = c.String("api-token")
 
+	if apiToken == "" {
+		apiToken = config.APIToken
+	}
+
+	builder.SkipPush = c.Bool("skip-push") || config.SkipPush
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/docker-build", dockerBuild)
 
@@ -33,7 +40,7 @@ func serve(c *cli.Context) {
 }
 
 func loggingMiddleware() *negronilogrus.Middleware {
-	return negronilogrus.NewCustomMiddleware(logger.Level, logger.Formatter)
+	return negronilogrus.NewCustomMiddleware(Logger.Level, Logger.Formatter)
 }
 
 func dockerBuild(w http.ResponseWriter, req *http.Request) {
@@ -71,7 +78,7 @@ func dockerBuild(w http.ResponseWriter, req *http.Request) {
 	})
 
 	jobConfig := &job.JobConfig{
-		Logger:         logger,
+		Logger:         Logger,
 		Workdir:        workdir,
 		GitHubAPIToken: apiToken,
 	}

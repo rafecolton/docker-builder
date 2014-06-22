@@ -7,6 +7,6 @@ import (
 )
 
 func lint(c *cli.Context) {
-	par, _ = parser.NewParser(c.Args().First(), logger)
+	par, _ = parser.NewParser(c.Args().First(), Logger)
 	par.AssertLint()
 }

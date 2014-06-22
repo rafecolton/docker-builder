@@ -15,7 +15,7 @@ func build(c *cli.Context) {
 		builderfile = "Bobfile"
 	}
 
-	par, err := parser.NewParser(builderfile, logger)
+	par, err := parser.NewParser(builderfile, Logger)
 	if err != nil {
 		exitErr(73, "unable to generate parser", err)
 	}
@@ -25,7 +25,7 @@ func build(c *cli.Context) {
 		exitErr(23, "unable to parse", err)
 	}
 
-	bob, err := builder.NewBuilder(logger, true)
+	bob, err := builder.NewBuilder(Logger, true)
 	if err != nil {
 		exitErr(61, "unable to build", err)
 	}

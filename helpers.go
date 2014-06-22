@@ -17,6 +17,6 @@ func exitErr(exitCode int, message string, args interface{}) {
 		fields = args.(map[string]interface{})
 	}
 
-	logger.WithFields(fields).Error(message)
+	Logger.WithFields(fields).Error(message)
 	gocleanup.Exit(exitCode)
 }
