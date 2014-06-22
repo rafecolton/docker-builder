@@ -16,7 +16,8 @@ import (
 	"github.com/onsi/gocleanup"
 )
 
-const SERVER_DESCRIPTION = `Start a small HTTP web server for receiving build requests.
+//ServerDescription is the help text for the `serer` command
+const ServerDescription = `Start a small HTTP web server for receiving build requests.
 
 Configure through the environment:
 

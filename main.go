@@ -100,7 +100,7 @@ func main() {
 		{
 			Name:        "serve",
 			Usage:       "serve <options> - start a small HTTP web server for receiving build requests",
-			Description: SERVER_DESCRIPTION,
+			Description: ServerDescription,
 			Action:      serve,
 			Flags: []cli.Flag{
 				cli.IntFlag{"port, p", config.Port, "port on which to serve"},
