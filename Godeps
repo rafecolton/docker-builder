@@ -20,14 +20,19 @@
 			"Rev": "820deefc9031d101f085ef773425fc6ca7a5363e"
 		},
 		{
-			"ImportPath": "github.com/codegangsta/negroni",
-			"Comment": "v0.1-9-gfdad03a",
-			"Rev": "fdad03a1937d0406f95433aac2ccd06d682e9dad"
+			"ImportPath": "github.com/codegangsta/inject",
+			"Comment": "v1.0-rc1",
+			"Rev": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39"
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
 			"Comment": "0.2.1-129-g6062c6b",
 			"Rev": "6062c6b35beaffaf643b2f80f926b6337c3db63a"
+		},
+		{
+			"ImportPath": "github.com/go-martini/martini",
+			"Comment": "v1.0-6-g9af2cc2",
+			"Rev": "9af2cc2f8861c10bad0df25c8ded19fc9cd9b74e"
 		},
 		{
 			"ImportPath": "github.com/hishboy/gocommons/lang",
@@ -37,10 +42,6 @@
 			"ImportPath": "github.com/kelseyhightower/envconfig",
 			"Comment": "v1.0.0",
 			"Rev": "0280e33525f5d88edb71638a80b31724153225ba"
-		},
-		{
-			"ImportPath": "github.com/meatballhat/negroni-logrus",
-			"Rev": "7b8e28075933f92d13d44cc352cd2aee32ec05bb"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",

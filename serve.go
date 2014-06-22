@@ -10,8 +10,7 @@ import (
 	"github.com/modcloth/docker-builder/job"
 
 	"github.com/codegangsta/cli"
-	"github.com/codegangsta/negroni"
-	"github.com/meatballhat/negroni-logrus"
+	"github.com/go-martini/martini"
 	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
 )
@@ -30,47 +29,32 @@ func serve(c *cli.Context) {
 
 	builder.SkipPush = c.Bool("skip-push") || config.SkipPush
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/docker-build", dockerBuild)
+	m := martini.Classic()
 
-	n := negroni.Classic()
-	n.UseHandler(mux)
-	n.Use(loggingMiddleware())
-	n.Run(portString)
+	m.Post("/docker-build", dockerBuild)
+
+	http.ListenAndServe(portString, m) // instead of m.Run()
 }
 
-func loggingMiddleware() *negronilogrus.Middleware {
-	return negronilogrus.NewCustomMiddleware(Logger.Level, Logger.Formatter)
-}
-
-func dockerBuild(w http.ResponseWriter, req *http.Request) {
-	if req.Method != "POST" {
-		http.Error(w, "404 not found", http.StatusNotFound)
-		return
-	}
-
+func dockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
 	body, err := ioutil.ReadAll(req.Body)
 	defer req.Body.Close()
 	if err != nil {
-		http.Error(w, "400 bad request", http.StatusBadRequest)
-		return
+		return 400, "400 bad request"
 	}
 
 	var spec = &job.JobSpec{}
 	if err = json.Unmarshal([]byte(body), spec); err != nil {
-		http.Error(w, "400 bad request", http.StatusBadRequest)
-		return
+		return 400, "400 bad request"
 	}
 
 	if err = spec.Validate(); err != nil {
-		http.Error(w, "412 precondition failed", http.StatusPreconditionFailed)
-		return
+		return 412, "412 precondition failed"
 	}
 
 	workdir, err := ioutil.TempDir("", "docker-build-worker")
 	if err != nil {
-		http.Error(w, "500 internal server error", http.StatusInternalServerError)
-		return
+		return 500, "500 internal server error"
 	}
 
 	gocleanup.Register(func() {
@@ -85,8 +69,19 @@ func dockerBuild(w http.ResponseWriter, req *http.Request) {
 
 	job := job.NewJob(jobConfig, spec)
 
-	if err = job.Process(); err != nil {
-		http.Error(w, "417 expectation failed", http.StatusExpectationFailed)
-		return
+	// TODO: set this from somewhere
+	var async bool
+
+	// if async
+	if async {
+		if err = job.Process(); err != nil {
+			return 417, "417 expectation failed"
+		}
+
+		return 201, "201 created"
 	}
+
+	// if not async
+	go job.Process()
+	return 202, "202 accepted"
 }
