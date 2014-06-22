@@ -34,6 +34,11 @@
 			"Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
 		},
 		{
+			"ImportPath": "github.com/kelseyhightower/envconfig",
+			"Comment": "v1.0.0",
+			"Rev": "0280e33525f5d88edb71638a80b31724153225ba"
+		},
+		{
 			"ImportPath": "github.com/meatballhat/negroni-logrus",
 			"Rev": "7b8e28075933f92d13d44cc352cd2aee32ec05bb"
 		},
