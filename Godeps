@@ -20,6 +20,11 @@
 			"Rev": "820deefc9031d101f085ef773425fc6ca7a5363e"
 		},
 		{
+			"ImportPath": "github.com/codegangsta/negroni",
+			"Comment": "v0.1-9-gfdad03a",
+			"Rev": "fdad03a1937d0406f95433aac2ccd06d682e9dad"
+		},
+		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
 			"Comment": "0.2.1-129-g6062c6b",
 			"Rev": "6062c6b35beaffaf643b2f80f926b6337c3db63a"
@@ -29,13 +34,22 @@
 			"Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
 		},
 		{
+			"ImportPath": "github.com/meatballhat/negroni-logrus",
+			"Rev": "7b8e28075933f92d13d44cc352cd2aee32ec05bb"
+		},
+		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
 			"Rev": "66b8be3a55b04e20fa4a26ca867fbb5612f75a73"
 		},
 		{
+			"ImportPath": "github.com/modcloth/kamino",
+			"Comment": "v0.1.2",
+			"Rev": "9ca92fa5b1ff549157054972ce16c9faa43df87a"
+		},
+		{
 			"ImportPath": "github.com/modcloth/queued-command-runner",
-			"Comment": "v0.2.3",
-			"Rev": "2f3d49fb2970aa398b94c991253bd83eb123b8aa"
+			"Comment": "v0.2.3-1-g5334e5b",
+			"Rev": "5334e5b5279c9144df6122689eb049dd27e1440b"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",

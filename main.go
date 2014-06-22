@@ -70,6 +70,17 @@ func main() {
 			Description: "Validate whether or not your Bobfile is parsable.",
 			Action:      lint,
 		},
+		{
+			Name:        "serve",
+			ShortName:   "S",
+			Usage:       "serve <options> - start a small HTTP web server for receiving build requests",
+			Description: "Start a small HTTP web server for receiving build requests",
+			Action:      serve,
+			Flags: []cli.Flag{
+				cli.IntFlag{"port, P", 5000, "port on which to serve"},
+				cli.StringFlag{"api-token, T", "", "GitHub API token"},
+			},
+		},
 	}
 
 	app.Run(os.Args)
