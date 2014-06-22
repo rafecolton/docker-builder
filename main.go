@@ -99,11 +99,20 @@ func main() {
 			Action:      lint,
 		},
 		{
-			Name:        "serve",
-			ShortName:   "S",
-			Usage:       "serve <options> - start a small HTTP web server for receiving build requests",
-			Description: "Start a small HTTP web server for receiving build requests",
-			Action:      serve,
+			Name:      "serve",
+			ShortName: "S",
+			Usage:     "serve <options> - start a small HTTP web server for receiving build requests",
+			Description: `Start a small HTTP web server for receiving build requests.
+
+Configure through the environment:
+
+DOCKER_BUILDER_LOGLEVEL     =>     --log-level (global)
+DOCKER_BUILDER_LOGFORMAT    =>     --log-format (global)
+DOCKER_BUILDER_PORT         =>     --port
+DOCKER_BUILDER_APITOKEN     =>     --api-token
+DOCKER_BUILDER_SKIPPUSH     =>     --skip-push
+			`,
+			Action: serve,
 			Flags: []cli.Flag{
 				cli.IntFlag{"port, P", config.Port, "port on which to serve"},
 				cli.StringFlag{"api-token, T", "", "GitHub API token"},

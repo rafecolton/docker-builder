@@ -24,8 +24,8 @@ docker-builder build Bobfile
 ## More Reasonably-Paced Start
 0. Install `docker-builder`
 0. Explore the [Writing a Bobfile](docs/writing-a-bobfile.md) doc
-0. Consider running `docker-builder -h` and `docker-builder help build` for more
-   options
+0. Run`docker-builder --help`
+0. Run `docker-builder help build`
 
 ### First, Install `docker-builder`
 
@@ -64,3 +64,4 @@ things first, such as `go`.
 ## Other Docs
 
 * [Why?](docs/why.md)
+* [Advanced Usage](docs/advanced-usage.md)
