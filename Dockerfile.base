@@ -20,6 +20,8 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise-updates main universe" >>
 RUN apt-get update -y && apt-get install -y --no-install-recommends curl openssh-client make git \
   pkg-config mercurial build-essential sudo
 
+RUN curl -sL https://get.docker.io | sh
+
 # install go
 RUN curl -sLO https://storage.googleapis.com/golang/$GO_TARBALL
 RUN tar -C /usr/local -xzf $GO_TARBALL

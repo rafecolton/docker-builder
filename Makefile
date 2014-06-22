@@ -77,7 +77,7 @@ binclean:
 	touch ./releases/.gitkeep
 
 .PHONY: build
-build: binclean deps
+build: binclean godep
 	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES) $(B)
 
 .PHONY: release
@@ -102,11 +102,11 @@ gox-darwin: build dev
 .PHONY: godep
 godep:
 	go get github.com/tools/godep
+	@echo "godep restoring..."
+	$(GOPATH)/bin/godep restore
 
 .PHONY: deps
 deps: godep
-	@echo "godep restoring..."
-	$(GOPATH)/bin/godep restore
 	go get github.com/golang/lint/golint
 	go get github.com/onsi/ginkgo/ginkgo
 	go get github.com/onsi/gomega
