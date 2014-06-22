@@ -3,6 +3,8 @@ MAINTAINER devops@modcloth.com
 
 ENV GOPATH /app
 
+ADD ./.dockercfg /root/.dockercfg
+
 ## set up build dir and add project
 ADD . /app/src/github.com/modcloth/docker-builder
 WORKDIR /app/src/github.com/modcloth/docker-builder
