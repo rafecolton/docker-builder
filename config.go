@@ -9,4 +9,7 @@ type Config struct {
 	LogFormat string
 	APIToken  string
 	SkipPush  bool
+	// for basic auth
+	Username string
+	Password string
 }

@@ -21,12 +21,18 @@
 # DOCKER_BUILDER_PORT         =>     --port
 # DOCKER_BUILDER_APITOKEN     =>     --api-token
 # DOCKER_BUILDER_SKIPPUSH     =>     --skip-push
+# DOCKER_BUILDER_USERNAME     =>     --username
+# DOCKER_BUILDER_PASSWORD     =>     --password
+#
+# NOTE: If username and password are both empty (i.e. not provided), basic auth will not be used.
 #
 #
 # OPTIONS:
-#    --port, -P '5000'  port on which to serve
-#    --api-token, -T  GitHub API token
-#    --skip-push    override Bobfile behavior and do not push any images (useful for testing)
+#    --port, -p '5000'	port on which to serve
+#    --api-token, -t 	GitHub API token
+#    --skip-push		override Bobfile behavior and do not push any images (useful for testing)
+#    --username 		username for basic auth
+#    --password 		password for basic auth
 ```
 
 ### Example Request

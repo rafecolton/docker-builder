@@ -78,14 +78,12 @@ func main() {
 	app.Commands = []cli.Command{
 		{
 			Name:        "init",
-			ShortName:   "i",
 			Usage:       "init [dir] - initialize the given directory (default '.') with a Bobfile",
 			Description: "Make educated guesses to fill out a Bobfile given a directory with a Dockerfile",
 			Action:      initialize,
 		},
 		{
 			Name:        "build",
-			ShortName:   "b",
 			Usage:       "build [file] - build Docker images from the provided Bobfile",
 			Description: "Build Docker images from the provided Bobfile.",
 			Action:      build,
@@ -95,30 +93,21 @@ func main() {
 		},
 		{
 			Name:        "lint",
-			ShortName:   "l",
 			Usage:       "lint [file] - validates whether or not your Bobfile is parsable",
 			Description: "Validate whether or not your Bobfile is parsable.",
 			Action:      lint,
 		},
 		{
-			Name:      "serve",
-			ShortName: "S",
-			Usage:     "serve <options> - start a small HTTP web server for receiving build requests",
-			Description: `Start a small HTTP web server for receiving build requests.
-
-Configure through the environment:
-
-DOCKER_BUILDER_LOGLEVEL     =>     --log-level (global)
-DOCKER_BUILDER_LOGFORMAT    =>     --log-format (global)
-DOCKER_BUILDER_PORT         =>     --port
-DOCKER_BUILDER_APITOKEN     =>     --api-token
-DOCKER_BUILDER_SKIPPUSH     =>     --skip-push
-			`,
-			Action: serve,
+			Name:        "serve",
+			Usage:       "serve <options> - start a small HTTP web server for receiving build requests",
+			Description: SERVER_DESCRIPTION,
+			Action:      serve,
 			Flags: []cli.Flag{
-				cli.IntFlag{"port, P", config.Port, "port on which to serve"},
-				cli.StringFlag{"api-token, T", "", "GitHub API token"},
+				cli.IntFlag{"port, p", config.Port, "port on which to serve"},
+				cli.StringFlag{"api-token, t", "", "GitHub API token"},
 				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
+				cli.StringFlag{"username", "", "username for basic auth"},
+				cli.StringFlag{"password", "", "password for basic auth"},
 			},
 		},
 	}
