@@ -1,0 +1,29 @@
+FROM stackbrew/ubuntu:12.04
+MAINTAINER devops@modcloth.com
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV GOROOT /usr/local/go
+ENV GO_TARBALL go1.3.linux-amd64.tar.gz
+ENV LD_LIBRARY_PATH /lib/x86_64-linux-gnu:/usr/local/lib:/usr/lib:/lib
+
+# Fix some issues with APT packages
+# See https://github.com/dotbutt/docker/issues/1024
+RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN ln -sFf /bin/true /sbin/initctl
+RUN echo "initscripts hold" | dpkg --set-selections
+
+# get ubuntu sources for installing things
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise-updates main universe" >> /etc/apt/sources.list
+
+# install deps
+RUN apt-get update -y && apt-get install -y --no-install-recommends curl openssh-client make git \
+  pkg-config mercurial build-essential sudo
+
+RUN curl -sL https://get.docker.io | sh
+
+# install go
+RUN curl -sLO https://storage.googleapis.com/golang/$GO_TARBALL
+RUN tar -C /usr/local -xzf $GO_TARBALL
+RUN ln -sv /usr/local/go/bin/* /usr/local/bin
+RUN rm -f $GO_TARBALL

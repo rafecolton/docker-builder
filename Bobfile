@@ -1,0 +1,14 @@
+[docker]
+
+build_opts = ["--rm", "--no-cache"]
+tag_opts = ["--force"]
+
+[containers]
+
+[containers.app]
+Dockerfile = "Dockerfile"
+registry = "quay.io/modcloth"
+project = "docker-builder"
+tags = ["git:branch", "git:rev", "latest"]
+
+# vim:ft=toml
