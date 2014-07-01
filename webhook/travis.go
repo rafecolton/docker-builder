@@ -45,7 +45,7 @@ func Travis(w http.ResponseWriter, req *http.Request) (int, string) {
 		logger.WithFields(logrus.Fields{
 			"owner": payload.Repository.Owner,
 			"repo":  payload.Repository.Name,
-		}).Error("travis build was a success")
+		}).Error("travis build was not a success, not build")
 		return 409, "409 conflict"
 	}
 
