@@ -63,6 +63,7 @@ func serve(c *cli.Context) {
 	// establish routes
 	server.Post("/docker-build", dockerBuild)
 	server.Post("/docker-build/travis", serveWebhook(webhook.Travis))
+	server.Post("/docker-build/github", serveWebhook(webhook.Github))
 
 	// start server
 	http.ListenAndServe(portString, server)

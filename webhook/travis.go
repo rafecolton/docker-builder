@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	TRAVIS_SUCCESS = iota
+	TRAVIS_SUCCESS    = iota
 	TRAVIS_NO_SUCCESS // pending or failure
 )
 
 const (
-	TRAVIS_BUILD_TYPE_PUSH = "push"
+	TRAVIS_BUILD_TYPE_PUSH         = "push"
 	TRAVIS_BUILD_TYPE_PULL_REQUEST = "pull_request"
 )
 
@@ -24,10 +24,10 @@ type TravisRepository struct {
 }
 
 type TravisPayload struct {
-	Repository TravisRepository `json:"repository"`
-	CommitSHA     string           `json:"commit"`
-	BuildStatus     int              `json:"status"`
-	BuildType       string           `json:"type"`
+	Repository  TravisRepository `json:"repository"`
+	CommitSHA   string           `json:"commit"`
+	BuildStatus int              `json:"status"`
+	BuildType   string           `json:"type"`
 }
 
 func Travis(req *http.Request) (spec *job.JobSpec, err error) {
