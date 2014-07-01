@@ -9,7 +9,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/go-martini/martini"
-	"github.com/martini-contrib/auth"
+	"github.com/modcloth/auth"
 )
 
 //ServerDescription is the help text for the `serer` command
@@ -51,9 +51,20 @@ func serve(c *cli.Context) {
 	server := martini.Classic()
 
 	// check for basic auth
-	authFunc := func(http.ResponseWriter, *http.Request) {}
+	basicAuthFunc := func(http.ResponseWriter, *http.Request) {}
 	if un != "" && pwd != "" {
-		authFunc = auth.Basic(un, pwd)
+		basicAuthFunc = auth.Basic(un, pwd)
+	}
+
+	// check for travis and github auth
+	travisAuthFunc := func(http.ResponseWriter, *http.Request) {}
+	if c.String("travis-token") != "" {
+		travisAuthFunc = auth.TravisCI(c.String("travis-token"))
+	}
+
+	githubAuthFunc := func(http.ResponseWriter, *http.Request) {}
+	if c.String("github-secret") != "" {
+		githubAuthFunc = auth.GitHub(c.String("github-secret"))
 	}
 
 	// configure webhook globals
@@ -62,9 +73,9 @@ func serve(c *cli.Context) {
 
 	// establish routes
 	server.Get("/health", func() (int, string) { return 200, "200 OK" })
-	server.Post("/docker-build", authFunc, webhook.DockerBuild)
-	server.Post("/docker-build/travis", authFunc, webhook.Travis)
-	server.Post("/docker-build/github", authFunc, webhook.Github)
+	server.Post("/docker-build", basicAuthFunc, webhook.DockerBuild)
+	server.Post("/docker-build/travis", basicAuthFunc, travisAuthFunc, webhook.Travis)
+	server.Post("/docker-build/github", basicAuthFunc, githubAuthFunc, webhook.Github)
 
 	// start server
 	http.ListenAndServe(portString, server)

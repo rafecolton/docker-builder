@@ -108,6 +108,8 @@ func main() {
 				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
 				cli.StringFlag{"username", "", "username for basic auth"},
 				cli.StringFlag{"password", "", "password for basic auth"},
+				cli.StringFlag{"travis-token", "", "Travis API token for webhooks"},
+				cli.StringFlag{"github-secret", "", "GitHub secret for webhooks"},
 			},
 		},
 	}
