@@ -26,6 +26,7 @@ func init() {
 	testServer = &martini.ClassicMartini{m, r}
 
 	testServer.Post("/docker-build/github", Github)
+	testServer.Post("/docker-build/travis", Travis)
 	testServer.Post("/docker-build", DockerBuild)
 
 	l := &logrus.Logger{Level: logrus.Panic}
