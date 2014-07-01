@@ -30,6 +30,11 @@ func APIToken(t string) {
 	apiToken = t
 }
 
+//TestMode sets the (global) testMode variable for the webhook package
+func TestMode(b bool) {
+	testMode = b
+}
+
 func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Request) (int, string) {
 	// If tests are running, don't actually attempt to build containers, just return success.
 	// This is meant to allow testing ot the HTTP interactions for the webhooks

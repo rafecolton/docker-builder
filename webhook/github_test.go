@@ -1,93 +1,117 @@
 package webhook_test
 
-//import (
-//. "github.com/modcloth/docker-builder/webhook"
+import (
+	. "github.com/modcloth/docker-builder/webhook"
 
-//. "github.com/onsi/ginkgo"
-//. "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 
-//"bytes"
-//"encoding/json"
-//"strconv"
-//)
+	"github.com/go-martini/martini"
 
-//type githubOwner struct {
-//Name string `json:"name"`
-//}
+	"bytes"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"strconv"
+)
 
-//type githubRepo struct {
-//Owner githubOwner `json:"owner"`
-//Name  string      `json:"name"`
-//}
+type githubOwner struct {
+	Name string `json:"name"`
+}
 
-//type githubRequest struct {
-//Commit     string     `json:"after"`
-//Repository githubRepo `json:"repository"`
-//Event      string     `json:"-"`
-//}
+type githubRepo struct {
+	Owner githubOwner `json:"owner"`
+	Name  string      `json:"name"`
+}
 
-//func makeGithubRequest(options *githubRequest) {
-//result, err := json.Marshal(options)
-//if err != nil {
-//Fail(err.Error())
-//}
-//PostRequest("POST",
-//"/docker-builder/github",
-//HandleWebhook(Github),
-//bytes.NewReader(result),
-//map[string]string{
-//"Content-Length": strconv.Itoa(len(result)),
-//"Content-Type":   "application/json",
-//"X-Github-Event": options.Event,
-//},
-//)
-//}
+type githubRequest struct {
+	Commit     string     `json:"after"`
+	Repository githubRepo `json:"repository"`
+	Event      string     `json:"-"`
+	RawBody    string     `json:"-"`
+}
 
-//var _ = Describe("Github", func() {
-//Context("when github request is unsupported", func() {
-//It("returns an error when event is not push", func() {
-//makeGithubRequest(&githubRequest{
-//Event: "issue",
-//})
-//Expect(response.Code).To(Equal(400))
-//Expect(spec).To(BeNil())
-//Expect(err).ToNot(BeNil())
-//})
-//It("returns an error when JSON is invalid", func() {
-//body := []byte(`[this is not valid json}`)
-//PostRequest("POST",
-//"/docker-builder/github",
-//HandleWebhook(Github),
-//bytes.NewReader(body),
-//map[string]string{
-//"Content-Length": strconv.Itoa(len(body)),
-//"Content-Type":   "application/x-www-form-urlencoded",
-//"X-Github-Event": "push",
-//},
-//)
+func makeGithubRequest(options *githubRequest) (req *http.Request, err error) {
+	var body []byte
+	if options.RawBody == "" {
+		body, err = json.Marshal(options)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		body = []byte(options.RawBody)
+	}
+	req, err = http.NewRequest(
+		"POST",
+		"http://localhost:5000/docker-build/github",
+		bytes.NewReader(body),
+	)
+	if err != nil {
+		return
+	}
+	req.Header.Add("Content-Length", strconv.Itoa(len(body)))
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("X-Github-Event", options.Event)
 
-//Expect(response.Code).To(Equal(400))
-//Expect(spec).To(BeNil())
-//Expect(err).ToNot(BeNil())
-//})
-//})
-//Context("when Github request is correct", func() {
-//It("returns a valid spec", func() {
-//makeGithubRequest(&githubRequest{
-//Event:  "push",
-//Commit: "a427f16faa8e4d63f9fcaa4ec55e80765fd11b04",
-//Repository: githubRepo{
-//Owner: githubOwner{
-//Name: "testuser",
-//},
-//Name: "testrepo",
-//},
-//})
-//Expect(response.Code).To(Equal(202))
-//Expect(spec).ToNot(BeNil())
-//Expect(err).To(BeNil())
-//err = spec.Validate()
-//Expect(err).To(BeNil())
-//})
-//})
-//})
+	return
+}
+
+var _ = Describe("Github", func() {
+	Context("when github request is unsupported", func() {
+		It("returns an error when event is not push", func() {
+			req, err := makeGithubRequest(&githubRequest{
+				Event: "issue",
+			})
+			Expect(err).To(BeNil())
+			Expect(req).ToNot(BeNil())
+
+			w := httptest.NewRecorder()
+			m := martini.Classic()
+			m.Post("/docker-build/github", Github)
+			m.ServeHTTP(w, req)
+
+			Expect(w.Code).To(Equal(400))
+			Expect(w.Body.String()).To(Equal("400 bad request"))
+		})
+		It("returns an error when JSON is invalid", func() {
+			req, err := makeGithubRequest(&githubRequest{
+				RawBody: `[this is not valid json}`,
+				Event:   "push",
+			})
+			Expect(err).To(BeNil())
+			Expect(req).ToNot(BeNil())
+
+			w := httptest.NewRecorder()
+			m := martini.Classic()
+			m.Post("/docker-build/github", Github)
+			m.ServeHTTP(w, req)
+
+			Expect(w.Code).To(Equal(400))
+			Expect(w.Body.String()).To(Equal("400 bad request"))
+		})
+	})
+	Context("when Github request is correct", func() {
+		It("returns a valid spec", func() {
+			req, err := makeGithubRequest(&githubRequest{
+				Event:  "push",
+				Commit: "a427f16faa8e4d63f9fcaa4ec55e80765fd11b04",
+				Repository: githubRepo{
+					Owner: githubOwner{
+						Name: "testuser",
+					},
+					Name: "testrepo",
+				},
+			})
+			Expect(err).To(BeNil())
+			Expect(req).ToNot(BeNil())
+
+			w := httptest.NewRecorder()
+			m := martini.Classic()
+			m.Post("/docker-build/github", Github)
+			m.ServeHTTP(w, req)
+
+			Expect(w.Code).To(Equal(202))
+			Expect(w.Body.String()).To(Equal("202 accepted"))
+		})
+	})
+})
