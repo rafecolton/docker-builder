@@ -44,8 +44,8 @@
 			"Rev": "0280e33525f5d88edb71638a80b31724153225ba"
 		},
 		{
-			"ImportPath": "github.com/martini-contrib/auth",
-			"Rev": "a455012474163bc03aa53b2be38ac603d2ae9474"
+			"ImportPath": "github.com/modcloth/auth",
+			"Rev": "f623abbc5ce0f84a24beae6f7a021f5dfedfcc82"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
