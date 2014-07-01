@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/modcloth/docker-builder",
-	"GoVersion": "go1.2.2",
+	"GoVersion": "go1.3",
 	"Packages": [
 		"./..."
 	],
@@ -46,10 +46,6 @@
 		{
 			"ImportPath": "github.com/martini-contrib/auth",
 			"Rev": "a455012474163bc03aa53b2be38ac603d2ae9474"
-		},
-		{
-			"ImportPath": "github.com/martini-contrib/render",
-			"Rev": "b98ad24cf4d742c5b91f77fae35a03e4f2a66540"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
