@@ -1,21 +1,25 @@
+version = 1
+
 [docker]
 
 build_opts = ["--rm", "--no-cache"]
 tag_opts = ["--force"]
 
-[containers]
-
-[containers.global]
+[[container]]
+name = "global"
 registry = "quay.io/modcloth"
 
-[containers.base]
+[[container]]
+name = "base"
 Dockerfile = "Dockerfile.base"
 project = "docker-builder-base"
 tags = ["latest"]
 
-[containers.app]
+[[container]]
+name = "app"
 Dockerfile = "Dockerfile"
 project = "docker-builder"
 tags = ["git:branch", "git:rev", "git:short", "latest"]
+
 
 # vim:ft=toml

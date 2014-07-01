@@ -5,8 +5,25 @@ Builderfile is a struct representation of what is expected to be inside a
 Builderfile.
 */
 type Builderfile struct {
+	Version    int `toml:"version"`
 	Docker     `toml:"docker"`
-	Containers map[string]ContainerSection `toml:"containers"`
+	Containers []Container `toml:"container"`
+}
+
+/*
+Container is a struct representation of an individual member of the  "containers"
+section of a Builderfile. Each of these sections defines a docker container to
+be built and other related options.
+*/
+type Container struct {
+	Name       string   `toml:"name"`
+	Dockerfile string   `toml:"Dockerfile"`
+	Included   []string `toml:"included"`
+	Excluded   []string `toml:"excluded"`
+	Registry   string   `toml:"registry"`
+	Project    string   `toml:"project"`
+	Tags       []string `toml:"tags"`
+	SkipPush   bool     `toml:"skip_push"`
 }
 
 /*
@@ -15,22 +32,6 @@ Docker is a struct representation of the "docker" section of a Builderfile.
 type Docker struct {
 	BuildOpts []string `toml:"build_opts"`
 	TagOpts   []string `toml:"tag_opts"`
-}
-
-/*
-ContainerSection is a struct representation of an individual member of the  "containers"
-section of a Builderfile. Each of these sections defines a docker container to
-be built and other related options.
-*/
-type ContainerSection struct {
-	Name       string   `toml:"-"`
-	Dockerfile string   `toml:"Dockerfile"`
-	Included   []string `toml:"included"`
-	Excluded   []string `toml:"excluded"`
-	Registry   string   `toml:"registry"`
-	Project    string   `toml:"project"`
-	Tags       []string `toml:"tags"`
-	SkipPush   bool     `toml:"skip_push"`
 }
 
 /*
