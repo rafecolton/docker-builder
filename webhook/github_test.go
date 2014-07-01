@@ -1,17 +1,12 @@
 package webhook_test
 
 import (
-	. "github.com/modcloth/docker-builder/webhook"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
-	"github.com/go-martini/martini"
 
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"net/http/httptest"
 	"strconv"
 )
 
@@ -65,13 +60,10 @@ var _ = Describe("Github", func() {
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
 
-			w := httptest.NewRecorder()
-			m := martini.Classic()
-			m.Post("/docker-build/github", Github)
-			m.ServeHTTP(w, req)
+			testServer.ServeHTTP(recorder, req)
 
-			Expect(w.Code).To(Equal(400))
-			Expect(w.Body.String()).To(Equal("400 bad request"))
+			Expect(recorder.Code).To(Equal(400))
+			Expect(recorder.Body.String()).To(Equal("400 bad request"))
 		})
 		It("returns an error when JSON is invalid", func() {
 			req, err := makeGithubRequest(&githubRequest{
@@ -81,13 +73,10 @@ var _ = Describe("Github", func() {
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
 
-			w := httptest.NewRecorder()
-			m := martini.Classic()
-			m.Post("/docker-build/github", Github)
-			m.ServeHTTP(w, req)
+			testServer.ServeHTTP(recorder, req)
 
-			Expect(w.Code).To(Equal(400))
-			Expect(w.Body.String()).To(Equal("400 bad request"))
+			Expect(recorder.Code).To(Equal(400))
+			Expect(recorder.Body.String()).To(Equal("400 bad request"))
 		})
 	})
 	Context("when Github request is correct", func() {
@@ -105,13 +94,10 @@ var _ = Describe("Github", func() {
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
 
-			w := httptest.NewRecorder()
-			m := martini.Classic()
-			m.Post("/docker-build/github", Github)
-			m.ServeHTTP(w, req)
+			testServer.ServeHTTP(recorder, req)
 
-			Expect(w.Code).To(Equal(202))
-			Expect(w.Body.String()).To(Equal("202 accepted"))
+			Expect(recorder.Code).To(Equal(202))
+			Expect(recorder.Body.String()).To(Equal("202 accepted"))
 		})
 	})
 })
