@@ -8,6 +8,7 @@ import (
 
 	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/job"
+	"github.com/modcloth/docker-builder/webhook"
 
 	"github.com/codegangsta/cli"
 	"github.com/go-martini/martini"
@@ -61,6 +62,8 @@ func serve(c *cli.Context) {
 
 	// establish routes
 	server.Post("/docker-build", dockerBuild)
+	server.Post("/docker-build/travis", serveWebhook(webhook.Travis))
+	server.Post("/docker-build/github", serveWebhook(webhook.Github))
 
 	// start server
 	http.ListenAndServe(portString, server)
@@ -78,8 +81,21 @@ func dockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
 	if err = json.Unmarshal([]byte(body), spec); err != nil {
 		return 400, "400 bad request"
 	}
+	return processJobHelper(spec, w, req)
+}
 
-	if err = spec.Validate(); err != nil {
+func serveWebhook(parseJobSpec webhook.Parser) func(http.ResponseWriter, *http.Request) (int, string) {
+	return func(w http.ResponseWriter, req *http.Request) (int, string) {
+		spec, err := parseJobSpec(req)
+		if err != nil {
+			return 400, "400 bad request"
+		}
+		return processJobHelper(spec, w, req)
+	}
+}
+
+func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Request) (int, string) {
+	if err := spec.Validate(); err != nil {
 		return 412, "412 precondition failed"
 	}
 
