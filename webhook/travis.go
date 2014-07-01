@@ -9,41 +9,42 @@ import (
 )
 
 const (
-	TRAVIS_SUCCESS    = iota
-	TRAVIS_NO_SUCCESS // pending or failure
+	travisSuccess = iota
 )
 
 const (
-	TRAVIS_BUILD_TYPE_PUSH         = "push"
-	TRAVIS_BUILD_TYPE_PULL_REQUEST = "pull_request"
+	travisBuildTypePullRequest = "pull_request"
 )
 
-type TravisRepository struct {
+type travisRepository struct {
 	Owner string `json:"owner_name"`
 	Name  string `json:"name"`
 }
 
-type TravisPayload struct {
-	Repository  TravisRepository `json:"repository"`
+type travisPayload struct {
+	Repository  travisRepository `json:"repository"`
 	CommitSHA   string           `json:"commit"`
 	BuildStatus int              `json:"status"`
 	BuildType   string           `json:"type"`
 }
 
+/*
+Travis parses a webhook HTTP request from Travis CI and returns a JobSpec.
+*/
 func Travis(req *http.Request) (spec *job.JobSpec, err error) {
 	payloadBody := req.FormValue("payload")
-	var payload = &TravisPayload{}
+	var payload = &travisPayload{}
 	if err = json.Unmarshal([]byte(payloadBody), payload); err != nil {
 		return
 	}
 
-	if payload.BuildStatus != TRAVIS_SUCCESS {
+	if payload.BuildStatus != travisSuccess {
 		err = fmt.Errorf("build was not successful for %s/%s",
 			payload.Repository.Owner, payload.Repository.Name)
 		return
 	}
 
-	if payload.BuildType == TRAVIS_BUILD_TYPE_PULL_REQUEST {
+	if payload.BuildType == travisBuildTypePullRequest {
 		err = fmt.Errorf("won't build for pull request on %s/%s",
 			payload.Repository.Owner, payload.Repository.Name)
 		return

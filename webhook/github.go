@@ -15,20 +15,23 @@ var (
 	}
 )
 
-type GithubOwner struct {
+type githubOwner struct {
 	Name string `json:"name"`
 }
 
-type GithubRepository struct {
+type githubRepository struct {
 	Name  string      `json:"name"`
-	Owner GithubOwner `json:"owner"`
+	Owner githubOwner `json:"owner"`
 }
 
-type GithubPushPayload struct {
-	Repository GithubRepository `json:"repository"`
+type githubPushPayload struct {
+	Repository githubRepository `json:"repository"`
 	CommitSHA  string           `json:"after"`
 }
 
+/*
+Github parses a Github webhook HTTP request and returns a JobSpec.
+*/
 func Github(req *http.Request) (spec *job.JobSpec, err error) {
 	event := req.Header.Get("X-Github-Event")
 	if !githubSupportedEvents[event] {
@@ -40,7 +43,7 @@ func Github(req *http.Request) (spec *job.JobSpec, err error) {
 	if err != nil {
 		return
 	}
-	var payload = &GithubPushPayload{}
+	var payload = &githubPushPayload{}
 	if err = json.Unmarshal([]byte(body), payload); err != nil {
 		return
 	}
