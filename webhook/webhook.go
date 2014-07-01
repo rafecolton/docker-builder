@@ -11,8 +11,14 @@ import (
 	"github.com/modcloth/docker-builder/job"
 )
 
+const (
+	processJobSuccessCode    = 202
+	processJobSuccessMessage = "202 accepted"
+)
+
 var logger *logrus.Logger
 var apiToken string
+var testMode bool
 
 //Logger sets the (global) logger for the webhook package
 func Logger(l *logrus.Logger) {
@@ -25,6 +31,12 @@ func APIToken(t string) {
 }
 
 func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Request) (int, string) {
+	// If tests are running, don't actually attempt to build containers, just return success.
+	// This is meant to allow testing ot the HTTP interactions for the webhooks
+	if testMode {
+		return processJobSuccessCode, processJobSuccessMessage
+	}
+
 	if err := spec.Validate(); err != nil {
 		return 412, "412 precondition failed"
 	}
@@ -47,10 +59,10 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 	job := job.NewJob(jobConfig, spec)
 
 	// TODO: set this from somewhere
-	var async bool
+	var sync bool
 
-	// if async
-	if async {
+	// if sync
+	if sync {
 		if err = job.Process(); err != nil {
 			return 417, "417 expectation failed"
 		}
@@ -58,7 +70,7 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 		return 201, "201 created"
 	}
 
-	// if not async
+	// if async
 	go job.Process()
-	return 202, "202 accepted"
+	return processJobSuccessCode, processJobSuccessMessage
 }
