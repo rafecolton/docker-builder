@@ -60,8 +60,7 @@ func serve(c *cli.Context) {
 	webhook.APIToken(apiToken)
 
 	// establish routes
-	server.Post("/docker-build", webhook.JSON)
-	server.Post("/docker-build/json", webhook.JSON)
+	server.Post("/docker-build", webhook.DockerBuild)
 	server.Post("/docker-build/travis", webhook.Travis)
 	server.Post("/docker-build/github", webhook.Github)
 

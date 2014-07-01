@@ -9,10 +9,10 @@ import (
 )
 
 /*
-JSON parses a simple JSON blob returns a JobSpec
+DockerBuild parses a simple JSON blob returns a JobSpec
 */
-func JSON(w http.ResponseWriter, req *http.Request) (int, string) {
-	// TODO: check encoding type
+func DockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
+	// TODO: check content type
 
 	body, err := ioutil.ReadAll(req.Body)
 	defer req.Body.Close()
