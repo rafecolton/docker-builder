@@ -55,12 +55,14 @@ func serve(c *cli.Context) {
 	server := martini.Classic()
 
 	// check for basic auth
+	authFunc := func(http.ResponseWriter, *http.Request) {}
 	if un != "" && pwd != "" {
-		server.Use(auth.Basic(un, pwd))
+		authFunc = auth.Basic(un, pwd)
 	}
 
 	// establish routes
-	server.Post("/docker-build", dockerBuild)
+	server.Get("/health", func() (int, string) { return 200, "200 OK" })
+	server.Post("/docker-build", authFunc, dockerBuild)
 
 	// start server
 	http.ListenAndServe(portString, server)
