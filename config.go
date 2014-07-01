@@ -15,4 +15,6 @@ type Config struct {
 	// for travis auth
 	TravisToken  string
 	GitHubSecret string
+	NoTravis     bool
+	NoGitHub     bool
 }

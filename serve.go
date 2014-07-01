@@ -24,6 +24,10 @@ DOCKER_BUILDER_APITOKEN     =>     --api-token
 DOCKER_BUILDER_SKIPPUSH     =>     --skip-push
 DOCKER_BUILDER_USERNAME     =>     --username
 DOCKER_BUILDER_PASSWORD     =>     --password
+DOCKER_BUILDER_TRAVISTOKEN  =>     --travis-token
+DOCKER_BUILDER_NOTRAVIS     =>     --no-travis
+DOCKER_BUILDER_GITHUBSECRET =>     --github-secret
+DOCKER_BUILDER_NOGITHUB     =>     --no-github
 
 NOTE: If username and password are both empty (i.e. not provided), basic auth will not be used.
 `
@@ -84,8 +88,14 @@ func serve(c *cli.Context) {
 	// establish routes
 	server.Get("/health", func() (int, string) { return 200, "200 OK" })
 	server.Post("/docker-build", basicAuthFunc, webhook.DockerBuild)
-	server.Post("/docker-build/travis", travisAuthFunc, webhook.Travis)
-	server.Post("/docker-build/github", githubAuthFunc, webhook.Github)
+
+	if !c.Bool("no-travis") && !config.NoTravis {
+		server.Post("/docker-build/travis", travisAuthFunc, webhook.Travis)
+	}
+
+	if !c.Bool("no-github") && !config.NoGitHub {
+		server.Post("/docker-build/github", githubAuthFunc, webhook.Github)
+	}
 
 	// start server
 	http.ListenAndServe(portString, server)

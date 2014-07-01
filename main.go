@@ -110,6 +110,8 @@ func main() {
 				cli.StringFlag{"password", "", "password for basic auth"},
 				cli.StringFlag{"travis-token", "", "Travis API token for webhooks"},
 				cli.StringFlag{"github-secret", "", "GitHub secret for webhooks"},
+				cli.BoolFlag{"no-travis", "do not include route for Travis CI webhook"},
+				cli.BoolFlag{"no-github", "do not include route for GitHub webhook"},
 			},
 		},
 	}
