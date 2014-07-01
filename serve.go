@@ -51,8 +51,9 @@ func serve(c *cli.Context) {
 	server := martini.Classic()
 
 	// check for basic auth
+	authFunc := func(http.ResponseWriter, *http.Request) {}
 	if un != "" && pwd != "" {
-		server.Use(auth.Basic(un, pwd))
+		authFunc = auth.Basic(un, pwd)
 	}
 
 	// configure webhook globals
@@ -60,9 +61,10 @@ func serve(c *cli.Context) {
 	webhook.APIToken(apiToken)
 
 	// establish routes
-	server.Post("/docker-build", webhook.DockerBuild)
-	server.Post("/docker-build/travis", webhook.Travis)
-	server.Post("/docker-build/github", webhook.Github)
+	server.Get("/health", func() (int, string) { return 200, "200 OK" })
+	server.Post("/docker-build", authFunc, webhook.DockerBuild)
+	server.Post("/docker-build/travis", authFunc, webhook.Travis)
+	server.Post("/docker-build/github", authFunc, webhook.Github)
 
 	// start server
 	http.ListenAndServe(portString, server)
