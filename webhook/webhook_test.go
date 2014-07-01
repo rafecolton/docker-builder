@@ -11,10 +11,11 @@ import (
 	. "github.com/onsi/gomega"
 
 	//"github.com/modcloth/docker-builder/job"
-	//. "github.com/modcloth/docker-builder/webhook"
+	. "github.com/modcloth/docker-builder/webhook"
 
 	//"github.com/go-martini/martini"
 	//"github.com/martini-contrib/render"
+	"github.com/Sirupsen/logrus"
 )
 
 //var (
@@ -23,7 +24,12 @@ import (
 //err      error
 //)
 
+func init() {
+	Logger(logrus.New())
+}
+
 func TestMain(t *testing.T) {
+	TestMode(true)
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Webhook Specs")
 }
