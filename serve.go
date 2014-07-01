@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/webhook"
@@ -63,7 +64,7 @@ func serve(c *cli.Context) {
 	// establish routes
 	server.Get("/health", func() (int, string) { return 200, "200 OK" })
 	server.Post("/docker-build", authFunc, webhook.DockerBuild)
-	server.Post("/docker-build/travis", authFunc, webhook.Travis)
+	server.Post("/docker-build/travis", webhook.TravisAuth(os.Getenv("TRAVIS_TOKEN")), webhook.Travis)
 	server.Post("/docker-build/github", authFunc, webhook.Github)
 
 	// start server

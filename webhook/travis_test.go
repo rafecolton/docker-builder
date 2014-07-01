@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"path"
 	"strconv"
 )
 
@@ -24,6 +25,11 @@ type travisRequest struct {
 	Commit     string     `json:"commit"`
 	Repository travisRepo `json:"repository"`
 }
+
+const (
+	// hash of "username/repositoryTRAVIS_TOKEN"
+	travisAuthHeader = "92a14eac5ccb1caf98a3623b60d284d77a6233cd20bb82b92a01fa53f7f58dd6"
+)
 
 func makeTravisRequest(options *travisRequest, bodyString string) (*http.Request, error) {
 	if bodyString == "" {
@@ -50,6 +56,9 @@ func makeTravisRequest(options *travisRequest, bodyString string) (*http.Request
 
 	req.Header.Add("Content-Length", strconv.Itoa(len(body)))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Travis-Repo-Slug",
+		path.Join(options.Repository.Owner, options.Repository.Name))
+	req.Header.Add("Authorization", travisAuthHeader)
 
 	return req, nil
 }
@@ -61,6 +70,10 @@ var _ = Describe("Travis", func() {
 		It("returns an error when status == 1", func() {
 			req, err := makeTravisRequest(&travisRequest{
 				Status: 1,
+				Repository: travisRepo{
+					Owner: "username",
+					Name:  "repository",
+				},
 			}, "")
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
@@ -74,8 +87,11 @@ var _ = Describe("Travis", func() {
 		It("returns an error when type is pull_request", func() {
 			req, err := makeTravisRequest(&travisRequest{
 				Type: "pull_request",
+				Repository: travisRepo{
+					Owner: "username",
+					Name:  "repository",
+				},
 			}, "")
-
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
 
@@ -86,7 +102,13 @@ var _ = Describe("Travis", func() {
 		})
 
 		It("returns an error when JSON is invalid", func() {
-			req, err := makeTravisRequest(nil, `[this is not valid json}`)
+			req, err := makeTravisRequest(&travisRequest{
+				Repository: travisRepo{
+					Owner: "username",
+					Name:  "repository",
+				},
+			}, `[this is not valid json}`)
+
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
 
@@ -95,16 +117,30 @@ var _ = Describe("Travis", func() {
 			Expect(recorder.Code).To(Equal(400))
 			Expect(recorder.Body.String()).To(Equal("400 bad request"))
 		})
-	})
+		It("returns an error when authentication is incorrent", func() {
+			req, err := makeTravisRequest(&travisRequest{
+				Repository: travisRepo{
+					Owner: "wrong_username",
+					Name:  "wrong_repo_name",
+				},
+			}, "")
+			Expect(err).To(BeNil())
+			Expect(req).ToNot(BeNil())
 
+			testServer.ServeHTTP(recorder, req)
+
+			Expect(recorder.Code).To(Equal(401))
+			Expect(recorder.Body.String()).To(Equal("Not Authorized\n"))
+		})
+	})
 	Context("when travis request is valid", func() {
-		It("returns a valid spec", func() {
+		It("returns success", func() {
 			req, err := makeTravisRequest(&travisRequest{
 				Type:   "push",
 				Commit: "a427f16faa8e4d63f9fcaa4ec55e80765fd11b04",
 				Repository: travisRepo{
-					Owner: "testuser",
-					Name:  "testrepo",
+					Owner: "username",
+					Name:  "repository",
 				},
 			}, "")
 			Expect(err).To(BeNil())
