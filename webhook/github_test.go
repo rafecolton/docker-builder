@@ -26,8 +26,10 @@ type githubRequest struct {
 	RawBody    string     `json:"-"`
 }
 
-func makeGithubRequest(options *githubRequest) (req *http.Request, err error) {
+func makeGithubRequest(options *githubRequest) (*http.Request, error) {
 	var body []byte
+	var err error
+
 	if options.RawBody == "" {
 		body, err = json.Marshal(options)
 		if err != nil {
@@ -36,19 +38,21 @@ func makeGithubRequest(options *githubRequest) (req *http.Request, err error) {
 	} else {
 		body = []byte(options.RawBody)
 	}
-	req, err = http.NewRequest(
+
+	req, err := http.NewRequest(
 		"POST",
 		"http://localhost:5000/docker-build/github",
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return
+		return nil, err
 	}
+
 	req.Header.Add("Content-Length", strconv.Itoa(len(body)))
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("X-Github-Event", options.Event)
 
-	return
+	return req, nil
 }
 
 var _ = Describe("Github", func() {
