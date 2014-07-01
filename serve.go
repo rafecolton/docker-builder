@@ -57,13 +57,23 @@ func serve(c *cli.Context) {
 	}
 
 	// check for travis and github auth
+	travisToken := c.String("travis-token")
+	if travisToken == "" {
+		travisToken = config.TravisToken
+	}
+
 	travisAuthFunc := func(http.ResponseWriter, *http.Request) {}
-	if c.String("travis-token") != "" {
+	if travisToken != "" {
 		travisAuthFunc = auth.TravisCI(c.String("travis-token"))
 	}
 
+	githubSecret := c.String("github-secret")
+	if githubSecret == "" {
+		githubSecret = config.GitHubSecret
+	}
+
 	githubAuthFunc := func(http.ResponseWriter, *http.Request) {}
-	if c.String("github-secret") != "" {
+	if githubSecret != "" {
 		githubAuthFunc = auth.GitHub(c.String("github-secret"))
 	}
 
@@ -74,8 +84,8 @@ func serve(c *cli.Context) {
 	// establish routes
 	server.Get("/health", func() (int, string) { return 200, "200 OK" })
 	server.Post("/docker-build", basicAuthFunc, webhook.DockerBuild)
-	server.Post("/docker-build/travis", basicAuthFunc, travisAuthFunc, webhook.Travis)
-	server.Post("/docker-build/github", basicAuthFunc, githubAuthFunc, webhook.Github)
+	server.Post("/docker-build/travis", travisAuthFunc, webhook.Travis)
+	server.Post("/docker-build/github", githubAuthFunc, webhook.Github)
 
 	// start server
 	http.ListenAndServe(portString, server)

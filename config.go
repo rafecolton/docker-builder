@@ -12,4 +12,7 @@ type Config struct {
 	// for basic auth
 	Username string
 	Password string
+	// for travis auth
+	TravisToken  string
+	GitHubSecret string
 }
