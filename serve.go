@@ -1,20 +1,15 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/modcloth/docker-builder/builder"
-	"github.com/modcloth/docker-builder/job"
 	"github.com/modcloth/docker-builder/webhook"
 
 	"github.com/codegangsta/cli"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/auth"
-	"github.com/modcloth/go-fileutils"
-	"github.com/onsi/gocleanup"
 )
 
 //ServerDescription is the help text for the `serer` command
@@ -60,75 +55,16 @@ func serve(c *cli.Context) {
 		server.Use(auth.Basic(un, pwd))
 	}
 
+	// configure webhook globals
+	webhook.Logger(Logger)
+	webhook.APIToken(apiToken)
+
 	// establish routes
-	server.Post("/docker-build", dockerBuild)
-	server.Post("/docker-build/travis", serveWebhook(webhook.Travis))
-	server.Post("/docker-build/github", serveWebhook(webhook.Github))
+	server.Post("/docker-build", webhook.JSON)
+	server.Post("/docker-build/json", webhook.JSON)
+	server.Post("/docker-build/travis", webhook.Travis)
+	server.Post("/docker-build/github", webhook.Github)
 
 	// start server
 	http.ListenAndServe(portString, server)
-}
-
-// handle a request
-func dockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
-	body, err := ioutil.ReadAll(req.Body)
-	defer req.Body.Close()
-	if err != nil {
-		return 400, "400 bad request"
-	}
-
-	var spec = &job.JobSpec{}
-	if err = json.Unmarshal([]byte(body), spec); err != nil {
-		return 400, "400 bad request"
-	}
-	return processJobHelper(spec, w, req)
-}
-
-func serveWebhook(parseJobSpec webhook.Parser) func(http.ResponseWriter, *http.Request) (int, string) {
-	return func(w http.ResponseWriter, req *http.Request) (int, string) {
-		spec, err := parseJobSpec(req)
-		if err != nil {
-			return 400, "400 bad request"
-		}
-		return processJobHelper(spec, w, req)
-	}
-}
-
-func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Request) (int, string) {
-	if err := spec.Validate(); err != nil {
-		return 412, "412 precondition failed"
-	}
-
-	workdir, err := ioutil.TempDir("", "docker-build-worker")
-	if err != nil {
-		return 500, "500 internal server error"
-	}
-
-	gocleanup.Register(func() {
-		fileutils.RmRF(workdir)
-	})
-
-	jobConfig := &job.JobConfig{
-		Logger:         Logger,
-		Workdir:        workdir,
-		GitHubAPIToken: apiToken,
-	}
-
-	job := job.NewJob(jobConfig, spec)
-
-	// TODO: set this from somewhere
-	var async bool
-
-	// if async
-	if async {
-		if err = job.Process(); err != nil {
-			return 417, "417 expectation failed"
-		}
-
-		return 201, "201 created"
-	}
-
-	// if not async
-	go job.Process()
-	return 202, "202 accepted"
 }

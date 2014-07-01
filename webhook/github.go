@@ -2,7 +2,6 @@ package webhook
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -32,27 +31,29 @@ type githubPushPayload struct {
 /*
 Github parses a Github webhook HTTP request and returns a JobSpec.
 */
-func Github(req *http.Request) (spec *job.JobSpec, err error) {
+func Github(w http.ResponseWriter, req *http.Request) (int, string) {
 	event := req.Header.Get("X-Github-Event")
 	if !githubSupportedEvents[event] {
-		err = fmt.Errorf("Github event type %s is not supported.", event)
-		return
+		logger.Errorf("Github event type %s is not supported.", event)
+		return 400, "400 bad request"
 	}
 	body, err := ioutil.ReadAll(req.Body)
 	defer req.Body.Close()
 	if err != nil {
-		return
+		logger.Error(err)
+		return 400, "400 bad request"
 	}
 	var payload = &githubPushPayload{}
 	if err = json.Unmarshal([]byte(body), payload); err != nil {
-		return
+		logger.Error(err)
+		return 400, "400 bad request"
 	}
 
-	spec = &job.JobSpec{
+	spec := &job.JobSpec{
 		RepoOwner: payload.Repository.Owner.Name,
 		RepoName:  payload.Repository.Name,
 		GitRef:    payload.CommitSHA,
 	}
 
-	return
+	return processJobHelper(spec, w, req)
 }

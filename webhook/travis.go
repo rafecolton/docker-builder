@@ -2,8 +2,9 @@ package webhook
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+
+	"github.com/Sirupsen/logrus"
 
 	"github.com/modcloth/docker-builder/job"
 )
@@ -31,30 +32,36 @@ type travisPayload struct {
 /*
 Travis parses a webhook HTTP request from Travis CI and returns a JobSpec.
 */
-func Travis(req *http.Request) (spec *job.JobSpec, err error) {
+func Travis(w http.ResponseWriter, req *http.Request) (int, string) {
 	payloadBody := req.FormValue("payload")
 	var payload = &travisPayload{}
-	if err = json.Unmarshal([]byte(payloadBody), payload); err != nil {
-		return
+
+	if err := json.Unmarshal([]byte(payloadBody), payload); err != nil {
+		logger.WithField("error", err).Error("error unmarshaling json")
+		return 400, "400 bad request"
 	}
 
 	if payload.BuildStatus != travisSuccess {
-		err = fmt.Errorf("build was not successful for %s/%s",
-			payload.Repository.Owner, payload.Repository.Name)
-		return
+		logger.WithFields(logrus.Fields{
+			"owner": payload.Repository.Owner,
+			"repo":  payload.Repository.Name,
+		}).Error("travis build was a success")
+		return 409, "409 conflict"
 	}
 
 	if payload.BuildType == travisBuildTypePullRequest {
-		err = fmt.Errorf("won't build for pull request on %s/%s",
-			payload.Repository.Owner, payload.Repository.Name)
-		return
+		logger.WithFields(logrus.Fields{
+			"owner": payload.Repository.Owner,
+			"repo":  payload.Repository.Name,
+		}).Error("build type is a pull request, not building")
+		return 409, "409 conflict"
 	}
 
-	spec = &job.JobSpec{
+	spec := &job.JobSpec{
 		RepoOwner: payload.Repository.Owner,
 		RepoName:  payload.Repository.Name,
 		GitRef:    payload.CommitSHA,
 	}
 
-	return
+	return processJobHelper(spec, w, req)
 }
