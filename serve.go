@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/modcloth/docker-builder/builder"
@@ -17,67 +16,52 @@ const ServerDescription = `Start a small HTTP web server for receiving build req
 
 Configure through the environment:
 
-DOCKER_BUILDER_LOGLEVEL     =>     --log-level (global)
-DOCKER_BUILDER_LOGFORMAT    =>     --log-format (global)
-DOCKER_BUILDER_PORT         =>     --port
-DOCKER_BUILDER_APITOKEN     =>     --api-token
-DOCKER_BUILDER_SKIPPUSH     =>     --skip-push
-DOCKER_BUILDER_USERNAME     =>     --username
-DOCKER_BUILDER_PASSWORD     =>     --password
-DOCKER_BUILDER_TRAVISTOKEN  =>     --travis-token
-DOCKER_BUILDER_NOTRAVIS     =>     --no-travis
-DOCKER_BUILDER_GITHUBSECRET =>     --github-secret
-DOCKER_BUILDER_NOGITHUB     =>     --no-github
+DOCKER_BUILDER_LOGLEVEL				=>		   --log-level (global)
+DOCKER_BUILDER_LOGFORMAT			=>		   --log-format (global)
+DOCKER_BUILDER_PORT					=>		   --port
+DOCKER_BUILDER_APITOKEN				=>		   --api-token
+DOCKER_BUILDER_SKIPPUSH				=>		   --skip-push
+DOCKER_BUILDER_USERNAME				=>		   --username
+DOCKER_BUILDER_PASSWORD				=>		   --password
+DOCKER_BUILDER_TRAVISTOKEN			=>		   --travis-token
+DOCKER_BUILDER_NOTRAVIS				=>		   --no-travis
+DOCKER_BUILDER_GITHUBSECRET			=>		   --github-secret
+DOCKER_BUILDER_NOGITHUB				=>		   --no-github
 
 NOTE: If username and password are both empty (i.e. not provided), basic auth will not be used.
 `
 
-var apiToken string
+var apiToken, githubSecret, portString, pwd, travisToken, un string
+var skipPush bool
+var shouldTravis, shouldGitHub bool
+var shouldBasicAuth, shouldTravisAuth, shouldGitHubAuth bool
+
+var basicAuthFunc = func(http.ResponseWriter, *http.Request) {}
+var travisAuthFunc = func(http.ResponseWriter, *http.Request) {}
+var githubAuthFunc = func(http.ResponseWriter, *http.Request) {}
 
 // define the server
 func serve(c *cli.Context) {
-	// get vars from env and cli
-
 	// set username and password (in helpers.go)
-	setUnAndPwd(c)
-	// get port
-	port := c.Int("port")
-	portString := fmt.Sprintf(":%d", port)
-	// get api token
-	apiToken = c.String("api-token")
-	if apiToken == "" {
-		apiToken = config.APIToken
-	}
-	// get "skip-push" option
-	builder.SkipPush = c.Bool("skip-push") || config.SkipPush
+	setServerVars(c)
 
+	// get "skip-push" option
+	builder.SkipPush = skipPush
 	// set up server
 	server := martini.Classic()
 
 	// check for basic auth
-	basicAuthFunc := func(http.ResponseWriter, *http.Request) {}
-	if un != "" && pwd != "" {
+	if shouldBasicAuth {
 		basicAuthFunc = auth.Basic(un, pwd)
 	}
 
-	// check for travis and github auth
-	travisToken := c.String("travis-token")
-	if travisToken == "" {
-		travisToken = config.TravisToken
-	}
-
-	travisAuthFunc := func(http.ResponseWriter, *http.Request) {}
-	if travisToken != "" {
+	// check for Travis auth
+	if shouldTravisAuth {
 		travisAuthFunc = auth.TravisCI(travisToken)
 	}
 
-	githubSecret := c.String("github-secret")
-	if githubSecret == "" {
-		githubSecret = config.GitHubSecret
-	}
-
-	githubAuthFunc := func(http.ResponseWriter, *http.Request) {}
-	if githubSecret != "" {
+	// check for GitHub auth
+	if shouldGitHubAuth {
 		githubAuthFunc = auth.GitHub(githubSecret)
 	}
 
@@ -89,11 +73,11 @@ func serve(c *cli.Context) {
 	server.Get("/health", func() (int, string) { return 200, "200 OK" })
 	server.Post("/docker-build", basicAuthFunc, webhook.DockerBuild)
 
-	if !c.Bool("no-travis") && !config.NoTravis {
+	if shouldTravis {
 		server.Post("/docker-build/travis", travisAuthFunc, webhook.Travis)
 	}
 
-	if !c.Bool("no-github") && !config.NoGitHub {
+	if shouldGitHub {
 		server.Post("/docker-build/github", githubAuthFunc, webhook.Github)
 	}
 
