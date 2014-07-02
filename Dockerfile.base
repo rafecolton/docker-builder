@@ -7,7 +7,7 @@ ENV GO_TARBALL go1.3.linux-amd64.tar.gz
 ENV LD_LIBRARY_PATH /lib/x86_64-linux-gnu:/usr/local/lib:/usr/lib:/lib
 
 # Fix some issues with APT packages
-# See https://github.com/dotbutt/docker/issues/1024
+# See https://github.com/dotcloud/docker/issues/1024
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -sFf /bin/true /sbin/initctl
 RUN echo "initscripts hold" | dpkg --set-selections
