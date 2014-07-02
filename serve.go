@@ -68,7 +68,7 @@ func serve(c *cli.Context) {
 
 	travisAuthFunc := func(http.ResponseWriter, *http.Request) {}
 	if travisToken != "" {
-		travisAuthFunc = auth.TravisCI(c.String("travis-token"))
+		travisAuthFunc = auth.TravisCI(travisToken)
 	}
 
 	githubSecret := c.String("github-secret")
@@ -78,7 +78,7 @@ func serve(c *cli.Context) {
 
 	githubAuthFunc := func(http.ResponseWriter, *http.Request) {}
 	if githubSecret != "" {
-		githubAuthFunc = auth.GitHub(c.String("github-secret"))
+		githubAuthFunc = auth.GitHub(githubSecret)
 	}
 
 	// configure webhook globals
