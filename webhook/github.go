@@ -55,5 +55,5 @@ func Github(w http.ResponseWriter, req *http.Request) (int, string) {
 		GitRef:    payload.CommitSHA,
 	}
 
-	return processJobHelper(spec, w, req)
+	return processJobHelper(spec, syncDefault, w, req)
 }

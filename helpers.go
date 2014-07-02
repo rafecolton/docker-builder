@@ -70,6 +70,9 @@ func setServerVars(c *cli.Context) {
 	// get skip-push
 	skipPush = c.Bool("skip-push") || config.SkipPush
 
+	// check if builds should be async or not
+	syncDefault = c.Bool("sync-build") || config.SyncBuild
+
 	// check if should travis
 	shouldTravis = !c.Bool("no-travis") && !config.NoTravis
 

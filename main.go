@@ -106,6 +106,7 @@ func main() {
 				cli.IntFlag{"port, p", config.Port, "port on which to serve"},
 				cli.StringFlag{"api-token, t", "", "GitHub API token"},
 				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
+				cli.BoolFlag{"sync-build", "block response until build/tag steps are complete"},
 				cli.StringFlag{"username", "", "username for basic auth"},
 				cli.StringFlag{"password", "", "password for basic auth"},
 				cli.StringFlag{"travis-token", "", "Travis API token for webhooks"},
