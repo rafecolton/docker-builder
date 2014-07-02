@@ -24,6 +24,5 @@ func DockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
 	if err = json.Unmarshal([]byte(body), spec); err != nil {
 		return 400, "400 bad request"
 	}
-
 	return processJobHelper(spec, w, req)
 }

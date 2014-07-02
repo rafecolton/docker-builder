@@ -71,7 +71,7 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 	// if sync
 	if spec.Sync {
 		if err = job.Process(); err != nil {
-			logger.Error(err)
+			logger.WithField("error", err).Error("unable to process job synchronously")
 			return 417, "417 expectation failed"
 		}
 		return processJobSyncSuccessCode, processJobSyncSuccessMessage
