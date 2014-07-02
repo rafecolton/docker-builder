@@ -51,5 +51,3 @@ Topics:
 #    --no-travis          do not include route for Travis CI webhook
 #    --no-github          do not include route for GitHub webhook
 ```
-
-#### Options Explained
