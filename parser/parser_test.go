@@ -130,7 +130,7 @@ var _ = Describe("Parse", func() {
 		shortCmd := &exec.Cmd{
 			Path: git,
 			Dir:  top,
-			Args: []string{git, "describe", "--always"},
+			Args: []string{git, "describe", "--always", "--dirty", "--tags"},
 		}
 		shortBytes, _ := shortCmd.Output()
 		short = string(shortBytes)[:len(shortBytes)-1]
