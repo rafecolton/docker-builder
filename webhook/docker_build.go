@@ -25,10 +25,5 @@ func DockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
 		return 400, "400 bad request"
 	}
 
-	sync := syncDefault
-	if spec.Sync != nil {
-		sync = *spec.Sync
-	}
-
-	return processJobHelper(spec, sync, w, req)
+	return processJobHelper(spec, w, req)
 }

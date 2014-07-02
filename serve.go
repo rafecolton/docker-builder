@@ -32,7 +32,7 @@ NOTE: If username and password are both empty (i.e. not provided), basic auth wi
 `
 
 var apiToken, githubSecret, portString, pwd, travisToken, un string
-var skipPush, syncDefault bool
+var skipPush bool
 var shouldTravis, shouldGitHub bool
 var shouldBasicAuth, shouldTravisAuth, shouldGitHubAuth bool
 
@@ -68,7 +68,6 @@ func serve(c *cli.Context) {
 	// configure webhook globals
 	webhook.Logger(Logger)
 	webhook.APIToken(apiToken)
-	webhook.SyncDefault(syncDefault)
 
 	// establish routes
 	server.Get("/health", func() (int, string) { return 200, "200 OK" })

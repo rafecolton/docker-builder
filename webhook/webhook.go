@@ -21,7 +21,6 @@ const (
 var logger *logrus.Logger
 var apiToken string
 var testMode bool
-var syncDefault bool
 
 //Logger sets the (global) logger for the webhook package
 func Logger(l *logrus.Logger) {
@@ -38,16 +37,11 @@ func TestMode(b bool) {
 	testMode = b
 }
 
-//SyncDefault sets the (global) syncDefault variable for the webhook package
-func SyncDefault(b bool) {
-	syncDefault = b
-}
-
-func processJobHelper(spec *job.JobSpec, sync bool, w http.ResponseWriter, req *http.Request) (int, string) {
+func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Request) (int, string) {
 	// If tests are running, don't actually attempt to build containers, just return success.
 	// This is meant to allow testing ot the HTTP interactions for the webhooks
 	if testMode {
-		if sync {
+		if spec.Sync {
 			return processJobSyncSuccessCode, processJobSyncSuccessMessage
 		}
 		return processJobSuccessCode, processJobSuccessMessage
@@ -75,7 +69,7 @@ func processJobHelper(spec *job.JobSpec, sync bool, w http.ResponseWriter, req *
 	job := job.NewJob(jobConfig, spec)
 
 	// if sync
-	if sync {
+	if spec.Sync {
 		if err = job.Process(); err != nil {
 			logger.Error(err)
 			return 417, "417 expectation failed"
