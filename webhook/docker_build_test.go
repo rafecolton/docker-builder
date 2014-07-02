@@ -28,8 +28,9 @@ func makeJSONRequest(rawBody string) (*http.Request, error) {
 
 var _ = Describe("DockerBuild", func() {
 	var (
-		validBody   = `{"account": "foo"}`
-		invalidBody = `{"account": 5}`
+		validBody     = `{"account": "foo"}`
+		validBodySync = `{"account": "foo", "sync":true}`
+		invalidBody   = `{"account": 5}`
 	)
 
 	Context("when JSON data is invalid", func() {
@@ -55,6 +56,16 @@ var _ = Describe("DockerBuild", func() {
 
 			Expect(recorder.Code).To(Equal(202))
 			Expect(recorder.Body.String()).To(Equal("202 accepted"))
+		})
+		It("returns a 201 if sync == true", func() {
+			req, err := makeJSONRequest(validBodySync)
+			Expect(err).To(BeNil())
+			Expect(req).ToNot(BeNil())
+
+			testServer.ServeHTTP(recorder, req)
+
+			Expect(recorder.Code).To(Equal(201))
+			Expect(recorder.Body.String()).To(Equal("201 created"))
 		})
 	})
 })
