@@ -6,7 +6,7 @@ tag_opts = ["--force"]
 [containers]
 
 [containers.global]
-registry = "quay.io/modcloth"
+registry = "modcloth"
 
 [containers.base]
 Dockerfile = "Dockerfile.base"
