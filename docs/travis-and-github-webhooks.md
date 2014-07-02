@@ -49,6 +49,8 @@ You can add a Github webhook to your repository by accessing the
 settings page at https://github.com/USERNAME/REPOSITORY/settings/hooks.
 Make sure the webhook is set to trigger on "Just the `push` event".
 
+Note that the route for GitHub hooks is `/docker-build/github`
+
 ### Disabling Authentication and Endpoints
 
 If a GitHub secret is not supplied, requests to the GitHub endpoint will

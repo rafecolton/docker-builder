@@ -51,3 +51,9 @@ Topics:
 #    --no-travis          do not include route for Travis CI webhook
 #    --no-github          do not include route for GitHub webhook
 ```
+
+#### Healthcheck
+
+The `docker-builder` server has a healthcheck route available at
+`/health`.  As long as the server is running, an HTTP request to
+`/health` will return 200/OK.
