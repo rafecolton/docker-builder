@@ -14,6 +14,7 @@ type JobSpec struct {
 	GitRef         string `json:"ref"`
 	GitHubAPIToken string `json:"api_token"`
 	Depth          string `json:"depth"`
+	Sync           *bool  `json:"sync"`
 }
 
 /*
