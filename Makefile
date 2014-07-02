@@ -11,7 +11,8 @@ PACKAGES := \
   $(B)/parser \
   $(B)/parser/tag \
   $(B)/parser/uuid \
-  $(B)/version
+  $(B)/version \
+  $(B)/webhook
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
 BRANCH_VAR := $(B)/version.BranchString
