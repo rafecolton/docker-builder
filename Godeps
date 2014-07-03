@@ -45,7 +45,7 @@
 		},
 		{
 			"ImportPath": "github.com/modcloth/auth",
-			"Rev": "b6e46c9cd19acff0a88ee836ede379d81b5e086c"
+			"Rev": "3f96c83d4d504fb0804967df1d55b96e69817f38"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
