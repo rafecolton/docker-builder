@@ -1,9 +1,9 @@
 #!/bin/bash
 
 docker login \
-  --username "$DOCKERCFG_USERNAME" \
-  --password "$DOCKERCFG_PASSWORD" \
-  --email "$DOCKERCFG_EMAIL" \
-  "${DOCKERCFG_INDEX:-quay.io}"
+  --username "${DOCKERCFG_USERNAME}" \
+  --password "${DOCKERCFG_PASSWORD}" \
+  --email "${DOCKERCFG_EMAIL}" \
+  "${DOCKERCFG_INDEX}"
 
 exec /app/bin/docker-builder "$@"
