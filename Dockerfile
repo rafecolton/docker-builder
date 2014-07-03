@@ -1,4 +1,4 @@
-FROM quay.io/modcloth/docker-builder-base:latest
+FROM modcloth/docker-builder-base:latest
 MAINTAINER devops@modcloth.com
 
 ENV GOPATH /app

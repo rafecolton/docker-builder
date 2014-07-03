@@ -7,8 +7,8 @@ tag_opts = ["--force"]
 
 [containers.app]
 Dockerfile = "Dockerfile"
-registry = "quay.io/modcloth"
+registry = "modcloth"
 project = "docker-builder"
-tags = ["git:branch", "git:rev", "latest"]
+tags = ["git:branch", "git:rev", "git:short", "latest"]
 
 # vim:ft=toml

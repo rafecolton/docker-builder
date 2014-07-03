@@ -9,7 +9,7 @@ tag_opts = ["--force"]
 
 [containers.base]
 Dockerfile = "Dockerfile.base"
-registry = "quay.io/modcloth"
+registry = "modcloth"
 project = "docker-builder-base"
 tags = ["latest"]
 
