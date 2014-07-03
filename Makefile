@@ -83,6 +83,7 @@ build: binclean godep
 
 .PHONY: release
 release: binclean gox-linux gox-darwin
+	open ./releases
 
 .PHONY: gox-linux
 gox-linux: build dev
