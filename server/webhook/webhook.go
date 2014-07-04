@@ -12,10 +12,10 @@ import (
 )
 
 const (
-	processJobSuccessCode        = 202
-	processJobSuccessMessage     = "202 accepted"
-	processJobSyncSuccessCode    = 201
-	processJobSyncSuccessMessage = "201 created"
+	asyncSuccessCode    = 202
+	asyncSuccessMessage = "202 accepted"
+	syncSuccessCode     = 201
+	syncSuccessMessage  = "201 created"
 )
 
 var logger *logrus.Logger
@@ -42,9 +42,9 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 	// This is meant to allow testing ot the HTTP interactions for the webhooks
 	if testMode {
 		if spec.Sync {
-			return processJobSyncSuccessCode, processJobSyncSuccessMessage
+			return syncSuccessCode, syncSuccessMessage
 		}
-		return processJobSuccessCode, processJobSuccessMessage
+		return asyncSuccessCode, asyncSuccessMessage
 	}
 
 	if err := spec.Validate(); err != nil {
@@ -74,10 +74,10 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 			logger.WithField("error", err).Error("unable to process job synchronously")
 			return 417, "417 expectation failed"
 		}
-		return processJobSyncSuccessCode, processJobSyncSuccessMessage
+		return syncSuccessCode, syncSuccessMessage
 	}
 
 	// if async
 	go job.Process()
-	return processJobSuccessCode, processJobSuccessMessage
+	return asyncSuccessCode, asyncSuccessMessage
 }
