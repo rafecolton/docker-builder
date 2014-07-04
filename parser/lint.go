@@ -15,12 +15,7 @@ invalid.
 func (parser *Parser) Lint() error {
 	//TODO: this should probably call Parse instead of the unexported method rawToStruct
 	_, err := parser.rawToStruct()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 /*
@@ -49,18 +44,18 @@ func (parser *Parser) AssertLint() {
 
 // helper functions
 func (parser *Parser) printLintSuccessMessage() {
-	//parser.WithFields(logrus.Fields{"file": parser.filename}).Info("file is a valid Bobfile")
+	parser.WithFields(logrus.Fields{"file": parser.filename}).Info("file is a valid Bobfile")
 }
 
 func (parser *Parser) printLintFailMessage(err error) {
-	//var errMsg string
+	var errMsg string
 	fields := logrus.Fields{"error": err}
 
 	if parser.filename == "" {
-		//errMsg = "no file provided for linting"
+		errMsg = "no file provided for linting"
 	} else {
 		fields["filename"] = parser.filename
-		//errMsg = "file provided is not a valid Bobfile"
+		errMsg = "file provided is not a valid Bobfile"
 	}
-	//parser.WithFields(fields).Error(errMsg)
+	parser.WithFields(fields).Error(errMsg)
 }
