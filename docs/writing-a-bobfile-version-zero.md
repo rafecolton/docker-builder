@@ -1,11 +1,4 @@
-# Writing a Bobfile - Version 1
-
-You may also want to look at the following:
-
-* [Writing a Bobfile - Version 0 (deprecated)](writing-a-bobfile-version-zero.md)
-* [Upgrading Bobfile from Version 0 to Version 1: How and Why](upgrading-zero-to-one.md)
-
-<!-- TODO - change stuff below -->
+# Writing a Bobfile - Version 0 (deprecated)
 
 The basic ingredients to a Bob-build are the `docker-builder` executable and a
 `Bobfile` config file.  This page assumes that you have already
@@ -22,9 +15,6 @@ want.  The name `Bobfile` is just a convention.
 
 ```toml
 # Bobfile
-
-version = 1 # this is required, or your Bobfile may be parsed incorrectly
-
 [docker]
 build_opts = [
   "--rm",
@@ -32,7 +22,9 @@ build_opts = [
 ]
 tag_opts = ["--force"]
 
-[container_globals]
+[containers]
+
+[containers.global]
 registry = "modcloth"
 project = "my-app"
 excluded = ["spec"]
@@ -42,8 +34,7 @@ tags = [
   "git:short"
 ]
 
-[[container]]
-name = "base"
+[containers.base]
 Dockerfile = "Dockerfile.base"
 included = [
   "Gemfile",
@@ -52,8 +43,7 @@ included = [
 tags = ["base"]
 skip_push = true
 
-[[container]]
-name = "app"
+[containers.app]
 Dockerfile = "Dockerfile.app"
 ```
 
@@ -66,9 +56,14 @@ are available:
 * `build_opts` - Array
 * `tag_opts` - Array
 
-### The `[container_globals]` Section
+### The `[containers]` Section
 
-The `[container_globals]` section is a special section that will get
+The `[containers]` section can have any number of sub-sections, where
+each section represents a container to be built, tagged, and pushed.
+
+#### The `[containers.global]` Section
+
+The `[containers.global]` section is a special section that will get
 merged into each of the other container sections, with the values in the
 individual container section taking precedence over the global section.
 For example, the above `Bobfile` could be rewritten as follows:
@@ -82,8 +77,9 @@ build_opts = [
 ]
 tag_opts = ["-f"]
 
-[[container]]
-name = "base"
+[containers]
+
+[containers.base]
 Dockerfile = "Dockerfile.base"
 registry = "modcloth"
 project = "my-app"
@@ -95,8 +91,7 @@ included = [
 tags = ["base"]
 skip_push = true
 
-[[container]]
-name = "app"
+[containers.app]
 Dockerfile = "Dockerfile.app"
 registry = "modcloth"
 project = "my-app"
@@ -109,11 +104,10 @@ tags = [
 ]
 ```
 
-### The `[[container]]` Sections
+#### The `[containers.<layer>]` Section
 
-The following stanzas are available in a `[[container]]` section:
+The following stanzas are available in a `[containers.<layer>]` section:
 
-* `name` - String (required) - the name of the section
 * `Dockerfile` - String (required) - the file to be used as the
   "Dockerfile" for the build
 * `registry` - String
