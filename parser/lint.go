@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/onsi/gocleanup"
 )
 
 /*
@@ -22,23 +21,27 @@ func (parser *Parser) Lint() error {
 AssertLint is like Lint except that instead of returning an nil/error to
 indicate success/failure, it exits nonzero if linting fails.
 */
-func (parser *Parser) AssertLint() {
+func (parser *Parser) AssertLint() int {
 	if !parser.IsOpenable() {
 		if parser.filename == "" {
-			parser.printLintFailMessage(errors.New("no file provided for linting"))
+			parser.printLintFailMessage(
+				errors.New("no file provided for linting"),
+			)
 		} else {
-			parser.printLintFailMessage(errors.New("unable to open file"))
+			parser.printLintFailMessage(
+				errors.New("unable to open file"),
+			)
 		}
-		gocleanup.Exit(17)
+		return 17
 	}
 
 	err := parser.Lint()
 	if err != nil {
 		parser.printLintFailMessage(err)
-		gocleanup.Exit(5)
+		return 5
 	} else {
 		parser.printLintSuccessMessage()
-		gocleanup.Exit(0)
+		return 0
 	}
 }
 

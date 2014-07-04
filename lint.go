@@ -8,5 +8,6 @@ import (
 
 func lint(c *cli.Context) {
 	par, _ = parser.NewParser(c.Args().First(), Logger)
-	par.AssertLint()
+	exitCode := par.AssertLint()
+	gocleanup.Exit(exitCode)
 }
