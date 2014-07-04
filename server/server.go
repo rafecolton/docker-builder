@@ -5,7 +5,7 @@ import (
 
 	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/conf"
-	"github.com/modcloth/docker-builder/webhook"
+	"github.com/modcloth/docker-builder/server/webhook"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"

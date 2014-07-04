@@ -6,6 +6,7 @@ import (
 
 	"github.com/modcloth/docker-builder/conf"
 	"github.com/modcloth/docker-builder/parser"
+	"github.com/modcloth/docker-builder/server"
 	"github.com/modcloth/docker-builder/version"
 
 	"github.com/Sirupsen/logrus"
@@ -99,8 +100,8 @@ func main() {
 		{
 			Name:        "serve",
 			Usage:       "serve <options> - start a small HTTP web server for receiving build requests",
-			Description: ServerDescription,
-			Action:      serve,
+			Description: server.Description,
+			Action:      func(c *cli.Context) { server.Logger(Logger); server.Serve(c) },
 			Flags: []cli.Flag{
 				cli.IntFlag{"port, p", config.Port, "port on which to serve"},
 				cli.StringFlag{"api-token, t", "", "GitHub API token"},
