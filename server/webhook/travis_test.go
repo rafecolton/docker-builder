@@ -1,8 +1,6 @@
 package webhook_test
 
 import (
-	//. "github.com/modcloth/docker-builder/webhook"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 

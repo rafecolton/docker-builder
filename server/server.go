@@ -17,10 +17,12 @@ var logger *logrus.Logger
 var config = conf.Config
 var server = martini.Classic()
 
+//Logger sets the (global) logger for the server package
 func Logger(l *logrus.Logger) {
 	logger = l
 }
 
+// Serve sets everything up and runs the docker-builder server
 func Serve(context *cli.Context) {
 	// set vars
 	setVarsFromContext(context)

@@ -1,10 +1,9 @@
 package conf
 
+// Config is the global config for docker-builder
 var Config Conf
 
-/*
-Config is used for storing data retrieved from environmental variables.
-*/
+// Conf is used for storing data retrieved from environmental variables.
 type Conf struct {
 	Port      int
 	LogLevel  string

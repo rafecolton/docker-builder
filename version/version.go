@@ -50,7 +50,7 @@ func NewVersion() *Version {
 	}
 
 	if ver.Version == "" {
-	  ver.Version = "<unknown>"
+		ver.Version = "<unknown>"
 	}
 
 	return ver
