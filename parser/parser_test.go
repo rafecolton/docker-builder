@@ -41,8 +41,8 @@ var _ = Describe("Parse", func() {
 		expectedInstructionSet  = &InstructionSet{
 			DockerBuildOpts: []string{"--rm", "--no-cache"},
 			DockerTagOpts:   []string{"--force"},
-			Containers: map[string]builderfile.ContainerSection{
-				"base": *&builderfile.ContainerSection{
+			Containers: []builderfile.ContainerSection{
+				*&builderfile.ContainerSection{
 					Name:       "base",
 					Dockerfile: "Dockerfile.base",
 					Included:   []string{"Gemfile", "Gemfile.lock"},
@@ -52,7 +52,7 @@ var _ = Describe("Parse", func() {
 					Tags:       []string{"base"},
 					SkipPush:   true,
 				},
-				"app": *&builderfile.ContainerSection{
+				*&builderfile.ContainerSection{
 					Name:       "app",
 					Dockerfile: "Dockerfile",
 					Included:   []string{},
@@ -65,21 +65,20 @@ var _ = Describe("Parse", func() {
 			},
 		}
 		expectedBuilderfile = &builderfile.Builderfile{
+			Version: 1,
 			Docker: *&builderfile.Docker{
 				BuildOpts: []string{"--rm", "--no-cache"},
 				TagOpts:   []string{"--force"},
 			},
-			Containers: map[string]builderfile.ContainerSection{
-				"global": *&builderfile.ContainerSection{
-					Dockerfile: "",
-					Included:   nil,
-					Excluded:   []string{"spec", "tmp"},
-					Registry:   "quay.io/modcloth",
-					Project:    "style-gallery",
-					Tags:       []string{"git:branch", "git:rev", "git:short"},
-					SkipPush:   false,
-				},
-				"base": *&builderfile.ContainerSection{
+			ContainerGlobals: &builderfile.ContainerSection{
+				Excluded: []string{"spec", "tmp"},
+				Registry: "quay.io/modcloth",
+				Project:  "style-gallery",
+				Tags:     []string{"git:branch", "git:rev", "git:short"},
+			},
+			ContainerArr: []*builderfile.ContainerSection{
+				&builderfile.ContainerSection{
+					Name:       "base",
 					Dockerfile: "Dockerfile.base",
 					Included:   []string{"Gemfile", "Gemfile.lock"},
 					Excluded:   nil,
@@ -88,7 +87,8 @@ var _ = Describe("Parse", func() {
 					Tags:       []string{"base"},
 					SkipPush:   true,
 				},
-				"app": *&builderfile.ContainerSection{
+				&builderfile.ContainerSection{
+					Name:       "app",
 					Dockerfile: "Dockerfile",
 					Included:   nil,
 					Excluded:   nil,

@@ -35,14 +35,13 @@ func (parser *Parser) AssertLint() int {
 		return 17
 	}
 
-	err := parser.Lint()
-	if err != nil {
+	if err := parser.Lint(); err != nil {
 		parser.printLintFailMessage(err)
 		return 5
-	} else {
-		parser.printLintSuccessMessage()
-		return 0
 	}
+
+	parser.printLintSuccessMessage()
+	return 0
 }
 
 // helper functions

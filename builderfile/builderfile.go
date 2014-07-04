@@ -1,12 +1,26 @@
 package builderfile
 
+import (
+	"github.com/Sirupsen/logrus"
+)
+
+var logger *logrus.Logger
+
+//Logger sets the (global) logger for the builderfile package
+func Logger(l *logrus.Logger) {
+	logger = l
+}
+
 /*
 Builderfile is a struct representation of what is expected to be inside a
 Builderfile.
 */
 type Builderfile struct {
-	Docker     `toml:"docker"`
-	Containers map[string]ContainerSection `toml:"containers"`
+	Version          int                         `toml:"version"`
+	Docker           Docker                      `toml:"docker"`
+	Containers       map[string]ContainerSection `toml:"containers"`
+	ContainerArr     []*ContainerSection         `toml:"container"`
+	ContainerGlobals *ContainerSection           `toml:"container_globals"`
 }
 
 /*
@@ -23,7 +37,7 @@ section of a Builderfile. Each of these sections defines a docker container to
 be built and other related options.
 */
 type ContainerSection struct {
-	Name       string   `toml:"-"`
+	Name       string   `toml:"name"`
 	Dockerfile string   `toml:"Dockerfile"`
 	Included   []string `toml:"included"`
 	Excluded   []string `toml:"excluded"`

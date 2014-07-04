@@ -36,6 +36,8 @@ func build(c *cli.Context) {
 		exitErr(29, "unable to build", err)
 	}
 
+	bob.Warnf("command sequence: %+v\n", commandSequence)
+
 	if builder.WaitForPush {
 	WaitForPush:
 		for {
