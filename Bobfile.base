@@ -1,13 +1,12 @@
+version = 1
+
 [docker]
 
 build_opts = ["--rm", "--no-cache"]
 tag_opts = ["--force"]
 
-[containers]
-
-[containers.global]
-
-[containers.base]
+[[container]]
+name = "base"
 Dockerfile = "Dockerfile.base"
 registry = "modcloth"
 project = "docker-builder-base"
