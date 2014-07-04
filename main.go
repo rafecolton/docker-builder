@@ -1,13 +1,12 @@
 package main
 
 import (
-	"github.com/modcloth/docker-builder/parser"
-	"github.com/modcloth/docker-builder/version"
-)
-
-import (
 	"fmt"
 	"os"
+
+	"github.com/modcloth/docker-builder/conf"
+	"github.com/modcloth/docker-builder/parser"
+	"github.com/modcloth/docker-builder/version"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
@@ -19,7 +18,7 @@ import (
 
 var ver = version.NewVersion()
 var par *parser.Parser
-var config Config
+var config = conf.Config
 
 //Logger is the logger for the docker-builder main
 var Logger *logrus.Logger
