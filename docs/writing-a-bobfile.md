@@ -5,8 +5,6 @@ You may also want to look at the following:
 * [Writing a Bobfile - Version 0 (deprecated)](writing-a-bobfile-version-zero.md)
 * [Upgrading Bobfile from Version 0 to Version 1: How and Why](upgrading-zero-to-one.md)
 
-<!-- TODO - change stuff below -->
-
 The basic ingredients to a Bob-build are the `docker-builder` executable and a
 `Bobfile` config file.  This page assumes that you have already
 downloaded or built the `docker-builder` executable.  If you have not, please

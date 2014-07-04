@@ -64,8 +64,6 @@ func (parser *Parser) convertBobfileVersion() (*builderfile.Builderfile, error) 
 	return builderfile.Convert0to1(fileZero)
 }
 
-//TODO: redo further steps to parse new file type
-
 // Step 3 of Parse
 func (parser *Parser) structToInstructionSet() (*InstructionSet, error) {
 	file, err := parser.convertBobfileVersion()
