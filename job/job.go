@@ -40,6 +40,7 @@ type job struct {
 	Created        time.Time      `json:"created"`
 	Completed      time.Time      `json:"completed,omitempty"`
 	Archived       time.Time      `json:"archived,omitempty"`
+	Error          error          `json:"error,omitempty"`
 }
 
 /*
@@ -197,11 +198,21 @@ func (job *job) Process() error {
 		}
 	}()
 
+	var archive = func() {
+		time.Sleep(time.Duration(KeepLogTimeInSeconds) * time.Second)
+		job.Status = "archived"
+		job.Archived = time.Now()
+		job.LogRoute = ""
+		fileutils.Rm(fmt.Sprintf("%s/log.log", job.logDir))
+	}
+
 	job.Status = "cloning"
 	// step 1: clone
 	path, err := job.clone()
 	if err != nil {
 		job.Status = "errored"
+		job.Error = err
+		go archive()
 		return err
 	}
 
@@ -209,21 +220,14 @@ func (job *job) Process() error {
 	// step 2: build
 	if err = job.build(filepath.Join(path, "Bobfile")); err != nil {
 		job.Status = "errored"
+		job.Error = err
+		go archive()
 		return err
 	}
+
 	job.Status = "completed"
 	job.Completed = time.Now()
-
-	go func() {
-		time.Sleep(time.Duration(KeepLogTimeInSeconds) * time.Second)
-		job.Status = "archived"
-		job.Archived = time.Now()
-		job.LogRoute = ""
-		fileutils.Rm(fmt.Sprintf("%s/log.log", job.logDir))
-	}()
-
-	// step 3: cleanup
 	fileutils.RmRF(path)
-
+	go archive()
 	return nil
 }
