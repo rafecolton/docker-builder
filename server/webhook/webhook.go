@@ -1,6 +1,8 @@
 package webhook
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -79,5 +81,11 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 
 	// if async
 	go job.Process()
-	return asyncSuccessCode, asyncSuccessMessage
+
+	retBytes, err := json.Marshal(job)
+	if err != nil {
+		return 409, fmt.Sprintf(`{"error": %q}`, err)
+	}
+
+	return asyncSuccessCode, string(retBytes)
 }

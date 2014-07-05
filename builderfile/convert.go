@@ -18,8 +18,8 @@ You should consider @{!y}pressing ^C@{|y} and @{!y}updating your Bobfile@{|y} be
 
 For more information, see @{!y}https://github.com/modcloth/docker-builder@{|y}
 
-Sleeping for 30 seconds before building...
-@{|}`)
+Sleeping for %d seconds before building...
+@{|}`, sleepTime)
 
 /*
 Convert0to1 converts the deprecated builderfile version 0 to version 1.  It
