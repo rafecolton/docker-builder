@@ -18,4 +18,5 @@ type Conf struct {
 	GitHubSecret string
 	NoTravis     bool
 	NoGitHub     bool
+	SleepTime    int
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/conf"
+	"github.com/modcloth/docker-builder/job"
 	"github.com/modcloth/docker-builder/server/webhook"
 
 	"github.com/Sirupsen/logrus"
@@ -51,9 +52,19 @@ func Serve(context *cli.Context) {
 		server.Post("/docker-build/github", githubAuthFunc, webhook.Github)
 	}
 
-	// establish routes
+	// base routes
 	server.Get("/health", func() (int, string) { return 200, "200 OK" })
 	server.Post("/docker-build", basicAuthFunc, webhook.DockerBuild)
+
+	// job control routes
+	server.Group("/jobs", func(r martini.Router) {
+		r.Get("/:id", job.Get)
+		r.Get("/:id/tail", job.TailN)
+		r.Post("", webhook.DockerBuild)
+		r.Get("", job.GetAll)
+	}, basicAuthFunc)
+
+	job.KeepLogTimeInSeconds = sleepTime
 
 	// start server
 	http.ListenAndServe(portString, server)
