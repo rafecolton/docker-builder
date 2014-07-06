@@ -25,7 +25,10 @@ func init() {
 	m.MapTo(r, (*martini.Routes)(nil))
 	m.Action(r.Handle)
 	testServer = &martini.ClassicMartini{m, r}
-	l := &logrus.Logger{Level: logrus.Panic}
+	l := &logrus.Logger{
+		Level:     logrus.Panic,
+		Formatter: &logrus.JSONFormatter{},
+	}
 	Logger(l)
 	webhook.Logger(l)
 

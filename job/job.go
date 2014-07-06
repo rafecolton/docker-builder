@@ -107,7 +107,11 @@ func NewJob(cfg *JobConfig, spec *JobSpec) *Job {
 			cfg.Logger.WithField("error", err).Error("error creating log file")
 			id = ""
 		} else {
-			out = io.MultiWriter(os.Stdout, file)
+			if TestMode {
+				out = file
+			} else {
+				out = io.MultiWriter(os.Stdout, file)
+			}
 			ret.logFile = file
 		}
 	}
@@ -213,10 +217,7 @@ Process does the actual job processing work, including:
 */
 func (job *Job) Process() error {
 	if TestMode {
-		job.Logger.Warn("job.Process() called in test mode")
-		job.Status = "completed"
-		job.Completed = time.Now()
-		return nil
+		return job.processTestMode()
 	}
 
 	var archive = func() {
@@ -256,5 +257,19 @@ func (job *Job) Process() error {
 	job.Completed = time.Now()
 	fileutils.RmRF(path)
 	go archive()
+	return nil
+}
+
+func (job *Job) processTestMode() error {
+	job.Logger.Warn("job.Process() called in test mode")
+	job.Status = "completed"
+	job.Completed = time.Now()
+
+	// log something for test purposes
+	levelBefore := job.Logger.Level
+	job.Logger.Level = logrus.Debug
+	job.Logger.Debug("FOO")
+	job.Logger.Level = levelBefore
+
 	return nil
 }
