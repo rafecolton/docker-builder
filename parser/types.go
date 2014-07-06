@@ -17,7 +17,7 @@ the sections for the individual containers.
 type InstructionSet struct {
 	DockerBuildOpts []string
 	DockerTagOpts   []string
-	Containers      map[string]builderfile.ContainerSection
+	Containers      []builderfile.ContainerSection
 }
 
 /*

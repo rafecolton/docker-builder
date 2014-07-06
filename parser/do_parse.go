@@ -44,9 +44,29 @@ func (parser *Parser) rawToStruct() (*builderfile.Builderfile, error) {
 	return file, nil
 }
 
+// Step 2.5 of Parse - handle Bobfile version
+
+func (parser *Parser) convertBobfileVersion() (*builderfile.Builderfile, error) {
+	var err error
+	var fileZero *builderfile.Builderfile
+
+	fileZero, err = parser.rawToStruct()
+	if err != nil {
+		return nil, err
+	}
+
+	// check version, do conversion
+	if fileZero.Version == 1 {
+		return fileZero, nil
+	}
+
+	builderfile.Logger(logger)
+	return builderfile.Convert0to1(fileZero)
+}
+
 // Step 3 of Parse
 func (parser *Parser) structToInstructionSet() (*InstructionSet, error) {
-	file, err := parser.rawToStruct()
+	file, err := parser.convertBobfileVersion()
 	if err != nil {
 		return nil, err
 	}

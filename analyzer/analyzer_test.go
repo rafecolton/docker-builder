@@ -31,12 +31,13 @@ var _ = Describe("Analysis Parsing", func() {
 			repoBasename:      "fake-repo",
 		}
 		outfile = &builderfile.Builderfile{
+			Version: 1,
 			Docker: *&builderfile.Docker{
 				BuildOpts: []string{"--rm", "--no-cache"},
 				TagOpts:   []string{"--force"},
 			},
-			Containers: map[string]builderfile.ContainerSection{
-				"app": *&builderfile.ContainerSection{
+			ContainerArr: []*builderfile.ContainerSection{
+				&builderfile.ContainerSection{
 					Name:     "app",
 					Registry: "modcloth",
 					Project:  "fake-repo",
@@ -76,13 +77,15 @@ var _ = Describe("Analysis Parsing", func() {
 		It("only has `latest` tag and default registry", func() {
 			subject.isGitRepo = false
 			subject.remotes = ""
-			outfile.Containers["app"] = *&builderfile.ContainerSection{
-				Name:       "app",
-				Registry:   "my-registry",
-				Project:    "fake-repo",
-				Tags:       []string{"latest"},
-				Dockerfile: "Dockerfile",
-				SkipPush:   false,
+			outfile.ContainerArr = []*builderfile.ContainerSection{
+				&builderfile.ContainerSection{
+					Name:       "app",
+					Registry:   "my-registry",
+					Project:    "fake-repo",
+					Tags:       []string{"latest"},
+					Dockerfile: "Dockerfile",
+					SkipPush:   false,
+				},
 			}
 			out, err := ParseAnalysis(subject)
 

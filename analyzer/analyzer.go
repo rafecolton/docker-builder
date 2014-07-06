@@ -167,16 +167,19 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 	}
 
 	ret := &builderfile.Builderfile{
+		Version: 1,
 		Docker: *&builderfile.Docker{
 			BuildOpts: []string{"--rm", "--no-cache"},
 			TagOpts:   []string{"--force"},
 		},
-		Containers: map[string]builderfile.ContainerSection{},
+		ContainerArr: []*builderfile.ContainerSection{},
 	}
+
+	var appContainer *builderfile.ContainerSection
 
 	if analysis.IsGitRepo() {
 		// get registry
-		ret.Containers["app"] = *&builderfile.ContainerSection{
+		appContainer = &builderfile.ContainerSection{
 			Name:       "app",
 			Registry:   registryFromRemotes(analysis.GitRemotes()),
 			Dockerfile: "Dockerfile",
@@ -190,7 +193,7 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 			},
 		}
 	} else {
-		ret.Containers["app"] = *&builderfile.ContainerSection{
+		appContainer = &builderfile.ContainerSection{
 			Name:       "app",
 			Registry:   "my-registry",
 			Dockerfile: "Dockerfile",
@@ -199,6 +202,8 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 			Tags:       []string{"latest"},
 		}
 	}
+
+	ret.ContainerArr = append(ret.ContainerArr, appContainer)
 
 	return ret, nil
 }

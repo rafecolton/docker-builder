@@ -1,9 +1,10 @@
-package main
+package conf
 
-/*
-Config is used for storing data retrieved from environmental variables.
-*/
-type Config struct {
+// Config is the global config for docker-builder
+var Config Conf
+
+// Conf is used for storing data retrieved from environmental variables.
+type Conf struct {
 	Port      int
 	LogLevel  string
 	LogFormat string
@@ -17,4 +18,5 @@ type Config struct {
 	GitHubSecret string
 	NoTravis     bool
 	NoGitHub     bool
+	SleepTime    int
 }

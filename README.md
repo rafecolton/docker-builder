@@ -6,6 +6,11 @@
 Bob, the `docker-builder`, builds, tags, and pushes multiple Docker images, all
 from a friendly `Bobfile` config file.
 
+## Other Topics
+
+* [Motivation for Docker Builder](docs/why.md)
+* [Docker Builder Server](docs/advanced-usage.md)
+
 ## Quick Start
 
 Steps to quick start:
@@ -39,11 +44,11 @@ go get github.com/modcloth/docker-builder
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.5.2/docker-builder-v0.5.2-darwin-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.6.0/docker-builder-v0.6.0-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.5.2/docker-builder-v0.5.2-linux-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.6.0/docker-builder-v0.6.0-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1
 ```
 
@@ -60,8 +65,3 @@ output is harmless and safe to ignore.
 
 To build from source, run `make build`.  You may have to install some
 things first, such as `go`.
-
-## Other Docs
-
-* [Why?](docs/why.md)
-* [Advanced Usage](docs/advanced-usage.md)

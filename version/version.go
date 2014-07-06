@@ -36,24 +36,21 @@ and some sensible defaults.
 func NewVersion() *Version {
 	ver := &Version{
 		Programname: path.Base(os.Args[0]),
+		Branch:      BranchString,
+		Rev:         RevString,
+		Version:     VersionString,
 	}
 
-	if BranchString == "" {
+	if ver.Branch == "" {
 		ver.Branch = "<unknown>"
-	} else {
-		ver.Branch = BranchString
 	}
 
-	if RevString == "" {
+	if ver.Rev == "" {
 		ver.Rev = "<unknown>"
-	} else {
-		ver.Rev = RevString
 	}
 
-	if VersionString == "" {
-		ver.Version = ""
-	} else {
-		ver.Version = VersionString
+	if ver.Version == "" {
+		ver.Version = "<unknown>"
 	}
 
 	return ver
