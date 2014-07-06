@@ -6,6 +6,11 @@
 Bob, the `docker-builder`, builds, tags, and pushes multiple Docker images, all
 from a friendly `Bobfile` config file.
 
+## Other Topics
+
+* [Motivation for Docker Builder](docs/why.md)
+* [Docker Builder Server](docs/advanced-usage.md)
+
 ## Quick Start
 
 Steps to quick start:
@@ -60,8 +65,3 @@ output is harmless and safe to ignore.
 
 To build from source, run `make build`.  You may have to install some
 things first, such as `go`.
-
-## Other Docs
-
-* [Why?](docs/why.md)
-* [Advanced Usage](docs/advanced-usage.md)
