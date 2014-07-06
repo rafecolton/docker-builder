@@ -15,32 +15,43 @@ import (
 	"github.com/modcloth/kamino"
 )
 
+/*
+TestMode monkeys with certain things for tests so bad things don't
+happen
+*/
+var TestMode bool
+
 const defaultTail = "100"
 
-var gen = uuid.NewUUIDGenerator(true)
+var gen uuid.UUIDGenerator
+var logger *logrus.Logger
 
 //KeepLogTimeInSeconds is the number of seconds to wait before deleting a job's
 //logfile and marking it "archived".
 var KeepLogTimeInSeconds = 600
 
-type job struct {
-	Workdir        string         `json:"-"`
-	GitHubAPIToken string         `json:"-"`
-	GitCloneDepth  string         `json:"clond_depth,omitempty"`
+/*
+Job is the struct representation of a build job.  Intended to be
+created with NewJob, but exported so it can be used for tests.
+*/
+type Job struct {
 	Account        string         `json:"account,omitempty"`
+	Archived       time.Time      `json:"archived,omitempty"`
+	Completed      time.Time      `json:"completed,omitempty"`
+	Created        time.Time      `json:"created"`
+	Error          error          `json:"error,omitempty"`
+	GitCloneDepth  string         `json:"clond_depth,omitempty"`
+	GitHubAPIToken string         `json:"-"`
+	ID             string         `json:"id,omitempty"`
+	LogRoute       string         `json:"log_route,omitempty"`
+	Logger         *logrus.Logger `json:"-"`
 	Ref            string         `json:"ref,omitempty"`
 	Repo           string         `json:"repo,omitempty"`
-	Logger         *logrus.Logger `json:"-"`
-	ID             string         `json:"id,omitempty"`
-	infoRoute      string         `json:"-"`
-	LogRoute       string         `json:"log_route,omitempty"`
 	Status         string         `json:"status"`
+	Workdir        string         `json:"-"`
+	infoRoute      string         `json:"-"`
 	logDir         string         `json:"-"`
 	logFile        *os.File       `json:"-"`
-	Created        time.Time      `json:"created"`
-	Completed      time.Time      `json:"completed,omitempty"`
-	Archived       time.Time      `json:"archived,omitempty"`
-	Error          error          `json:"error,omitempty"`
 }
 
 /*
@@ -52,17 +63,23 @@ type JobConfig struct {
 	GitHubAPIToken string
 }
 
+//Logger sets the (global) logger for the server package
+func Logger(l *logrus.Logger) {
+	logger = l
+}
+
 /*
 NewJob creates a new job from the config as well as a job spec.  After creating
 the job, calling job.Process() will actually perform the work.
 */
-func NewJob(cfg *JobConfig, spec *JobSpec) *job {
+func NewJob(cfg *JobConfig, spec *JobSpec) *Job {
+	gen = uuid.NewUUIDGenerator(!TestMode)
 	id, err := gen.NextUUID()
 	if err != nil {
 		cfg.Logger.WithField("error", err).Error("error creating uuid")
 	}
 
-	ret := &job{
+	ret := &Job{
 		ID:             id,
 		Account:        spec.RepoOwner,
 		GitHubAPIToken: spec.GitHubAPIToken,
@@ -73,7 +90,10 @@ func NewJob(cfg *JobConfig, spec *JobSpec) *job {
 		LogRoute:       fmt.Sprintf("/jobs/%s/tail?n=%s", id, defaultTail),
 		logDir:         fmt.Sprintf("%s/%s", cfg.Workdir, id),
 		Status:         "created",
-		Created:        time.Now(),
+	}
+
+	if !TestMode {
+		ret.Created = time.Now()
 	}
 
 	out := io.MultiWriter(os.Stdout)
@@ -111,7 +131,7 @@ func NewJob(cfg *JobConfig, spec *JobSpec) *job {
 	return ret
 }
 
-func (job *job) clone() (string, error) {
+func (job *Job) clone() (string, error) {
 	job.Logger.WithFields(logrus.Fields{
 		"api_token_present":  job.GitHubAPIToken != "",
 		"account":            job.Account,
@@ -169,7 +189,7 @@ func (job *job) clone() (string, error) {
 	return path, nil
 }
 
-func (job *job) build(file string) error {
+func (job *Job) build(file string) error {
 
 	job.Logger.Debug("attempting to create a builder")
 
@@ -191,12 +211,13 @@ Process does the actual job processing work, including:
 	2. build from the Bobfile at the top level
 	3. clean up the cloned repo
 */
-func (job *job) Process() error {
-	defer func() {
-		if job.logFile != nil {
-			job.logFile.Close()
-		}
-	}()
+func (job *Job) Process() error {
+	if TestMode {
+		job.Logger.Warn("job.Process() called in test mode")
+		job.Status = "completed"
+		job.Completed = time.Now()
+		return nil
+	}
 
 	var archive = func() {
 		time.Sleep(time.Duration(KeepLogTimeInSeconds) * time.Second)
@@ -205,6 +226,12 @@ func (job *job) Process() error {
 		job.LogRoute = ""
 		fileutils.Rm(fmt.Sprintf("%s/log.log", job.logDir))
 	}
+
+	defer func() {
+		if job.logFile != nil {
+			job.logFile.Close()
+		}
+	}()
 
 	job.Status = "cloning"
 	// step 1: clone

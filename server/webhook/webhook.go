@@ -68,21 +68,26 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 		GitHubAPIToken: apiToken,
 	}
 
-	job := job.NewJob(jobConfig, spec)
+	j := job.NewJob(jobConfig, spec)
 
 	// if sync
-	if spec.Sync {
-		if err = job.Process(); err != nil {
+	if spec.Sync || job.TestMode {
+		if err = j.Process(); err != nil {
 			logger.WithField("error", err).Error("unable to process job synchronously")
-			return 417, "417 expectation failed"
+			return 417, fmt.Sprintf(`{"error": %q}`, err)
 		}
-		return syncSuccessCode, syncSuccessMessage
+		retBytes, err := json.Marshal(j)
+		if err != nil {
+			return 417, fmt.Sprintf(`{"error": %q}`, err)
+		}
+
+		return syncSuccessCode, string(retBytes)
 	}
 
 	// if async
-	go job.Process()
+	go j.Process()
 
-	retBytes, err := json.Marshal(job)
+	retBytes, err := json.Marshal(j)
 	if err != nil {
 		return 409, fmt.Sprintf(`{"error": %q}`, err)
 	}

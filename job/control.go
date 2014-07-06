@@ -11,7 +11,7 @@ import (
 	"github.com/go-martini/martini"
 )
 
-var jobs = map[string]*job{}
+var jobs = map[string]*Job{}
 
 /*
 TailN is the handler function for the job log tailing route.
