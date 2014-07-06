@@ -24,12 +24,12 @@ func TailN(params martini.Params, req *http.Request) (int, string) {
 		n = defaultTail
 	}
 
-	nInt, err := strconv.Atoi(n)
+	_, err := strconv.Atoi(n)
 	if err != nil {
 		return 400, fmt.Sprintf("%s is not a valid number", n)
 	}
 
-	out, err := tailN(nInt, id)
+	out, err := tailN(n, id)
 	if err != nil {
 		return 412, err.Error()
 	}
@@ -37,7 +37,7 @@ func TailN(params martini.Params, req *http.Request) (int, string) {
 	return 200, out
 }
 
-func tailN(n int, id string) (string, error) {
+func tailN(n, id string) (string, error) {
 	job := jobs[id]
 
 	if job.Status == "archived" {
@@ -45,7 +45,7 @@ func tailN(n int, id string) (string, error) {
 	}
 
 	logFilePath := fmt.Sprintf("%s/log.log", job.logDir)
-	out, err := exec.Command("tail", "-n", fmt.Sprintf("%d", n), logFilePath).Output()
+	out, err := exec.Command("tail", "-n", n, logFilePath).Output()
 
 	return string(out), err
 }
