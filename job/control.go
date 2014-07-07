@@ -2,7 +2,6 @@ package job
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"os/exec"
@@ -39,11 +38,6 @@ func TailN(params martini.Params, req *http.Request) (int, string) {
 
 func tailN(n, id string) (string, error) {
 	job := jobs[id]
-
-	if job.Status == "archived" {
-		return "", errors.New("job is archived, no log file available")
-	}
-
 	logFilePath := fmt.Sprintf("%s/log.log", job.logDir)
 	out, err := exec.Command("tail", "-n", n, logFilePath).Output()
 

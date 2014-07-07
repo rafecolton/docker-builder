@@ -18,7 +18,6 @@ Example Response:
 ```javascript
 {
   "account": "modcloth",
-  "archived": "0001-01-01T00:00:00Z",
   "completed": "0001-01-01T00:00:00Z",
   "created": "2014-07-06T14:02:01.92446296-07:00",
   "id": "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
@@ -45,7 +44,6 @@ Example Response:
 {
   "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3": {
     "account": "modcloth",
-    "archived": "0001-01-01T00:00:00Z",
     "completed": "0001-01-01T00:00:00Z",
     "created": "2014-07-06T14:02:01.92446296-07:00",
     "id": "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
@@ -72,7 +70,6 @@ Example Response:
 ```javascript
 {
   "account": "modcloth",
-  "archived": "0001-01-01T00:00:00Z",
   "completed": "0001-01-01T00:00:00Z",
   "created": "2014-07-06T14:02:01.92446296-07:00",
   "id": "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",

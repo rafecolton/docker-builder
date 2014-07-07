@@ -63,8 +63,6 @@ func Serve(context *cli.Context) {
 		r.Get("", job.GetAll)
 	}, basicAuthFunc)
 
-	job.KeepLogTimeInSeconds = sleepTime
-
 	// start server
 	http.ListenAndServe(portString, server)
 }

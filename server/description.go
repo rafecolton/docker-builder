@@ -8,7 +8,6 @@ Configure through the environment:
 DOCKER_BUILDER_LOGLEVEL             =>     --log-level (global)
 DOCKER_BUILDER_LOGFORMAT            =>     --log-format (global)
 DOCKER_BUILDER_PORT                 =>     --port
-DOCKER_BUILDER_SLEEPTIME            =>     --sleep-time
 DOCKER_BUILDER_APITOKEN             =>     --api-token
 DOCKER_BUILDER_SKIPPUSH             =>     --skip-push
 DOCKER_BUILDER_USERNAME             =>     --username

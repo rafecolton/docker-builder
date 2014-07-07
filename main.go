@@ -34,10 +34,6 @@ func init() {
 		conf.Config.Port = 5000
 	}
 
-	if conf.Config.SleepTime == 0 {
-		conf.Config.SleepTime = 600
-	}
-
 	// set logger defaults
 	Logger = logrus.New()
 	Logger.Formatter = &logrus.TextFormatter{ForceColors: true}
@@ -107,7 +103,6 @@ func main() {
 			Action:      func(c *cli.Context) { server.Logger(Logger); server.Serve(c) },
 			Flags: []cli.Flag{
 				cli.IntFlag{"port, p", conf.Config.Port, "port on which to serve"},
-				cli.IntFlag{"sleep-time", conf.Config.SleepTime, "sleep time, in seconds, before deleting log file"},
 				cli.StringFlag{"api-token, t", "", "GitHub API token"},
 				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
 				cli.StringFlag{"username", "", "username for basic auth"},
