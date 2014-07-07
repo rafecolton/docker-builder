@@ -127,3 +127,7 @@ func (rtoo *realDockerClient) sortedImages() (APIImagesSlice, error) {
 
 	return images, nil
 }
+
+func (rtoo *realDockerClient) TagImage(name string, opts docker.TagImageOptions) error {
+	return rtoo.client.TagImage(name, opts)
+}

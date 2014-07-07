@@ -39,7 +39,7 @@ var _ = Describe("Setup", func() {
 				Excluded:   []string{"spec", "tmp"},
 				Included:   []string{"Gemfile", "Gemfile.lock"},
 			},
-			SubCommand: []exec.Cmd{
+			SubCommand: []interface{}{
 				*&exec.Cmd{
 					Path: "docker",
 					Args: []string{
@@ -52,10 +52,7 @@ var _ = Describe("Setup", func() {
 						".",
 					},
 				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{"docker", "tag", "<IMG>", "quay.io/modcloth/style-gallery:base"},
-				},
+				&parser.TagCmd{Tag: "quay.io/modcloth/style-gallery:base"},
 			},
 		}
 		appSubSequence = &parser.SubSequence{
@@ -65,7 +62,7 @@ var _ = Describe("Setup", func() {
 				Excluded:   []string{"spec", "tmp"},
 				Included:   []string{},
 			},
-			SubCommand: []exec.Cmd{
+			SubCommand: []interface{}{
 				*&exec.Cmd{
 					Path: "docker",
 					Args: []string{
@@ -78,33 +75,9 @@ var _ = Describe("Setup", func() {
 						".",
 					},
 				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{
-						"docker",
-						"tag",
-						"<IMG>",
-						fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
-					},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{
-						"docker",
-						"tag",
-						"<IMG>",
-						fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
-					},
-				},
-				*&exec.Cmd{
-					Path: "docker",
-					Args: []string{
-						"docker",
-						"tag",
-						"<IMG>",
-						fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
-					},
-				},
+				&parser.TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+				&parser.TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+				&parser.TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
 				*&exec.Cmd{
 					Path: "docker",
 					Args: []string{

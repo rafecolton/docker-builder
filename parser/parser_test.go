@@ -144,7 +144,7 @@ var _ = Describe("Parse", func() {
 						Included:   []string{"Gemfile", "Gemfile.lock"},
 						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
-					SubCommand: []exec.Cmd{
+					SubCommand: []interface{}{
 						*&exec.Cmd{
 							Path: "docker",
 							Args: []string{
@@ -157,16 +157,7 @@ var _ = Describe("Parse", func() {
 								".",
 							},
 						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"tag",
-								"--force",
-								"<IMG>",
-								"quay.io/modcloth/style-gallery:base",
-							},
-						},
+						&TagCmd{Tag: "quay.io/modcloth/style-gallery:base"},
 					},
 				},
 				&SubSequence{
@@ -177,7 +168,7 @@ var _ = Describe("Parse", func() {
 						Included:   []string{},
 						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
-					SubCommand: []exec.Cmd{
+					SubCommand: []interface{}{
 						*&exec.Cmd{
 							Path: "docker",
 							Args: []string{
@@ -190,36 +181,9 @@ var _ = Describe("Parse", func() {
 								".",
 							},
 						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"tag",
-								"--force",
-								"<IMG>",
-								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
-							},
-						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"tag",
-								"--force",
-								"<IMG>",
-								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
-							},
-						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"tag",
-								"--force",
-								"<IMG>",
-								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
-							},
-						},
+						&TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
+						&TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
+						&TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
 						*&exec.Cmd{
 							Path: "docker",
 							Args: []string{

@@ -33,10 +33,10 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		Commands: []*SubSequence{},
 	}
 
-	var containerCommands []exec.Cmd
+	var containerCommands []interface{}
 
 	for _, v := range is.Containers {
-		containerCommands = []exec.Cmd{}
+		containerCommands = []interface{}{}
 
 		// ADD BUILD COMMANDS
 		uuid, err := parser.NextUUID()
@@ -75,14 +75,14 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 			tagList = append(tagList, fullTag)
 
-			buildArgs = []string{"docker", "tag"}
-			buildArgs = append(buildArgs, is.DockerTagOpts...)
-			buildArgs = append(buildArgs, "<IMG>", fullTag)
+			tagCmd := &TagCmd{Tag: fullTag}
+			for _, opt := range is.DockerBuildOpts {
+				if opt == "-f" || opt == "--force" {
+					tagCmd.Force = true
+				}
+			}
 
-			containerCommands = append(containerCommands, *&exec.Cmd{
-				Path: "docker",
-				Args: buildArgs,
-			})
+			containerCommands = append(containerCommands, tagCmd)
 		}
 
 		// ADD PUSH COMMANDS

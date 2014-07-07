@@ -12,6 +12,7 @@ type DockerClient interface {
 	LatestImageTaggedWithUUID(uuid string) (string, error)
 	RemoveImage(name string) error
 	LatestRepoTaggedWithUUID(uuid string) (string, error)
+	TagImage(name string, opts docker.TagImageOptions) error
 }
 
 type realDockerClient struct {
@@ -25,9 +26,10 @@ type nullDockerClient struct {
 	*logrus.Logger
 }
 
-/*
-LatestImageTaggedWithUUID is a mandatory method of the DockerClient interface.
-*/
+func (null *nullDockerClient) TagImage(name string, opts docker.TagImageOptions) error {
+	return nil
+}
+
 func (null *nullDockerClient) LatestImageTaggedWithUUID(uuid string) (string, error) {
 	return "abcdef0123456789", nil
 }

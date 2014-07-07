@@ -154,74 +154,68 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 		var err error
 
 		for _, cmd := range seq.SubCommand {
-			cmd.Stdout = bob.Stdout
-			cmd.Stderr = bob.Stderr
-			cmd.Dir = workdir
+			switch cmd.(type) {
+			//case *parser.ExecCmd:
+			case exec.Cmd:
+				cmd := cmd.(exec.Cmd)
+				cmd.Stdout = bob.Stdout
+				cmd.Stderr = bob.Stderr
+				cmd.Dir = workdir
+				if cmd.Path == "docker" {
+					path, err := fileutils.Which("docker")
+					if err != nil {
+						return err
+					}
 
-			if cmd.Path == "docker" {
-				path, err := fileutils.Which("docker")
-				if err != nil {
-					return err
+					cmd.Path = path
 				}
 
-				cmd.Path = path
-			}
+				if cmd.Args[1] == "build" {
+					bob.WithFields(logrus.Fields{
+						"command": strings.Join(cmd.Args, " "),
+					}).Info("running build command")
 
-			switch cmd.Args[1] {
-			case "build":
-				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, " "),
-				}).Info("running build command")
+					if err := cmd.Run(); err != nil {
+						return err
+					}
 
-				if err := cmd.Run(); err != nil {
-					return err
-				}
+					imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
+					if err != nil {
+						return err
+					}
+				} else if cmd.Args[1] == "push" {
+					//do final transformation
+					runnerCmd := makeRunnerCommandForPush(cmd)
 
-				imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
-				if err != nil {
-					return err
-				}
-			case "tag":
-				for k, v := range cmd.Args {
-					if v == "<IMG>" {
-						cmd.Args[k] = imageID
+					if !SkipPush {
+						bob.WithFields(logrus.Fields{
+							"command": strings.Join(cmd.Args, " "),
+						}).Info("running push command")
+
+						//set necessary var
+						WaitForPush = true
+
+						runner.Run(runnerCmd)
+
+					} else {
+						bob.WithFields(logrus.Fields{
+							"key": runnerCmd.Key,
+							"cmd": strings.Join(runnerCmd.Cmd.Args, " "),
+						}).Warn("not running push command")
 					}
 				}
+			case *parser.TagCmd:
+				cmd := cmd.(*parser.TagCmd)
+				cmd.TagFunc = bob.dockerClient.TagImage
+				cmd.Image = imageID
+
 				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, " "),
+					"command": cmd.Message(),
 				}).Info("running tag command")
 
 				if err := cmd.Run(); err != nil {
 					return err
 				}
-			case "push":
-				// do final transformation
-				runnerCmd := makeRunnerCommandForPush(cmd)
-
-				if !SkipPush {
-					// log
-					bob.WithFields(logrus.Fields{
-						"command": strings.Join(cmd.Args, " "),
-					}).Info("running push command")
-
-					// set necessary var
-					WaitForPush = true
-
-					// run
-					runner.Run(runnerCmd)
-
-				} else {
-					bob.WithFields(logrus.Fields{
-						"key": runnerCmd.Key,
-						"cmd": strings.Join(runnerCmd.Cmd.Args, " "),
-					}).Warn("not running push command")
-				}
-			default:
-				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, " "),
-				}).Warn("improperly formatted command")
-
-				return fmt.Errorf("improperly formatted command %q", strings.Join(cmd.Args, " "))
 			}
 		}
 

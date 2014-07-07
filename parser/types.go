@@ -1,11 +1,11 @@
 package parser
 
 import (
-	"os/exec"
-)
+	"strings"
 
-import (
 	"github.com/modcloth/docker-builder/builderfile"
+
+	"github.com/fsouza/go-dockerclient"
 )
 
 /*
@@ -51,5 +51,34 @@ and which files/dirs to exclude.
 */
 type SubSequence struct {
 	Metadata   *SubSequenceMetadata
-	SubCommand []exec.Cmd
+	SubCommand []interface{}
+}
+
+//TagCmd is a wrapper for the docker TagImage functionality
+type TagCmd struct {
+	TagFunc func(name string, opts docker.TagImageOptions) error
+	Image   string
+	Force   bool
+	Tag     string
+}
+
+//Run is the command that actually calls TagImage to do the tagging
+func (t *TagCmd) Run() error {
+	var opts = &docker.TagImageOptions{
+		Force: t.Force,
+		Repo:  t.Tag,
+	}
+	return t.TagFunc(t.Image, *opts)
+}
+
+//Message returns the shell command that would be equivalent to the TagImage command
+func (t *TagCmd) Message() string {
+	msg := []string{"docker", "tag"}
+	if t.Force {
+		msg = append(msg, "--force")
+	}
+	msg = append(msg, t.Image)
+	msg = append(msg, t.Tag)
+
+	return strings.Join(msg, " ")
 }
