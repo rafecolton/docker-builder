@@ -5,6 +5,6 @@ go:
 script: make test
 notifications:
   webhooks:
-    - https://docker-build-server.modcloth.com
+    - https://docker-build-server.modcloth.com/docker-build/travis
   on_success: always
   on_failure: never
