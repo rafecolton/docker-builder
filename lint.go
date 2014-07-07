@@ -4,9 +4,11 @@ import (
 	"github.com/modcloth/docker-builder/parser"
 
 	"github.com/codegangsta/cli"
+	"github.com/onsi/gocleanup"
 )
 
 func lint(c *cli.Context) {
 	par, _ = parser.NewParser(c.Args().First(), Logger)
-	par.AssertLint()
+	exitCode := par.AssertLint()
+	gocleanup.Exit(exitCode)
 }

@@ -1,4 +1,4 @@
-## Why?
+## Motivation for Docker Builder
 
 Bob was created out of the need to more easily build, tag, and push
 layered docker images.  Beyond what a normal `docker build` would offer,

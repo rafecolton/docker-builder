@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/modcloth/docker-builder/parser"
-	"github.com/modcloth/docker-builder/version"
-)
-
-import (
 	"fmt"
 	"os"
+
+	"github.com/modcloth/docker-builder/conf"
+	"github.com/modcloth/docker-builder/parser"
+	"github.com/modcloth/docker-builder/server"
+	"github.com/modcloth/docker-builder/version"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
@@ -19,7 +19,7 @@ import (
 
 var ver = version.NewVersion()
 var par *parser.Parser
-var config Config
+var config = conf.Config
 
 //Logger is the logger for the docker-builder main
 var Logger *logrus.Logger
@@ -33,6 +33,10 @@ func init() {
 	// set default config port
 	if config.Port == 0 {
 		config.Port = 5000
+	}
+
+	if config.SleepTime == 0 {
+		config.SleepTime = 600
 	}
 
 	// set logger defaults
@@ -100,10 +104,11 @@ func main() {
 		{
 			Name:        "serve",
 			Usage:       "serve <options> - start a small HTTP web server for receiving build requests",
-			Description: ServerDescription,
-			Action:      serve,
+			Description: server.Description,
+			Action:      func(c *cli.Context) { server.Logger(Logger); server.Serve(c) },
 			Flags: []cli.Flag{
 				cli.IntFlag{"port, p", config.Port, "port on which to serve"},
+				cli.IntFlag{"sleep-time", config.SleepTime, "sleep time, in seconds, before deleting log file"},
 				cli.StringFlag{"api-token, t", "", "GitHub API token"},
 				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
 				cli.StringFlag{"username", "", "username for basic auth"},

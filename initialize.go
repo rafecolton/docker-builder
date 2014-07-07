@@ -37,12 +37,6 @@ func initialize(c *cli.Context) {
 	}
 	defer outfile.Close()
 
-	// TODO: figure out why this isn't getting written by the toml encoder
-	dockerSectionHeader := []byte("[docker]\n\n")
-	if _, err := outfile.Write(dockerSectionHeader); err != nil {
-		exitErr(127, "unable to write to output file", map[string]interface{}{"output_file": bobfilePath, "error": err})
-	}
-
 	encoder := toml.NewEncoder(outfile)
 	if err = encoder.Encode(file); err != nil {
 		exitErr(123, "unable to write to output file", map[string]interface{}{"output_file": bobfilePath, "error": err})

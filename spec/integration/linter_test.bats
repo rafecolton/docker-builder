@@ -10,7 +10,7 @@
   [ "$status" -eq 5  ]
 }
 
-@test "docker-builder exits 17 when asked to lint an invalid file" {
+@test "docker-builder exits 17 when asked to lint a file that does not exist" {
   run $GOPATH/bin/docker-builder -q lint foo
   [ "$status" -eq 17  ]
 }

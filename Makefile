@@ -6,13 +6,15 @@ PACKAGES := \
   $(B)/analyzer \
   $(B)/builder \
   $(B)/builderfile \
+  $(B)/conf \
   $(B)/dclient \
   $(B)/log \
   $(B)/parser \
   $(B)/parser/tag \
   $(B)/parser/uuid \
-  $(B)/version \
-  $(B)/webhook
+  $(B)/server \
+  $(B)/server/webhook \
+  $(B)/version
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
 BRANCH_VAR := $(B)/version.BranchString

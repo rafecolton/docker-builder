@@ -1,3 +1,5 @@
+version = 1
+
 [docker]
 build_opts = [
   "--rm",
@@ -5,9 +7,7 @@ build_opts = [
 ]
 tag_opts = ["--force"]
 
-[containers]
-
-[containers.global]
+[container_globals]
 excluded = [
   "spec",
   "tmp"
@@ -20,8 +20,8 @@ tags = [
   "git:short"
 ]
 
-
-[containers.base]
+[[container]]
+name = "base"
 Dockerfile = "Dockerfile.base"
 included = [
   "Gemfile",
@@ -30,7 +30,8 @@ included = [
 tags = ["base"]
 skip_push = true
 
-[containers.app]
+[[container]]
+name = "app"
 Dockerfile = "Dockerfile"
 
 # behavior
