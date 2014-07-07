@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/modcloth/docker-builder/conf"
+
 	"github.com/codegangsta/cli"
 )
 
@@ -18,6 +20,7 @@ var travisAuthFunc = func(http.ResponseWriter, *http.Request) {}
 var githubAuthFunc = func(http.ResponseWriter, *http.Request) {}
 
 func setVarsFromContext(c *cli.Context) {
+	config := conf.Config
 	/// lowest priority
 
 	// ENV

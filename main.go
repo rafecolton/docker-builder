@@ -19,24 +19,23 @@ import (
 
 var ver = version.NewVersion()
 var par *parser.Parser
-var config = conf.Config
 
 //Logger is the logger for the docker-builder main
 var Logger *logrus.Logger
 
 func init() {
 	// parse env config
-	if err := envconfig.Process("docker_builder", &config); err != nil {
+	if err := envconfig.Process("docker_builder", &conf.Config); err != nil {
 		Logger.WithField("err", err).Fatal("envconfig error")
 	}
 
 	// set default config port
-	if config.Port == 0 {
-		config.Port = 5000
+	if conf.Config.Port == 0 {
+		conf.Config.Port = 5000
 	}
 
-	if config.SleepTime == 0 {
-		config.SleepTime = 600
+	if conf.Config.SleepTime == 0 {
+		conf.Config.SleepTime = 600
 	}
 
 	// set logger defaults
@@ -54,8 +53,8 @@ func main() {
 		cli.BoolFlag{"rev", "print revision and exit"},
 		cli.BoolFlag{"version-short", "print long version and exit"},
 		cli.BoolFlag{"quiet, q", "produce no output, only exit codes"},
-		cli.StringFlag{"log-level, l", config.LogLevel, "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
-		cli.StringFlag{"log-format, f", config.LogFormat, "log output format (options: text/t, json/j)"},
+		cli.StringFlag{"log-level, l", conf.Config.LogLevel, "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
+		cli.StringFlag{"log-format, f", conf.Config.LogFormat, "log output format (options: text/t, json/j)"},
 	}
 	app.Action = func(c *cli.Context) {
 		ver = version.NewVersion()
@@ -107,8 +106,8 @@ func main() {
 			Description: server.Description,
 			Action:      func(c *cli.Context) { server.Logger(Logger); server.Serve(c) },
 			Flags: []cli.Flag{
-				cli.IntFlag{"port, p", config.Port, "port on which to serve"},
-				cli.IntFlag{"sleep-time", config.SleepTime, "sleep time, in seconds, before deleting log file"},
+				cli.IntFlag{"port, p", conf.Config.Port, "port on which to serve"},
+				cli.IntFlag{"sleep-time", conf.Config.SleepTime, "sleep time, in seconds, before deleting log file"},
 				cli.StringFlag{"api-token, t", "", "GitHub API token"},
 				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
 				cli.StringFlag{"username", "", "username for basic auth"},

@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/modcloth/docker-builder/builder"
-	"github.com/modcloth/docker-builder/conf"
 	"github.com/modcloth/docker-builder/job"
 	"github.com/modcloth/docker-builder/server/webhook"
 
@@ -15,7 +14,7 @@ import (
 )
 
 var logger *logrus.Logger
-var config = conf.Config
+
 var server = martini.Classic()
 
 //Logger sets the (global) logger for the server package
