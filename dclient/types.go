@@ -13,6 +13,7 @@ type DockerClient interface {
 	RemoveImage(name string) error
 	LatestRepoTaggedWithUUID(uuid string) (string, error)
 	TagImage(name string, opts docker.TagImageOptions) error
+	PushImage(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
 }
 
 type realDockerClient struct {
@@ -24,6 +25,10 @@ type realDockerClient struct {
 // returns fixed output, used for testing
 type nullDockerClient struct {
 	*logrus.Logger
+}
+
+func (null *nullDockerClient) PushImage(opts docker.PushImageOptions, auth docker.AuthConfiguration) error {
+	return nil
 }
 
 func (null *nullDockerClient) TagImage(name string, opts docker.TagImageOptions) error {

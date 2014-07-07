@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/modcloth/docker-builder/builderfile"
@@ -60,6 +61,7 @@ type TagCmd struct {
 	Image   string
 	Force   bool
 	Tag     string
+	msg     string
 }
 
 //Run is the command that actually calls TagImage to do the tagging
@@ -73,12 +75,41 @@ func (t *TagCmd) Run() error {
 
 //Message returns the shell command that would be equivalent to the TagImage command
 func (t *TagCmd) Message() string {
-	msg := []string{"docker", "tag"}
-	if t.Force {
-		msg = append(msg, "--force")
+	if t.msg == "" {
+		msg := []string{"docker", "tag"}
+		if t.Force {
+			msg = append(msg, "--force")
+		}
+		msg = append(msg, t.Image)
+		msg = append(msg, t.Tag)
+		t.msg = strings.Join(msg, " ")
 	}
-	msg = append(msg, t.Image)
-	msg = append(msg, t.Tag)
 
-	return strings.Join(msg, " ")
+	return t.msg
+}
+
+type PushCmd struct {
+	PushFunc  func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
+	Image     string
+	Registry  string
+	AuthUn    string
+	AuthPwd   string
+	AuthEmail string
+}
+
+func (p *PushCmd) Run() error {
+	auth := &docker.AuthConfiguration{
+		Username: p.AuthUn,
+		Password: p.AuthPwd,
+		Email:    p.AuthEmail,
+	}
+	opts := &docker.PushImageOptions{
+		Name:     p.Image,
+		Registry: p.Registry,
+	}
+	return p.PushFunc(*opts, *auth)
+}
+
+func (p *PushCmd) Message() string {
+	return fmt.Sprintf("docker push %s", p.Image)
 }

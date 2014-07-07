@@ -88,12 +88,17 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		// ADD PUSH COMMANDS
 		if !v.SkipPush {
 			for _, fullTag := range tagList {
-				buildArgs = []string{"docker", "push", fullTag}
+				pushCmd := &PushCmd{
+					Registry: "quay.io",
+				}
 
-				containerCommands = append(containerCommands, *&exec.Cmd{
-					Path: "docker",
-					Args: buildArgs,
-				})
+				//buildArgs = []string{"docker", "push", fullTag}
+				containerCommands = append(containerCommands, pushCmd)
+
+				//containerCommands = append(containerCommands, *&exec.Cmd{
+				//Path: "docker",
+				//Args: buildArgs,
+				//})
 			}
 		}
 

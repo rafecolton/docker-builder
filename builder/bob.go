@@ -216,6 +216,17 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				if err := cmd.Run(); err != nil {
 					return err
 				}
+			case *parser.PushCmd:
+				cmd := cmd.(*parser.PushCmd)
+				cmd.PushFunc = bob.dockerClient.PushImage
+
+				bob.WithFields(logrus.Fields{
+					"command": cmd.Message(),
+				}).Info("running push command")
+
+				if err := cmd.Run(); err != nil {
+					return err
+				}
 			}
 		}
 
