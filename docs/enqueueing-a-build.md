@@ -19,7 +19,6 @@ curl -XPOST -H 'Content-Type: application/json' 'http://localhost:5000/docker-bu
 ```javascript
 {
   "account": "my-account",
-  "archived": "0001-01-01T00:00:00Z",
   "completed": "0001-01-01T00:00:00Z",
   "created": "2014-07-06T14:02:01.92446296-07:00",
   "id": "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",

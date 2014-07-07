@@ -10,7 +10,7 @@ import (
 )
 
 var apiToken, githubSecret, portString, pwd, travisToken, un string
-var port, sleepTime int
+var port int
 var skipPush bool
 var shouldTravis, shouldGitHub bool
 var shouldBasicAuth, shouldTravisAuth, shouldGitHubAuth bool
@@ -30,7 +30,6 @@ func setVarsFromContext(c *cli.Context) {
 	travisToken = config.TravisToken
 	githubSecret = config.GitHubSecret
 	port = config.Port
-	sleepTime = config.SleepTime
 
 	// command line
 	cliUn := c.String("username")
@@ -39,11 +38,6 @@ func setVarsFromContext(c *cli.Context) {
 	cliTravisToken := c.String("travis-token")
 	cliGitHubSecret := c.String("github-secret")
 	cliPort := c.Int("port")
-	cliSleepTime := c.Int("sleep-time")
-
-	if cliSleepTime != config.SleepTime {
-		sleepTime = cliSleepTime
-	}
 
 	if cliTravisToken != "" {
 		travisToken = cliTravisToken
