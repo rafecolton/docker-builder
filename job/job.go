@@ -35,7 +35,7 @@ type Job struct {
 	Completed      time.Time      `json:"completed,omitempty"`
 	Created        time.Time      `json:"created"`
 	Error          error          `json:"error,omitempty"`
-	GitCloneDepth  string         `json:"clond_depth,omitempty"`
+	GitCloneDepth  string         `json:"clone_depth,omitempty"`
 	GitHubAPIToken string         `json:"-"`
 	ID             string         `json:"id,omitempty"`
 	LogRoute       string         `json:"log_route,omitempty"`
