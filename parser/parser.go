@@ -18,7 +18,7 @@ tell if the Builderfile is valid (openable) or nat.
 type Parser struct {
 	filename string
 	*logrus.Logger
-	uuidGenerator uuid.UUIDGenerator
+	uuidGenerator uuid.Generator
 	top           string
 }
 

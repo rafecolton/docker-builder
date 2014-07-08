@@ -30,7 +30,7 @@ type travisPayload struct {
 }
 
 /*
-Travis parses a webhook HTTP request from Travis CI and returns a JobSpec.
+Travis parses a webhook HTTP request from Travis CI and returns a job.Spec
 */
 func Travis(w http.ResponseWriter, req *http.Request) (int, string) {
 	payloadBody := req.FormValue("payload")
@@ -57,7 +57,7 @@ func Travis(w http.ResponseWriter, req *http.Request) (int, string) {
 		return 409, "409 conflict"
 	}
 
-	spec := &job.JobSpec{
+	spec := &job.Spec{
 		RepoOwner: payload.Repository.Owner,
 		RepoName:  payload.Repository.Name,
 		GitRef:    payload.CommitSHA,

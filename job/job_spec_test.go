@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 )
 
-var _ = Describe("NewJobSpec()", func() {
+var _ = Describe("NewSpec()", func() {
 	var (
 		args interface{}
 	)
@@ -19,7 +19,7 @@ var _ = Describe("NewJobSpec()", func() {
 			  "repo": "kamino-test",
 			  "ref": "master"
 			}`)
-			spec, err := NewJobSpec(args)
+			spec, err := NewSpec(args)
 
 			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
@@ -30,7 +30,7 @@ var _ = Describe("NewJobSpec()", func() {
 			  "account": "modcloth-labs",
 			  "ref": "master"
 			}`)
-			spec, err := NewJobSpec(args)
+			spec, err := NewSpec(args)
 
 			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
@@ -38,7 +38,7 @@ var _ = Describe("NewJobSpec()", func() {
 
 		It("returns an error when args are empty", func() {
 			emptyArgs := []interface{}{}
-			spec, err := NewJobSpec(emptyArgs...)
+			spec, err := NewSpec(emptyArgs...)
 
 			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
@@ -49,7 +49,7 @@ var _ = Describe("NewJobSpec()", func() {
 			  "account": "modcloth-labs",
 			  "repo": "kamino-test"
 			}`)
-			spec, err := NewJobSpec(args)
+			spec, err := NewSpec(args)
 
 			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
@@ -57,7 +57,7 @@ var _ = Describe("NewJobSpec()", func() {
 
 		It("returns an error when provided args are not valid json", func() {
 			args = makeArg(`foo`)
-			spec, err := NewJobSpec(args)
+			spec, err := NewSpec(args)
 
 			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
@@ -71,7 +71,7 @@ var _ = Describe("NewJobSpec()", func() {
 			  "repo": "kamino-test",
 			  "ref": "master"
 			}`)
-			spec, err := NewJobSpec(args)
+			spec, err := NewSpec(args)
 
 			Expect(spec).ToNot(BeNil())
 			Expect(err).To(BeNil())

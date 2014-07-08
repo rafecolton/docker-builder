@@ -23,7 +23,7 @@ var TestMode bool
 
 const defaultTail = "100"
 
-var gen uuid.UUIDGenerator
+var gen uuid.Generator
 var logger *logrus.Logger
 
 /*
@@ -50,9 +50,9 @@ type Job struct {
 }
 
 /*
-JobConfig contains global configuration options for jobs
+Config contains global configuration options for jobs
 */
-type JobConfig struct {
+type Config struct {
 	Workdir        string
 	Logger         *logrus.Logger
 	GitHubAPIToken string
@@ -67,7 +67,7 @@ func Logger(l *logrus.Logger) {
 NewJob creates a new job from the config as well as a job spec.  After creating
 the job, calling job.Process() will actually perform the work.
 */
-func NewJob(cfg *JobConfig, spec *JobSpec) *Job {
+func NewJob(cfg *Config, spec *Spec) *Job {
 	gen = uuid.NewUUIDGenerator(!TestMode)
 	id, err := gen.NextUUID()
 	if err != nil {

@@ -6,9 +6,9 @@ import (
 )
 
 /*
-JobSpec contains the specs for a job, retrieved from parsed JSON
+Spec contains the specs for a job, retrieved from parsed JSON
 */
-type JobSpec struct {
+type Spec struct {
 	RepoOwner      string `json:"account"`
 	RepoName       string `json:"repo"`
 	GitRef         string `json:"ref"`
@@ -18,17 +18,17 @@ type JobSpec struct {
 }
 
 /*
-NewJobSpec creates a new job spec based on the arguments that would be passed
+NewSpec creates a new job spec based on the arguments that would be passed
 along from the job goworker picks up from Redis.
 */
-func NewJobSpec(args ...interface{}) (*JobSpec, error) {
+func NewSpec(args ...interface{}) (*Spec, error) {
 	return extractJobSpecFromRawArgs(args...)
 }
 
 /*
 Validate checks that required fields are present in the spec.
 */
-func (spec *JobSpec) Validate() error {
+func (spec *Spec) Validate() error {
 
 	if spec.RepoOwner == "" {
 		return errors.New("account must be provided for job spec")
@@ -45,8 +45,8 @@ func (spec *JobSpec) Validate() error {
 	return nil
 }
 
-func extractJobSpecFromRawArgs(args ...interface{}) (*JobSpec, error) {
-	var ret = &JobSpec{}
+func extractJobSpecFromRawArgs(args ...interface{}) (*Spec, error) {
+	var ret = &Spec{}
 
 	if len(args) < 1 {
 		return nil, errors.New("a single build spec object argument is required")

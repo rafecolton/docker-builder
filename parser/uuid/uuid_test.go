@@ -14,8 +14,8 @@ func TestBuilder(t *testing.T) {
 
 var _ = Describe("GenerateUUID", func() {
 	var (
-		seeded UUIDGenerator
-		random UUIDGenerator
+		seeded Generator
+		random Generator
 	)
 
 	Context("with a random uuid generator", func() {
