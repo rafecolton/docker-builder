@@ -9,6 +9,7 @@ import (
 
 	"github.com/modcloth/docker-builder/builder"
 	"github.com/modcloth/docker-builder/parser/uuid"
+	"github.com/modcloth/queued-command-runner"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/modcloth/go-fileutils"
@@ -233,6 +234,14 @@ func (job *Job) Process() error {
 	job.Status = "building"
 	// step 2: build
 	if err = job.build(filepath.Join(path, "Bobfile")); err != nil {
+		job.Status = "errored"
+		job.Error = err
+		return err
+	}
+
+	select {
+	case <-runner.Done:
+	case err := <-runner.Errors:
 		job.Status = "errored"
 		job.Error = err
 		return err
