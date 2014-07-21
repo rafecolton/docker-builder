@@ -39,7 +39,7 @@ func TestMode(b bool) {
 	testMode = b
 }
 
-func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Request) (int, string) {
+func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) (int, string) {
 	// If tests are running, don't actually attempt to build containers, just return success.
 	// This is meant to allow testing ot the HTTP interactions for the webhooks
 	if testMode {
@@ -62,7 +62,7 @@ func processJobHelper(spec *job.JobSpec, w http.ResponseWriter, req *http.Reques
 		fileutils.RmRF(workdir)
 	})
 
-	jobConfig := &job.JobConfig{
+	jobConfig := &job.Config{
 		Logger:         logger,
 		Workdir:        workdir,
 		GitHubAPIToken: apiToken,

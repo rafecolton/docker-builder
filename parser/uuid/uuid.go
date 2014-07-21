@@ -12,10 +12,10 @@ type seededUUIDGenerator struct {
 }
 
 /*
-A UUIDGenerator generates uuids either randomly or the same one every time (for
+A Generator generates uuids either randomly or the same one every time (for
 test purposes)
 */
-type UUIDGenerator interface {
+type Generator interface {
 	NextUUID() (string, error)
 }
 
@@ -24,7 +24,7 @@ NewUUIDGenerator returns a UUIDGenerator.  If passed (true), the generator will
 produce a unique uuid every time.  If passed (false), the generator will
 produce the same uuid every time.
 */
-func NewUUIDGenerator(random bool) UUIDGenerator {
+func NewUUIDGenerator(random bool) Generator {
 	if random {
 		return &randomUUIDGenerator{}
 	}

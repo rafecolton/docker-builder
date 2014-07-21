@@ -101,18 +101,11 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 }
 
 /*
-BuilderLogger is an accessor method for bob's internal logger
-*/
-func (bob *Builder) BuilderLogger() *logrus.Logger {
-	return bob.Logger
-}
-
-/*
 BuildFromFile combines Build() with parser.Parse() to reduce the number of
 steps needed to build with bob programatically.
 */
 func (bob *Builder) BuildFromFile(file string) error {
-	par, err := parser.NewParser(file, bob.BuilderLogger())
+	par, err := parser.NewParser(file, bob.Logger)
 	if err != nil {
 		return err
 	}

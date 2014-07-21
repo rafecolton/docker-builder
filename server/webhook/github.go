@@ -29,7 +29,7 @@ type githubPushPayload struct {
 }
 
 /*
-Github parses a Github webhook HTTP request and returns a JobSpec.
+Github parses a Github webhook HTTP request and returns a job.Spec.
 */
 func Github(w http.ResponseWriter, req *http.Request) (int, string) {
 	event := req.Header.Get("X-Github-Event")
@@ -49,7 +49,7 @@ func Github(w http.ResponseWriter, req *http.Request) (int, string) {
 		return 400, "400 bad request"
 	}
 
-	spec := &job.JobSpec{
+	spec := &job.Spec{
 		RepoOwner: payload.Repository.Owner.Name,
 		RepoName:  payload.Repository.Name,
 		GitRef:    payload.CommitSHA,

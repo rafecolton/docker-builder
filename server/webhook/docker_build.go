@@ -9,7 +9,7 @@ import (
 )
 
 /*
-DockerBuild parses a simple JSON blob returns a JobSpec
+DockerBuild parses a simple JSON blob returns a job.Spec
 */
 func DockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
 	// TODO: check content type
@@ -20,7 +20,7 @@ func DockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
 		return 400, "400 bad request"
 	}
 
-	var spec = &job.JobSpec{}
+	var spec = &job.Spec{}
 	if err = json.Unmarshal([]byte(body), spec); err != nil {
 		return 400, "400 bad request"
 	}

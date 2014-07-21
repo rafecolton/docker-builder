@@ -23,12 +23,8 @@ var TestMode bool
 
 const defaultTail = "100"
 
-var gen uuid.UUIDGenerator
+var gen uuid.Generator
 var logger *logrus.Logger
-
-//KeepLogTimeInSeconds is the number of seconds to wait before deleting a job's
-//logfile and marking it "archived".
-var KeepLogTimeInSeconds = 600
 
 /*
 Job is the struct representation of a build job.  Intended to be
@@ -36,11 +32,10 @@ created with NewJob, but exported so it can be used for tests.
 */
 type Job struct {
 	Account        string         `json:"account,omitempty"`
-	Archived       time.Time      `json:"archived,omitempty"`
 	Completed      time.Time      `json:"completed,omitempty"`
 	Created        time.Time      `json:"created"`
 	Error          error          `json:"error,omitempty"`
-	GitCloneDepth  string         `json:"clond_depth,omitempty"`
+	GitCloneDepth  string         `json:"clone_depth,omitempty"`
 	GitHubAPIToken string         `json:"-"`
 	ID             string         `json:"id,omitempty"`
 	LogRoute       string         `json:"log_route,omitempty"`
@@ -55,9 +50,9 @@ type Job struct {
 }
 
 /*
-JobConfig contains global configuration options for jobs
+Config contains global configuration options for jobs
 */
-type JobConfig struct {
+type Config struct {
 	Workdir        string
 	Logger         *logrus.Logger
 	GitHubAPIToken string
@@ -72,7 +67,7 @@ func Logger(l *logrus.Logger) {
 NewJob creates a new job from the config as well as a job spec.  After creating
 the job, calling job.Process() will actually perform the work.
 */
-func NewJob(cfg *JobConfig, spec *JobSpec) *Job {
+func NewJob(cfg *Config, spec *Spec) *Job {
 	gen = uuid.NewUUIDGenerator(!TestMode)
 	id, err := gen.NextUUID()
 	if err != nil {
@@ -220,14 +215,6 @@ func (job *Job) Process() error {
 		return job.processTestMode()
 	}
 
-	var archive = func() {
-		time.Sleep(time.Duration(KeepLogTimeInSeconds) * time.Second)
-		job.Status = "archived"
-		job.Archived = time.Now()
-		job.LogRoute = ""
-		fileutils.Rm(fmt.Sprintf("%s/log.log", job.logDir))
-	}
-
 	defer func() {
 		if job.logFile != nil {
 			job.logFile.Close()
@@ -240,7 +227,6 @@ func (job *Job) Process() error {
 	if err != nil {
 		job.Status = "errored"
 		job.Error = err
-		go archive()
 		return err
 	}
 
@@ -249,14 +235,12 @@ func (job *Job) Process() error {
 	if err = job.build(filepath.Join(path, "Bobfile")); err != nil {
 		job.Status = "errored"
 		job.Error = err
-		go archive()
 		return err
 	}
 
 	job.Status = "completed"
 	job.Completed = time.Now()
 	fileutils.RmRF(path)
-	go archive()
 	return nil
 }
 

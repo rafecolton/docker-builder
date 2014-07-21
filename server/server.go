@@ -2,9 +2,9 @@ package server
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/modcloth/docker-builder/builder"
-	"github.com/modcloth/docker-builder/conf"
 	"github.com/modcloth/docker-builder/job"
 	"github.com/modcloth/docker-builder/server/webhook"
 
@@ -15,8 +15,10 @@ import (
 )
 
 var logger *logrus.Logger
-var config = conf.Config
-var server = martini.Classic()
+var server *martini.ClassicMartini
+var skipLogging = map[string]bool{
+	"/health": true,
+}
 
 //Logger sets the (global) logger for the server package
 func Logger(l *logrus.Logger) {
@@ -45,6 +47,9 @@ func Serve(context *cli.Context) {
 	// configure webhooks
 	webhook.Logger(logger)
 	webhook.APIToken(apiToken)
+
+	server = setupServer()
+
 	if shouldTravis {
 		server.Post("/docker-build/travis", travisAuthFunc, webhook.Travis)
 	}
@@ -64,8 +69,39 @@ func Serve(context *cli.Context) {
 		r.Get("", job.GetAll)
 	}, basicAuthFunc)
 
-	job.KeepLogTimeInSeconds = sleepTime
-
 	// start server
 	http.ListenAndServe(portString, server)
+}
+
+func setupServer() *martini.ClassicMartini {
+	router := martini.NewRouter()
+	server := martini.New()
+	server.Use(martini.Recovery())
+	server.Use(requestLogger)
+	server.MapTo(router, (*martini.Routes)(nil))
+	server.Action(router.Handle)
+	return &martini.ClassicMartini{server, router}
+}
+
+func requestLogger(res http.ResponseWriter, req *http.Request, c martini.Context) {
+	if skipLogging[req.URL.Path] {
+		return
+	}
+
+	start := time.Now()
+
+	addr := req.Header.Get("X-Real-IP")
+	if addr == "" {
+		addr = req.Header.Get("X-Forwarded-For")
+		if addr == "" {
+			addr = req.RemoteAddr
+		}
+	}
+
+	logger.Printf("Started %s %s for %s", req.Method, req.URL.Path, addr)
+
+	rw := res.(martini.ResponseWriter)
+	c.Next()
+
+	logger.Printf("Completed %v %s in %v\n", rw.Status(), http.StatusText(rw.Status()), time.Since(start))
 }
