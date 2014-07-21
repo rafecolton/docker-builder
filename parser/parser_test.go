@@ -157,7 +157,10 @@ var _ = Describe("Parse", func() {
 								".",
 							},
 						},
-						&TagCmd{Tag: "quay.io/modcloth/style-gallery:base"},
+						&TagCmd{
+							Repo: "quay.io/modcloth/style-gallery",
+							Tag:  "base",
+						},
 					},
 				},
 				&SubSequence{
@@ -181,32 +184,32 @@ var _ = Describe("Parse", func() {
 								".",
 							},
 						},
-						&TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch)},
-						&TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev)},
-						&TagCmd{Tag: fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short)},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"push",
-								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", branch),
-							},
+						&TagCmd{
+							Repo: "quay.io/modcloth/style-gallery",
+							Tag:  branch,
 						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"push",
-								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", rev),
-							},
+						&TagCmd{
+							Repo: "quay.io/modcloth/style-gallery",
+							Tag:  rev,
 						},
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"push",
-								fmt.Sprintf("quay.io/modcloth/style-gallery:%s", short),
-							},
+						&TagCmd{
+							Repo: "quay.io/modcloth/style-gallery",
+							Tag:  short,
+						},
+						&PushCmd{
+							Image:    "quay.io/modcloth/style-gallery",
+							Tag:      branch,
+							Registry: "quay.io/modcloth",
+						},
+						&PushCmd{
+							Image:    "quay.io/modcloth/style-gallery",
+							Tag:      rev,
+							Registry: "quay.io/modcloth",
+						},
+						&PushCmd{
+							Image:    "quay.io/modcloth/style-gallery",
+							Tag:      short,
+							Registry: "quay.io/modcloth",
 						},
 					},
 				},
