@@ -2,7 +2,7 @@ package dclient
 
 import (
 	"github.com/Sirupsen/logrus"
-	"github.com/modcloth/go-dockerclient"
+	"github.com/fsouza/go-dockerclient"
 )
 
 /*

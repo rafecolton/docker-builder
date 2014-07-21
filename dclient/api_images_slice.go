@@ -1,6 +1,6 @@
 package dclient
 
-import "github.com/modcloth/go-dockerclient"
+import "github.com/fsouza/go-dockerclient"
 
 /*
 APIImagesSlice is a type that wraps []docker.APIImages so that it can be sorted

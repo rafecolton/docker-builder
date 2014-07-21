@@ -7,7 +7,7 @@ import (
 
 	"github.com/modcloth/docker-builder/builderfile"
 
-	"github.com/modcloth/go-dockerclient"
+	"github.com/fsouza/go-dockerclient"
 )
 
 /*
