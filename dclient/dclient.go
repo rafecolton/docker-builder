@@ -7,7 +7,7 @@ import (
 	"sort"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/fsouza/go-dockerclient"
+	"github.com/modcloth/go-dockerclient"
 )
 
 /*

@@ -6,7 +6,7 @@ import (
 
 	"github.com/modcloth/docker-builder/builderfile"
 
-	"github.com/fsouza/go-dockerclient"
+	"github.com/modcloth/go-dockerclient"
 )
 
 /*
@@ -61,6 +61,7 @@ type TagCmd struct {
 	Image   string
 	Force   bool
 	Tag     string
+	Repo    string
 	msg     string
 }
 
@@ -68,7 +69,8 @@ type TagCmd struct {
 func (t *TagCmd) Run() error {
 	var opts = &docker.TagImageOptions{
 		Force: t.Force,
-		Repo:  t.Tag,
+		Repo:  t.Repo,
+		Tag:   t.Tag,
 	}
 	return t.TagFunc(t.Image, *opts)
 }
@@ -81,7 +83,7 @@ func (t *TagCmd) Message() string {
 			msg = append(msg, "--force")
 		}
 		msg = append(msg, t.Image)
-		msg = append(msg, t.Tag)
+		msg = append(msg, fmt.Sprintf("%s:%s", t.Repo, t.Tag))
 		t.msg = strings.Join(msg, " ")
 	}
 
@@ -91,6 +93,7 @@ func (t *TagCmd) Message() string {
 type PushCmd struct {
 	PushFunc  func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
 	Image     string
+	Tag       string
 	Registry  string
 	AuthUn    string
 	AuthPwd   string
@@ -105,11 +108,12 @@ func (p *PushCmd) Run() error {
 	}
 	opts := &docker.PushImageOptions{
 		Name:     p.Image,
+		Tag:      p.Tag,
 		Registry: p.Registry,
 	}
 	return p.PushFunc(*opts, *auth)
 }
 
 func (p *PushCmd) Message() string {
-	return fmt.Sprintf("docker push %s", p.Image)
+	return fmt.Sprintf("docker push %s:%s", p.Image, p.Tag)
 }

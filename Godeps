@@ -25,7 +25,12 @@
 			"Rev": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39"
 		},
 		{
-			"ImportPath": "github.com/fsouza/go-dockerclient",
+			"ImportPath": "github.com/fsouza/go-dockerclient/engine",
+			"Comment": "0.2.1-169-ge21b2a4",
+			"Rev": "e21b2a4562b3ec0731c54e59ab56c41c79067e12"
+		},
+		{
+			"ImportPath": "github.com/fsouza/go-dockerclient/utils",
 			"Comment": "0.2.1-169-ge21b2a4",
 			"Rev": "e21b2a4562b3ec0731c54e59ab56c41c79067e12"
 		},
@@ -46,6 +51,11 @@
 		{
 			"ImportPath": "github.com/modcloth/auth",
 			"Rev": "3f96c83d4d504fb0804967df1d55b96e69817f38"
+		},
+		{
+			"ImportPath": "github.com/modcloth/go-dockerclient",
+			"Comment": "0.2.1-180-ga19e4e5",
+			"Rev": "a19e4e516017a6f70e2b8142af52731b7489776f"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",

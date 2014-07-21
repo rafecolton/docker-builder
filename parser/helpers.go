@@ -55,7 +55,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			Args: buildArgs,
 		})
 
-		var tagList = []string{}
+		var tagList = [][2]string{}
 
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {
@@ -71,11 +71,14 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				tagObj = tag.NewTag("default", tagArg)
 			}
 
-			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
+			fullTag := [2]string{name, tagObj.Tag()}
 
 			tagList = append(tagList, fullTag)
 
-			tagCmd := &TagCmd{Tag: fullTag}
+			tagCmd := &TagCmd{
+				Repo: fullTag[0],
+				Tag:  fullTag[1],
+			}
 			for _, opt := range is.DockerBuildOpts {
 				if opt == "-f" || opt == "--force" {
 					tagCmd.Force = true
@@ -89,16 +92,12 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		if !v.SkipPush {
 			for _, fullTag := range tagList {
 				pushCmd := &PushCmd{
+					Image: fullTag[0],
+					Tag:   fullTag[1],
 					Registry: "quay.io",
 				}
 
-				//buildArgs = []string{"docker", "push", fullTag}
 				containerCommands = append(containerCommands, pushCmd)
-
-				//containerCommands = append(containerCommands, *&exec.Cmd{
-				//Path: "docker",
-				//Args: buildArgs,
-				//})
 			}
 		}
 
