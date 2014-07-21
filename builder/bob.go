@@ -212,6 +212,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 			case *parser.PushCmd:
 				cmd := cmd.(*parser.PushCmd)
 				cmd.PushFunc = bob.dockerClient.PushImage
+				cmd.OutputStream = bob.Stdout
 
 				bob.WithFields(logrus.Fields{
 					"command": cmd.Message(),

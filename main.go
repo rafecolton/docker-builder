@@ -51,6 +51,9 @@ func main() {
 		cli.BoolFlag{"quiet, q", "produce no output, only exit codes"},
 		cli.StringFlag{"log-level, l", conf.Config.LogLevel, "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
 		cli.StringFlag{"log-format, f", conf.Config.LogFormat, "log output format (options: text/t, json/j)"},
+		cli.StringFlag{"dockercfg-un", conf.Config.CfgUn, "Docker registry username"},
+		cli.StringFlag{"dockercfg-pass", conf.Config.CfgPass, "Docker registry password"},
+		cli.StringFlag{"dockercfg-email", conf.Config.CfgEmail, "Docker registry email"},
 	}
 	app.Action = func(c *cli.Context) {
 		ver = version.NewVersion()

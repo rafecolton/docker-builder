@@ -10,12 +10,21 @@ type Conf struct {
 	LogFormat string
 	APIToken  string
 	SkipPush  bool
+
 	// for basic auth
 	Username string
 	Password string
+
 	// for travis auth
-	TravisToken  string
+	TravisToken string
+	NoTravis    bool
+
+	// for github auth
 	GitHubSecret string
-	NoTravis     bool
 	NoGitHub     bool
+
+	// docker registry credentials
+	CfgUn    string
+	CfgPass  string
+	CfgEmail string
 }

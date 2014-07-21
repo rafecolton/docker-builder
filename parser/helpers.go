@@ -8,6 +8,7 @@ import (
 
 import (
 	"github.com/modcloth/docker-builder/builderfile"
+	"github.com/modcloth/docker-builder/conf"
 	"github.com/modcloth/docker-builder/parser/tag"
 )
 
@@ -92,9 +93,12 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		if !v.SkipPush {
 			for _, fullTag := range tagList {
 				pushCmd := &PushCmd{
-					Image: fullTag[0],
-					Tag:   fullTag[1],
-					Registry: "quay.io",
+					Image:     fullTag[0],
+					Tag:       fullTag[1],
+					AuthUn:    conf.Config.CfgUn,
+					AuthPwd:   conf.Config.CfgPass,
+					AuthEmail: conf.Config.CfgEmail,
+					Registry:  v.Registry,
 				}
 
 				containerCommands = append(containerCommands, pushCmd)

@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/modcloth/docker-builder/builderfile"
@@ -91,13 +92,14 @@ func (t *TagCmd) Message() string {
 }
 
 type PushCmd struct {
-	PushFunc  func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
-	Image     string
-	Tag       string
-	Registry  string
-	AuthUn    string
-	AuthPwd   string
-	AuthEmail string
+	PushFunc     func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
+	Image        string
+	Tag          string
+	Registry     string
+	AuthUn       string
+	AuthPwd      string
+	AuthEmail    string
+	OutputStream io.Writer
 }
 
 func (p *PushCmd) Run() error {
@@ -107,9 +109,10 @@ func (p *PushCmd) Run() error {
 		Email:    p.AuthEmail,
 	}
 	opts := &docker.PushImageOptions{
-		Name:     p.Image,
-		Tag:      p.Tag,
-		Registry: p.Registry,
+		Name:         p.Image,
+		Tag:          p.Tag,
+		Registry:     p.Registry,
+		OutputStream: p.OutputStream,
 	}
 	return p.PushFunc(*opts, *auth)
 }
