@@ -91,6 +91,7 @@ func (t *TagCmd) Message() string {
 	return t.msg
 }
 
+//PushCmd is a wrapper for the docker PushImage functionality
 type PushCmd struct {
 	PushFunc     func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
 	Image        string
@@ -102,6 +103,7 @@ type PushCmd struct {
 	OutputStream io.Writer
 }
 
+//Run is the command that actually calls PushImage to do the pushing
 func (p *PushCmd) Run() error {
 	auth := &docker.AuthConfiguration{
 		Username: p.AuthUn,
@@ -117,6 +119,7 @@ func (p *PushCmd) Run() error {
 	return p.PushFunc(*opts, *auth)
 }
 
+//Message returns the shell command that would be equivalent to the PushImage command
 func (p *PushCmd) Message() string {
 	return fmt.Sprintf("docker push %s:%s", p.Image, p.Tag)
 }
