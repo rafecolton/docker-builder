@@ -163,39 +163,17 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					cmd.Path = path
 				}
 
-				if cmd.Args[1] == "build" {
-					bob.WithFields(logrus.Fields{
-						"command": strings.Join(cmd.Args, " "),
-					}).Info("running build command")
+				bob.WithFields(logrus.Fields{
+					"command": strings.Join(cmd.Args, " "),
+				}).Info("running build command")
 
-					if err := cmd.Run(); err != nil {
-						return err
-					}
+				if err := cmd.Run(); err != nil {
+					return err
+				}
 
-					imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
-					if err != nil {
-						return err
-					}
-				} else if cmd.Args[1] == "push" {
-					//do final transformation
-					runnerCmd := makeRunnerCommandForPush(cmd)
-
-					if !SkipPush {
-						bob.WithFields(logrus.Fields{
-							"command": strings.Join(cmd.Args, " "),
-						}).Info("running push command")
-
-						//set necessary var
-						WaitForPush = true
-
-						runner.Run(runnerCmd)
-
-					} else {
-						bob.WithFields(logrus.Fields{
-							"key": runnerCmd.Key,
-							"cmd": strings.Join(runnerCmd.Cmd.Args, " "),
-						}).Warn("not running push command")
-					}
+				imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
+				if err != nil {
+					return err
 				}
 			case *parser.TagCmd:
 				cmd := cmd.(*parser.TagCmd)
