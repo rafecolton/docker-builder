@@ -20,19 +20,10 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/hishboy/gocommons/lang"
 	"github.com/modcloth/go-fileutils"
-	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 )
 
 var imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
-
-/*
-WaitForPush indicates to main() that a `docker push` command has been
-started.  Since those are run asynchronously, main() has to wait on the
-runner.Done channel.  However, if the build does not require a push, we
-don't want to wait or we'll just be stuck forever.
-*/
-var WaitForPush bool
 
 /*
 SkipPush, when set to true, will override any behavior set by a Bobfile and
@@ -216,24 +207,6 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 	}
 
 	return nil
-}
-
-func makeRunnerCommandForPush(cmd exec.Cmd) *runner.Command {
-
-	imageGiven := cmd.Args[2]
-	matches := imageWithTagRegex.FindStringSubmatch(imageGiven)
-
-	// if image includes a tag
-	if len(matches) >= 3 {
-		return &runner.Command{
-			Cmd: &cmd,
-			Key: matches[1], // image without tag
-		}
-	}
-
-	return &runner.Command{
-		Cmd: &cmd,
-	}
 }
 
 /*

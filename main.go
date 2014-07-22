@@ -13,7 +13,6 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/modcloth/kamino"
-	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 )
 
@@ -72,7 +71,6 @@ func main() {
 		logFormat := c.String("log-format")
 
 		setLogger(logLevel, logFormat)
-		runner.Logger = Logger
 		kamino.Logger = Logger
 
 		return nil

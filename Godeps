@@ -57,11 +57,6 @@
 			"Rev": "9ca92fa5b1ff549157054972ce16c9faa43df87a"
 		},
 		{
-			"ImportPath": "github.com/modcloth/queued-command-runner",
-			"Comment": "v0.2.3-1-g5334e5b",
-			"Rev": "5334e5b5279c9144df6122689eb049dd27e1440b"
-		},
-		{
 			"ImportPath": "github.com/nu7hatch/gouuid",
 			"Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
 		},
