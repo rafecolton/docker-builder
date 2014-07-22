@@ -19,4 +19,4 @@ RUN chmod +x /usr/local/bin/docker-builder-wrapper
 
 EXPOSE 5000
 CMD ["-h"]
-ENTRYPOINT ["/usr/local/bin/docker-builder-wrapper"]
+ENTRYPOINT ["/app/bin/docker-builder"]
