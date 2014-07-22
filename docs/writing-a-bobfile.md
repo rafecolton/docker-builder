@@ -32,6 +32,9 @@ tag_opts = ["--force"]
 
 [container_globals]
 registry = "modcloth"
+dockercfg_un = "foo"
+dockercfg_pass = "bar"
+dockercfg_email = "baz@example.com"
 project = "my-app"
 excluded = ["spec"]
 tags = [
@@ -84,6 +87,9 @@ tag_opts = ["-f"]
 name = "base"
 Dockerfile = "Dockerfile.base"
 registry = "modcloth"
+dockercfg_un = "foo"
+dockercfg_pass = "bar"
+dockercfg_email = "baz@example.com"
 project = "my-app"
 excluded = ["spec"]
 included = [
@@ -97,6 +103,9 @@ skip_push = true
 name = "app"
 Dockerfile = "Dockerfile.app"
 registry = "modcloth"
+dockercfg_un = "foo"
+dockercfg_pass = "bar"
+dockercfg_email = "baz@example.com"
 project = "my-app"
 excluded = ["spec"]
 included = []
@@ -121,6 +130,10 @@ The following stanzas are available in a `[[container]]` section:
 * `tags` - Array
 * `skip_push` - Bool - don't run `docker push...` after building this
   container
+* Docker registry credentials (for authenticating to a registry when pushing images)
+  - `dockercfg_un` - auth username
+  - `dockercfg_pass` - auth password
+  - `dockercfg_email` - auth email
 
 #### The `tags` Stanza
 

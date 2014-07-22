@@ -44,11 +44,11 @@ go get github.com/modcloth/docker-builder
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.6.2/docker-builder-v0.6.2-darwin-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.7.0/docker-builder-v0.7.0-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.6.2/docker-builder-v0.6.2-linux-amd64.tar.gz | \
+curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.7.0/docker-builder-v0.7.0-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1
 ```
 
