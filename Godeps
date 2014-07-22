@@ -25,6 +25,11 @@
 			"Rev": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39"
 		},
 		{
+			"ImportPath": "github.com/dotcloud/docker/pkg/tailfile",
+			"Comment": "v1.1.0-14-g02ef943",
+			"Rev": "02ef9437d3b55301ded005806b1649238afdbdad"
+		},
+		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
 			"Comment": "0.2.1-182-g433479f",
 			"Rev": "433479ff1777c472a9a1dafb0091bc1dc9752fee"
