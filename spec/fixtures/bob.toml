@@ -13,6 +13,9 @@ excluded = [
   "tmp"
 ]
 registry = "quay.io/modcloth"
+dockercfg_un = "foo"
+dockercfg_pass = "bar"
+dockercfg_email = "baz"
 project = "style-gallery"
 tags = [
   "git:branch",

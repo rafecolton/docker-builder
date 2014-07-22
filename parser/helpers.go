@@ -89,15 +89,28 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			containerCommands = append(containerCommands, tagCmd)
 		}
 
+		un := v.CfgUn
+		pass := v.CfgPass
+		email := v.CfgEmail
+		if un == "" {
+			un = conf.Config.CfgUn
+		}
+		if pass == "" {
+			pass = conf.Config.CfgPass
+		}
+		if email == "" {
+			email = conf.Config.CfgEmail
+		}
+
 		// ADD PUSH COMMANDS
 		if !v.SkipPush {
 			for _, fullTag := range tagList {
 				pushCmd := &PushCmd{
 					Image:     fullTag[0],
 					Tag:       fullTag[1],
-					AuthUn:    conf.Config.CfgUn,
-					AuthPwd:   conf.Config.CfgPass,
-					AuthEmail: conf.Config.CfgEmail,
+					AuthUn:    un,
+					AuthPwd:   pass,
+					AuthEmail: email,
 					Registry:  v.Registry,
 				}
 
@@ -158,6 +171,18 @@ func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile
 	}
 
 	container.SkipPush = container.SkipPush || globals.SkipPush
+
+	if container.CfgUn == "" {
+		container.CfgUn = globals.CfgUn
+	}
+
+	if container.CfgPass == "" {
+		container.CfgPass = globals.CfgPass
+	}
+
+	if container.CfgEmail == "" {
+		container.CfgEmail = globals.CfgEmail
+	}
 
 	return container
 }
