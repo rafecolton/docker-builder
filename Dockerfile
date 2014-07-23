@@ -14,9 +14,6 @@ RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts
 RUN touch Makefile
 RUN make build
 
-ADD .docker-builder-wrapper /usr/local/bin/docker-builder-wrapper
-RUN chmod +x /usr/local/bin/docker-builder-wrapper
-
 EXPOSE 5000
 CMD ["-h"]
 ENTRYPOINT ["/app/bin/docker-builder"]
