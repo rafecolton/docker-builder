@@ -157,7 +157,6 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 					return err
 				}
 			}
-
 		}
 
 		repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(seq.Metadata.UUID)

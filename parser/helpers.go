@@ -92,7 +92,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				Repo: name,
 				Tag:  tagObj.Tag(),
 			}
-			for _, opt := range is.DockerBuildOpts {
+			for _, opt := range is.DockerTagOpts {
 				if opt == "-f" || opt == "--force" {
 					tagCmd.Force = true
 				}
