@@ -149,9 +149,11 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 				Image:    imageID,
 			}
 
+			cmd = cmd.WithOpts(opts)
+
 			bob.WithField("command", cmd.Message()).Infof("running %s command", cmd.Type())
 
-			if err := cmd.WithOpts(opts).Run(); err != nil {
+			if err = cmd.Run(); err != nil {
 				return err
 			}
 
