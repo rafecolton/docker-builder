@@ -1,12 +1,14 @@
 package job
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os/exec"
+	"os"
 	"strconv"
 
+	"github.com/dotcloud/docker/pkg/tailfile"
 	"github.com/go-martini/martini"
 )
 
@@ -23,12 +25,12 @@ func TailN(params martini.Params, req *http.Request) (int, string) {
 		n = defaultTail
 	}
 
-	_, err := strconv.Atoi(n)
+	intN, err := strconv.Atoi(n)
 	if err != nil {
 		return 400, fmt.Sprintf("%s is not a valid number", n)
 	}
 
-	out, err := tailN(n, id)
+	out, err := tailN(intN, id)
 	if err != nil {
 		return 412, err.Error()
 	}
@@ -36,12 +38,23 @@ func TailN(params martini.Params, req *http.Request) (int, string) {
 	return 200, out
 }
 
-func tailN(n, id string) (string, error) {
+func tailN(n int, id string) (string, error) {
 	job := jobs[id]
 	logFilePath := fmt.Sprintf("%s/log.log", job.logDir)
-	out, err := exec.Command("tail", "-n", n, logFilePath).Output()
 
-	return string(out), err
+	file, err := os.Open(logFilePath)
+	if err != nil {
+		return "", err
+	}
+
+	byteMatrix, err := tailfile.TailFile(file, n)
+	if err != nil {
+		return "", err
+	}
+
+	out := bytes.Join(byteMatrix, []byte("\n"))
+
+	return string(out) + "\n", err
 }
 
 //Get gets the requested job as JSON.

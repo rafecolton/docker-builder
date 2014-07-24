@@ -17,41 +17,54 @@ Topics:
 
 # NAME:
 #    serve - serve <options> - start a small HTTP web server for receiving build requests
-# 
+#
 # USAGE:
 #    command serve [command options] [arguments...]
-# 
+#
 # DESCRIPTION:
 #    Start a small HTTP web server for receiving build requests.
-# 
+#
 # Configure through the environment:
-# 
-# DOCKER_BUILDER_LOGLEVEL             =>     --log-level (global)
-# DOCKER_BUILDER_LOGFORMAT            =>     --log-format (global)
-# DOCKER_BUILDER_PORT                 =>     --port
-# DOCKER_BUILDER_APITOKEN             =>     --api-token
-# DOCKER_BUILDER_SKIPPUSH             =>     --skip-push
-# DOCKER_BUILDER_USERNAME             =>     --username
-# DOCKER_BUILDER_PASSWORD             =>     --password
-# DOCKER_BUILDER_TRAVISTOKEN          =>     --travis-token
-# DOCKER_BUILDER_NOTRAVIS             =>     --no-travis
-# DOCKER_BUILDER_GITHUBSECRET         =>     --github-secret
-# DOCKER_BUILDER_NOGITHUB             =>     --no-github
-# 
-# NOTE: If username and password are both empty (i.e. not provided), basic
-# auth will not be used.
-# 
-# 
+#
+# Global:
+#   DOCKER_BUILDER_LOGLEVEL         =>     --log-level (global)
+#   DOCKER_BUILDER_LOGFORMAT        =>     --log-format (global)
+#
+# Docker Registry Auth:
+#   DOCKER_BUILDER_CFGUN            =>     --dockercfg-un (global)
+#   DOCKER_BUILDER_CFGPASS          =>     --dockercfg-pass (global)
+#   DOCKER_BUILDER_CFGEMAIL         =>     --dockercfg-email (global)
+#
+# Server:
+#   DOCKER_BUILDER_PORT             =>     --port
+#   DOCKER_BUILDER_APITOKEN         =>     --api-token
+#   DOCKER_BUILDER_SKIPPUSH         =>     --skip-push
+#
+# Basic Auth:
+#   DOCKER_BUILDER_USERNAME         =>     --username
+#   DOCKER_BUILDER_PASSWORD         =>     --password
+#
+# Travis Auth:
+#   DOCKER_BUILDER_TRAVISTOKEN      =>     --travis-token
+#   DOCKER_BUILDER_NOTRAVIS         =>     --no-travis
+#
+# GitHub Auth:
+#   DOCKER_BUILDER_GITHUBSECRET     =>     --github-secret
+#   DOCKER_BUILDER_NOGITHUB         =>     --no-github
+#
+# NOTE: If username and password are both empty (i.e. not provided), basic auth will not be used.
+#
+#
 # OPTIONS:
-#    --port, -p '5000'    port on which to serve
-#    --api-token, -t      GitHub API token
-#    --skip-push          override Bobfile behavior and do not push any images (useful for testing)
-#    --username           username for basic auth
-#    --password           password for basic auth
-#    --travis-token       Travis API token for webhooks
-#    --github-secret      GitHub secret for webhooks
-#    --no-travis          do not include route for Travis CI webhook
-#    --no-github          do not include route for GitHub webhook
+#    --port, -p '5000'  port on which to serve
+#    --api-token, -t  GitHub API token
+#    --skip-push    override Bobfile behavior and do not push any images (useful for testing)
+#    --username     username for basic auth
+#    --password     password for basic auth
+#    --travis-token   Travis API token for webhooks
+#    --github-secret  GitHub secret for webhooks
+#    --no-travis    do not include route for Travis CI webhook
+#    --no-github    do not include route for GitHub webhook
 ```
 
 #### Healthcheck

@@ -12,27 +12,16 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/hishboy/gocommons/lang"
 	"github.com/modcloth/go-fileutils"
-	"github.com/modcloth/queued-command-runner"
 	"github.com/onsi/gocleanup"
 )
 
 var imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
-
-/*
-WaitForPush indicates to main() that a `docker push` command has been
-started.  Since those are run asynchronously, main() has to wait on the
-runner.Done channel.  However, if the build does not require a push, we
-don't want to wait or we'll just be stuck forever.
-*/
-var WaitForPush bool
 
 /*
 SkipPush, when set to true, will override any behavior set by a Bobfile and
@@ -147,74 +136,29 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 		var err error
 
 		for _, cmd := range seq.SubCommand {
-			cmd.Stdout = bob.Stdout
-			cmd.Stderr = bob.Stderr
-			cmd.Dir = workdir
-
-			if cmd.Path == "docker" {
-				path, err := fileutils.Which("docker")
-				if err != nil {
-					return err
-				}
-
-				cmd.Path = path
+			opts := &parser.DockerCmdOpts{
+				TagFunc:  bob.dockerClient.TagImage,
+				PushFunc: bob.dockerClient.PushImage,
+				Stdout:   bob.Stdout,
+				Stderr:   bob.Stderr,
+				Workdir:  workdir,
+				Image:    imageID,
+				SkipPush: SkipPush,
 			}
 
-			switch cmd.Args[1] {
-			case "build":
-				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, " "),
-				}).Info("running build command")
+			cmd = cmd.WithOpts(opts)
 
-				if err := cmd.Run(); err != nil {
-					return err
-				}
+			bob.WithField("command", cmd.Message()).Infof("running %s command", cmd.Type())
 
+			if err = cmd.Run(); err != nil {
+				return err
+			}
+
+			if cmd.Type() == "build" {
 				imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
 				if err != nil {
 					return err
 				}
-			case "tag":
-				for k, v := range cmd.Args {
-					if v == "<IMG>" {
-						cmd.Args[k] = imageID
-					}
-				}
-				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, " "),
-				}).Info("running tag command")
-
-				if err := cmd.Run(); err != nil {
-					return err
-				}
-			case "push":
-				// do final transformation
-				runnerCmd := makeRunnerCommandForPush(cmd)
-
-				if !SkipPush {
-					// log
-					bob.WithFields(logrus.Fields{
-						"command": strings.Join(cmd.Args, " "),
-					}).Info("running push command")
-
-					// set necessary var
-					WaitForPush = true
-
-					// run
-					runner.Run(runnerCmd)
-
-				} else {
-					bob.WithFields(logrus.Fields{
-						"key": runnerCmd.Key,
-						"cmd": strings.Join(runnerCmd.Cmd.Args, " "),
-					}).Warn("not running push command")
-				}
-			default:
-				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, " "),
-				}).Warn("improperly formatted command")
-
-				return fmt.Errorf("improperly formatted command %q", strings.Join(cmd.Args, " "))
 			}
 		}
 
@@ -232,24 +176,6 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 	}
 
 	return nil
-}
-
-func makeRunnerCommandForPush(cmd exec.Cmd) *runner.Command {
-
-	imageGiven := cmd.Args[2]
-	matches := imageWithTagRegex.FindStringSubmatch(imageGiven)
-
-	// if image includes a tag
-	if len(matches) >= 3 {
-		return &runner.Command{
-			Cmd: &cmd,
-			Key: matches[1], // image without tag
-		}
-	}
-
-	return &runner.Command{
-		Cmd: &cmd,
-	}
 }
 
 /*

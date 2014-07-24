@@ -20,6 +20,7 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise-updates main universe" >>
 RUN apt-get update -y && apt-get install -y --no-install-recommends curl openssh-client make git \
   pkg-config mercurial build-essential sudo
 
+# install docker
 RUN curl -sL https://get.docker.io | sh
 
 # install go

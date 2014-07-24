@@ -1,10 +1,6 @@
 package parser
 
 import (
-	"os/exec"
-)
-
-import (
 	"github.com/modcloth/docker-builder/builderfile"
 )
 
@@ -51,5 +47,5 @@ and which files/dirs to exclude.
 */
 type SubSequence struct {
 	Metadata   *SubSequenceMetadata
-	SubCommand []exec.Cmd
+	SubCommand []DockerCmd
 }

@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-)
 
-import (
 	"github.com/modcloth/docker-builder/builderfile"
+	"github.com/modcloth/docker-builder/conf"
 	"github.com/modcloth/docker-builder/parser/tag"
 )
 
@@ -33,10 +32,14 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		Commands: []*SubSequence{},
 	}
 
-	var containerCommands []exec.Cmd
+	var containerCommands []DockerCmd
+	var tagCommands []DockerCmd
+	var pushCommands []DockerCmd
 
 	for _, v := range is.Containers {
-		containerCommands = []exec.Cmd{}
+		containerCommands = []DockerCmd{}
+		tagCommands = []DockerCmd{}
+		pushCommands = []DockerCmd{}
 
 		// ADD BUILD COMMANDS
 		uuid, err := parser.NextUUID()
@@ -50,12 +53,26 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")
 
-		containerCommands = append(containerCommands, *&exec.Cmd{
-			Path: "docker",
-			Args: buildArgs,
+		containerCommands = append(containerCommands, &BuildCmd{
+			Cmd: &exec.Cmd{
+				Path: "docker",
+				Args: buildArgs,
+			},
 		})
 
-		var tagList = []string{}
+		// get docker registry credentials
+		un := v.CfgUn
+		pass := v.CfgPass
+		email := v.CfgEmail
+		if un == "" {
+			un = conf.Config.CfgUn
+		}
+		if pass == "" {
+			pass = conf.Config.CfgPass
+		}
+		if email == "" {
+			email = conf.Config.CfgEmail
+		}
 
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {
@@ -71,31 +88,34 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				tagObj = tag.NewTag("default", tagArg)
 			}
 
-			fullTag := fmt.Sprintf("%s:%s", name, tagObj.Tag())
+			tagCmd := &TagCmd{
+				Repo: name,
+				Tag:  tagObj.Tag(),
+			}
+			for _, opt := range is.DockerTagOpts {
+				if opt == "-f" || opt == "--force" {
+					tagCmd.Force = true
+				}
+			}
 
-			tagList = append(tagList, fullTag)
+			tagCommands = append(tagCommands, tagCmd)
 
-			buildArgs = []string{"docker", "tag"}
-			buildArgs = append(buildArgs, is.DockerTagOpts...)
-			buildArgs = append(buildArgs, "<IMG>", fullTag)
-
-			containerCommands = append(containerCommands, *&exec.Cmd{
-				Path: "docker",
-				Args: buildArgs,
-			})
-		}
-
-		// ADD PUSH COMMANDS
-		if !v.SkipPush {
-			for _, fullTag := range tagList {
-				buildArgs = []string{"docker", "push", fullTag}
-
-				containerCommands = append(containerCommands, *&exec.Cmd{
-					Path: "docker",
-					Args: buildArgs,
-				})
+			// ADD CORRESPONDING PUSH COMMAND
+			if !v.SkipPush {
+				pushCmd := &PushCmd{
+					Image:     name,
+					Tag:       tagObj.Tag(),
+					AuthUn:    un,
+					AuthPwd:   pass,
+					AuthEmail: email,
+					Registry:  v.Registry,
+				}
+				pushCommands = append(pushCommands, pushCmd)
 			}
 		}
+
+		containerCommands = append(containerCommands, tagCommands...)
+		containerCommands = append(containerCommands, pushCommands...)
 
 		ret.Commands = append(ret.Commands, &SubSequence{
 			Metadata: &SubSequenceMetadata{
@@ -150,6 +170,18 @@ func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile
 	}
 
 	container.SkipPush = container.SkipPush || globals.SkipPush
+
+	if container.CfgUn == "" {
+		container.CfgUn = globals.CfgUn
+	}
+
+	if container.CfgPass == "" {
+		container.CfgPass = globals.CfgPass
+	}
+
+	if container.CfgEmail == "" {
+		container.CfgEmail = globals.CfgEmail
+	}
 
 	return container
 }

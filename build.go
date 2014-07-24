@@ -5,7 +5,6 @@ import (
 	"github.com/modcloth/docker-builder/parser"
 
 	"github.com/codegangsta/cli"
-	"github.com/modcloth/queued-command-runner"
 )
 
 func build(c *cli.Context) {
@@ -34,17 +33,5 @@ func build(c *cli.Context) {
 
 	if err = bob.Build(commandSequence); err != nil {
 		exitErr(29, "unable to build", err)
-	}
-
-	if builder.WaitForPush {
-	WaitForPush:
-		for {
-			select {
-			case <-runner.Done:
-				break WaitForPush
-			case err := <-runner.Errors:
-				exitErr(1, "error when running push command", map[string]interface{}{"command": err.CommandStr, "error": err})
-			}
-		}
 	}
 }

@@ -16,8 +16,8 @@
 		},
 		{
 			"ImportPath": "github.com/codegangsta/cli",
-			"Comment": "1.0.0-65-g820deef",
-			"Rev": "820deefc9031d101f085ef773425fc6ca7a5363e"
+			"Comment": "1.0.0-88-g27ecc97",
+			"Rev": "27ecc97192df1bf053a22b04463f2b51b8b8373e"
 		},
 		{
 			"ImportPath": "github.com/codegangsta/inject",
@@ -25,9 +25,14 @@
 			"Rev": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39"
 		},
 		{
+			"ImportPath": "github.com/dotcloud/docker/pkg/tailfile",
+			"Comment": "v1.1.0-14-g02ef943",
+			"Rev": "02ef9437d3b55301ded005806b1649238afdbdad"
+		},
+		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
-			"Comment": "0.2.1-169-ge21b2a4",
-			"Rev": "e21b2a4562b3ec0731c54e59ab56c41c79067e12"
+			"Comment": "0.2.1-182-g433479f",
+			"Rev": "433479ff1777c472a9a1dafb0091bc1dc9752fee"
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
@@ -55,11 +60,6 @@
 			"ImportPath": "github.com/modcloth/kamino",
 			"Comment": "v0.1.2",
 			"Rev": "9ca92fa5b1ff549157054972ce16c9faa43df87a"
-		},
-		{
-			"ImportPath": "github.com/modcloth/queued-command-runner",
-			"Comment": "v0.2.3-1-g5334e5b",
-			"Rev": "5334e5b5279c9144df6122689eb049dd27e1440b"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",

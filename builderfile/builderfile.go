@@ -45,6 +45,9 @@ type ContainerSection struct {
 	Project    string   `toml:"project"`
 	Tags       []string `toml:"tags"`
 	SkipPush   bool     `toml:"skip_push"`
+	CfgUn      string   `toml:"dockercfg_un"`
+	CfgPass    string   `toml:"dockercfg_pass"`
+	CfgEmail   string   `toml:"dockercfg_email"`
 }
 
 /*

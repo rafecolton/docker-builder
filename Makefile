@@ -8,6 +8,7 @@ PACKAGES := \
   $(B)/builderfile \
   $(B)/conf \
   $(B)/dclient \
+  $(B)/job \
   $(B)/log \
   $(B)/parser \
   $(B)/parser/tag \
@@ -186,6 +187,10 @@ gopath:
 .PHONY: save
 save:
 	godep save -copy=false ./...
+
+.PHONY: get
+get:
+	go get ./...
 
 .PHONY: dev
 dev: deps gox
