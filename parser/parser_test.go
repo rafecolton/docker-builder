@@ -168,10 +168,7 @@ var _ = Describe("Parse", func() {
 								},
 							},
 						},
-						&TagCmd{
-							Repo: "quay.io/modcloth/style-gallery",
-							Tag:  "base",
-						},
+						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: "base", Force: true},
 					},
 				},
 				&SubSequence{
@@ -197,9 +194,9 @@ var _ = Describe("Parse", func() {
 								},
 							},
 						},
-						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: branch},
-						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: rev},
-						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: short},
+						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: branch, Force: true},
+						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: rev, Force: true},
+						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: short, Force: true},
 						&PushCmd{
 							Image:     "quay.io/modcloth/style-gallery",
 							Tag:       branch,
