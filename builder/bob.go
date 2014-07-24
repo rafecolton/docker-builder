@@ -136,6 +136,10 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 		var err error
 
 		for _, cmd := range seq.SubCommand {
+			if cmd.Type() == "push" && SkipPush {
+				continue
+			}
+
 			opts := &parser.DockerCmdOpts{
 				TagFunc:  bob.dockerClient.TagImage,
 				PushFunc: bob.dockerClient.PushImage,
