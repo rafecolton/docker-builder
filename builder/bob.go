@@ -137,28 +137,21 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 		for _, cmd := range seq.SubCommand {
 			opts := &parser.DockerCmdOpts{
-				TagFunc:  bob.dockerClient.TagImage,
-				PushFunc: bob.dockerClient.PushImage,
-				Stdout:   bob.Stdout,
-				Stderr:   bob.Stderr,
-				Workdir:  workdir,
-				Image:    imageID,
-				SkipPush: SkipPush,
+				DockerClient: bob.dockerClient,
+				Image:        imageID,
+				ImageUUID:    seq.Metadata.UUID,
+				SkipPush:     SkipPush,
+				Stderr:       bob.Stderr,
+				Stdout:       bob.Stdout,
+				Workdir:      workdir,
 			}
 
 			cmd = cmd.WithOpts(opts)
 
 			bob.WithField("command", cmd.Message()).Infof("running %s command", cmd.Type())
 
-			if err = cmd.Run(); err != nil {
+			if imageID, err = cmd.Run(); err != nil {
 				return err
-			}
-
-			if cmd.Type() == "build" {
-				imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
-				if err != nil {
-					return err
-				}
 			}
 		}
 
@@ -297,19 +290,4 @@ func (bob *Builder) CleanWorkdir() error {
 	}
 
 	return nil
-}
-
-/*
-LatestImageTaggedWithUUID accepts a uuid and invokes the underlying utility
-DockerClient to determine the id of the most recently created image tagged with
-the provided uuid.
-*/
-func (bob *Builder) LatestImageTaggedWithUUID(uuid string) (string, error) {
-	id, err := bob.dockerClient.LatestImageTaggedWithUUID(uuid)
-	if err != nil {
-		bob.Println(err)
-		return "", err
-	}
-
-	return id, nil
 }

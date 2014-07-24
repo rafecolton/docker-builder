@@ -8,6 +8,8 @@ import (
 
 	"github.com/fsouza/go-dockerclient"
 	"github.com/modcloth/go-fileutils"
+
+	"github.com/modcloth/docker-builder/dclient"
 )
 
 /*
@@ -15,28 +17,26 @@ DockerCmdOpts is an options struct for the options required by the various
 structs that implement the DockerCmd interface
 */
 type DockerCmdOpts struct {
-	TagFunc  func(name string, opts docker.TagImageOptions) error
-	PushFunc func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
-	Image    string
-	Workdir  string
-	Stdout   io.Writer
-	Stderr   io.Writer
-	SkipPush bool
+	DockerClient dclient.DockerClient
+	Image        string
+	Workdir      string
+	Stdout       io.Writer
+	Stderr       io.Writer
+	SkipPush     bool
+	ImageUUID    string
 }
 
 /*
 DockerCmd is an interface that wraps the various docker command types.
 */
 type DockerCmd interface {
-	// Run() runs the underlying command
-	Run() error
+	// Run() runs the underlying command. The string return value is expected
+	// to be the ID of the image being operated on
+	Run() (string, error)
 
 	// Message() returns a string representation of the command if it were to
 	// be run on the command line
 	Message() string
-
-	// Type() returns the type of the command ("build, "tag", or "push")
-	Type() string
 
 	// WithOpts sets the options for the command. It is expected to return the
 	// same DockerCmd in a state in which the Run() function can be called
@@ -57,7 +57,7 @@ func (b *BuildCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 }
 
 //Run is the command that actually calls docker build shell command
-func (b *BuildCmd) Run() error {
+func (b *BuildCmd) Run() (string, error) {
 	cmd := b.Cmd
 	opts := b.opts
 
@@ -67,17 +67,21 @@ func (b *BuildCmd) Run() error {
 
 	dockerExePath, err := fileutils.Which("docker")
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	cmd.Path = dockerExePath
 
-	return b.Cmd.Run()
-}
+	if err := b.Cmd.Run(); err != nil {
+		return "", err
+	}
 
-//Type returns a string indicating the type of the DockerCmd
-func (b *BuildCmd) Type() string {
-	return "build"
+	imageID, err := opts.DockerClient.LatestImageTaggedWithUUID(opts.ImageUUID)
+	if err != nil {
+		return "", err
+	}
+
+	return imageID, nil
 }
 
 //Message returns the shell command that gets run for docker build commands
@@ -98,18 +102,18 @@ type TagCmd struct {
 //WithOpts sets options required for the TagCmd
 func (t *TagCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 	t.Image = opts.Image
-	t.TagFunc = opts.TagFunc
+	t.TagFunc = opts.DockerClient.TagImage
 	return t
 }
 
 //Run is the command that actually calls TagImage to do the tagging
-func (t *TagCmd) Run() error {
+func (t *TagCmd) Run() (string, error) {
 	var opts = &docker.TagImageOptions{
 		Force: t.Force,
 		Repo:  t.Repo,
 		Tag:   t.Tag,
 	}
-	return t.TagFunc(t.Image, *opts)
+	return t.Image, t.TagFunc(t.Image, *opts)
 }
 
 //Message returns the shell command that would be equivalent to the TagImage command
@@ -127,11 +131,6 @@ func (t *TagCmd) Message() string {
 	return t.msg
 }
 
-//Type returns a string indicating the type of the DockerCmd
-func (t *TagCmd) Type() string {
-	return "tag"
-}
-
 //PushCmd is a wrapper for the docker PushImage functionality
 type PushCmd struct {
 	PushFunc     func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
@@ -142,21 +141,24 @@ type PushCmd struct {
 	AuthPwd      string
 	AuthEmail    string
 	OutputStream io.Writer
-	skip         bool
+
+	skip    bool
+	imageID string
 }
 
 //WithOpts sets options required for the PushCmd
 func (p *PushCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 	p.OutputStream = opts.Stdout
-	p.PushFunc = opts.PushFunc
+	p.PushFunc = opts.DockerClient.PushImage
 	p.skip = opts.SkipPush
+	p.imageID = opts.Image
 	return p
 }
 
 //Run is the command that actually calls PushImage to do the pushing
-func (p *PushCmd) Run() error {
+func (p *PushCmd) Run() (string, error) {
 	if p.skip {
-		return nil
+		return p.imageID, nil
 	}
 
 	auth := &docker.AuthConfiguration{
@@ -170,15 +172,10 @@ func (p *PushCmd) Run() error {
 		Registry:     p.Registry,
 		OutputStream: p.OutputStream,
 	}
-	return p.PushFunc(*opts, *auth)
+	return p.imageID, p.PushFunc(*opts, *auth)
 }
 
 //Message returns the shell command that would be equivalent to the PushImage command
 func (p *PushCmd) Message() string {
 	return fmt.Sprintf("docker push %s:%s", p.Image, p.Tag)
-}
-
-//Type returns a string indicating the type of the DockerCmd
-func (p *PushCmd) Type() string {
-	return "push"
 }
