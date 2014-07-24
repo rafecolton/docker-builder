@@ -21,6 +21,7 @@ type DockerCmdOpts struct {
 	Workdir  string
 	Stdout   io.Writer
 	Stderr   io.Writer
+	SkipPush bool
 }
 
 /*
@@ -141,17 +142,23 @@ type PushCmd struct {
 	AuthPwd      string
 	AuthEmail    string
 	OutputStream io.Writer
+	skip         bool
 }
 
 //WithOpts sets options required for the PushCmd
 func (p *PushCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 	p.OutputStream = opts.Stdout
 	p.PushFunc = opts.PushFunc
+	p.skip = opts.SkipPush
 	return p
 }
 
 //Run is the command that actually calls PushImage to do the pushing
 func (p *PushCmd) Run() error {
+	if p.skip {
+		return nil
+	}
+
 	auth := &docker.AuthConfiguration{
 		Username: p.AuthUn,
 		Password: p.AuthPwd,
