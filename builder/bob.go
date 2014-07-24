@@ -148,7 +148,7 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 
 			cmd = cmd.WithOpts(opts)
 
-			bob.WithField("command", cmd.Message()).Infof("running %s command", cmd.Type())
+			bob.WithField("command", cmd.Message()).Info("running docker command")
 
 			if imageID, err = cmd.Run(); err != nil {
 				return err
