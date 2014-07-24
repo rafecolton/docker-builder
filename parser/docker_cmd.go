@@ -56,7 +56,8 @@ func (b *BuildCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 	return b
 }
 
-//Run is the command that actually calls docker build shell command
+//Run is the command that actually calls docker build shell command.  Determine
+//the image ID for the resulting image and return that as well.
 func (b *BuildCmd) Run() (string, error) {
 	cmd := b.Cmd
 	opts := b.opts
