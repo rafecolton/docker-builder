@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-)
 
-import (
 	"github.com/modcloth/docker-builder/builderfile"
 	"github.com/modcloth/docker-builder/conf"
 	"github.com/modcloth/docker-builder/parser/tag"
@@ -34,10 +32,14 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		Commands: []*SubSequence{},
 	}
 
-	var containerCommands []interface{}
+	var containerCommands []DockerCmd
+	var tagCommands []DockerCmd
+	var pushCommands []DockerCmd
 
 	for _, v := range is.Containers {
-		containerCommands = []interface{}{}
+		containerCommands = []DockerCmd{}
+		tagCommands = []DockerCmd{}
+		pushCommands = []DockerCmd{}
 
 		// ADD BUILD COMMANDS
 		uuid, err := parser.NextUUID()
@@ -51,12 +53,26 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")
 
-		containerCommands = append(containerCommands, *&exec.Cmd{
-			Path: "docker",
-			Args: buildArgs,
+		containerCommands = append(containerCommands, &BuildCmd{
+			Cmd: &exec.Cmd{
+				Path: "docker",
+				Args: buildArgs,
+			},
 		})
 
-		var tagList = [][2]string{}
+		// get docker registry credentials
+		un := v.CfgUn
+		pass := v.CfgPass
+		email := v.CfgEmail
+		if un == "" {
+			un = conf.Config.CfgUn
+		}
+		if pass == "" {
+			pass = conf.Config.CfgPass
+		}
+		if email == "" {
+			email = conf.Config.CfgEmail
+		}
 
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {
@@ -72,13 +88,9 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				tagObj = tag.NewTag("default", tagArg)
 			}
 
-			fullTag := [2]string{name, tagObj.Tag()}
-
-			tagList = append(tagList, fullTag)
-
 			tagCmd := &TagCmd{
-				Repo: fullTag[0],
-				Tag:  fullTag[1],
+				Repo: name,
+				Tag:  tagObj.Tag(),
 			}
 			for _, opt := range is.DockerBuildOpts {
 				if opt == "-f" || opt == "--force" {
@@ -86,37 +98,24 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				}
 			}
 
-			containerCommands = append(containerCommands, tagCmd)
-		}
+			tagCommands = append(tagCommands, tagCmd)
 
-		un := v.CfgUn
-		pass := v.CfgPass
-		email := v.CfgEmail
-		if un == "" {
-			un = conf.Config.CfgUn
-		}
-		if pass == "" {
-			pass = conf.Config.CfgPass
-		}
-		if email == "" {
-			email = conf.Config.CfgEmail
-		}
-
-		// ADD PUSH COMMANDS
-		if !v.SkipPush {
-			for _, fullTag := range tagList {
+			// ADD CORRESPONDING PUSH COMMAND
+			if !v.SkipPush {
 				pushCmd := &PushCmd{
-					Image:     fullTag[0],
-					Tag:       fullTag[1],
+					Image:     name,
+					Tag:       tagObj.Tag(),
 					AuthUn:    un,
 					AuthPwd:   pass,
 					AuthEmail: email,
 					Registry:  v.Registry,
 				}
-
-				containerCommands = append(containerCommands, pushCmd)
+				pushCommands = append(pushCommands, pushCmd)
 			}
 		}
+
+		containerCommands = append(containerCommands, tagCommands...)
+		containerCommands = append(containerCommands, pushCommands...)
 
 		ret.Commands = append(ret.Commands, &SubSequence{
 			Metadata: &SubSequenceMetadata{

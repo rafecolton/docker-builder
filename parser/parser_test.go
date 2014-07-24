@@ -153,17 +153,19 @@ var _ = Describe("Parse", func() {
 						Included:   []string{"Gemfile", "Gemfile.lock"},
 						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
-					SubCommand: []interface{}{
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"build",
-								"-t",
-								"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
-								"--rm",
-								"--no-cache",
-								".",
+					SubCommand: []DockerCmd{
+						&BuildCmd{
+							Cmd: &exec.Cmd{
+								Path: "docker",
+								Args: []string{
+									"docker",
+									"build",
+									"-t",
+									"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+									"--rm",
+									"--no-cache",
+									".",
+								},
 							},
 						},
 						&TagCmd{
@@ -180,31 +182,24 @@ var _ = Describe("Parse", func() {
 						Included:   []string{},
 						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
-					SubCommand: []interface{}{
-						*&exec.Cmd{
-							Path: "docker",
-							Args: []string{
-								"docker",
-								"build",
-								"-t",
-								"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
-								"--rm",
-								"--no-cache",
-								".",
+					SubCommand: []DockerCmd{
+						&BuildCmd{
+							Cmd: &exec.Cmd{
+								Path: "docker",
+								Args: []string{
+									"docker",
+									"build",
+									"-t",
+									"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+									"--rm",
+									"--no-cache",
+									".",
+								},
 							},
 						},
-						&TagCmd{
-							Repo: "quay.io/modcloth/style-gallery",
-							Tag:  branch,
-						},
-						&TagCmd{
-							Repo: "quay.io/modcloth/style-gallery",
-							Tag:  rev,
-						},
-						&TagCmd{
-							Repo: "quay.io/modcloth/style-gallery",
-							Tag:  short,
-						},
+						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: branch},
+						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: rev},
+						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: short},
 						&PushCmd{
 							Image:     "quay.io/modcloth/style-gallery",
 							Tag:       branch,

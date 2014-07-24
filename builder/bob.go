@@ -12,10 +12,8 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/hishboy/gocommons/lang"
@@ -138,59 +136,28 @@ func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
 		var err error
 
 		for _, cmd := range seq.SubCommand {
-			switch cmd.(type) {
-			//case *parser.ExecCmd:
-			case exec.Cmd:
-				cmd := cmd.(exec.Cmd)
-				cmd.Stdout = bob.Stdout
-				cmd.Stderr = bob.Stderr
-				cmd.Dir = workdir
-				if cmd.Path == "docker" {
-					path, err := fileutils.Which("docker")
-					if err != nil {
-						return err
-					}
+			opts := &parser.DockerCmdOpts{
+				TagFunc:  bob.dockerClient.TagImage,
+				PushFunc: bob.dockerClient.PushImage,
+				Stdout:   bob.Stdout,
+				Stderr:   bob.Stderr,
+				Workdir:  workdir,
+				Image:    imageID,
+			}
 
-					cmd.Path = path
-				}
+			bob.WithField("command", cmd.Message()).Infof("running %s command", cmd.Type())
 
-				bob.WithFields(logrus.Fields{
-					"command": strings.Join(cmd.Args, " "),
-				}).Info("running build command")
+			if err := cmd.WithOpts(opts).Run(); err != nil {
+				return err
+			}
 
-				if err := cmd.Run(); err != nil {
-					return err
-				}
-
+			if cmd.Type() == "build" {
 				imageID, err = bob.LatestImageTaggedWithUUID(seq.Metadata.UUID)
 				if err != nil {
 					return err
 				}
-			case *parser.TagCmd:
-				cmd := cmd.(*parser.TagCmd)
-				cmd.TagFunc = bob.dockerClient.TagImage
-				cmd.Image = imageID
-
-				bob.WithFields(logrus.Fields{
-					"command": cmd.Message(),
-				}).Info("running tag command")
-
-				if err := cmd.Run(); err != nil {
-					return err
-				}
-			case *parser.PushCmd:
-				cmd := cmd.(*parser.PushCmd)
-				cmd.PushFunc = bob.dockerClient.PushImage
-				cmd.OutputStream = bob.Stdout
-
-				bob.WithFields(logrus.Fields{
-					"command": cmd.Message(),
-				}).Info("running push command")
-
-				if err := cmd.Run(); err != nil {
-					return err
-				}
 			}
+
 		}
 
 		repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(seq.Metadata.UUID)

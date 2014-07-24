@@ -1,13 +1,7 @@
 package parser
 
 import (
-	"fmt"
-	"io"
-	"strings"
-
 	"github.com/modcloth/docker-builder/builderfile"
-
-	"github.com/fsouza/go-dockerclient"
 )
 
 /*
@@ -53,73 +47,5 @@ and which files/dirs to exclude.
 */
 type SubSequence struct {
 	Metadata   *SubSequenceMetadata
-	SubCommand []interface{}
-}
-
-//TagCmd is a wrapper for the docker TagImage functionality
-type TagCmd struct {
-	TagFunc func(name string, opts docker.TagImageOptions) error
-	Image   string
-	Force   bool
-	Tag     string
-	Repo    string
-	msg     string
-}
-
-//Run is the command that actually calls TagImage to do the tagging
-func (t *TagCmd) Run() error {
-	var opts = &docker.TagImageOptions{
-		Force: t.Force,
-		Repo:  t.Repo,
-		Tag:   t.Tag,
-	}
-	return t.TagFunc(t.Image, *opts)
-}
-
-//Message returns the shell command that would be equivalent to the TagImage command
-func (t *TagCmd) Message() string {
-	if t.msg == "" {
-		msg := []string{"docker", "tag"}
-		if t.Force {
-			msg = append(msg, "--force")
-		}
-		msg = append(msg, t.Image)
-		msg = append(msg, fmt.Sprintf("%s:%s", t.Repo, t.Tag))
-		t.msg = strings.Join(msg, " ")
-	}
-
-	return t.msg
-}
-
-//PushCmd is a wrapper for the docker PushImage functionality
-type PushCmd struct {
-	PushFunc     func(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
-	Image        string
-	Tag          string
-	Registry     string
-	AuthUn       string
-	AuthPwd      string
-	AuthEmail    string
-	OutputStream io.Writer
-}
-
-//Run is the command that actually calls PushImage to do the pushing
-func (p *PushCmd) Run() error {
-	auth := &docker.AuthConfiguration{
-		Username: p.AuthUn,
-		Password: p.AuthPwd,
-		Email:    p.AuthEmail,
-	}
-	opts := &docker.PushImageOptions{
-		Name:         p.Image,
-		Tag:          p.Tag,
-		Registry:     p.Registry,
-		OutputStream: p.OutputStream,
-	}
-	return p.PushFunc(*opts, *auth)
-}
-
-//Message returns the shell command that would be equivalent to the PushImage command
-func (p *PushCmd) Message() string {
-	return fmt.Sprintf("docker push %s:%s", p.Image, p.Tag)
+	SubCommand []DockerCmd
 }
