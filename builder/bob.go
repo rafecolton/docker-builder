@@ -106,11 +106,7 @@ func (bob *Builder) BuildFromFile(file string) error {
 
 	bob.Builderfile = file
 
-	if err = bob.Build(commandSequence); err != nil {
-		return err
-	}
-
-	return nil
+	return bob.Build(commandSequence)
 }
 
 /*
@@ -285,9 +281,5 @@ func (bob *Builder) CleanWorkdir() error {
 		return err
 	}
 
-	if err := fileutils.MkdirP(workdir, 0755); err != nil {
-		return err
-	}
-
-	return nil
+	return fileutils.MkdirP(workdir, 0755)
 }
