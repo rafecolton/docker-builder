@@ -10,6 +10,7 @@ from a friendly `Bobfile` config file.
 
 * [Motivation for Docker Builder](docs/why.md)
 * [Docker Builder Server](docs/advanced-usage.md)
+* [Writing a Bobfile](docs/writing-a-bobfile.md)
 
 ## Quick Start
 
@@ -65,3 +66,7 @@ output is harmless and safe to ignore.
 
 To build from source, run `make build`.  You may have to install some
 things first, such as `go`.
+
+## Contributing
+
+**Pull requests welcome!**

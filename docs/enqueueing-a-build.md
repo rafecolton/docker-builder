@@ -44,5 +44,5 @@ Other Fields:
 * `sync / type: bool` - sets whether the server should respond to a
   request immediately or block until build completes. The default
 behavior is to respond immediately (value: `false`). Set this to `true`
-to wait for a response after the build and tag phases. Note that this
-will return before the server pushes the image to the registry.
+to wait for a response until after the build, tag, and push phases are
+all complete.

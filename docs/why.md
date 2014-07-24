@@ -29,4 +29,4 @@ tagging macros.
 0. **Seamless, reliable build, tag, &amp; push process**
   - A typical docker build workflow can be a bit tedious and nuanced.
     Bob aims to abstract all of this and make the process much simpler
-  - simply write your `Dockerfile` and let Bob take care of the rest!
+  - Simply write your `Dockerfile` and let Bob take care of the rest!
