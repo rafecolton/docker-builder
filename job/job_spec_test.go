@@ -4,59 +4,49 @@ import (
 	. "github.com/modcloth/docker-builder/job"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
-	"encoding/json"
 )
 
 var _ = Describe("NewSpec()", func() {
 	var (
-		args interface{}
+		args []byte
 	)
 
 	Context("when required args are missing", func() {
 		It("returns an error when account is not provided", func() {
-			args = makeArg(`{
+			args = []byte(`{
 			  "repo": "kamino-test",
 			  "ref": "master"
 			}`)
-			spec, err := NewSpec(args)
+			spec, _ := NewSpec(args)
+			err := spec.Validate()
 
-			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
 		})
 
 		It("returns an error when repo is not provided", func() {
-			args = makeArg(`{
+			args = []byte(`{
 			  "account": "modcloth-labs",
 			  "ref": "master"
 			}`)
-			spec, err := NewSpec(args)
+			spec, _ := NewSpec(args)
+			err := spec.Validate()
 
-			Expect(spec).To(BeNil())
-			Expect(err).ToNot(BeNil())
-		})
-
-		It("returns an error when args are empty", func() {
-			emptyArgs := []interface{}{}
-			spec, err := NewSpec(emptyArgs...)
-
-			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
 		})
 
 		It("returns an error when no ref is provided", func() {
-			args = makeArg(`{
+			args = []byte(`{
 			  "account": "modcloth-labs",
 			  "repo": "kamino-test"
 			}`)
-			spec, err := NewSpec(args)
+			spec, _ := NewSpec(args)
+			err := spec.Validate()
 
-			Expect(spec).To(BeNil())
 			Expect(err).ToNot(BeNil())
 		})
 
 		It("returns an error when provided args are not valid json", func() {
-			args = makeArg(`foo`)
+			args = []byte(`foo`)
 			spec, err := NewSpec(args)
 
 			Expect(spec).To(BeNil())
@@ -66,7 +56,7 @@ var _ = Describe("NewSpec()", func() {
 
 	Context("when required args are present", func() {
 		It("returns a valid job spec", func() {
-			args = makeArg(`{
+			args = []byte(`{
 			  "account": "modcloth-labs",
 			  "repo": "kamino-test",
 			  "ref": "master"
@@ -78,14 +68,3 @@ var _ = Describe("NewSpec()", func() {
 		})
 	})
 })
-
-func makeArg(rawJSON string) interface{} {
-
-	type jsonType map[string]interface{}
-
-	ret := &jsonType{}
-
-	_ = json.Unmarshal([]byte(rawJSON), ret)
-
-	return interface{}(*ret)
-}

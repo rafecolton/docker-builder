@@ -18,11 +18,15 @@ type Spec struct {
 }
 
 /*
-NewSpec creates a new job spec based on the arguments that would be passed
-along from the job goworker picks up from Redis.
+NewSpec creates a new job spec from raw json data
 */
-func NewSpec(args ...interface{}) (*Spec, error) {
-	return extractJobSpecFromRawArgs(args...)
+func NewSpec(raw []byte) (*Spec, error) {
+	var ret = &Spec{}
+	if err := json.Unmarshal(raw, ret); err != nil {
+		return nil, err
+	}
+
+	return ret, nil
 }
 
 /*
@@ -43,33 +47,4 @@ func (spec *Spec) Validate() error {
 	}
 
 	return nil
-}
-
-func extractJobSpecFromRawArgs(args ...interface{}) (*Spec, error) {
-	var ret = &Spec{}
-
-	if len(args) < 1 {
-		return nil, errors.New("a single build spec object argument is required")
-	}
-
-	rawBuildJobSpec, ok := args[0].(interface{})
-	if !ok {
-		return nil, errors.New("build spec args must be an object")
-	}
-
-	argJSONBytes, err := json.Marshal(rawBuildJobSpec)
-	if err != nil {
-		return nil, errors.New("failed to re-serialize build job spec object")
-	}
-
-	err = json.Unmarshal(argJSONBytes, ret)
-	if err != nil {
-		return nil, errors.New("failed to deserialize build job spec as JSON")
-	}
-
-	if err = ret.Validate(); err != nil {
-		return nil, err
-	}
-
-	return ret, nil
 }
