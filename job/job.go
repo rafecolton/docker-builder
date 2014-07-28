@@ -245,15 +245,19 @@ func (job *Job) Process() error {
 }
 
 func (job *Job) processTestMode() error {
-	job.Logger.Warn("job.Process() called in test mode")
-	job.Status = "completed"
-	job.Completed = time.Now()
+	// If this function is used correctly,
+	// we should never see this warning message.
+	job.Logger.Warn("processing job in test mode")
 
 	// log something for test purposes
 	levelBefore := job.Logger.Level
 	job.Logger.Level = logrus.Debug
 	job.Logger.Debug("FOO")
 	job.Logger.Level = levelBefore
+
+	// mark job as completed
+	job.Status = "completed"
+	job.Completed = time.Now()
 
 	return nil
 }
