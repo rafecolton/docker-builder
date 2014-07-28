@@ -77,8 +77,8 @@ quick: build
 .PHONY: binclean
 binclean:
 	rm -f $(GOPATH)/bin/docker-builder
-	rm -rf ./releases/*
-	touch ./releases/.gitkeep
+	rm -rf ./Release/*
+	touch ./Release/.gitkeep
 
 .PHONY: build
 build: binclean godep
@@ -86,21 +86,21 @@ build: binclean godep
 
 .PHONY: release
 release: binclean gox-linux gox-darwin
-	open ./releases
+	open ./Release
 
 .PHONY: gox-linux
 gox-linux: build dev
-	mkdir -p ./releases/linux/bin
-	gox -output="releases/linux/bin/docker-builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	pushd releases >/dev/null && \
+	mkdir -p ./Release/linux/bin
+	gox -output="Release/linux/bin/docker-builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	pushd Release >/dev/null && \
 	  tar -czf docker-builder-$(REPO_VERSION)-linux-amd64.tar.gz linux/ && \
 	  popd >/dev/null
 
 .PHONY: gox-darwin
 gox-darwin: build dev
-	mkdir -p ./releases/darwin/bin
-	gox -output="releases/darwin/bin/docker-builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	pushd releases >/dev/null && \
+	mkdir -p ./Release/darwin/bin
+	gox -output="Release/darwin/bin/docker-builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	pushd Release >/dev/null && \
 	  tar -czf docker-builder-$(REPO_VERSION)-darwin-amd64.tar.gz darwin/ && \
 	  popd >/dev/null
 

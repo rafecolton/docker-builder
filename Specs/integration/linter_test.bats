@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 @test "docker-builder correct lints a valid Builderfile" {
-  run $GOPATH/bin/docker-builder -q lint spec/fixtures/bob.toml
+  run $GOPATH/bin/docker-builder -q lint Specs/fixtures/bob.toml
   [ "$status" -eq 0  ]
 }
 

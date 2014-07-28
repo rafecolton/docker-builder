@@ -113,8 +113,8 @@ var _ = Describe("Parse", func() {
 	BeforeEach(func() {
 		top = os.Getenv("PWD")
 		git, _ := fileutils.Which("git")
-		validFile = fmt.Sprintf("%s/spec/fixtures/bob.toml", top)
-		invalidFile = fmt.Sprintf("%s/specs/fixtures/foodoesnotexist", top)
+		validFile = fmt.Sprintf("%s/Specs/fixtures/bob.toml", top)
+		invalidFile = fmt.Sprintf("%s/Specs/fixtures/foodoesnotexist", top)
 		subject = nil
 		// branch
 		branchCmd := &exec.Cmd{

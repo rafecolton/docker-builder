@@ -243,7 +243,7 @@ Repodir is the dir from which we are using files for our docker builds.
 */
 func (bob *Builder) Repodir() string {
 	if !bob.isRegular {
-		repoDir := "spec/fixtures/repodir"
+		repoDir := "Specs/fixtures/repodir"
 		return fmt.Sprintf("%s/%s", os.Getenv("PWD"), repoDir)
 	}
 	return filepath.Dir(bob.Builderfile)
