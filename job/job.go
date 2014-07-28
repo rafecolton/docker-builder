@@ -15,38 +15,43 @@ import (
 	"github.com/modcloth/kamino"
 )
 
-/*
-TestMode monkeys with certain things for tests so bad things don't
-happen
-*/
-var TestMode bool
+const (
+	defaultTail         = "100"
+	defaultBobfile      = "Bobfile"
+	specFixturesRepoDir = "./Specs/fixtures/repodir"
+)
 
-const defaultTail = "100"
+var (
+	// TestMode monkeys with certain things for tests so bad things don't happen
+	TestMode bool
 
-var gen uuid.Generator
-var logger *logrus.Logger
+	gen    uuid.Generator
+	logger *logrus.Logger
+)
 
 /*
 Job is the struct representation of a build job.  Intended to be
 created with NewJob, but exported so it can be used for tests.
 */
 type Job struct {
-	Account        string         `json:"account,omitempty"`
-	Completed      time.Time      `json:"completed,omitempty"`
-	Created        time.Time      `json:"created"`
-	Error          error          `json:"error,omitempty"`
-	GitCloneDepth  string         `json:"clone_depth,omitempty"`
-	GitHubAPIToken string         `json:"-"`
-	ID             string         `json:"id,omitempty"`
-	LogRoute       string         `json:"log_route,omitempty"`
-	Logger         *logrus.Logger `json:"-"`
-	Ref            string         `json:"ref,omitempty"`
-	Repo           string         `json:"repo,omitempty"`
-	Status         string         `json:"status"`
-	Workdir        string         `json:"-"`
-	infoRoute      string         `json:"-"`
-	logDir         string         `json:"-"`
-	logFile        *os.File       `json:"-"`
+	Account            string         `json:"account,omitempty"`
+	Bobfile            string         `json:"bobfile,omitempty"`
+	Completed          time.Time      `json:"completed,omitempty"`
+	Created            time.Time      `json:"created"`
+	Error              error          `json:"error,omitempty"`
+	GitCloneDepth      string         `json:"clone_depth,omitempty"`
+	GitHubAPIToken     string         `json:"-"`
+	ID                 string         `json:"id,omitempty"`
+	LogRoute           string         `json:"log_route,omitempty"`
+	Logger             *logrus.Logger `json:"-"`
+	Ref                string         `json:"ref,omitempty"`
+	Repo               string         `json:"repo,omitempty"`
+	Status             string         `json:"status"`
+	Workdir            string         `json:"-"`
+	infoRoute          string         `json:"-"`
+	logDir             string         `json:"-"`
+	logFile            *os.File       `json:"-"`
+	clonedRepoLocation string         `json:"-"`
 }
 
 /*
@@ -74,7 +79,13 @@ func NewJob(cfg *Config, spec *Spec) *Job {
 		cfg.Logger.WithField("error", err).Error("error creating uuid")
 	}
 
+	bobfile := spec.Bobfile
+	if bobfile == "" {
+		bobfile = defaultBobfile
+	}
+
 	ret := &Job{
+		Bobfile:        bobfile,
 		ID:             id,
 		Account:        spec.RepoOwner,
 		GitHubAPIToken: spec.GitHubAPIToken,
@@ -230,6 +241,14 @@ func (job *Job) Process() error {
 		return err
 	}
 
+	job.Status = "validating"
+	job.clonedRepoLocation = path
+	if err = job.ValidateAfterCloning(); err != nil {
+		job.Status = "errored"
+		job.Error = err
+		return err
+	}
+
 	job.Status = "building"
 	// step 2: build
 	if err = job.build(filepath.Join(path, "Bobfile")); err != nil {
@@ -248,6 +267,19 @@ func (job *Job) processTestMode() error {
 	// If this function is used correctly,
 	// we should never see this warning message.
 	job.Logger.Warn("processing job in test mode")
+
+	// set status to validating in anticipation of performing validation step
+	job.Status = "validating"
+
+	// set clone path to fixtures dir
+	job.clonedRepoLocation = specFixturesRepoDir
+
+	// run after-cloning validations
+	if err := job.ValidateAfterCloning(); err != nil {
+		job.Status = "errored"
+		job.Error = err
+		return err
+	}
 
 	// log something for test purposes
 	levelBefore := job.Logger.Level

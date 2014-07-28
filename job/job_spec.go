@@ -9,6 +9,7 @@ import (
 Spec contains the specs for a job, retrieved from parsed JSON
 */
 type Spec struct {
+	Bobfile        string `json:"bobfile"`
 	RepoOwner      string `json:"account"`
 	RepoName       string `json:"repo"`
 	GitRef         string `json:"ref"`
