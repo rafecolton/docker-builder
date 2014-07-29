@@ -199,9 +199,10 @@ func (job *Job) clone() (string, error) {
 	return path, nil
 }
 
-func (job *Job) build(file string) error {
+func (job *Job) build() error {
 
 	job.Logger.Debug("attempting to create a builder")
+	bobfile := filepath.Join(job.clonedRepoLocation, job.Bobfile)
 
 	bob, err := builder.NewBuilder(job.Logger, true)
 	if err != nil {
@@ -209,9 +210,11 @@ func (job *Job) build(file string) error {
 		return err
 	}
 
-	job.Logger.WithField("file", file).Info("building from file")
+	job.Logger.WithField("file", bobfile).Info("building from file")
 
-	return bob.BuildFromFile(file)
+	err, _ = bob.BuildFromFile(bobfile)
+
+	return err
 }
 
 /*
@@ -240,18 +243,11 @@ func (job *Job) Process() error {
 		job.Error = err
 		return err
 	}
-
-	job.Status = "validating"
 	job.clonedRepoLocation = path
-	if err = job.ValidateAfterCloning(); err != nil {
-		job.Status = "errored"
-		job.Error = err
-		return err
-	}
 
 	job.Status = "building"
 	// step 2: build
-	if err = job.build(filepath.Join(path, "Bobfile")); err != nil {
+	if err = job.build(); err != nil {
 		job.Status = "errored"
 		job.Error = err
 		return err
@@ -273,13 +269,6 @@ func (job *Job) processTestMode() error {
 
 	// set clone path to fixtures dir
 	job.clonedRepoLocation = specFixturesRepoDir
-
-	// run after-cloning validations
-	if err := job.ValidateAfterCloning(); err != nil {
-		job.Status = "errored"
-		job.Error = err
-		return err
-	}
 
 	// log something for test purposes
 	levelBefore := job.Logger.Level
