@@ -212,7 +212,7 @@ func (job *Job) build() error {
 
 	job.Logger.WithField("file", bobfile).Info("building from file")
 
-	err, _ = bob.BuildFromFile(bobfile)
+	_, err = bob.BuildFromFile(bobfile)
 
 	return err
 }

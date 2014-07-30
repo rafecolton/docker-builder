@@ -93,21 +93,21 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 BuildFromFile does the building!  The return values include an error and a
 corresponding exit code (the exit code will be 0 if the error is nil)
 */
-func (bob *Builder) BuildFromFile(file string) (err error, exitCode int) {
+func (bob *Builder) BuildFromFile(file string) (exitCode int, err error) {
 	par, err := parser.NewParser(file, bob.Logger)
 	if err != nil {
-		return err, 73
+		return 73, err
 	}
 
 	commandSequence, err := par.Parse()
 	if err != nil {
-		return err, 23
+		return 23, err
 	}
 
 	bob.Builderfile = file
 
 	if err = bob.build(commandSequence); err != nil {
-		return err, 29
+		return 29, err
 	}
 
 	return
