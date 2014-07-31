@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/dotcloud/docker/pkg/tailfile"
+	"github.com/docker/docker/pkg/tailfile"
 	"github.com/go-martini/martini"
 )
 

@@ -29,7 +29,7 @@ func init() {
 	testServer.Post("/docker-build/travis", Travis)
 	testServer.Post("/docker-build", DockerBuild)
 
-	l := &logrus.Logger{Level: logrus.Panic}
+	l := &logrus.Logger{Level: logrus.PanicLevel}
 
 	Logger(l)
 }

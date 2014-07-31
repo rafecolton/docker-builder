@@ -18,7 +18,7 @@ pass in nil as your logger and false for shouldBeReal.
 func NewDockerClient(logger *logrus.Logger, shouldBeReal bool) (DockerClient, error) {
 	if logger == nil && !shouldBeReal {
 		quietLogger := logrus.New()
-		quietLogger.Level = logrus.Panic
+		quietLogger.Level = logrus.PanicLevel
 
 		return &nullDockerClient{
 			Logger: quietLogger,

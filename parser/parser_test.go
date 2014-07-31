@@ -24,7 +24,7 @@ func TestBuilder(t *testing.T) {
 var nullLogger = &logrus.Logger{
 	Out:       os.Stderr,
 	Formatter: new(logrus.TextFormatter),
-	Level:     logrus.Panic,
+	Level:     logrus.PanicLevel,
 }
 
 var _ = Describe("Parse", func() {
