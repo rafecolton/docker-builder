@@ -96,10 +96,7 @@ func NewJob(cfg *Config, spec *Spec) *Job {
 		LogRoute:       fmt.Sprintf("/jobs/%s/tail?n=%s", id, defaultTail),
 		logDir:         fmt.Sprintf("%s/%s", cfg.Workdir, id),
 		Status:         "created",
-	}
-
-	if !TestMode {
-		ret.Created = time.Now()
+		Created:        time.Now(),
 	}
 
 	out := io.MultiWriter(os.Stdout)
@@ -235,8 +232,8 @@ func (job *Job) Process() error {
 		}
 	}()
 
-	job.Status = "cloning"
 	// step 1: clone
+	job.Status = "cloning"
 	path, err := job.clone()
 	if err != nil {
 		job.Status = "errored"
@@ -245,8 +242,8 @@ func (job *Job) Process() error {
 	}
 	job.clonedRepoLocation = path
 
-	job.Status = "building"
 	// step 2: build
+	job.Status = "building"
 	if err = job.build(); err != nil {
 		job.Status = "errored"
 		job.Error = err
