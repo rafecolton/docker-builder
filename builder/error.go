@@ -1,8 +1,8 @@
 package builder
 
-// BuilderError is an interface for any error types returned by the builder
+// Error is an interface for any error types returned by the builder
 // package / during the building process
-type BuilderError interface {
+type Error interface {
 	// Error returns the error message to satisfy the error interface
 	Error() string
 

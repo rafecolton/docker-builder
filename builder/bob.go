@@ -92,7 +92,7 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 /*
 BuildFromFile does the building!
 */
-func (bob *Builder) BuildFromFile(file string) BuilderError {
+func (bob *Builder) BuildFromFile(file string) Error {
 	// Sanitization of the provided file path happens here because
 	// parser.NewParser calls filepath.Dir(file), which would be problematic
 	// with an unsanitized path.  Additionally, the sanitization happens here
