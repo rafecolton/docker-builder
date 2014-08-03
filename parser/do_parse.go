@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"github.com/modcloth/docker-builder/builderfile"
 	"io/ioutil"
 )
@@ -11,15 +10,10 @@ import (
 )
 
 // Step 1 of Parse
-func (parser *Parser) getRaw() (string, error) {
-	if !parser.IsOpenable() {
-		return "", fmt.Errorf("%q is not openable", parser.filename)
-	}
-
+func (parser *Parser) getRaw() (string, Error) {
 	bytes, err := ioutil.ReadFile(parser.filename)
-
 	if err != nil {
-		return "", err
+		return "", &OSPathError{error: err}
 	}
 
 	raw := string(bytes)
@@ -28,7 +22,7 @@ func (parser *Parser) getRaw() (string, error) {
 }
 
 // Step 2 of Parse
-func (parser *Parser) rawToStruct() (*builderfile.Builderfile, error) {
+func (parser *Parser) rawToStruct() (*builderfile.Builderfile, Error) {
 	raw, err := parser.getRaw()
 	if err != nil {
 		return nil, err
@@ -36,7 +30,7 @@ func (parser *Parser) rawToStruct() (*builderfile.Builderfile, error) {
 
 	file := &builderfile.Builderfile{}
 	if _, err := toml.Decode(raw, &file); err != nil {
-		return nil, err
+		return nil, &TOMLParseError{error: err}
 	}
 
 	file.Clean()
@@ -46,11 +40,10 @@ func (parser *Parser) rawToStruct() (*builderfile.Builderfile, error) {
 
 // Step 2.5 of Parse - handle Builderfile version
 
-func (parser *Parser) convertBuilderfileVersion() (*builderfile.Builderfile, error) {
-	var err error
-	var fileZero *builderfile.Builderfile
+func (parser *Parser) convertBuilderfileVersion() (*builderfile.Builderfile, Error) {
+	//var fileZero *builderfile.Builderfile
 
-	fileZero, err = parser.rawToStruct()
+	fileZero, err := parser.rawToStruct()
 	if err != nil {
 		return nil, err
 	}
@@ -61,11 +54,16 @@ func (parser *Parser) convertBuilderfileVersion() (*builderfile.Builderfile, err
 	}
 
 	builderfile.Logger(parser.Logger)
-	return builderfile.Convert0to1(fileZero)
+	fileOne, goErr := builderfile.Convert0to1(fileZero)
+	if goErr != nil {
+		return nil, &BuilderfileConvertError{error: goErr}
+	}
+
+	return fileOne, nil
 }
 
 // Step 3 of Parse
-func (parser *Parser) structToInstructionSet() (*InstructionSet, error) {
+func (parser *Parser) structToInstructionSet() (*InstructionSet, Error) {
 	file, err := parser.convertBuilderfileVersion()
 	if err != nil {
 		return nil, err
@@ -75,7 +73,7 @@ func (parser *Parser) structToInstructionSet() (*InstructionSet, error) {
 }
 
 // Step 4 of Parse()
-func (parser *Parser) instructionSetToCommandSequence() (*CommandSequence, error) {
+func (parser *Parser) instructionSetToCommandSequence() (*CommandSequence, Error) {
 	is, err := parser.structToInstructionSet()
 	if err != nil {
 		return nil, err
@@ -85,7 +83,7 @@ func (parser *Parser) instructionSetToCommandSequence() (*CommandSequence, error
 }
 
 // wrapper function for the final step
-func (parser *Parser) finalStep() (interface{}, error) {
+func (parser *Parser) finalStep() (interface{}, Error) {
 	return parser.instructionSetToCommandSequence()
 }
 
@@ -93,7 +91,7 @@ func (parser *Parser) finalStep() (interface{}, error) {
 Parse further parses the Builderfile struct into an InstructionSet struct,
 merging the global container options into the individual container sections.
 */
-func (parser *Parser) Parse() (*CommandSequence, error) {
+func (parser *Parser) Parse() (*CommandSequence, Error) {
 	ret, err := parser.finalStep()
 	if err != nil {
 		return nil, err

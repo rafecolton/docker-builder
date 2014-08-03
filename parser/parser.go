@@ -27,13 +27,11 @@ NewParser returns an initialized Parser.  Not currently necessary, as no
 default values are assigned to a new Parser, but useful to have in case we need
 to change this.
 */
-func NewParser(filename string, l *logrus.Logger) (*Parser, error) {
+func NewParser(filename string, l *logrus.Logger) *Parser {
 	return &Parser{
 		Logger:        l,
 		filename:      filename,
 		uuidGenerator: uuid.NewUUIDGenerator(true),
 		top:           filepath.Dir(filename),
-	}, nil
-}
 	}
 }

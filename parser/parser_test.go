@@ -224,35 +224,29 @@ var _ = Describe("Parse", func() {
 	})
 
 	Context("with a valid Builderfile", func() {
-
-		It("produces an openable file", func() {
-			subject, _ := NewParser(validFile, nullLogger)
-			Expect(subject.IsOpenable()).To(Equal(true))
-		})
-
 		It("returns a non empty string and a nil error as raw data", func() {
-			subject, _ := NewParser(validFile, nullLogger)
+			subject := NewParser(validFile, nullLogger)
 			raw, err := subject.getRaw()
 			Expect(len(raw)).ToNot(Equal(0))
 			Expect(err).To(BeNil())
 		})
 
 		It("returns a fully parsed Builderfile", func() {
-			subject, _ := NewParser(validFile, nullLogger)
+			subject := NewParser(validFile, nullLogger)
 			actual, err := subject.rawToStruct()
 			Expect(expectedBuilderfile).To(Equal(actual))
 			Expect(err).To(BeNil())
 		})
 
 		It("further processes the Builderfile into an InstructionSet", func() {
-			subject, _ := NewParser(validFile, nullLogger)
+			subject := NewParser(validFile, nullLogger)
 			actual, err := subject.structToInstructionSet()
 			Expect(expectedInstructionSet).To(Equal(actual))
 			Expect(err).To(BeNil())
 		})
 
 		It("further processes the InstructionSet into an CommandSequence", func() {
-			subject, _ := NewParser(validFile, nullLogger)
+			subject := NewParser(validFile, nullLogger)
 			subject.SeedUUIDGenerator()
 			actual, err := subject.instructionSetToCommandSequence()
 			Expect(expectedCommandSequence).To(Equal(actual))
@@ -262,7 +256,7 @@ var _ = Describe("Parse", func() {
 
 	Context("with an invalid Builderfile", func() {
 		It("returns an empty string and error as raw data", func() {
-			subject, _ := NewParser(invalidFile, nullLogger)
+			subject := NewParser(invalidFile, nullLogger)
 			raw, err := subject.getRaw()
 			Expect(raw).To(Equal(""))
 			Expect(err).ToNot(BeNil())

@@ -103,25 +103,19 @@ func (bob *Builder) BuildFromFile(file string) Error {
 		return bErr
 	}
 
-	par, err := parser.NewParser(sanitizedFile, bob.Logger)
-	if err != nil {
-		return &ParserRelatedError{
-			message:  err.Error(),
-			exitCode: 73,
-		}
-	}
+	par := parser.NewParser(sanitizedFile, bob.Logger)
 
-	commandSequence, err := par.Parse()
-	if err != nil {
+	commandSequence, pErr := par.Parse()
+	if pErr != nil {
 		return &ParserRelatedError{
-			message:  err.Error(),
+			message:  pErr.Error(),
 			exitCode: 23,
 		}
 	}
 
 	bob.Builderfile = sanitizedFile
 
-	if err = bob.build(commandSequence); err != nil {
+	if err := bob.build(commandSequence); err != nil {
 		return &BuildRelatedError{
 			message:  err.Error(),
 			exitCode: 29,
