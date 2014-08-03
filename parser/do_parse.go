@@ -13,7 +13,7 @@ import (
 // Step 1 of Parse
 func (parser *Parser) getRaw() (string, error) {
 	if !parser.IsOpenable() {
-		return "", fmt.Errorf("%s is not openable", parser.filename)
+		return "", fmt.Errorf("%q is not openable", parser.filename)
 	}
 
 	bytes, err := ioutil.ReadFile(parser.filename)
@@ -44,9 +44,9 @@ func (parser *Parser) rawToStruct() (*builderfile.Builderfile, error) {
 	return file, nil
 }
 
-// Step 2.5 of Parse - handle Bobfile version
+// Step 2.5 of Parse - handle Builderfile version
 
-func (parser *Parser) convertBobfileVersion() (*builderfile.Builderfile, error) {
+func (parser *Parser) convertBuilderfileVersion() (*builderfile.Builderfile, error) {
 	var err error
 	var fileZero *builderfile.Builderfile
 
@@ -60,13 +60,13 @@ func (parser *Parser) convertBobfileVersion() (*builderfile.Builderfile, error) 
 		return fileZero, nil
 	}
 
-	builderfile.Logger(logger)
+	builderfile.Logger(parser.Logger)
 	return builderfile.Convert0to1(fileZero)
 }
 
 // Step 3 of Parse
 func (parser *Parser) structToInstructionSet() (*InstructionSet, error) {
-	file, err := parser.convertBobfileVersion()
+	file, err := parser.convertBuilderfileVersion()
 	if err != nil {
 		return nil, err
 	}

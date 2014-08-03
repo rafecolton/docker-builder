@@ -15,15 +15,11 @@ IsOpenable examines the Builderfile provided to the Parser and returns a bool
 indicating whether or not the file exists and openable.
 */
 func (parser *Parser) IsOpenable() bool {
-
+	//TODO: get rid of this function - it really doesn't make sense to open the
+	//file twice just for the sake of different exit codes
 	file, err := os.Open(parser.filename)
 	defer file.Close()
-
-	if err != nil {
-		return false
-	}
-
-	return true
+	return err == nil
 }
 
 // turns InstructionSet structs into CommandSequence structs

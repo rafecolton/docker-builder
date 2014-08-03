@@ -22,15 +22,12 @@ type Parser struct {
 	top           string
 }
 
-var logger *logrus.Logger
-
 /*
 NewParser returns an initialized Parser.  Not currently necessary, as no
 default values are assigned to a new Parser, but useful to have in case we need
 to change this.
 */
 func NewParser(filename string, l *logrus.Logger) (*Parser, error) {
-	logger = l
 	return &Parser{
 		Logger:        l,
 		filename:      filename,
