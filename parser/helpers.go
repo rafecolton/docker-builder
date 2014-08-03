@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 
@@ -43,8 +42,8 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			return nil
 		}
 
-		name := fmt.Sprintf("%s/%s", v.Registry, v.Project)
-		initialTag := fmt.Sprintf("%s:%s", name, uuid)
+		name := v.Registry + "/" + v.Project
+		initialTag := name + ":" + uuid
 		buildArgs := []string{"docker", "build", "-t", initialTag}
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")

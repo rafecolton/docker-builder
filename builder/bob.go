@@ -8,7 +8,6 @@ import (
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -233,11 +232,11 @@ func (bob *Builder) Setup() error {
 
 	// copy the actual files over
 	for _, file := range fileSet.ToSlice() {
-		src := fmt.Sprintf("%s/%s", repodir, file)
-		dest := fmt.Sprintf("%s/%s", workdir, file)
+		src := repodir + "/" + file.(string)
+		dest := workdir + "/" + file.(string)
 
 		if file == meta.Dockerfile {
-			dest = fmt.Sprintf("%s/%s", workdir, "Dockerfile")
+			dest = workdir + "/" + "Dockerfile"
 		}
 
 		fileInfo, err := os.Stat(src)
@@ -264,7 +263,7 @@ Repodir is the dir from which we are using files for our docker builds.
 func (bob *Builder) Repodir() string {
 	if !bob.isRegular {
 		repoDir := "Specs/fixtures/repodir"
-		return fmt.Sprintf("%s/%s", os.Getenv("PWD"), repoDir)
+		return os.Getenv("PWD") + "/" + repoDir
 	}
 	return filepath.Dir(bob.Builderfile)
 }

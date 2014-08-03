@@ -4,10 +4,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"testing"
-)
 
-import (
-	"fmt"
 	"os"
 	"os/exec"
 
@@ -28,7 +25,6 @@ var nullLogger = &logrus.Logger{
 }
 
 var _ = Describe("Parse", func() {
-
 	var (
 		subject                 *Parser
 		validFile               string
@@ -113,8 +109,8 @@ var _ = Describe("Parse", func() {
 	BeforeEach(func() {
 		top = os.Getenv("PWD")
 		git, _ := fileutils.Which("git")
-		validFile = fmt.Sprintf("%s/Specs/fixtures/bob.toml", top)
-		invalidFile = fmt.Sprintf("%s/Specs/fixtures/foodoesnotexist", top)
+		validFile = top + "/Specs/fixtures/bob.toml"
+		invalidFile = top + "/Specs/fixtures/foodoesnotexist"
 		subject = nil
 		// branch
 		branchCmd := &exec.Cmd{

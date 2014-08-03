@@ -70,7 +70,7 @@ func (rtoo *realDockerClient) LatestImageTaggedWithUUID(uuid string) (string, er
 
 	for _, image := range images {
 		for _, tag := range image.RepoTags {
-			matched, err := regexp.MatchString(fmt.Sprintf(":%s$", uuid), tag)
+			matched, err := regexp.MatchString(":"+uuid+"$", tag)
 			if err != nil {
 				return "", err
 			}
@@ -92,7 +92,7 @@ func (rtoo *realDockerClient) LatestRepoTaggedWithUUID(uuid string) (string, err
 
 	for _, image := range images {
 		for _, tag := range image.RepoTags {
-			matched, err := regexp.MatchString(fmt.Sprintf(":%s$", uuid), tag)
+			matched, err := regexp.MatchString(":"+uuid+"$", tag)
 			if err != nil {
 				return "", err
 			}

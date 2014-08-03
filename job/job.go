@@ -1,7 +1,6 @@
 package job
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -92,9 +91,9 @@ func NewJob(cfg *Config, spec *Spec) *Job {
 		Ref:            spec.GitRef,
 		Repo:           spec.RepoName,
 		Workdir:        cfg.Workdir,
-		infoRoute:      fmt.Sprintf("/jobs/%s", id),
-		LogRoute:       fmt.Sprintf("/jobs/%s/tail?n=%s", id, defaultTail),
-		logDir:         fmt.Sprintf("%s/%s", cfg.Workdir, id),
+		infoRoute:      "/jobs/" + id,
+		LogRoute:       "/jobs/" + id + "/tail?n=" + defaultTail,
+		logDir:         cfg.Workdir + "/" + id,
 		Status:         "created",
 		Created:        time.Now(),
 	}
@@ -105,7 +104,7 @@ func NewJob(cfg *Config, spec *Spec) *Job {
 		cfg.Logger.WithField("error", err).Error("error creating log dir")
 		id = ""
 	} else {
-		file, err := os.Create(fmt.Sprintf("%s/log.log", ret.logDir))
+		file, err := os.Create(ret.logDir + "/log.log")
 		if err != nil {
 			cfg.Logger.WithField("error", err).Error("error creating log file")
 			id = ""

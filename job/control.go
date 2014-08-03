@@ -3,7 +3,6 @@ package job
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -27,7 +26,7 @@ func TailN(params martini.Params, req *http.Request) (int, string) {
 
 	intN, err := strconv.Atoi(n)
 	if err != nil {
-		return 400, fmt.Sprintf("%s is not a valid number", n)
+		return 400, n + " is not a valid number"
 	}
 
 	out, err := tailN(intN, id)
@@ -40,7 +39,7 @@ func TailN(params martini.Params, req *http.Request) (int, string) {
 
 func tailN(n int, id string) (string, error) {
 	job := jobs[id]
-	logFilePath := fmt.Sprintf("%s/log.log", job.logDir)
+	logFilePath := job.logDir + "/log.log"
 
 	file, err := os.Open(logFilePath)
 	if err != nil {
@@ -64,7 +63,7 @@ func Get(params martini.Params, req *http.Request) (int, string) {
 
 	retBytes, err := json.Marshal(job)
 	if err != nil {
-		return 409, fmt.Sprintf(`{"error": %q}`, err)
+		return 409, `{"error": "` + err.Error() + `"}`
 	}
 
 	return 200, string(retBytes)
@@ -74,7 +73,7 @@ func Get(params martini.Params, req *http.Request) (int, string) {
 func GetAll(params martini.Params) (int, string) {
 	retBytes, err := json.Marshal(jobs)
 	if err != nil {
-		return 409, fmt.Sprintf(`{"error": %q}`, err)
+		return 409, `{"error": "` + err.Error() + `"}`
 	}
 
 	return 200, string(retBytes)
