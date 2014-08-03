@@ -21,14 +21,14 @@ import (
 	"github.com/onsi/gocleanup"
 )
 
-var imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
+var (
+	// SkipPush will, when set to true, override any behavior set by a Bobfile and
+	// will cause builders *NOT* to run `docker push` commands.  SkipPush is also set
+	// by the `--skip-push` option when used on the command line.
+	SkipPush bool
 
-/*
-SkipPush, when set to true, will override any behavior set by a Bobfile and
-will cause builders *NOT* to run `docker push` commands.  SkipPush is also set
-by the `--skip-push` option when used on the command line.
-*/
-var SkipPush bool
+	imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
+)
 
 /*
 A Builder is the struct that actually does the work of moving files around and
