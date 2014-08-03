@@ -11,8 +11,6 @@ type Error interface {
 	ExitCode() int
 }
 
-//... SanitizeError
-
 // SanitizeError is used for errors related to sanitizing a given Bobfile path
 type SanitizeError struct {
 	message string
@@ -29,8 +27,6 @@ func (err *SanitizeError) Error() string {
 func (err *SanitizeError) ExitCode() int {
 	return 67
 }
-
-//... ParserRelatedError
 
 // ParserRelatedError is used for errors encounted during the building process
 // that are related to parsing the Bobfile
