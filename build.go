@@ -18,7 +18,7 @@ func build(c *cli.Context) {
 		exitErr(61, "unable to build", err)
 	}
 
-	if exitCode, err := bob.BuildFromFile(builderfile); err != nil {
-		exitErr(exitCode, "unable to build", err)
+	if err := bob.BuildFromFile(builderfile); err != nil {
+		exitErr(err.ExitCode(), "unable to build", err)
 	}
 }

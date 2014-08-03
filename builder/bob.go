@@ -90,32 +90,37 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 }
 
 /*
-BuildFromFile does the building!  The return values include an error and a
-corresponding exit code (the exit code will be 0 if the error is nil)
+BuildFromFile does the building!
 */
-func (bob *Builder) BuildFromFile(file string) (exitCode int, err error) {
-	par, err := parser.NewParser(file, bob.Logger)
+func (bob *Builder) BuildFromFile(file string) BuilderError {
+	par, err := parser.NewParser(sanitizedFile, bob.Logger)
 	if err != nil {
-		return 73, err
+		return &ParserRelatedError{
+			message:  err.Error(),
+			exitCode: 73,
+		}
 	}
 
 	commandSequence, err := par.Parse()
 	if err != nil {
-		return 23, err
+		return &ParserRelatedError{
+			message:  err.Error(),
+			exitCode: 23,
+		}
 	}
 
 	bob.Builderfile = file
 
 	if err = bob.build(commandSequence); err != nil {
-		return 29, err
+		return &BuildRelatedError{
+			message:  err.Error(),
+			exitCode: 29,
+		}
 	}
 
-	return
+	return nil
 }
 
-/*
-Build does the building!
-*/
 func (bob *Builder) build(commandSequence *parser.CommandSequence) error {
 	for _, seq := range commandSequence.Commands {
 		if err := bob.CleanWorkdir(); err != nil {
