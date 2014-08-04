@@ -25,21 +25,21 @@ var dotDotRegex = regexp.MustCompile("\\.\\.")
 // Bobfile path and returns either a sanitized version of the path or an error
 func SanitizeBuilderfilePath(file string) (string, Error) {
 	if dotDotRegex.MatchString(file) {
-		return "", &SanitizeError{message: DotDotSanitizeErrorMessage}
+		return "", &SanitizeError{Message: DotDotSanitizeErrorMessage}
 	}
 
 	abs, err := filepath.Abs("./" + file)
 	if err != nil {
-		return "", &SanitizeError{message: InvalidPathSanitizeErrorMessage}
+		return "", &SanitizeError{Message: InvalidPathSanitizeErrorMessage}
 	}
 
 	resolved, err := filepath.EvalSymlinks(abs)
 	if err != nil {
-		return "", &SanitizeError{message: InvalidPathSanitizeErrorMessage}
+		return "", &SanitizeError{Message: InvalidPathSanitizeErrorMessage}
 	}
 
 	if abs != resolved {
-		return "", &SanitizeError{message: SymlinkSanitizeErrorMessage}
+		return "", &SanitizeError{Message: SymlinkSanitizeErrorMessage}
 	}
 
 	clean := filepath.Clean(abs)

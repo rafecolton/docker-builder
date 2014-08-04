@@ -13,13 +13,13 @@ type Error interface {
 
 // SanitizeError is used for errors related to sanitizing a given Bobfile path
 type SanitizeError struct {
-	message string
+	Message string
 }
 
 // Error returns the error message for a SanitizeError.  It is expected to be
 // set at the time that the struct instance is created
 func (err *SanitizeError) Error() string {
-	return err.message
+	return err.Message
 }
 
 // ExitCode returns the exit code for errors related to sanitizing the Bobfile
@@ -31,38 +31,38 @@ func (err *SanitizeError) ExitCode() int {
 // ParserRelatedError is used for errors encounted during the building process
 // that are related to parsing the Bobfile
 type ParserRelatedError struct {
-	message  string
-	exitCode int
+	Message string
+	Code    int
 }
 
 // Error returns the error message for a ParserRelatedError.  It is expected to
 // be set at the time that the struct instance is created
 func (err *ParserRelatedError) Error() string {
-	return err.message
+	return err.Message
 }
 
 // ExitCode returns the exit code for errors related to parsing the Bobfile
 // path.  It is expected to be set during the time that struct instance is
 // created
 func (err *ParserRelatedError) ExitCode() int {
-	return err.exitCode
+	return err.Code
 }
 
 // BuildRelatedError is used for build-related errors produced by the builder package
 // that are encountered during the build process
 type BuildRelatedError struct {
-	message  string
-	exitCode int
+	Message string
+	Code    int
 }
 
 // Error returns the error message for a build-related error.  It is expected
 // to be set at the time that the struct instance is created
 func (err *BuildRelatedError) Error() string {
-	return err.message
+	return err.Message
 }
 
 // ExitCode returns the exit code for errors related to the build process.  It
 // is expected to be set during the time that struct instance is created
 func (err *BuildRelatedError) ExitCode() int {
-	return err.exitCode
+	return err.Code
 }
