@@ -89,16 +89,16 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 }
 
 /*
-BuildFromFile does the building!
+Build does the building!
 */
-func (bob *Builder) BuildFromFile(file string) Error {
+func (bob *Builder) Build(config *BuildConfig) Error {
 	// Sanitization of the provided file path happens here because
 	// parser.NewParser calls filepath.Dir(file), which would be problematic
 	// with an unsanitized path.  Additionally, the sanitization happens here
 	// as opposed to parser.Parse because the validations are conceptually
 	// different.  The parser is more concerned with the presence or absence of
 	// the file and its contents but not the file's location.
-	sanitizedFile, bErr := SanitizeBuilderfilePath(file)
+	sanitizedFile, bErr := SanitizeBuilderfilePath(config)
 	if bErr != nil {
 		return bErr
 	}

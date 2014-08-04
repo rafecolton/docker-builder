@@ -3,7 +3,6 @@ package job
 import (
 	"io"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/modcloth/docker-builder/builder"
@@ -198,7 +197,6 @@ func (job *Job) clone() (string, error) {
 func (job *Job) build() error {
 
 	job.Logger.Debug("attempting to create a builder")
-	bobfile := filepath.Join(job.clonedRepoLocation, job.Bobfile)
 
 	bob, err := builder.NewBuilder(job.Logger, true)
 	if err != nil {
@@ -206,11 +204,14 @@ func (job *Job) build() error {
 		return err
 	}
 
-	job.Logger.WithField("file", bobfile).Info("building from file")
+	job.Logger.WithField("file", job.Bobfile).Info("building from file")
 
-	err = bob.BuildFromFile(bobfile)
+	config, err := builder.NewBuildConfig(job.Bobfile, job.clonedRepoLocation)
+	if err != nil {
+		return err
+	}
 
-	return err
+	return bob.Build(config)
 }
 
 /*

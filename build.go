@@ -18,7 +18,12 @@ func build(c *cli.Context) {
 		exitErr(61, "unable to build", err)
 	}
 
-	if err := bob.BuildFromFile(builderfile); err != nil {
+	config, err := builder.NewBuildConfig(builderfile, ".")
+	if err != nil {
+		exitErr(1, "unable to create build config", err)
+	}
+
+	if err := bob.Build(config); err != nil {
 		exitErr(err.ExitCode(), "unable to build", err)
 	}
 }

@@ -23,12 +23,15 @@ var dotDotRegex = regexp.MustCompile("\\.\\.")
 
 // SanitizeBuilderfilePath checks for disallowed entries in the provided
 // Bobfile path and returns either a sanitized version of the path or an error
-func SanitizeBuilderfilePath(file string) (string, Error) {
+func SanitizeBuilderfilePath(config *BuildConfig) (string, Error) {
+	var file = config.File()
+	var top = config.Top()
+
 	if dotDotRegex.MatchString(file) {
 		return "", &SanitizeError{Message: DotDotSanitizeErrorMessage}
 	}
 
-	abs, err := filepath.Abs("./" + file)
+	abs, err := filepath.Abs(top + "/" + file)
 	if err != nil {
 		return "", &SanitizeError{Message: InvalidPathSanitizeErrorMessage}
 	}

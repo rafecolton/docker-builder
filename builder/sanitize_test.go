@@ -5,7 +5,6 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"os"
 	"path/filepath"
 )
 
@@ -20,25 +19,24 @@ var _ = Describe("Sanitize Builderfile path", func() {
 		cleanedValidPath = filepath.Clean(absValidPath)
 	)
 
-	BeforeEach(func() {
-		os.Chdir("..")
-	})
-
 	Context("when the path is bogus", func() {
 		It(`returns an error when the path contains ".."`, func() {
-			_, err := SanitizeBuilderfilePath(dotDotPath)
+			config, _ := NewBuildConfig(dotDotPath, "..")
+			_, err := SanitizeBuilderfilePath(config)
 			Expect(err).ToNot(BeNil())
 			Expect(err.Error()).To(Equal(DotDotSanitizeErrorMessage))
 		})
 
 		It("returns an error when the path contains symlinks", func() {
-			_, err := SanitizeBuilderfilePath(symlinkPath)
+			config, _ := NewBuildConfig(symlinkPath, "..")
+			_, err := SanitizeBuilderfilePath(config)
 			Expect(err).ToNot(BeNil())
 			Expect(err.Error()).To(Equal(SymlinkSanitizeErrorMessage))
 		})
 
 		It("returns an error when the path is invalid", func() {
-			_, err := SanitizeBuilderfilePath(bogusPath)
+			config, _ := NewBuildConfig(bogusPath, "..")
+			_, err := SanitizeBuilderfilePath(config)
 			Expect(err).ToNot(BeNil())
 			Expect(err.Error()).To(Equal(InvalidPathSanitizeErrorMessage))
 		})
@@ -46,12 +44,14 @@ var _ = Describe("Sanitize Builderfile path", func() {
 
 	Context("when the path is valid", func() {
 		It("does not return an error", func() {
-			_, err := SanitizeBuilderfilePath(validPath)
+			config, _ := NewBuildConfig(validPath, "..")
+			_, err := SanitizeBuilderfilePath(config)
 			Expect(err).To(BeNil())
 		})
 
 		It("returns a cleaned version of the path", func() {
-			path, _ := SanitizeBuilderfilePath(validPath)
+			config, _ := NewBuildConfig(validPath, "..")
+			path, _ := SanitizeBuilderfilePath(config)
 			Expect(path).To(Equal(cleanedValidPath))
 		})
 	})
