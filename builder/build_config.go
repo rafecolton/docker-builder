@@ -12,6 +12,10 @@ type BuildConfig struct {
 	top  string
 }
 
+// NewBuildConfig returns a *BuildConfig after doing a little bit of setup.  If
+// top is not provided (an empty string), it is defaulted to ".".  The top is
+// sanitized by evaluating all symlinks so that it can be properly sanitized by
+// the builder when the time comes
 func NewBuildConfig(file, top string) (*BuildConfig, error) {
 	//ret := &BuildConfig{}
 	//ret.file = file
@@ -34,10 +38,12 @@ func NewBuildConfig(file, top string) (*BuildConfig, error) {
 	}, nil
 }
 
+// File returns the Bobfile associated with the build config
 func (b *BuildConfig) File() string {
 	return b.file
 }
 
+// Top returns the repo directory after the setup has been done in NewBuildConfig
 func (b *BuildConfig) Top() string {
 	return b.top
 }
