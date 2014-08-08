@@ -7,19 +7,19 @@ import (
 func setLogger(level, format string) {
 	switch level {
 	case "debug", "d":
-		Logger.Level = logrus.Debug
+		Logger.Level = logrus.DebugLevel
 	case "info", "i":
-		Logger.Level = logrus.Info
+		Logger.Level = logrus.InfoLevel
 	case "warn", "w":
-		Logger.Level = logrus.Warn
+		Logger.Level = logrus.WarnLevel
 	case "error", "e":
-		Logger.Level = logrus.Error
+		Logger.Level = logrus.ErrorLevel
 	case "fatal", "f":
-		Logger.Level = logrus.Fatal
+		Logger.Level = logrus.FatalLevel
 	case "panic", "p":
-		Logger.Level = logrus.Panic
+		Logger.Level = logrus.PanicLevel
 	default:
-		Logger.Level = logrus.Info
+		Logger.Level = logrus.InfoLevel
 	}
 
 	switch format {

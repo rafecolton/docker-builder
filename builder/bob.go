@@ -61,7 +61,7 @@ case we want to initialize our Builders with something.
 func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 	if logger == nil {
 		logger = logrus.New()
-		logger.Level = logrus.Panic
+		logger.Level = logrus.PanicLevel
 	}
 
 	client, err := dclient.NewDockerClient(logger, shouldBeRegular)

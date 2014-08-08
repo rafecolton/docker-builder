@@ -251,7 +251,7 @@ func (job *Job) processTestMode() error {
 
 	// log something for test purposes
 	levelBefore := job.Logger.Level
-	job.Logger.Level = logrus.Debug
+	job.Logger.Level = logrus.DebugLevel
 	job.Logger.Debug("FOO")
 	job.Logger.Level = levelBefore
 
