@@ -44,15 +44,47 @@ func main() {
 	app.Usage = "docker-builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"
 	app.Version = fmt.Sprintf("%s %s", ver.Version, app.Compiled)
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{"branch", "print branch and exit"},
-		cli.BoolFlag{"rev", "print revision and exit"},
-		cli.BoolFlag{"version-short", "print long version and exit"},
-		cli.BoolFlag{"quiet, q", "produce no output, only exit codes"},
-		cli.StringFlag{"log-level, l", conf.Config.LogLevel, "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)"},
-		cli.StringFlag{"log-format, f", conf.Config.LogFormat, "log output format (options: text/t, json/j)"},
-		cli.StringFlag{"dockercfg-un", conf.Config.CfgUn, "Docker registry username"},
-		cli.StringFlag{"dockercfg-pass", conf.Config.CfgPass, "Docker registry password"},
-		cli.StringFlag{"dockercfg-email", conf.Config.CfgEmail, "Docker registry email"},
+		cli.BoolFlag{
+			Name:  "branch",
+			Usage: "print branch and exit",
+		},
+		cli.BoolFlag{
+			Name:  "rev",
+			Usage: "print revision and exit",
+		},
+		cli.BoolFlag{
+			Name:  "version-short",
+			Usage: "print long version and exit",
+		},
+		cli.BoolFlag{
+			Name:  "quiet, q",
+			Usage: "produce no output, only exit codes",
+		},
+		cli.StringFlag{
+			Name:  "log-level, l",
+			Value: conf.Config.LogLevel,
+			Usage: "log level (options: debug/d, info/i, warn/w, error/e, fatal/f, panic/p)",
+		},
+		cli.StringFlag{
+			Name:  "log-format, f",
+			Value: conf.Config.LogFormat,
+			Usage: "log output format (options: text/t, json/j)",
+		},
+		cli.StringFlag{
+			Name:  "dockercfg-un",
+			Value: conf.Config.CfgUn,
+			Usage: "Docker registry username",
+		},
+		cli.StringFlag{
+			Name:  "dockercfg-pass",
+			Value: conf.Config.CfgPass,
+			Usage: "Docker registry password",
+		},
+		cli.StringFlag{
+			Name:  "dockercfg-email",
+			Value: conf.Config.CfgEmail,
+			Usage: "Docker registry email",
+		},
 	}
 	app.Action = func(c *cli.Context) {
 		ver = version.NewVersion()
@@ -88,7 +120,10 @@ func main() {
 			Description: "Build Docker images from the provided Bobfile.",
 			Action:      build,
 			Flags: []cli.Flag{
-				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
+				cli.BoolFlag{
+					Name:  "skip-push",
+					Usage: "override Bobfile behavior and do not push any images (useful for testing)",
+				},
 			},
 		},
 		{
@@ -103,15 +138,48 @@ func main() {
 			Description: server.Description,
 			Action:      func(c *cli.Context) { server.Logger(Logger); server.Serve(c) },
 			Flags: []cli.Flag{
-				cli.IntFlag{"port, p", conf.Config.Port, "port on which to serve"},
-				cli.StringFlag{"api-token, t", "", "GitHub API token"},
-				cli.BoolFlag{"skip-push", "override Bobfile behavior and do not push any images (useful for testing)"},
-				cli.StringFlag{"username", "", "username for basic auth"},
-				cli.StringFlag{"password", "", "password for basic auth"},
-				cli.StringFlag{"travis-token", "", "Travis API token for webhooks"},
-				cli.StringFlag{"github-secret", "", "GitHub secret for webhooks"},
-				cli.BoolFlag{"no-travis", "do not include route for Travis CI webhook"},
-				cli.BoolFlag{"no-github", "do not include route for GitHub webhook"},
+				cli.IntFlag{
+					Name:  "port, p",
+					Value: conf.Config.Port,
+					Usage: "port on which to serve",
+				},
+				cli.StringFlag{
+					Name:  "api-token, t",
+					Value: "",
+					Usage: "GitHub API token",
+				},
+				cli.BoolFlag{
+					Name:  "skip-push",
+					Usage: "override Bobfile behavior and do not push any images (useful for testing)",
+				},
+				cli.StringFlag{
+					Name:  "username",
+					Value: "",
+					Usage: "username for basic auth",
+				},
+				cli.StringFlag{
+					Name:  "password",
+					Value: "",
+					Usage: "password for basic auth",
+				},
+				cli.StringFlag{
+					Name:  "travis-token",
+					Value: "",
+					Usage: "Travis API token for webhooks",
+				},
+				cli.StringFlag{
+					Name:  "github-secret",
+					Value: "",
+					Usage: "GitHub secret for webhooks",
+				},
+				cli.BoolFlag{
+					Name:  "no-travis",
+					Usage: "do not include route for Travis CI webhook",
+				},
+				cli.BoolFlag{
+					Name:  "no-github",
+					Usage: "do not include route for GitHub webhook",
+				},
 			},
 		},
 	}
