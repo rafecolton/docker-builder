@@ -152,7 +152,7 @@ The following macro tags are currently available:
 * `git`
     - `git:branch` - the git branch of the app repo (`git rev-parse -q --abbrev-ref HEAD`)
     - `git:rev` - the full git revision of the app repo (`git rev-parse -q HEAD`)
-    - `git:short` - the shortened version of the app repo rev (`git describe --always`)
+    - `git:short` - the shortened version of the app repo rev (`git describe --always --dirty --tags`)
 
 ## Linting &amp; Building
 
