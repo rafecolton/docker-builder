@@ -10,12 +10,7 @@ will either be a random uuid (normal behavior) or the same uuid every time if
 the generator is "seeded" (used for tests)
 */
 func (parser *Parser) NextUUID() (string, error) {
-	ret, err := parser.uuidGenerator.NextUUID()
-	if err != nil {
-		return "", err
-	}
-
-	return ret, nil
+	return parser.uuidGenerator.NextUUID()
 }
 
 /*
