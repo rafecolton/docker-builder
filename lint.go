@@ -8,7 +8,10 @@ import (
 )
 
 func lint(c *cli.Context) {
-	par, _ = parser.NewParser(c.Args().First(), Logger)
-	exitCode := par.AssertLint()
-	gocleanup.Exit(exitCode)
+	p := parser.NewParser(c.Args().First(), Logger)
+	if _, err := p.Parse(); err != nil {
+		p.Error(err.Error())
+		gocleanup.Exit(err.ExitCode())
+	}
+	gocleanup.Exit(0)
 }

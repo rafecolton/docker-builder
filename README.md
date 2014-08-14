@@ -8,9 +8,9 @@ from a friendly `Bobfile` config file.
 
 ## Other Topics
 
-* [Motivation for Docker Builder](docs/why.md)
-* [Docker Builder Server](docs/advanced-usage.md)
-* [Writing a Bobfile](docs/writing-a-bobfile.md)
+* [Motivation for Docker Builder](Documentation/why.md)
+* [Docker Builder Server](Documentation/advanced-usage.md)
+* [Writing a Bobfile](Documentation/writing-a-bobfile.md)
 
 ## Quick Start
 
@@ -29,7 +29,7 @@ docker-builder build Bobfile
 
 ## More Reasonably-Paced Start
 0. Install `docker-builder`
-0. Explore the [Writing a Bobfile](docs/writing-a-bobfile.md) doc
+0. Explore the [Writing a Bobfile](Documentation/writing-a-bobfile.md) doc
 0. Run`docker-builder --help`
 0. Run `docker-builder help build`
 

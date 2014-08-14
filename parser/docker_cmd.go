@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"io"
 	"os/exec"
 	"strings"
@@ -125,7 +124,7 @@ func (t *TagCmd) Message() string {
 			msg = append(msg, "--force")
 		}
 		msg = append(msg, t.Image)
-		msg = append(msg, fmt.Sprintf("%s:%s", t.Repo, t.Tag))
+		msg = append(msg, t.Repo+":"+t.Tag)
 		t.msg = strings.Join(msg, " ")
 	}
 
@@ -178,5 +177,5 @@ func (p *PushCmd) Run() (string, error) {
 
 //Message returns the shell command that would be equivalent to the PushImage command
 func (p *PushCmd) Message() string {
-	return fmt.Sprintf("docker push %s:%s", p.Image, p.Tag)
+	return "docker push " + p.Image + ":" + p.Tag
 }

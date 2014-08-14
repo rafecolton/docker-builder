@@ -8,7 +8,6 @@ import (
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -21,14 +20,14 @@ import (
 	"github.com/onsi/gocleanup"
 )
 
-var imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
+var (
+	// SkipPush will, when set to true, override any behavior set by a Bobfile and
+	// will cause builders *NOT* to run `docker push` commands.  SkipPush is also set
+	// by the `--skip-push` option when used on the command line.
+	SkipPush bool
 
-/*
-SkipPush, when set to true, will override any behavior set by a Bobfile and
-will cause builders *NOT* to run `docker push` commands.  SkipPush is also set
-by the `--skip-push` option when used on the command line.
-*/
-var SkipPush bool
+	imageWithTagRegex = regexp.MustCompile("^(.*):(.*)$")
+)
 
 /*
 A Builder is the struct that actually does the work of moving files around and
@@ -61,7 +60,7 @@ case we want to initialize our Builders with something.
 func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 	if logger == nil {
 		logger = logrus.New()
-		logger.Level = logrus.Panic
+		logger.Level = logrus.PanicLevel
 	}
 
 	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
@@ -90,29 +89,43 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 }
 
 /*
-BuildFromFile combines Build() with parser.Parse() to reduce the number of
-steps needed to build with bob programatically.
-*/
-func (bob *Builder) BuildFromFile(file string) error {
-	par, err := parser.NewParser(file, bob.Logger)
-	if err != nil {
-		return err
-	}
-
-	commandSequence, err := par.Parse()
-	if err != nil {
-		return err
-	}
-
-	bob.Builderfile = file
-
-	return bob.Build(commandSequence)
-}
-
-/*
 Build does the building!
 */
-func (bob *Builder) Build(commandSequence *parser.CommandSequence) error {
+func (bob *Builder) Build(config *BuildConfig) Error {
+	// Sanitization of the provided file path happens here because
+	// parser.NewParser calls filepath.Dir(file), which would be problematic
+	// with an unsanitized path.  Additionally, the sanitization happens here
+	// as opposed to parser.Parse because the validations are conceptually
+	// different.  The parser is more concerned with the presence or absence of
+	// the file and its contents but not the file's location.
+	sanitizedFile, bErr := SanitizeBuilderfilePath(config)
+	if bErr != nil {
+		return bErr
+	}
+
+	par := parser.NewParser(sanitizedFile, bob.Logger)
+
+	commandSequence, pErr := par.Parse()
+	if pErr != nil {
+		return &ParserRelatedError{
+			Message: pErr.Error(),
+			Code:    23,
+		}
+	}
+
+	bob.Builderfile = sanitizedFile
+
+	if err := bob.build(commandSequence); err != nil {
+		return &BuildRelatedError{
+			Message: err.Error(),
+			Code:    29,
+		}
+	}
+
+	return nil
+}
+
+func (bob *Builder) build(commandSequence *parser.CommandSequence) error {
 	for _, seq := range commandSequence.Commands {
 		if err := bob.CleanWorkdir(); err != nil {
 			return err
@@ -213,11 +226,11 @@ func (bob *Builder) Setup() error {
 
 	// copy the actual files over
 	for _, file := range fileSet.ToSlice() {
-		src := fmt.Sprintf("%s/%s", repodir, file)
-		dest := fmt.Sprintf("%s/%s", workdir, file)
+		src := repodir + "/" + file.(string)
+		dest := workdir + "/" + file.(string)
 
 		if file == meta.Dockerfile {
-			dest = fmt.Sprintf("%s/%s", workdir, "Dockerfile")
+			dest = workdir + "/" + "Dockerfile"
 		}
 
 		fileInfo, err := os.Stat(src)
@@ -243,8 +256,8 @@ Repodir is the dir from which we are using files for our docker builds.
 */
 func (bob *Builder) Repodir() string {
 	if !bob.isRegular {
-		repoDir := "spec/fixtures/repodir"
-		return fmt.Sprintf("%s/%s", os.Getenv("PWD"), repoDir)
+		repoDir := "Specs/fixtures/repodir"
+		return os.Getenv("PWD") + "/" + repoDir
 	}
 	return filepath.Dir(bob.Builderfile)
 }

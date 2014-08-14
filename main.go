@@ -42,7 +42,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "docker-builder"
 	app.Usage = "docker-builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"
-	app.Version = fmt.Sprintf("%s %s", ver.Version, app.Compiled)
+	app.Version = ver.Version + " " + app.Compiled.String()
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{"branch", "print branch and exit"},
 		cli.BoolFlag{"rev", "print revision and exit"},

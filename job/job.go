@@ -1,10 +1,8 @@
 package job
 
 import (
-	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/modcloth/docker-builder/builder"
@@ -15,38 +13,43 @@ import (
 	"github.com/modcloth/kamino"
 )
 
-/*
-TestMode monkeys with certain things for tests so bad things don't
-happen
-*/
-var TestMode bool
+const (
+	defaultTail         = "100"
+	defaultBobfile      = "Bobfile"
+	specFixturesRepoDir = "./Specs/fixtures/repodir"
+)
 
-const defaultTail = "100"
+var (
+	// TestMode monkeys with certain things for tests so bad things don't happen
+	TestMode bool
 
-var gen uuid.Generator
-var logger *logrus.Logger
+	gen    uuid.Generator
+	logger *logrus.Logger
+)
 
 /*
 Job is the struct representation of a build job.  Intended to be
 created with NewJob, but exported so it can be used for tests.
 */
 type Job struct {
-	Account        string         `json:"account,omitempty"`
-	Completed      time.Time      `json:"completed,omitempty"`
-	Created        time.Time      `json:"created"`
-	Error          error          `json:"error,omitempty"`
-	GitCloneDepth  string         `json:"clone_depth,omitempty"`
-	GitHubAPIToken string         `json:"-"`
-	ID             string         `json:"id,omitempty"`
-	LogRoute       string         `json:"log_route,omitempty"`
-	Logger         *logrus.Logger `json:"-"`
-	Ref            string         `json:"ref,omitempty"`
-	Repo           string         `json:"repo,omitempty"`
-	Status         string         `json:"status"`
-	Workdir        string         `json:"-"`
-	infoRoute      string         `json:"-"`
-	logDir         string         `json:"-"`
-	logFile        *os.File       `json:"-"`
+	Account            string         `json:"account,omitempty"`
+	Bobfile            string         `json:"bobfile,omitempty"`
+	Completed          time.Time      `json:"completed,omitempty"`
+	Created            time.Time      `json:"created"`
+	Error              error          `json:"error,omitempty"`
+	GitCloneDepth      string         `json:"clone_depth,omitempty"`
+	GitHubAPIToken     string         `json:"-"`
+	ID                 string         `json:"id,omitempty"`
+	LogRoute           string         `json:"log_route,omitempty"`
+	Logger             *logrus.Logger `json:"-"`
+	Ref                string         `json:"ref,omitempty"`
+	Repo               string         `json:"repo,omitempty"`
+	Status             string         `json:"status"`
+	Workdir            string         `json:"-"`
+	infoRoute          string         `json:"-"`
+	logDir             string         `json:"-"`
+	logFile            *os.File       `json:"-"`
+	clonedRepoLocation string         `json:"-"`
 }
 
 /*
@@ -74,21 +77,24 @@ func NewJob(cfg *Config, spec *Spec) *Job {
 		cfg.Logger.WithField("error", err).Error("error creating uuid")
 	}
 
+	bobfile := spec.Bobfile
+	if bobfile == "" {
+		bobfile = defaultBobfile
+	}
+
 	ret := &Job{
+		Bobfile:        bobfile,
 		ID:             id,
 		Account:        spec.RepoOwner,
 		GitHubAPIToken: spec.GitHubAPIToken,
 		Ref:            spec.GitRef,
 		Repo:           spec.RepoName,
 		Workdir:        cfg.Workdir,
-		infoRoute:      fmt.Sprintf("/jobs/%s", id),
-		LogRoute:       fmt.Sprintf("/jobs/%s/tail?n=%s", id, defaultTail),
-		logDir:         fmt.Sprintf("%s/%s", cfg.Workdir, id),
+		infoRoute:      "/jobs/" + id,
+		LogRoute:       "/jobs/" + id + "/tail?n=" + defaultTail,
+		logDir:         cfg.Workdir + "/" + id,
 		Status:         "created",
-	}
-
-	if !TestMode {
-		ret.Created = time.Now()
+		Created:        time.Now(),
 	}
 
 	out := io.MultiWriter(os.Stdout)
@@ -97,7 +103,7 @@ func NewJob(cfg *Config, spec *Spec) *Job {
 		cfg.Logger.WithField("error", err).Error("error creating log dir")
 		id = ""
 	} else {
-		file, err := os.Create(fmt.Sprintf("%s/log.log", ret.logDir))
+		file, err := os.Create(ret.logDir + "/log.log")
 		if err != nil {
 			cfg.Logger.WithField("error", err).Error("error creating log file")
 			id = ""
@@ -188,7 +194,7 @@ func (job *Job) clone() (string, error) {
 	return path, nil
 }
 
-func (job *Job) build(file string) error {
+func (job *Job) build() error {
 
 	job.Logger.Debug("attempting to create a builder")
 
@@ -198,9 +204,14 @@ func (job *Job) build(file string) error {
 		return err
 	}
 
-	job.Logger.WithField("file", file).Info("building from file")
+	job.Logger.WithField("file", job.Bobfile).Info("building from file")
 
-	return bob.BuildFromFile(file)
+	config, err := builder.NewBuildConfig(job.Bobfile, job.clonedRepoLocation)
+	if err != nil {
+		return err
+	}
+
+	return bob.Build(config)
 }
 
 /*
@@ -221,18 +232,19 @@ func (job *Job) Process() error {
 		}
 	}()
 
-	job.Status = "cloning"
 	// step 1: clone
+	job.Status = "cloning"
 	path, err := job.clone()
 	if err != nil {
 		job.Status = "errored"
 		job.Error = err
 		return err
 	}
+	job.clonedRepoLocation = path
 
-	job.Status = "building"
 	// step 2: build
-	if err = job.build(filepath.Join(path, "Bobfile")); err != nil {
+	job.Status = "building"
+	if err = job.build(); err != nil {
 		job.Status = "errored"
 		job.Error = err
 		return err
@@ -245,15 +257,25 @@ func (job *Job) Process() error {
 }
 
 func (job *Job) processTestMode() error {
-	job.Logger.Warn("job.Process() called in test mode")
-	job.Status = "completed"
-	job.Completed = time.Now()
+	// If this function is used correctly,
+	// we should never see this warning message.
+	job.Logger.Warn("processing job in test mode")
+
+	// set status to validating in anticipation of performing validation step
+	job.Status = "validating"
+
+	// set clone path to fixtures dir
+	job.clonedRepoLocation = specFixturesRepoDir
 
 	// log something for test purposes
 	levelBefore := job.Logger.Level
-	job.Logger.Level = logrus.Debug
+	job.Logger.Level = logrus.DebugLevel
 	job.Logger.Debug("FOO")
 	job.Logger.Level = levelBefore
+
+	// mark job as completed
+	job.Status = "completed"
+	job.Completed = time.Now()
 
 	return nil
 }

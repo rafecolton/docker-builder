@@ -1,7 +1,6 @@
 package webhook
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
@@ -20,9 +19,10 @@ func DockerBuild(w http.ResponseWriter, req *http.Request) (int, string) {
 		return 400, "400 bad request"
 	}
 
-	var spec = &job.Spec{}
-	if err = json.Unmarshal([]byte(body), spec); err != nil {
+	spec, err := job.NewSpec(body)
+	if err != nil {
 		return 400, "400 bad request"
 	}
+
 	return processJobHelper(spec, w, req)
 }

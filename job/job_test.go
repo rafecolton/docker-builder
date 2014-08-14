@@ -3,7 +3,6 @@ package job_test
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 
@@ -22,9 +21,9 @@ type logMessage struct {
 
 func makeRequest(method, path string, body []byte) (req *http.Request, err error) {
 	if len(body) != 0 {
-		req, err = http.NewRequest(method, fmt.Sprintf("http://localhost:5000/%s", path), bytes.NewReader(body))
+		req, err = http.NewRequest(method, "http://localhost:5000/"+path, bytes.NewReader(body))
 	} else {
-		req, err = http.NewRequest(method, fmt.Sprintf("http://localhost:5000/%s", path), nil)
+		req, err = http.NewRequest(method, "http://localhost:5000/"+path, nil)
 	}
 
 	return req, nil
@@ -40,7 +39,7 @@ var (
 	expectedJob = &Job{
 		Account:  "foo",
 		ID:       jobID,
-		LogRoute: fmt.Sprintf("/jobs/%s/tail?n=100", jobID),
+		LogRoute: "/jobs/" + jobID + "/tail?n=100",
 		Ref:      "baz",
 		Repo:     "bar",
 		Status:   "created",

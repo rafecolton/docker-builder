@@ -26,7 +26,7 @@ func init() {
 	m.Action(r.Handle)
 	testServer = &martini.ClassicMartini{m, r}
 	l := &logrus.Logger{
-		Level:     logrus.Panic,
+		Level:     logrus.PanicLevel,
 		Formatter: &logrus.JSONFormatter{},
 	}
 	Logger(l)

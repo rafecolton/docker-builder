@@ -2,7 +2,6 @@ package webhook
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -74,22 +73,26 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 	if spec.Sync || job.TestMode {
 		if err = j.Process(); err != nil {
 			logger.WithField("error", err).Error("unable to process job synchronously")
-			return 417, fmt.Sprintf(`{"error": %q}`, err)
+			return 417, `{"error": "` + err.Error() + `"}`
 		}
 		retBytes, err := json.Marshal(j)
 		if err != nil {
-			return 417, fmt.Sprintf(`{"error": %q}`, err)
+			return 417, `{"error": "` + err.Error() + `"}`
 		}
 
 		return syncSuccessCode, string(retBytes)
 	}
 
 	// if async
-	go j.Process()
+	go func() {
+		if err = j.Process(); err != nil {
+			logger.WithField("error", err).Error("unable to process job synchronously")
+		}
+	}()
 
 	retBytes, err := json.Marshal(j)
 	if err != nil {
-		return 409, fmt.Sprintf(`{"error": %q}`, err)
+		return 409, `{"error": "` + err.Error() + `"}`
 	}
 
 	return asyncSuccessCode, string(retBytes)

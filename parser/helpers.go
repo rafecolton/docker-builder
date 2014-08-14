@@ -1,30 +1,12 @@
 package parser
 
 import (
-	"fmt"
-	"os"
 	"os/exec"
 
 	"github.com/modcloth/docker-builder/builderfile"
 	"github.com/modcloth/docker-builder/conf"
 	"github.com/modcloth/docker-builder/parser/tag"
 )
-
-/*
-IsOpenable examines the Builderfile provided to the Parser and returns a bool
-indicating whether or not the file exists and openable.
-*/
-func (parser *Parser) IsOpenable() bool {
-
-	file, err := os.Open(parser.filename)
-	defer file.Close()
-
-	if err != nil {
-		return false
-	}
-
-	return true
-}
 
 // turns InstructionSet structs into CommandSequence structs
 func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
@@ -47,8 +29,8 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 			return nil
 		}
 
-		name := fmt.Sprintf("%s/%s", v.Registry, v.Project)
-		initialTag := fmt.Sprintf("%s:%s", name, uuid)
+		name := v.Registry + "/" + v.Project
+		initialTag := name + ":" + uuid
 		buildArgs := []string{"docker", "build", "-t", initialTag}
 		buildArgs = append(buildArgs, is.DockerBuildOpts...)
 		buildArgs = append(buildArgs, ".")
