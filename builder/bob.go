@@ -233,17 +233,8 @@ func (bob *Builder) Setup() error {
 			dest = workdir + "/" + "Dockerfile"
 		}
 
-		fileInfo, err := os.Stat(src)
-		if err != nil {
-			return err
-		}
-
-		if fileInfo.IsDir() {
-			err = fileutils.CpR(src, dest)
-		} else {
-			err = fileutils.Cp(src, dest)
-		}
-		if err != nil {
+		copyArgs := fileutils.CpArgs{Recursive: true, PreserveTimestamps: true}
+		if err := fileutils.CpWithArgs(src, dest, copyArgs); err != nil {
 			return err
 		}
 	}
