@@ -19,7 +19,7 @@ const (
 	SymlinkSanitizeErrorMessage = "bobfile path must not contain symlinks"
 )
 
-var dotDotRegex = regexp.MustCompile("\\.\\.")
+var dotDotRegex = regexp.MustCompile(`\.\.`)
 
 // SanitizeBuilderfilePath checks for disallowed entries in the provided
 // Bobfile path and returns either a sanitized version of the path or an error
