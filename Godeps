@@ -16,8 +16,8 @@
 		},
 		{
 			"ImportPath": "github.com/codegangsta/cli",
-			"Comment": "1.1.0",
-			"Rev": "27ecc97192df1bf053a22b04463f2b51b8b8373e"
+			"Comment": "1.2.0-22-g687db20",
+			"Rev": "687db20fc379d1686465a28e9959707cd1acc990"
 		},
 		{
 			"ImportPath": "github.com/codegangsta/inject",
