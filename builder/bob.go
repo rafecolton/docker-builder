@@ -127,22 +127,19 @@ func (bob *Builder) Build(config *BuildConfig) Error {
 
 func (bob *Builder) build(commandSequence *parser.CommandSequence) error {
 	for _, seq := range commandSequence.Commands {
-		if err := bob.CleanWorkdir(); err != nil {
+		var imageID string
+		var err error
+
+		if err = bob.CleanWorkdir(); err != nil {
 			return err
 		}
 		bob.SetNextSubSequence(seq)
-		if err := bob.Setup(); err != nil {
+		if err = bob.Setup(); err != nil {
 			return err
 		}
 
-		workdir := bob.Workdir()
-
-		bob.WithFields(logrus.Fields{
-			"container_section": seq.Metadata.Name,
-		}).Info("running commands for container section")
-
-		var imageID string
-		var err error
+		bob.WithField("container_section", seq.Metadata.Name).
+			Info("running commands for container section")
 
 		for _, cmd := range seq.SubCommand {
 			opts := &parser.DockerCmdOpts{
@@ -152,9 +149,8 @@ func (bob *Builder) build(commandSequence *parser.CommandSequence) error {
 				SkipPush:     SkipPush,
 				Stderr:       bob.Stderr,
 				Stdout:       bob.Stdout,
-				Workdir:      workdir,
+				Workdir:      bob.Workdir(),
 			}
-
 			cmd = cmd.WithOpts(opts)
 
 			bob.WithField("command", cmd.Message()).Info("running docker command")
@@ -163,21 +159,22 @@ func (bob *Builder) build(commandSequence *parser.CommandSequence) error {
 				return err
 			}
 		}
+		bob.attemptToDeleteTemporaryUUIDTag(seq.Metadata.UUID)
+	}
+	return nil
+}
 
-		repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(seq.Metadata.UUID)
-		if err != nil {
-			bob.WithField("err", err).Warn("error getting repo taggged with temporary tag")
-		}
-
-		bob.WithField("tag", repoWithTag).Info("deleting temporary tag")
-
-		if err = bob.dockerClient.RemoveImage(repoWithTag); err != nil {
-			bob.WithField("err", err).Warn("error deleting temporary tag")
-
-		}
+func (bob *Builder) attemptToDeleteTemporaryUUIDTag(uuid string) {
+	repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(uuid)
+	if err != nil {
+		bob.WithField("err", err).Warn("error getting repo taggged with temporary tag")
 	}
 
-	return nil
+	bob.WithField("tag", repoWithTag).Info("deleting temporary tag")
+
+	if err = bob.dockerClient.RemoveImage(repoWithTag); err != nil {
+		bob.WithField("err", err).Warn("error deleting temporary tag")
+	}
 }
 
 /*
