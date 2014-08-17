@@ -9,7 +9,8 @@ curl -XPOST -H 'Content-Type: application/json' 'http://localhost:5000/docker-bu
 {
   "account": "my-account",
   "repo": "my-repo",
-  "ref": "master"
+  "ref": "master",
+  "bobfile": "Bobfile.app"
 }
 '
 ```
@@ -46,3 +47,5 @@ Other Fields:
 behavior is to respond immediately (value: `false`). Set this to `true`
 to wait for a response until after the build, tag, and push phases are
 all complete.
+* `bobfile / type: string` - the path, relative to the top of the repo,
+  to the `Bobfile` to use for the build
