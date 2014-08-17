@@ -21,22 +21,22 @@ var _ = Describe("Sanitize Builderfile path", func() {
 
 	Context("when the path is bogus", func() {
 		It(`returns an error when the path contains ".."`, func() {
-			config, _ := NewBuildConfig(dotDotPath, "..")
-			_, err := SanitizeBuilderfilePath(config)
+			config, _ := NewTrustedFilePath(dotDotPath, "..")
+			_, err := SanitizeTrustedFilePath(config)
 			Expect(err).ToNot(BeNil())
 			Expect(err.Error()).To(Equal(DotDotSanitizeErrorMessage))
 		})
 
 		It("returns an error when the path contains symlinks", func() {
-			config, _ := NewBuildConfig(symlinkPath, "..")
-			_, err := SanitizeBuilderfilePath(config)
+			config, _ := NewTrustedFilePath(symlinkPath, "..")
+			_, err := SanitizeTrustedFilePath(config)
 			Expect(err).ToNot(BeNil())
 			Expect(err.Error()).To(Equal(SymlinkSanitizeErrorMessage))
 		})
 
 		It("returns an error when the path is invalid", func() {
-			config, _ := NewBuildConfig(bogusPath, "..")
-			_, err := SanitizeBuilderfilePath(config)
+			config, _ := NewTrustedFilePath(bogusPath, "..")
+			_, err := SanitizeTrustedFilePath(config)
 			Expect(err).ToNot(BeNil())
 			Expect(err.Error()).To(Equal(InvalidPathSanitizeErrorMessage))
 		})
@@ -44,14 +44,14 @@ var _ = Describe("Sanitize Builderfile path", func() {
 
 	Context("when the path is valid", func() {
 		It("does not return an error", func() {
-			config, _ := NewBuildConfig(validPath, "..")
-			_, err := SanitizeBuilderfilePath(config)
+			config, _ := NewTrustedFilePath(validPath, "..")
+			_, err := SanitizeTrustedFilePath(config)
 			Expect(err).To(BeNil())
 		})
 
 		It("returns a cleaned version of the path", func() {
-			config, _ := NewBuildConfig(validPath, "..")
-			path, _ := SanitizeBuilderfilePath(config)
+			config, _ := NewTrustedFilePath(validPath, "..")
+			path, _ := SanitizeTrustedFilePath(config)
 			Expect(path).To(Equal(cleanedValidPath))
 		})
 	})

@@ -1,5 +1,10 @@
 package builder
 
+import (
+	"os"
+	"reflect"
+)
+
 // Error is an interface for any error types returned by the builder
 // package / during the building process
 type Error interface {
@@ -13,7 +18,23 @@ type Error interface {
 
 // SanitizeError is used for errors related to sanitizing a given Bobfile path
 type SanitizeError struct {
-	Message string
+	Message  string
+	Filename string
+	error
+}
+
+// IsSanitizeFileNotExist returns true if the error provided is a SanitizeError
+// resulting from an "os" IsNotExist PathError
+func IsSanitizeFileNotExist(err Error) bool {
+	if IsSanitizeError(err) {
+		return os.IsNotExist(err.(*SanitizeError).error)
+	}
+	return false
+}
+
+// IsSanitizeError returns true if the error provided is of the type SanitizeError
+func IsSanitizeError(err Error) bool {
+	return reflect.TypeOf(err).ConvertibleTo(reflect.TypeOf(&SanitizeError{}))
 }
 
 // Error returns the error message for a SanitizeError.  It is expected to be
