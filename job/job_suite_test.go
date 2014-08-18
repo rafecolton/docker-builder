@@ -1,9 +1,9 @@
 package job_test
 
 import (
-	. "github.com/modcloth/docker-builder/job"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/docker-builder/job"
 	"testing"
 
 	"net/http/httptest"
@@ -11,7 +11,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/go-martini/martini"
 
-	"github.com/modcloth/docker-builder/server/webhook"
+	"github.com/rafecolton/docker-builder/server/webhook"
 )
 
 var recorder *httptest.ResponseRecorder

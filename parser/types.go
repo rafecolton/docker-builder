@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/modcloth/docker-builder/builderfile"
+	"github.com/rafecolton/docker-builder/builderfile"
 )
 
 /*

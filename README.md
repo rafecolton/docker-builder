@@ -1,7 +1,7 @@
 # Welcome to Bob!
 
-[![Build Status](https://travis-ci.org/modcloth/docker-builder.svg?branch=master)](https://travis-ci.org/modcloth/docker-builder)
-[![GoDoc](https://godoc.org/github.com/modcloth/docker-builder?status.png)](https://godoc.org/github.com/modcloth/docker-builder)
+[![Build Status](https://travis-ci.org/rafecolton/docker-builder.svg?branch=master)](https://travis-ci.org/rafecolton/docker-builder)
+[![GoDoc](https://godoc.org/github.com/rafecolton/docker-builder?status.png)](https://godoc.org/github.com/rafecolton/docker-builder)
 
 Bob, the `docker-builder`, builds, tags, and pushes multiple Docker images, all
 from a friendly `Bobfile` config file.
@@ -18,7 +18,7 @@ Steps to quick start:
 
 ```bash
 # install docker-builder
-go get github.com/modcloth/docker-builder
+go get github.com/rafecolton/docker-builder
 
 # create a Bobfile
 docker-builder init .
@@ -38,18 +38,18 @@ docker-builder build Bobfile
 #### Easiest
 
 ```bash
-go get github.com/modcloth/docker-builder
+go get github.com/rafecolton/docker-builder
 ```
 
 #### From pre-compiled binaries
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.7.1/docker-builder-v0.7.1-darwin-amd64.tar.gz | \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.7.1/docker-builder-v0.7.1-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/modcloth/docker-builder/releases/download/v0.7.1/docker-builder-v0.7.1-linux-amd64.tar.gz | \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.7.1/docker-builder-v0.7.1-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1
 ```
 

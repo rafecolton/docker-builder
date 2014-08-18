@@ -1,14 +1,14 @@
 package analyzer_test
 
 import (
-	. "github.com/modcloth/docker-builder/analyzer"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/docker-builder/analyzer"
 	"testing"
 )
 
 import (
-	"github.com/modcloth/docker-builder/builderfile"
+	"github.com/rafecolton/docker-builder/builderfile"
 )
 
 func TestBuilder(t *testing.T) {
@@ -24,8 +24,8 @@ var _ = Describe("Analysis Parsing", func() {
 
 	BeforeEach(func() {
 		subject = &SpecRepoAnalysis{
-			remotes: `origin	git@github.com:modcloth/bob.git (fetch)
-					  origin	git@github.com:modcloth/bob.git (push)`,
+			remotes: `origin	git@github.com:rafecolton/bob.git (fetch)
+					  origin	git@github.com:rafecolton/bob.git (push)`,
 			dockerfilePresent: true,
 			isGitRepo:         true,
 			repoBasename:      "fake-repo",
@@ -39,7 +39,7 @@ var _ = Describe("Analysis Parsing", func() {
 			ContainerArr: []*builderfile.ContainerSection{
 				&builderfile.ContainerSection{
 					Name:     "app",
-					Registry: "modcloth",
+					Registry: "rafecolton",
 					Project:  "fake-repo",
 					Tags: []string{
 						"git:branch",

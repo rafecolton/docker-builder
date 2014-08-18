@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/modcloth/docker-builder/conf"
-	"github.com/modcloth/docker-builder/parser"
-	"github.com/modcloth/docker-builder/server"
-	"github.com/modcloth/docker-builder/version"
+	"github.com/rafecolton/docker-builder/conf"
+	"github.com/rafecolton/docker-builder/parser"
+	"github.com/rafecolton/docker-builder/server"
+	"github.com/rafecolton/docker-builder/version"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"

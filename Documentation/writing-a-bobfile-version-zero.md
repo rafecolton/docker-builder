@@ -25,7 +25,7 @@ tag_opts = ["--force"]
 [containers]
 
 [containers.global]
-registry = "modcloth"
+registry = "rafecolton"
 project = "my-app"
 excluded = ["spec"]
 tags = [
@@ -81,7 +81,7 @@ tag_opts = ["-f"]
 
 [containers.base]
 Dockerfile = "Dockerfile.base"
-registry = "modcloth"
+registry = "rafecolton"
 project = "my-app"
 excluded = ["spec"]
 included = [
@@ -93,7 +93,7 @@ skip_push = true
 
 [containers.app]
 Dockerfile = "Dockerfile.app"
-registry = "modcloth"
+registry = "rafecolton"
 project = "my-app"
 excluded = ["spec"]
 included = []

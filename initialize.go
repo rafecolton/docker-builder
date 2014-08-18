@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/modcloth/docker-builder/analyzer"
+	"github.com/rafecolton/docker-builder/analyzer"
 
 	"github.com/BurntSushi/toml"
 	"github.com/Sirupsen/logrus"

@@ -3,9 +3,9 @@ package parser
 import (
 	"os/exec"
 
-	"github.com/modcloth/docker-builder/builderfile"
-	"github.com/modcloth/docker-builder/conf"
-	"github.com/modcloth/docker-builder/parser/tag"
+	"github.com/rafecolton/docker-builder/builderfile"
+	"github.com/rafecolton/docker-builder/conf"
+	"github.com/rafecolton/docker-builder/parser/tag"
 )
 
 // turns InstructionSet structs into CommandSequence structs

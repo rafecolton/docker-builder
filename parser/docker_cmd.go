@@ -8,7 +8,7 @@ import (
 	"github.com/fsouza/go-dockerclient"
 	"github.com/modcloth/go-fileutils"
 
-	"github.com/modcloth/docker-builder/dclient"
+	"github.com/rafecolton/docker-builder/dclient"
 )
 
 /*

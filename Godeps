@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/modcloth/docker-builder",
+	"ImportPath": "github.com/rafecolton/docker-builder",
 	"GoVersion": "go1.3",
 	"Packages": [
 		"./..."

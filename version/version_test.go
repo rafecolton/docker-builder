@@ -1,9 +1,9 @@
 package version_test
 
 import (
-	. "github.com/modcloth/docker-builder/version"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/docker-builder/version"
 	"testing"
 )
 

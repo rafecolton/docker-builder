@@ -6,7 +6,7 @@ build_opts = ["--rm", "--no-cache"]
 tag_opts = ["--force"]
 
 [container_globals]
-registry = "modcloth"
+registry = "rafecolton"
 
 [[container]]
 name = "base"

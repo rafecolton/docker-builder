@@ -8,9 +8,9 @@ import (
 
 	"github.com/modcloth/go-fileutils"
 
-	. "github.com/modcloth/docker-builder/job"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/docker-builder/job"
 )
 
 type logMessage struct {

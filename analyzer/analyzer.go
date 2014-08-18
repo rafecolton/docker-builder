@@ -1,8 +1,8 @@
 package analyzer
 
 import (
-	"github.com/modcloth/docker-builder/builderfile"
 	"github.com/modcloth/go-fileutils"
+	"github.com/rafecolton/docker-builder/builderfile"
 
 	"errors"
 	"fmt"

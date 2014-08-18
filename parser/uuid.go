@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/modcloth/docker-builder/parser/uuid"
+	"github.com/rafecolton/docker-builder/parser/uuid"
 )
 
 /*

@@ -1,17 +1,17 @@
 package builder_test
 
 import (
-	. "github.com/modcloth/docker-builder/builder"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/docker-builder/builder"
 
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"sort"
 
-	"github.com/modcloth/docker-builder/parser"
 	"github.com/modcloth/go-fileutils"
+	"github.com/rafecolton/docker-builder/parser"
 )
 
 var _ = Describe("Setup", func() {

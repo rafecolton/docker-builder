@@ -9,7 +9,7 @@ import (
 	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
 
-	"github.com/modcloth/docker-builder/job"
+	"github.com/rafecolton/docker-builder/job"
 )
 
 const (

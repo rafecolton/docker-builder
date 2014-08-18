@@ -6,7 +6,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 
-	"github.com/modcloth/docker-builder/job"
+	"github.com/rafecolton/docker-builder/job"
 )
 
 const (

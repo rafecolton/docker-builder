@@ -1,9 +1,9 @@
 package builder
 
 import (
-	"github.com/modcloth/docker-builder/dclient"
-	"github.com/modcloth/docker-builder/log"
-	"github.com/modcloth/docker-builder/parser"
+	"github.com/rafecolton/docker-builder/dclient"
+	"github.com/rafecolton/docker-builder/log"
+	"github.com/rafecolton/docker-builder/parser"
 )
 
 import (

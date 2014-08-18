@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/modcloth/docker-builder/conf"
+	"github.com/rafecolton/docker-builder/conf"
 
 	"github.com/codegangsta/cli"
 )

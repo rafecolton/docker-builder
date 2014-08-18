@@ -8,7 +8,7 @@ tag_opts = ["--force"]
 [[container]]
 name = "base"
 Dockerfile = "Dockerfile.base"
-registry = "modcloth"
+registry = "rafecolton"
 project = "docker-builder-base"
 tags = ["latest"]
 

@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/modcloth/docker-builder/builder"
-	"github.com/modcloth/docker-builder/parser/uuid"
+	"github.com/rafecolton/docker-builder/builder"
+	"github.com/rafecolton/docker-builder/parser/uuid"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/modcloth/go-fileutils"

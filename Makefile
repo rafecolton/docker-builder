@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
-B := github.com/modcloth/docker-builder
+B := github.com/rafecolton/docker-builder
 PACKAGES := \
   $(B)/analyzer \
   $(B)/builder \

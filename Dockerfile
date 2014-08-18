@@ -1,11 +1,11 @@
-FROM modcloth/docker-builder-base:latest
-MAINTAINER devops@modcloth.com
+FROM rafecolton/docker-builder-base:latest
+MAINTAINER rafael.colton@gmail.com
 
 ENV GOPATH /app
 
 ## set up build dir and add project
-ADD . /app/src/github.com/modcloth/docker-builder
-WORKDIR /app/src/github.com/modcloth/docker-builder
+ADD . /app/src/github.com/rafecolton/docker-builder
+WORKDIR /app/src/github.com/rafecolton/docker-builder
 
 # make sure we don't have trouble getting deps from GitHub
 RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts

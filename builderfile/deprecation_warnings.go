@@ -14,7 +14,7 @@ You may want to @{!y}update@{|y} before proceeding.
 
 You should consider @{!y}pressing ^C@{|y} and @{!y}updating your Bobfile@{|y} before proceeding.
 
-For more information, see @{!y}https://github.com/modcloth/docker-builder@{|y}
+For more information, see @{!y}https://github.com/rafecolton/docker-builder@{|y}
 
 Sleeping for %d seconds before building...
 @{|}`, sleepTime)

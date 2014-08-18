@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/modcloth/docker-builder/parser"
+	"github.com/rafecolton/docker-builder/parser"
 
 	"github.com/codegangsta/cli"
 	"github.com/onsi/gocleanup"

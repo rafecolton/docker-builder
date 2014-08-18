@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	. "github.com/modcloth/docker-builder/server/webhook"
+	. "github.com/rafecolton/docker-builder/server/webhook"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/go-martini/martini"

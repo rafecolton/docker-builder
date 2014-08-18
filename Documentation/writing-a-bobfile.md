@@ -31,7 +31,7 @@ build_opts = [
 tag_opts = ["--force"]
 
 [container_globals]
-registry = "modcloth"
+registry = "rafecolton"
 dockercfg_un = "foo"
 dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"
@@ -81,7 +81,7 @@ tag_opts = ["-f"]
 [[container]]
 name = "base"
 Dockerfile = "Dockerfile.base"
-registry = "modcloth"
+registry = "rafecolton"
 dockercfg_un = "foo"
 dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"
@@ -92,7 +92,7 @@ skip_push = true
 [[container]]
 name = "app"
 Dockerfile = "Dockerfile.app"
-registry = "modcloth"
+registry = "rafecolton"
 dockercfg_un = "foo"
 dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"

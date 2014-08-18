@@ -25,7 +25,7 @@ tag_opts = ["--force"]
 [containers]
 
 [containers.global]
-registry = "modcloth"
+registry = "rafecolton"
 project = "my-app"
 excluded = ["spec"]
 tags = [
@@ -62,7 +62,7 @@ tag_opts = ["--force"]
 # [containers] # <--- this line is no longer necessary
 
 [container_globals] # <--- this line changed, used to be "[containers.global]"
-registry = "modcloth"
+registry = "rafecolton"
 project = "my-app"
 excluded = ["spec"]
 tags = [

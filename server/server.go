@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/modcloth/docker-builder/builder"
-	"github.com/modcloth/docker-builder/job"
-	"github.com/modcloth/docker-builder/server/webhook"
+	"github.com/rafecolton/docker-builder/builder"
+	"github.com/rafecolton/docker-builder/job"
+	"github.com/rafecolton/docker-builder/server/webhook"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"

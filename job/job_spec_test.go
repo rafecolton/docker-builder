@@ -1,9 +1,9 @@
 package job_test
 
 import (
-	. "github.com/modcloth/docker-builder/job"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/docker-builder/job"
 )
 
 var _ = Describe("NewSpec()", func() {

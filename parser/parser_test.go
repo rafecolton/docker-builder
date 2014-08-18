@@ -9,8 +9,8 @@ import (
 	"os/exec"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/modcloth/docker-builder/builderfile"
 	"github.com/modcloth/go-fileutils"
+	"github.com/rafecolton/docker-builder/builderfile"
 )
 
 func TestBuilder(t *testing.T) {

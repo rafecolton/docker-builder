@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/modcloth/docker-builder/job"
+	"github.com/rafecolton/docker-builder/job"
 )
 
 var (

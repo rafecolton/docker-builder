@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/modcloth/docker-builder/builder"
+	"github.com/rafecolton/docker-builder/builder"
 
 	"github.com/codegangsta/cli"
 )
