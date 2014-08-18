@@ -12,7 +12,7 @@ Bob offers the following:
 temporary directory, so you can name your `Dockerfile` whatever you
 want.
 
-0. <del>**Includes &amp; Excludes**</del>
+0. **<del>Includes &amp; Excludes</del>**
   - <del>Sometimes, you want to tailor which of your application's files end
     up in your container, but writing an explicit `ADD` command for each
 file and directory is very tedious.  Instead, by using Includes and
