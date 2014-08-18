@@ -36,7 +36,6 @@ dockercfg_un = "foo"
 dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"
 project = "my-app"
-excluded = ["spec"]
 tags = [
   "git:branch",
   "git:rev",
@@ -46,10 +45,6 @@ tags = [
 [[container]]
 name = "base"
 Dockerfile = "Dockerfile.base"
-included = [
-  "Gemfile",
-  "Gemfile.lock"
-]
 tags = ["base"]
 skip_push = true
 
@@ -91,11 +86,6 @@ dockercfg_un = "foo"
 dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"
 project = "my-app"
-excluded = ["spec"]
-included = [
-  "Gemfile",
-  "Gemfile.lock"
-]
 tags = ["base"]
 skip_push = true
 
@@ -107,8 +97,6 @@ dockercfg_un = "foo"
 dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"
 project = "my-app"
-excluded = ["spec"]
-included = []
 tags = [
   "git:branch",
   "git:rev",
@@ -125,8 +113,8 @@ The following stanzas are available in a `[[container]]` section:
   "Dockerfile" for the build
 * `registry` - String
 * `project` - String
-* `excluded` - Array
-* `included` - Array
+* <del>`excluded` - Array</del> **deprecated**
+* <del>`included` - Array</del> **deprecated**
 * `tags` - Array
 * `skip_push` - Bool - don't run `docker push...` after building this
   container

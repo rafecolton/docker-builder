@@ -115,13 +115,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 }
 
 func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile.ContainerSection {
-	if container.Excluded == nil {
-		container.Excluded = []string{}
-	}
-
-	if container.Included == nil {
-		container.Included = []string{}
-	}
 
 	if container.Tags == nil {
 		container.Tags = []string{}
@@ -129,14 +122,6 @@ func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile
 
 	if container.Dockerfile == "" {
 		container.Dockerfile = globals.Dockerfile
-	}
-
-	if len(container.Included) == 0 && globals.Included != nil {
-		container.Included = globals.Included
-	}
-
-	if len(container.Excluded) == 0 && globals.Excluded != nil {
-		container.Excluded = globals.Excluded
 	}
 
 	if container.Registry == "" {

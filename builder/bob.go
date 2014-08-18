@@ -214,30 +214,16 @@ func (bob *Builder) Setup() Error {
 
 	fileSet := lang.NewHashSet()
 
-	if len(meta.Included) == 0 {
-		files, err := ioutil.ReadDir(repodir)
-		if err != nil {
-			return &BuildRelatedError{
-				Message: err.Error(),
-				Code:    1,
-			}
-		}
-
-		for _, v := range files {
-			fileSet.Add(v.Name())
-		}
-	} else {
-		for _, v := range meta.Included {
-			//TODO: remove or sanitize these
-			fileSet.Add(v)
+	files, err := ioutil.ReadDir(repodir)
+	if err != nil {
+		return &BuildRelatedError{
+			Message: err.Error(),
+			Code:    1,
 		}
 	}
 
-	// subtract any excludes from fileSet
-	for _, exclude := range meta.Excluded {
-		if fileSet.Contains(exclude) {
-			fileSet.Remove(exclude)
-		}
+	for _, v := range files {
+		fileSet.Add(v.Name())
 	}
 
 	if fileSet.Contains("Dockerfile") {

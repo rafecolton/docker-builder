@@ -38,10 +38,11 @@ func (parser *Parser) rawToStruct() (*builderfile.Builderfile, Error) {
 	return file, nil
 }
 
-// Step 2.5 of Parse - handle Builderfile version
+// Step 2.5 of Parse - handle old Builderfile versions and other deprecated features
 
-func (parser *Parser) convertBuilderfileVersion() (*builderfile.Builderfile, Error) {
-	//var fileZero *builderfile.Builderfile
+func (parser *Parser) handleDeprecatedFeatures() (*builderfile.Builderfile, Error) {
+	// convert version 0 to version 1
+	var fileOne *builderfile.Builderfile
 
 	fileZero, err := parser.rawToStruct()
 	if err != nil {
@@ -49,14 +50,18 @@ func (parser *Parser) convertBuilderfileVersion() (*builderfile.Builderfile, Err
 	}
 
 	// check version, do conversion
-	if fileZero.Version == 1 {
-		return fileZero, nil
+	if fileZero.Version == 0 {
+		var goErr error
+		fileOne, goErr = builderfile.Convert0to1(fileZero)
+		if goErr != nil {
+			return nil, &BuilderfileConvertError{error: goErr}
+		}
+	} else {
+		fileOne = fileZero
 	}
 
-	builderfile.Logger(parser.Logger)
-	fileOne, goErr := builderfile.Convert0to1(fileZero)
-	if goErr != nil {
-		return nil, &BuilderfileConvertError{error: goErr}
+	if err := fileOne.HandleDeprecatedStanzas(); err != nil {
+		return nil, &BuilderfileDeprecatedStanzaError{error: err}
 	}
 
 	return fileOne, nil
@@ -64,7 +69,7 @@ func (parser *Parser) convertBuilderfileVersion() (*builderfile.Builderfile, Err
 
 // Step 3 of Parse
 func (parser *Parser) structToInstructionSet() (*InstructionSet, Error) {
-	file, err := parser.convertBuilderfileVersion()
+	file, err := parser.handleDeprecatedFeatures()
 	if err != nil {
 		return nil, err
 	}
