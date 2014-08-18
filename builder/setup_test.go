@@ -25,8 +25,6 @@ var _ = Describe("Setup", func() {
 			Metadata: &parser.SubSequenceMetadata{
 				Name:       "base",
 				Dockerfile: "Dockerfile.base",
-				Excluded:   []string{"spec", "tmp"},
-				Included:   []string{"Gemfile", "Gemfile.lock"},
 			},
 			SubCommand: []parser.DockerCmd{
 				&parser.BuildCmd{
@@ -50,8 +48,6 @@ var _ = Describe("Setup", func() {
 			Metadata: &parser.SubSequenceMetadata{
 				Name:       "app",
 				Dockerfile: "Dockerfile",
-				Excluded:   []string{"spec", "tmp"},
-				Included:   []string{},
 			},
 			SubCommand: []parser.DockerCmd{
 				&parser.BuildCmd{
@@ -121,6 +117,10 @@ var _ = Describe("Setup", func() {
 				"Dockerfile",
 				"Gemfile",
 				"Gemfile.lock",
+				"foo",
+				"README.txt",
+				"other_file.txt",
+				"spec",
 			}
 
 			files, _ := ioutil.ReadDir(subject.Workdir())
@@ -150,6 +150,7 @@ var _ = Describe("Setup", func() {
 				"foo",
 				"README.txt",
 				"other_file.txt",
+				"spec",
 			}
 
 			files, _ := ioutil.ReadDir(subject.Workdir())

@@ -8,7 +8,7 @@ from a friendly `Bobfile` config file.
 
 ## Other Topics
 
-* [Motivation for Docker Builder](Documentation/why.md)
+* [Original Motivation for Docker Builder](Documentation/why.md)
 * [Docker Builder Server](Documentation/advanced-usage.md)
 * [Writing a Bobfile](Documentation/writing-a-bobfile.md)
 

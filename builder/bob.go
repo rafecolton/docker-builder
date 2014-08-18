@@ -7,7 +7,7 @@ import (
 )
 
 import (
-	"errors"
+	//"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -91,15 +91,20 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 /*
 Build does the building!
 */
-func (bob *Builder) Build(config *BuildConfig) Error {
+func (bob *Builder) Build(tfp *TrustedFilePath) Error {
 	// Sanitization of the provided file path happens here because
 	// parser.NewParser calls filepath.Dir(file), which would be problematic
 	// with an unsanitized path.  Additionally, the sanitization happens here
 	// as opposed to parser.Parse because the validations are conceptually
 	// different.  The parser is more concerned with the presence or absence of
 	// the file and its contents but not the file's location.
-	sanitizedFile, bErr := SanitizeBuilderfilePath(config)
+	sanitizedFile, bErr := SanitizeTrustedFilePath(tfp)
 	if bErr != nil {
+		//if IsSanitizeInvalidPathError(bErr) {
+		//fmt.Println("IS BOBFILE NOT EXIST")
+		//} else {
+		//fmt.Println("is not bobfile not exist")
+		//}
 		return bErr
 	}
 
@@ -116,25 +121,24 @@ func (bob *Builder) Build(config *BuildConfig) Error {
 	bob.Builderfile = sanitizedFile
 
 	if err := bob.build(commandSequence); err != nil {
-		return &BuildRelatedError{
-			Message: err.Error(),
-			Code:    29,
-		}
+		return err
 	}
 
 	return nil
 }
 
-func (bob *Builder) build(commandSequence *parser.CommandSequence) error {
+func (bob *Builder) build(commandSequence *parser.CommandSequence) Error {
 	for _, seq := range commandSequence.Commands {
 		var imageID string
 		var err error
 
-		if err = bob.CleanWorkdir(); err != nil {
-			return err
+		if err := bob.CleanWorkdir(); err != nil {
+			return &BuildRelatedError{
+				Message: err.Error(),
+			}
 		}
 		bob.SetNextSubSequence(seq)
-		if err = bob.Setup(); err != nil {
+		if err := bob.Setup(); err != nil {
 			return err
 		}
 
@@ -156,7 +160,9 @@ func (bob *Builder) build(commandSequence *parser.CommandSequence) error {
 			bob.WithField("command", cmd.Message()).Info("running docker command")
 
 			if imageID, err = cmd.Run(); err != nil {
-				return err
+				return &BuildRelatedError{
+					Message: err.Error(),
+				}
 			}
 		}
 		bob.attemptToDeleteTemporaryUUIDTag(seq.Metadata.UUID)
@@ -181,34 +187,43 @@ func (bob *Builder) attemptToDeleteTemporaryUUIDTag(uuid string) {
 Setup moves all of the correct files into place in the temporary directory in
 order to perform the docker build.
 */
-func (bob *Builder) Setup() error {
+func (bob *Builder) Setup() Error {
+	var repodir = bob.Repodir()
+	var workdir = bob.Workdir()
+
 	if bob.nextSubSequence == nil {
-		return errors.New("no command sub sequence set, cannot perform setup")
+		return &BuildRelatedError{
+			Message: "no command sub sequence set, cannot perform setup",
+			Code:    1,
+		}
 	}
 
 	meta := bob.nextSubSequence.Metadata
-	fileSet := lang.NewHashSet()
-
-	if len(meta.Included) == 0 {
-		files, err := ioutil.ReadDir(bob.Repodir())
-		if err != nil {
-			return err
-		}
-
-		for _, v := range files {
-			fileSet.Add(v.Name())
-		}
-	} else {
-		for _, v := range meta.Included {
-			fileSet.Add(v)
+	dockerfile := meta.Dockerfile
+	pathToDockerfile, err := NewTrustedFilePath(dockerfile, repodir)
+	if err != nil {
+		return &BuildRelatedError{
+			Message: err.Error(),
+			Code:    1,
 		}
 	}
 
-	// subtract any excludes from fileSet
-	for _, exclude := range meta.Excluded {
-		if fileSet.Contains(exclude) {
-			fileSet.Remove(exclude)
+	if _, err := SanitizeTrustedFilePath(pathToDockerfile); err != nil {
+		return err
+	}
+
+	fileSet := lang.NewHashSet()
+
+	files, err := ioutil.ReadDir(repodir)
+	if err != nil {
+		return &BuildRelatedError{
+			Message: err.Error(),
+			Code:    1,
 		}
+	}
+
+	for _, v := range files {
+		fileSet.Add(v.Name())
 	}
 
 	if fileSet.Contains("Dockerfile") {
@@ -217,9 +232,6 @@ func (bob *Builder) Setup() error {
 
 	// add the Dockerfile
 	fileSet.Add(meta.Dockerfile)
-
-	workdir := bob.Workdir()
-	repodir := bob.Repodir()
 
 	// copy the actual files over
 	for _, file := range fileSet.ToSlice() {
@@ -237,7 +249,10 @@ func (bob *Builder) Setup() error {
 		}
 
 		if err := fileutils.CpWithArgs(src, dest, cpArgs); err != nil {
-			return err
+			return &BuildRelatedError{
+				Message: err.Error(),
+				Code:    1,
+			}
 		}
 	}
 

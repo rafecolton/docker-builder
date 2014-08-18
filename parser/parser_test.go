@@ -41,8 +41,6 @@ var _ = Describe("Parse", func() {
 				*&builderfile.ContainerSection{
 					Name:       "base",
 					Dockerfile: "Dockerfile.base",
-					Included:   []string{"Gemfile", "Gemfile.lock"},
-					Excluded:   []string{"spec", "tmp"},
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"base"},
@@ -54,8 +52,6 @@ var _ = Describe("Parse", func() {
 				*&builderfile.ContainerSection{
 					Name:       "app",
 					Dockerfile: "Dockerfile",
-					Included:   []string{},
-					Excluded:   []string{"spec", "tmp"},
 					Registry:   "quay.io/modcloth",
 					Project:    "style-gallery",
 					Tags:       []string{"git:branch", "git:rev", "git:short"},
@@ -73,7 +69,6 @@ var _ = Describe("Parse", func() {
 				TagOpts:   []string{"--force"},
 			},
 			ContainerGlobals: &builderfile.ContainerSection{
-				Excluded: []string{"spec", "tmp"},
 				Registry: "quay.io/modcloth",
 				Project:  "style-gallery",
 				Tags:     []string{"git:branch", "git:rev", "git:short"},
@@ -85,8 +80,6 @@ var _ = Describe("Parse", func() {
 				&builderfile.ContainerSection{
 					Name:       "base",
 					Dockerfile: "Dockerfile.base",
-					Included:   []string{"Gemfile", "Gemfile.lock"},
-					Excluded:   nil,
 					Registry:   "",
 					Project:    "",
 					Tags:       []string{"base"},
@@ -95,8 +88,6 @@ var _ = Describe("Parse", func() {
 				&builderfile.ContainerSection{
 					Name:       "app",
 					Dockerfile: "Dockerfile",
-					Included:   nil,
-					Excluded:   nil,
 					Registry:   "",
 					Project:    "",
 					Tags:       nil,
@@ -145,8 +136,6 @@ var _ = Describe("Parse", func() {
 					Metadata: &SubSequenceMetadata{
 						Name:       "base",
 						Dockerfile: "Dockerfile.base",
-						Excluded:   []string{"spec", "tmp"},
-						Included:   []string{"Gemfile", "Gemfile.lock"},
 						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
 					SubCommand: []DockerCmd{
@@ -171,8 +160,6 @@ var _ = Describe("Parse", func() {
 					Metadata: &SubSequenceMetadata{
 						Name:       "app",
 						Dockerfile: "Dockerfile",
-						Excluded:   []string{"spec", "tmp"},
-						Included:   []string{},
 						UUID:       "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
 					},
 					SubCommand: []DockerCmd{

@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"github.com/modcloth/docker-builder/builderfile"
 	"github.com/modcloth/docker-builder/parser/uuid"
 )
 
@@ -28,6 +29,7 @@ default values are assigned to a new Parser, but useful to have in case we need
 to change this.
 */
 func NewParser(filename string, l *logrus.Logger) *Parser {
+	builderfile.Logger(l)
 	return &Parser{
 		Logger:        l,
 		filename:      filename,

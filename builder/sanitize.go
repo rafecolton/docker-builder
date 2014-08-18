@@ -8,41 +8,55 @@ import (
 const (
 	// DotDotSanitizeErrorMessage is the error message used in errors that occur
 	// because a provided Bobfile path contains ".."
-	DotDotSanitizeErrorMessage = "bobfile path must not contain .."
+	DotDotSanitizeErrorMessage = "file path must not contain .."
 
 	// InvalidPathSanitizeErrorMessage is the error message used in errors that
 	// occur because a provided Bobfile path is invalid
-	InvalidPathSanitizeErrorMessage = "bobfile path is invalid"
+	InvalidPathSanitizeErrorMessage = "file path is invalid"
 
 	// SymlinkSanitizeErrorMessage is the error message used in errors that
 	// occur because a provided Bobfile path contains symlinks
-	SymlinkSanitizeErrorMessage = "bobfile path must not contain symlinks"
+	SymlinkSanitizeErrorMessage = "file path must not contain symlinks"
 )
 
 var dotDotRegex = regexp.MustCompile(`\.\.`)
 
-// SanitizeBuilderfilePath checks for disallowed entries in the provided
-// Bobfile path and returns either a sanitized version of the path or an error
-func SanitizeBuilderfilePath(config *BuildConfig) (string, Error) {
-	var file = config.File()
-	var top = config.Top()
+// SanitizeTrustedFilePath checks for disallowed entries in the provided
+// file path and returns either a sanitized version of the path or an error
+func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (string, Error) {
+	var file = trustedFilePath.File()
+	var top = trustedFilePath.Top()
 
 	if dotDotRegex.MatchString(file) {
-		return "", &SanitizeError{Message: DotDotSanitizeErrorMessage}
+		return "", &SanitizeError{
+			Message:  DotDotSanitizeErrorMessage,
+			Filename: file,
+		}
 	}
 
 	abs, err := filepath.Abs(top + "/" + file)
 	if err != nil {
-		return "", &SanitizeError{Message: InvalidPathSanitizeErrorMessage}
+		return "", &SanitizeError{
+			Message:  InvalidPathSanitizeErrorMessage,
+			error:    err,
+			Filename: file,
+		}
 	}
 
 	resolved, err := filepath.EvalSymlinks(abs)
 	if err != nil {
-		return "", &SanitizeError{Message: InvalidPathSanitizeErrorMessage}
+		return "", &SanitizeError{
+			Message:  InvalidPathSanitizeErrorMessage,
+			error:    err,
+			Filename: file,
+		}
 	}
 
 	if abs != resolved {
-		return "", &SanitizeError{Message: SymlinkSanitizeErrorMessage}
+		return "", &SanitizeError{
+			Message:  SymlinkSanitizeErrorMessage,
+			Filename: file,
+		}
 	}
 
 	clean := filepath.Clean(abs)

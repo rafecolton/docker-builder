@@ -206,7 +206,7 @@ func (job *Job) build() error {
 
 	job.Logger.WithField("file", job.Bobfile).Info("building from file")
 
-	config, err := builder.NewBuildConfig(job.Bobfile, job.clonedRepoLocation)
+	config, err := builder.NewTrustedFilePath(job.Bobfile, job.clonedRepoLocation)
 	if err != nil {
 		return err
 	}

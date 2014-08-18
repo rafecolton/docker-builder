@@ -12,13 +12,17 @@ Bob offers the following:
 temporary directory, so you can name your `Dockerfile` whatever you
 want.
 
-0. **Includes &amp; Excludes**
-  - Sometimes, you want to tailor which of your application's files end
+0. **<del>Includes &amp; Excludes</del>**
+  - <del>Sometimes, you want to tailor which of your application's files end
     up in your container, but writing an explicit `ADD` command for each
 file and directory is very tedious.  Instead, by using Includes and
 Excludes, your temporary build directory will have only exactly the
 files you want.  That way, instead of adding each file individually, you
-can simply `ADD . <dir>`
+can simply `ADD . <dir>`</del>
+  - **NOTE:** This functionality has been deprecated.  The introduction
+    of `.dockerignore` takes care of the ability to exclude files, and
+the `included` stanza by itself wasn't really providing much value.
+Still fun to see how early decisions were made!
 
 0. **Tagging macros**
   - More often than not, in addition to a static tag, it is desirable to

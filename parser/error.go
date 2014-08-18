@@ -45,3 +45,15 @@ type BuilderfileConvertError struct {
 func (err *BuilderfileConvertError) ExitCode() int {
 	return 7
 }
+
+// BuilderfileDeprecatedStanzaError is used for errors resulting from a deprecated
+// stanza in a Bobfile
+type BuilderfileDeprecatedStanzaError struct {
+	error
+}
+
+// ExitCode returns the exit code Bobfile conversion errors.  It is the same
+// value for all Bobfile deprecated stanza errors
+func (err *BuilderfileDeprecatedStanzaError) ExitCode() int {
+	return 57
+}

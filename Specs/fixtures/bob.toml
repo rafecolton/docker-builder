@@ -8,10 +8,6 @@ build_opts = [
 tag_opts = ["--force"]
 
 [container_globals]
-excluded = [
-  "spec",
-  "tmp"
-]
 registry = "quay.io/modcloth"
 dockercfg_un = "foo"
 dockercfg_pass = "bar"
@@ -26,19 +22,11 @@ tags = [
 [[container]]
 name = "base"
 Dockerfile = "Dockerfile.base"
-included = [
-  "Gemfile",
-  "Gemfile.lock"
-]
 tags = ["base"]
 skip_push = true
 
 [[container]]
 name = "app"
 Dockerfile = "Dockerfile"
-
-# behavior
-# all are included ; if included is specified, then only those files are
-# included then, anything in exclude is removed (i.e. this is final!)
 
 # vim:ft=toml
