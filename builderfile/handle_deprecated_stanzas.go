@@ -26,16 +26,18 @@ func (file *Builderfile) HandleDeprecatedStanzas() error {
 		}
 	}
 
-	if len(file.ContainerGlobals.Excluded) != 0 {
-		logger.Error(excludedStanzaWarningMessage)
-		return errors.New(`container section contains deprecated "excluded" section`)
-	}
+	if file.ContainerGlobals != nil {
+		if len(file.ContainerGlobals.Excluded) != 0 {
+			logger.Error(excludedStanzaWarningMessage)
+			return errors.New(`container section contains deprecated "excluded" section`)
+		}
 
-	if len(file.ContainerGlobals.Included) != 0 {
-		file.ContainerGlobals.Included = nil
-		if !includedWarningPrinted {
-			logger.Warn(includedStanzaWarningMessage)
-			includedWarningPrinted = true
+		if len(file.ContainerGlobals.Included) != 0 {
+			file.ContainerGlobals.Included = nil
+			if !includedWarningPrinted {
+				logger.Warn(includedStanzaWarningMessage)
+				includedWarningPrinted = true
+			}
 		}
 	}
 	return nil
