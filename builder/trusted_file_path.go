@@ -31,9 +31,13 @@ func NewTrustedFilePath(file, top string) (*TrustedFilePath, error) {
 		return nil, err
 	}
 
+	fullpath := resolved + "/" + file
+	dir := filepath.Dir(fullpath)
+	base := filepath.Base(fullpath)
+
 	return &TrustedFilePath{
-		file: file,
-		top:  resolved,
+		file: base,
+		top:  dir,
 	}, nil
 }
 

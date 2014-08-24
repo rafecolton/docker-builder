@@ -7,7 +7,6 @@ import (
 )
 
 import (
-	//"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -188,7 +187,6 @@ Setup moves all of the correct files into place in the temporary directory in
 order to perform the docker build.
 */
 func (bob *Builder) Setup() Error {
-	var repodir = bob.Repodir()
 	var workdir = bob.Workdir()
 
 	if bob.nextSubSequence == nil {
@@ -200,7 +198,7 @@ func (bob *Builder) Setup() Error {
 
 	meta := bob.nextSubSequence.Metadata
 	dockerfile := meta.Dockerfile
-	pathToDockerfile, err := NewTrustedFilePath(dockerfile, repodir)
+	pathToDockerfile, err := NewTrustedFilePath(dockerfile, bob.Repodir())
 	if err != nil {
 		return &BuildRelatedError{
 			Message: err.Error(),
@@ -213,8 +211,9 @@ func (bob *Builder) Setup() Error {
 	}
 
 	fileSet := lang.NewHashSet()
+	top := pathToDockerfile.Top()
 
-	files, err := ioutil.ReadDir(repodir)
+	files, err := ioutil.ReadDir(top)
 	if err != nil {
 		return &BuildRelatedError{
 			Message: err.Error(),
@@ -231,11 +230,11 @@ func (bob *Builder) Setup() Error {
 	}
 
 	// add the Dockerfile
-	fileSet.Add(meta.Dockerfile)
+	fileSet.Add(filepath.Base(meta.Dockerfile))
 
 	// copy the actual files over
 	for _, file := range fileSet.ToSlice() {
-		src := repodir + "/" + file.(string)
+		src := top + "/" + file.(string)
 		dest := workdir + "/" + file.(string)
 
 		if file == meta.Dockerfile {
