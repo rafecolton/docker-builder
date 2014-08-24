@@ -53,7 +53,7 @@ func (b *TrustedFilePath) Dir() string {
 	return filepath.Dir(b.top + "/" + b.file)
 }
 
-// Dir returns the basename of the full trusted file path
+// Base returns the basename of the full trusted file path
 func (b *TrustedFilePath) Base() string {
 	return filepath.Base(b.top + "/" + b.file)
 }
