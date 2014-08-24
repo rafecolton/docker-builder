@@ -211,7 +211,7 @@ func (bob *Builder) Setup() Error {
 	}
 
 	fileSet := lang.NewHashSet()
-	top := pathToDockerfile.Top()
+	top := pathToDockerfile.Dir()
 
 	files, err := ioutil.ReadDir(top)
 	if err != nil {

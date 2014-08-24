@@ -31,13 +31,9 @@ func NewTrustedFilePath(file, top string) (*TrustedFilePath, error) {
 		return nil, err
 	}
 
-	fullpath := resolved + "/" + file
-	dir := filepath.Dir(fullpath)
-	base := filepath.Base(fullpath)
-
 	return &TrustedFilePath{
-		file: base,
-		top:  dir,
+		file: file,
+		top:  resolved,
 	}, nil
 }
 
@@ -50,4 +46,14 @@ func (b *TrustedFilePath) File() string {
 // top level directory as provided by Top() is considered to be trusted.
 func (b *TrustedFilePath) Top() string {
 	return b.top
+}
+
+// Dir returns the dirname of the full trusted file path
+func (b *TrustedFilePath) Dir() string {
+	return filepath.Dir(b.top + "/" + b.file)
+}
+
+// Dir returns the basename of the full trusted file path
+func (b *TrustedFilePath) Base() string {
+	return filepath.Base(b.top + "/" + b.file)
 }
