@@ -107,7 +107,8 @@ func (bob *Builder) Build(tfp *TrustedFilePath) Error {
 		return bErr
 	}
 
-	par := parser.NewParser(sanitizedFile, bob.Logger)
+	pathToSanitizedFile := sanitizedFile.Top() + "/" + sanitizedFile.File()
+	par := parser.NewParser(pathToSanitizedFile, bob.Logger)
 
 	commandSequence, pErr := par.Parse()
 	if pErr != nil {
@@ -117,7 +118,7 @@ func (bob *Builder) Build(tfp *TrustedFilePath) Error {
 		}
 	}
 
-	bob.Builderfile = sanitizedFile
+	bob.Builderfile = pathToSanitizedFile
 
 	if err := bob.build(commandSequence); err != nil {
 		return err
@@ -188,6 +189,9 @@ order to perform the docker build.
 */
 func (bob *Builder) Setup() Error {
 	var workdir = bob.Workdir()
+	var pathToDockerfile, sanitizedPathToDockerfile *TrustedFilePath
+	var err error
+	var bErr Error
 
 	if bob.nextSubSequence == nil {
 		return &BuildRelatedError{
@@ -198,7 +202,7 @@ func (bob *Builder) Setup() Error {
 
 	meta := bob.nextSubSequence.Metadata
 	dockerfile := meta.Dockerfile
-	pathToDockerfile, err := NewTrustedFilePath(dockerfile, bob.Repodir())
+	pathToDockerfile, err = NewTrustedFilePath(dockerfile, bob.Repodir())
 	if err != nil {
 		return &BuildRelatedError{
 			Message: err.Error(),
@@ -206,12 +210,12 @@ func (bob *Builder) Setup() Error {
 		}
 	}
 
-	if _, err := SanitizeTrustedFilePath(pathToDockerfile); err != nil {
-		return err
+	if sanitizedPathToDockerfile, bErr = SanitizeTrustedFilePath(pathToDockerfile); err != nil {
+		return bErr
 	}
 
 	fileSet := lang.NewHashSet()
-	top := pathToDockerfile.Dir()
+	top := sanitizedPathToDockerfile.Top()
 
 	files, err := ioutil.ReadDir(top)
 	if err != nil {

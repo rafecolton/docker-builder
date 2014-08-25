@@ -51,7 +51,8 @@ var _ = Describe("Sanitize Builderfile path", func() {
 
 		It("returns a cleaned version of the path", func() {
 			config, _ := NewTrustedFilePath(validPath, "..")
-			path, _ := SanitizeTrustedFilePath(config)
+			sanitizedTrustedFile, _ := SanitizeTrustedFilePath(config)
+			path := sanitizedTrustedFile.Top() + "/" + sanitizedTrustedFile.File()
 			Expect(path).To(Equal(cleanedValidPath))
 		})
 	})
