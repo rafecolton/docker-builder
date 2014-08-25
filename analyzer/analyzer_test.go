@@ -33,8 +33,7 @@ var _ = Describe("Analysis Parsing", func() {
 		outfile = &builderfile.Builderfile{
 			Version: 1,
 			Docker: *&builderfile.Docker{
-				BuildOpts: []string{"--rm", "--no-cache"},
-				TagOpts:   []string{"--force"},
+				TagOpts: []string{"--force"},
 			},
 			ContainerArr: []*builderfile.ContainerSection{
 				&builderfile.ContainerSection{

@@ -5,6 +5,6 @@ name = "app"
 Dockerfile = "Dockerfile"
 registry = "rafecolton"
 project = "docker-builder"
-tags = ["git:branch", "git:rev", "git:short", "latest"]
+tags = ["git:short", "latest"]
 
 # vim:ft=toml

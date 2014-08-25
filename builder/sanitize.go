@@ -23,12 +23,12 @@ var dotDotRegex = regexp.MustCompile(`\.\.`)
 
 // SanitizeTrustedFilePath checks for disallowed entries in the provided
 // file path and returns either a sanitized version of the path or an error
-func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (string, Error) {
+func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (*TrustedFilePath, Error) {
 	var file = trustedFilePath.File()
 	var top = trustedFilePath.Top()
 
 	if dotDotRegex.MatchString(file) {
-		return "", &SanitizeError{
+		return nil, &SanitizeError{
 			Message:  DotDotSanitizeErrorMessage,
 			Filename: file,
 		}
@@ -36,7 +36,7 @@ func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (string, Error) {
 
 	abs, err := filepath.Abs(top + "/" + file)
 	if err != nil {
-		return "", &SanitizeError{
+		return nil, &SanitizeError{
 			Message:  InvalidPathSanitizeErrorMessage,
 			error:    err,
 			Filename: file,
@@ -45,7 +45,7 @@ func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (string, Error) {
 
 	resolved, err := filepath.EvalSymlinks(abs)
 	if err != nil {
-		return "", &SanitizeError{
+		return nil, &SanitizeError{
 			Message:  InvalidPathSanitizeErrorMessage,
 			error:    err,
 			Filename: file,
@@ -53,7 +53,7 @@ func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (string, Error) {
 	}
 
 	if abs != resolved {
-		return "", &SanitizeError{
+		return nil, &SanitizeError{
 			Message:  SymlinkSanitizeErrorMessage,
 			Filename: file,
 		}
@@ -61,5 +61,8 @@ func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (string, Error) {
 
 	clean := filepath.Clean(abs)
 
-	return clean, nil
+	return &TrustedFilePath{
+		top:  filepath.Dir(clean),
+		file: filepath.Base(clean),
+	}, nil
 }

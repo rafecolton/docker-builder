@@ -169,8 +169,7 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 	ret := &builderfile.Builderfile{
 		Version: 1,
 		Docker: *&builderfile.Docker{
-			BuildOpts: []string{"--rm", "--no-cache"},
-			TagOpts:   []string{"--force"},
+			TagOpts: []string{"--force"},
 		},
 		ContainerArr: []*builderfile.ContainerSection{},
 	}

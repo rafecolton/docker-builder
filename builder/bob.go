@@ -7,7 +7,6 @@ import (
 )
 
 import (
-	//"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -108,7 +107,8 @@ func (bob *Builder) Build(tfp *TrustedFilePath) Error {
 		return bErr
 	}
 
-	par := parser.NewParser(sanitizedFile, bob.Logger)
+	pathToSanitizedFile := sanitizedFile.Top() + "/" + sanitizedFile.File()
+	par := parser.NewParser(pathToSanitizedFile, bob.Logger)
 
 	commandSequence, pErr := par.Parse()
 	if pErr != nil {
@@ -118,7 +118,7 @@ func (bob *Builder) Build(tfp *TrustedFilePath) Error {
 		}
 	}
 
-	bob.Builderfile = sanitizedFile
+	bob.Builderfile = pathToSanitizedFile
 
 	if err := bob.build(commandSequence); err != nil {
 		return err
@@ -188,8 +188,10 @@ Setup moves all of the correct files into place in the temporary directory in
 order to perform the docker build.
 */
 func (bob *Builder) Setup() Error {
-	var repodir = bob.Repodir()
 	var workdir = bob.Workdir()
+	var pathToDockerfile, sanitizedPathToDockerfile *TrustedFilePath
+	var err error
+	var bErr Error
 
 	if bob.nextSubSequence == nil {
 		return &BuildRelatedError{
@@ -200,7 +202,7 @@ func (bob *Builder) Setup() Error {
 
 	meta := bob.nextSubSequence.Metadata
 	dockerfile := meta.Dockerfile
-	pathToDockerfile, err := NewTrustedFilePath(dockerfile, repodir)
+	pathToDockerfile, err = NewTrustedFilePath(dockerfile, bob.Repodir())
 	if err != nil {
 		return &BuildRelatedError{
 			Message: err.Error(),
@@ -208,13 +210,14 @@ func (bob *Builder) Setup() Error {
 		}
 	}
 
-	if _, err := SanitizeTrustedFilePath(pathToDockerfile); err != nil {
-		return err
+	if sanitizedPathToDockerfile, bErr = SanitizeTrustedFilePath(pathToDockerfile); err != nil {
+		return bErr
 	}
 
 	fileSet := lang.NewHashSet()
+	top := sanitizedPathToDockerfile.Top()
 
-	files, err := ioutil.ReadDir(repodir)
+	files, err := ioutil.ReadDir(top)
 	if err != nil {
 		return &BuildRelatedError{
 			Message: err.Error(),
@@ -231,11 +234,11 @@ func (bob *Builder) Setup() Error {
 	}
 
 	// add the Dockerfile
-	fileSet.Add(meta.Dockerfile)
+	fileSet.Add(filepath.Base(meta.Dockerfile))
 
 	// copy the actual files over
 	for _, file := range fileSet.ToSlice() {
-		src := repodir + "/" + file.(string)
+		src := top + "/" + file.(string)
 		dest := workdir + "/" + file.(string)
 
 		if file == meta.Dockerfile {
