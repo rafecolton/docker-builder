@@ -49,8 +49,8 @@
 			"Rev": "0280e33525f5d88edb71638a80b31724153225ba"
 		},
 		{
-			"ImportPath": "github.com/modcloth/auth",
-			"Rev": "3f96c83d4d504fb0804967df1d55b96e69817f38"
+			"ImportPath": "github.com/martini-contrib/auth",
+			"Rev": "a455012474163bc03aa53b2be38ac603d2ae9474"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
@@ -77,6 +77,10 @@
 		{
 			"ImportPath": "github.com/onsi/gomega",
 			"Rev": "4699d5a664396173c7d9fcef9e88be297c7bae13"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/vauth",
+			"Rev": "3c5da807bc47903e09eba6d4efef3cd9ad916851"
 		},
 		{
 			"ImportPath": "github.com/wsxiaoys/terminal/color",
