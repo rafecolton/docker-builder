@@ -28,9 +28,14 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D78692
 RUN bash -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
 RUN apt-get update -y && apt-get install -y -qq --no-install-recommends lxc-docker
 
+WORKDIR /app/src/github.com/rafecolton/docker-builder
+
+ADD Godeps /app/src/github.com/rafecolton/docker-builder/Godeps
+RUN go get github.com/tools/godep
+RUN $GOPATH/bin/godep restore
+
 # set up build dir and add project
 ADD . /app/src/github.com/rafecolton/docker-builder
-WORKDIR /app/src/github.com/rafecolton/docker-builder
 
 # make sure we don't have trouble getting deps from GitHub
 RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts
