@@ -11,7 +11,8 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	"github.com/go-martini/martini"
-	"github.com/modcloth/auth"
+	"github.com/martini-contrib/auth"
+	"github.com/rafecolton/vauth"
 )
 
 var logger *logrus.Logger
@@ -38,10 +39,10 @@ func Serve(context *cli.Context) {
 		basicAuthFunc = auth.Basic(un, pwd)
 	}
 	if shouldTravisAuth {
-		travisAuthFunc = auth.TravisCI(travisToken)
+		travisAuthFunc = vauth.TravisCI(travisToken)
 	}
 	if shouldGitHubAuth {
-		githubAuthFunc = auth.GitHub(githubSecret)
+		githubAuthFunc = vauth.GitHub(githubSecret)
 	}
 
 	// configure webhooks
