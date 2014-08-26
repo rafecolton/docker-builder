@@ -2,20 +2,7 @@ SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/rafecolton/docker-builder
-PACKAGES := \
-  $(B)/analyzer \
-  $(B)/builder \
-  $(B)/builderfile \
-  $(B)/conf \
-  $(B)/dclient \
-  $(B)/job \
-  $(B)/log \
-  $(B)/parser \
-  $(B)/parser/tag \
-  $(B)/parser/uuid \
-  $(B)/server \
-  $(B)/server/webhook \
-  $(B)/version
+PACKAGES := ./...
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
 BRANCH_VAR := $(B)/version.BranchString
@@ -25,7 +12,9 @@ REPO_BRANCH := $(shell git rev-parse -q --abbrev-ref HEAD)
 GOBUILD_VERSION_ARGS := -ldflags "\
   -X $(REV_VAR) $(REPO_REV) \
   -X $(VERSION_VAR) $(REPO_VERSION) \
-  -X $(BRANCH_VAR) $(REPO_BRANCH)"
+  -X $(BRANCH_VAR) $(REPO_BRANCH) \
+  -w \
+"
 
 BATS_INSTALL_DIR ?= /usr/local
 GINKGO_PATH ?= "."
@@ -33,8 +22,11 @@ GINKGO_PATH ?= "."
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
 
-export BATS_INSTALL_DIR
-export GINKGO_PATH
+# go build args
+CGO_ENABLED := 0
+GO_TAG_ARGS := -tags netgo
+
+export CGO_ENABLED
 export GOPATH
 
 .PHONY: all
@@ -82,7 +74,7 @@ binclean:
 
 .PHONY: build
 build: binclean godep
-	go install $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES) $(B)
+	go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
 
 .PHONY: release
 release: binclean gox-linux gox-darwin
@@ -91,7 +83,7 @@ release: binclean gox-linux gox-darwin
 .PHONY: gox-linux
 gox-linux: build dev
 	mkdir -p ./Release/linux/bin
-	gox -output="Release/linux/bin/docker-builder" -arch="amd64" -os="linux" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	gox -output="Release/linux/bin/docker-builder" -osarch="linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd Release >/dev/null && \
 	  tar -czf docker-builder-$(REPO_VERSION)-linux-amd64.tar.gz linux/ && \
 	  popd >/dev/null
@@ -99,7 +91,7 @@ gox-linux: build dev
 .PHONY: gox-darwin
 gox-darwin: build dev
 	mkdir -p ./Release/darwin/bin
-	gox -output="Release/darwin/bin/docker-builder" -arch="amd64" -os="darwin" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	gox -output="Release/darwin/bin/docker-builder" -osarch="darwin/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	pushd Release >/dev/null && \
 	  tar -czf docker-builder-$(REPO_VERSION)-darwin-amd64.tar.gz darwin/ && \
 	  popd >/dev/null
