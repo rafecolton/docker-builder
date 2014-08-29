@@ -36,8 +36,8 @@
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
-			"Comment": "v1.0-29-g4957faa",
-			"Rev": "4957faa90266615eb356bd0863e9ba7069a1c315"
+			"Comment": "v1.0-39-g42b0b68",
+			"Rev": "42b0b68fb383aac4f72331d0bd0948001b9be080"
 		},
 		{
 			"ImportPath": "github.com/hishboy/gocommons/lang",
