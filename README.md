@@ -45,11 +45,11 @@ go get github.com/rafecolton/docker-builder
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/0.7.3/docker-builder-0.7.3-darwin-amd64.tar.gz | \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/0.7.4/docker-builder-0.7.4-darwin-amd64.tar.gz | \
   tar -xzf - -C /usr/local --strip-components=1
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/0.7.3/docker-builder-0.7.3-linux-amd64.tar.gz | \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/0.7.4/docker-builder-0.7.4-linux-amd64.tar.gz | \
   sudo tar -xzf - -C /usr/local --strip-components=1
 ```
 
