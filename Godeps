@@ -66,11 +66,6 @@
 			"Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
 		},
 		{
-			"ImportPath": "github.com/onsi/ginkgo",
-			"Comment": "v1.0.0-28-g6481765",
-			"Rev": "6481765dda39cbaae281109e6945449642329197"
-		},
-		{
 			"ImportPath": "github.com/onsi/gocleanup",
 			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
 		},
