@@ -1,12 +1,13 @@
 {
 	"ImportPath": "github.com/rafecolton/docker-builder",
-	"GoVersion": "go1.3",
+	"GoVersion": "go1.3.1",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/BurntSushi/toml",
+			"Comment": "v0.1.0",
 			"Rev": "2ceedfee35ad3848e49308ab0c9a4f640cfb5fb2"
 		},
 		{
@@ -36,8 +37,8 @@
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
-			"Comment": "v1.0-29-g4957faa",
-			"Rev": "4957faa90266615eb356bd0863e9ba7069a1c315"
+			"Comment": "v1.0-39-g42b0b68",
+			"Rev": "42b0b68fb383aac4f72331d0bd0948001b9be080"
 		},
 		{
 			"ImportPath": "github.com/hishboy/gocommons/lang",
@@ -50,7 +51,7 @@
 		},
 		{
 			"ImportPath": "github.com/martini-contrib/auth",
-			"Rev": "a455012474163bc03aa53b2be38ac603d2ae9474"
+			"Rev": "7925ee933d02cb66101819126f8b39367994c2b2"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
@@ -67,8 +68,8 @@
 		},
 		{
 			"ImportPath": "github.com/onsi/ginkgo",
-			"Comment": "v1.0.0-28-g6481765",
-			"Rev": "6481765dda39cbaae281109e6945449642329197"
+			"Comment": "v1.1.0-6-g527974d",
+			"Rev": "527974d5873391de9d8a25b761b5fc1382e9279e"
 		},
 		{
 			"ImportPath": "github.com/onsi/gocleanup",
