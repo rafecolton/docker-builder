@@ -59,8 +59,8 @@
 		},
 		{
 			"ImportPath": "github.com/modcloth/kamino",
-			"Comment": "v0.1.2-4-g8dfe861",
-			"Rev": "8dfe861e9ce089cbdaaa6a96bcc8273720511099"
+			"Comment": "v0.1.2-21-gb484e92",
+			"Rev": "b484e923ab8e67cd62654f4f437fa544a2ff48ab"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",

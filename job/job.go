@@ -146,11 +146,12 @@ func (job *Job) clone() (string, error) {
 	}).Info("starting clone process")
 
 	genome := &kamino.Genome{
-		APIToken: job.GitHubAPIToken,
-		Account:  job.Account,
-		Ref:      job.Ref,
-		Repo:     job.Repo,
-		UseCache: kamino.No,
+		APIToken:  job.GitHubAPIToken,
+		Account:   job.Account,
+		Ref:       job.Ref,
+		Repo:      job.Repo,
+		UseCache:  kamino.No,
+		Recursive: true,
 	}
 
 	factory, err := kamino.NewCloneFactory(job.Workdir)
