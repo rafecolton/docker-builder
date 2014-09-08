@@ -20,11 +20,7 @@ Steps to quick start:
 # install docker-builder
 go get github.com/rafecolton/docker-builder
 
-# create a Bobfile
-docker-builder init .
-
-# build the aforementioned Bobfile
-docker-builder build Bobfile
+$GOPATH/bin/docker-builder --help
 ```
 
 ## More Reasonably-Paced Start
