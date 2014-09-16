@@ -30,10 +30,6 @@ RUN apt-get update -y && apt-get install -y -qq --no-install-recommends lxc-dock
 
 WORKDIR /app/src/github.com/rafecolton/docker-builder
 
-ADD Godeps /app/src/github.com/rafecolton/docker-builder/Godeps
-RUN go get github.com/tools/godep
-RUN $GOPATH/bin/godep restore
-
 # set up build dir and add project
 ADD . /app/src/github.com/rafecolton/docker-builder
 

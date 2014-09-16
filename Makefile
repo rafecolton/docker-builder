@@ -71,7 +71,7 @@ binclean:
 	touch ./Release/.gitkeep
 
 .PHONY: build
-build: binclean
+build: binclean get
 	CGO_ENABLED=0 go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
 
 .PHONY: release
@@ -163,7 +163,7 @@ gopath:
 
 .PHONY: get
 get:
-	go get ./...
+	go get -t ./...
 
 .PHONY: dev
 dev: deps gox
