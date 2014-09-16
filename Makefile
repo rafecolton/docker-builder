@@ -71,38 +71,25 @@ binclean:
 	touch ./Release/.gitkeep
 
 .PHONY: build
-build: binclean godep
+build: binclean
 	CGO_ENABLED=0 go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
 
 .PHONY: release
 release: binclean gox-linux gox-darwin
-	open ./Release
+	#open ./Release
 
 .PHONY: gox-linux
 gox-linux: build dev
-	mkdir -p ./Release/linux/bin
-	CGO_ENABLED=0 gox -output="Release/linux/bin/docker-builder" -osarch="linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	pushd Release >/dev/null && \
-	  tar -czf docker-builder-$(REPO_VERSION)-linux-amd64.tar.gz linux/ && \
-	  popd >/dev/null
+	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-linux-amd64" -osarch="linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	# TODO: make checksum
 
 .PHONY: gox-darwin
 gox-darwin: build dev
-	mkdir -p ./Release/darwin/bin
-	CGO_ENABLED=0 gox -output="Release/darwin/bin/docker-builder" -osarch="darwin/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	pushd Release >/dev/null && \
-	  tar -czf docker-builder-$(REPO_VERSION)-darwin-amd64.tar.gz darwin/ && \
-	  popd >/dev/null
-
-.PHONY: godep
-godep:
-	go get github.com/tools/godep
-	@echo "godep restoring..."
-	$(GOPATH)/bin/godep restore
+	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-docker-amd64" -osarch="darwin/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	# TODO: make checksum
 
 .PHONY: deps
-deps: godep
-	go get github.com/golang/lint/golint
+deps:
 	go get github.com/onsi/ginkgo/ginkgo
 	go get github.com/onsi/gomega
 	@echo "installing bats..."
@@ -173,10 +160,6 @@ gox:
 .PHONY: gopath
 gopath:
 	@echo  "\$$GOPATH = $(GOPATH)"
-
-.PHONY: save
-save:
-	godep save -copy=false ./...
 
 .PHONY: get
 get:
