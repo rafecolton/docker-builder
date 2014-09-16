@@ -75,17 +75,12 @@ build: binclean get
 	CGO_ENABLED=0 go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
 
 .PHONY: release
-release: binclean gox-linux gox-darwin
-	#open ./Release
+release: binclean gox-build
+	open ./Release
 
-.PHONY: gox-linux
-gox-linux: build dev
-	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-linux-amd64" -osarch="linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	# TODO: make checksum
-
-.PHONY: gox-darwin
-gox-darwin: build dev
-	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-docker-amd64" -osarch="darwin/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+.PHONY: gox-build
+gox-build: build gox
+	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	# TODO: make checksum
 
 .PHONY: deps
@@ -164,6 +159,3 @@ gopath:
 .PHONY: get
 get:
 	go get -t ./...
-
-.PHONY: dev
-dev: deps gox
