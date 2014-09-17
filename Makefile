@@ -30,25 +30,6 @@ export GOPATH
 .PHONY: all
 all: binclean clean build test
 
-.PHONY: default help
-default: help
-help:
-	@echo "Usage: make [target]"
-	@echo
-	@echo "Some Useful Options:"
-	@echo
-	@echo "  help: display this message"
-	@echo
-	@echo "  all: binclean clean build test"
-	@echo
-	@echo "  quick: build + invokes docker-builder a couple times (good for debugging)"
-	@echo
-	@echo "  build: installing libs plus installing deps"
-	@echo
-	@echo "  test: build fmtpolice, ginkgo tests, and bats tests"
-	@echo
-	@echo "  dev: set up the dev toolchain (deps + gox)"
-
 .PHONY: clean
 clean:
 	go clean -i -r $(PACKAGES) || true
@@ -79,26 +60,20 @@ release: binclean gox-build
 	open ./Release
 
 .PHONY: gox-build
-gox-build: build gox
+gox-build: get $(GOPATH)/bin/gox
 	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	# TODO: make checksum
 
-.PHONY: deps
-deps:
-	go get github.com/onsi/ginkgo/ginkgo
-	go get github.com/onsi/gomega
-	@echo "installing bats..."
-	@if ! which bats >/dev/null ; then \
-	  git clone https://github.com/sstephenson/bats.git && \
-	  (cd bats && $(SUDO) ./install.sh ${BATS_INSTALL_DIR}) && \
-	  rm -rf bats ; \
-	  fi
+.PHONY: install-ginkgo
+install-ginkgo:
+	go get -u github.com/onsi/ginkgo/ginkgo
+	go get -u github.com/onsi/gomega
 
 .PHONY: test
 test: build fmtpolice ginkgo bats
 
 .PHONY: fmtpolice
-fmtpolice: deps fmt lint
+fmtpolice: fmt lint
 
 .PHONY: fmt
 fmt:
@@ -111,7 +86,7 @@ fmt:
 
 .PHONY: linter
 linter:
-	go get github.com/golang/lint/golint
+	go get -u github.com/golang/lint/golint
 
 .PHONY: lint
 lint: linter
@@ -129,7 +104,7 @@ lintv:
 	@for file in $(shell git ls-files '*.go') ; do $(GOPATH)/bin/golint $$file ; done
 
 .PHONY: ginkgo
-ginkgo:
+ginkgo: install-ginkgo
 	@echo "----------"
 	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
 	  echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r ." && \
@@ -139,18 +114,18 @@ ginkgo:
 	  fi
 
 .PHONY: bats
-bats:
+bats: $(BATS_INSTALL_DIR)/bin/bats
 	@echo "----------"
 	$(BATS_INSTALL_DIR)/bin/bats $(BATS_OUT_FORMAT) $(shell find . -type f -name '*.bats')
 
-.PHONY: gox
-gox:
-	@if which gox >/dev/null ; then \
-	  echo "not installing gox, gox already installed." ; \
-	  else \
-	  go get github.com/mitchellh/gox ; \
-	  gox -build-toolchain -osarch="linux/amd64 darwin/amd64" ; \
-	  fi \
+$(BATS_INSTALL_DIR)/bin/bats:
+	git clone https://github.com/sstephenson/bats.git && \
+		(cd bats && $(SUDO) ./install.sh $(BATS_INSTALL_DIR)) && \
+		rm -rf bats
+
+$(GOPATH)/bin/gox:
+	go get github.com/mitchellh/gox
+	gox -build-toolchain -osarch="linux/amd64 darwin/amd64"
 
 .PHONY: gopath
 gopath:
