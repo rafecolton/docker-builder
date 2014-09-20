@@ -64,6 +64,11 @@ gox-build: get $(GOPATH)/bin/gox
 	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	# TODO: make checksum
 
+.PHONY: install-ginkgo
+install-ginkgo:
+	go get -u github.com/onsi/ginkgo/ginkgo
+	go get -u github.com/onsi/gomega
+
 .PHONY: test
 test: build fmtpolice ginkgo bats
 
@@ -99,7 +104,7 @@ lintv:
 	@for file in $(shell git ls-files '*.go') ; do $(GOPATH)/bin/golint $$file ; done
 
 .PHONY: ginkgo
-ginkgo:
+ginkgo: install-ginkgo
 	@echo "----------"
 	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
 	  echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r ." && \
