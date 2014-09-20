@@ -39,7 +39,7 @@ var (
 	expectedJob = &Job{
 		Account:  "foo",
 		ID:       jobID,
-		LogRoute: "/jobs/" + jobID + "/tail?n=100",
+		LogRoute: "http://localhost:5000/jobs/" + jobID + "/tail?n=100",
 		Ref:      "baz",
 		Repo:     "bar",
 		Status:   "created",

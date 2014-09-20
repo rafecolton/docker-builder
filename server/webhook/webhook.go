@@ -67,7 +67,7 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 		GitHubAPIToken: apiToken,
 	}
 
-	j := job.NewJob(jobConfig, spec)
+	j := job.NewJob(jobConfig, spec, req)
 
 	// if sync
 	if spec.Sync || job.TestMode {

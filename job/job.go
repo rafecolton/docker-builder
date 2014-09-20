@@ -2,7 +2,9 @@ package job
 
 import (
 	"io"
+	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/rafecolton/docker-builder/builder"
@@ -66,11 +68,32 @@ func Logger(l *logrus.Logger) {
 	logger = l
 }
 
+func (job *Job) setLogRouteHost(req *http.Request) {
+	var host string
+
+	if req.Host != "" {
+		host = req.Host
+	} else {
+		host = req.URL.Host
+	}
+
+	var scheme string
+	if req.TLS == nil {
+		scheme = "http"
+	} else {
+		scheme = "https"
+	}
+
+	if strings.HasPrefix(job.LogRoute, "/") {
+		job.LogRoute = scheme + "://" + host + job.LogRoute
+	}
+}
+
 /*
 NewJob creates a new job from the config as well as a job spec.  After creating
 the job, calling job.Process() will actually perform the work.
 */
-func NewJob(cfg *Config, spec *Spec) *Job {
+func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
 	gen = uuid.NewUUIDGenerator(!TestMode)
 	id, err := gen.NextUUID()
 	if err != nil {
@@ -96,6 +119,7 @@ func NewJob(cfg *Config, spec *Spec) *Job {
 		Status:         "created",
 		Created:        time.Now(),
 	}
+	ret.setLogRouteHost(req)
 
 	out := io.MultiWriter(os.Stdout)
 
