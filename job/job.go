@@ -141,13 +141,11 @@ func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
 		}
 	}
 
-	l := &logrus.Logger{
+	ret.Logger = &logrus.Logger{
 		Formatter: cfg.Logger.Formatter,
 		Level:     cfg.Logger.Level,
 		Out:       out,
 	}
-
-	ret.Logger = l
 
 	if ret.GitHubAPIToken == "" {
 		ret.GitHubAPIToken = cfg.GitHubAPIToken
