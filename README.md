@@ -39,6 +39,8 @@ go get github.com/rafecolton/docker-builder
 
 #### From pre-compiled binaries
 
+**TODO**: update this for the new binary-only install
+
 ```bash
 # on Mac OS X
 curl -sL https://github.com/rafecolton/docker-builder/releases/download/0.7.4/docker-builder-0.7.4-darwin-amd64.tar.gz | \
