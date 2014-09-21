@@ -258,6 +258,7 @@ func (job *Job) Process() error {
 	job.Status = "cloning"
 	path, err := job.clone()
 	if err != nil {
+		job.Logger.WithField("error", err).Error("unable to process job synchronously")
 		job.Status = "errored"
 		job.Error = err
 		return err
@@ -267,6 +268,7 @@ func (job *Job) Process() error {
 	// step 2: build
 	job.Status = "building"
 	if err = job.build(); err != nil {
+		job.Logger.WithField("error", err).Error("unable to process job synchronously")
 		job.Status = "errored"
 		job.Error = err
 		return err
