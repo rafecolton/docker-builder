@@ -74,7 +74,6 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 		if err = j.Process(); err != nil {
 			return 417, `{"error": "` + err.Error() + `"}`
 		}
-
 		retBytes, err := json.Marshal(j)
 		if err != nil {
 			return 417, `{"error": "` + err.Error() + `"}`

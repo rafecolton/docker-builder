@@ -24,14 +24,12 @@ func build(c *cli.Context) {
 	}
 
 	config, err := builder.NewTrustedFilePath(builderfile, ".")
-
 	if err != nil {
 		exitErr(1, "unable to create build config", err)
 	}
 
 	if err := bob.Build(config); err != nil {
 		if builder.IsSanitizeError(err) {
-
 			if c.Bool("force") {
 				pwd, err := os.Getwd()
 				if err != nil {
@@ -39,7 +37,6 @@ func build(c *cli.Context) {
 				}
 
 				basename := path.Base(pwd)
-
 				args := []string{"docker", "build", "-t", basename, "."}
 
 				cmd := exec.Command("docker")
