@@ -79,7 +79,9 @@ func GetAll(params martini.Params, req *http.Request) (int, string) {
 		jobArr[count] = v
 		count++
 	}
-	sort.Sort(List(jobArr))
+
+	// sort the final (possibly shortened) list
+	sort.Sort(ByCreatedDescending(jobArr))
 
 	retBytes, err := json.Marshal(jobArr)
 	if err != nil {
