@@ -35,7 +35,7 @@ var (
 	data        = []byte(validBody)
 	recorder2   *httptest.ResponseRecorder
 	job         = &Job{}
-	jobMap      = map[string]Job{}
+	jobMap      = []Job{}
 	expectedJob = &Job{
 		Account:  "foo",
 		ID:       jobID,
@@ -80,7 +80,7 @@ var _ = Describe("GET /jobs", func() {
 		get, _ := makeRequest("GET", "jobs", nil)
 		testServer.ServeHTTP(recorder2, get)
 		json.Unmarshal(recorder2.Body.Bytes(), &jobMap)
-		job := jobMap[jobID]
+		job := jobMap[0]
 
 		Expect(job.Account).To(Equal(expectedJob.Account))
 		Expect(job.ID).To(Equal(expectedJob.ID))
