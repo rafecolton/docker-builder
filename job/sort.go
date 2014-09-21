@@ -1,7 +1,8 @@
 package job
 
-type JobList []*Job
+// List is a type for sorting an array of jobs
+type List []*Job
 
-func (l JobList) Len() int           { return len(l) }
-func (l JobList) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
-func (l JobList) Less(i, j int) bool { return l[i].Created.Unix() > l[j].Created.Unix() }
+func (l List) Len() int           { return len(l) }
+func (l List) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
+func (l List) Less(i, j int) bool { return l[i].Created.Unix() > l[j].Created.Unix() }
