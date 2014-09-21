@@ -54,6 +54,15 @@ type Job struct {
 	clonedRepoLocation string         `json:"-"`
 }
 
+var parameterFieldMapping = map[string]string{
+	"account": "Account",
+	"bobfile": "Bobfile",
+	"id":      "ID",
+	"ref":     "Ref",
+	"repo":    "Repo",
+	"status":  "Status",
+}
+
 /*
 Config contains global configuration options for jobs
 */
