@@ -123,6 +123,10 @@ func main() {
 					Name:  "skip-push",
 					Usage: "override Bobfile behavior and do not push any images (useful for testing)",
 				},
+				cli.BoolFlag{
+					Name:  "force, f",
+					Usage: "when Bobfile is not present or is considered unsafe, instead of erring, perform a default build",
+				},
 			},
 		},
 		{
