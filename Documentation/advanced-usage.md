@@ -5,7 +5,7 @@ Topics:
 0. [Running the Server](#running-the-server)
 0. [Enqueueing a Build](enqueueing-a-build.md)
 0. [Travis and GitHub Webhooks](travis-and-github-webhooks.md)
-0. [Job Control](job-control.md)
+0. [Job Control (Routes)](job-control.md)
 0. [Healthcheck](#healthcheck)
 
 ### Running the Server
