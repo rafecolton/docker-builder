@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 
 	"github.com/docker/docker/pkg/tailfile"
@@ -71,7 +72,16 @@ func Get(params martini.Params, req *http.Request) (int, string) {
 
 //GetAll gets all of the jobs as JSON.
 func GetAll(params martini.Params, req *http.Request) (int, string) {
-	retBytes, err := json.Marshal(jobs)
+	var jobArr = make([]*Job, len(jobs)) //[l]*Job{}
+
+	var count int
+	for _, v := range jobs {
+		jobArr[count] = v
+		count++
+	}
+	sort.Sort(JobList(jobArr))
+
+	retBytes, err := json.Marshal(jobArr)
 	if err != nil {
 		return 409, `{"error": "` + err.Error() + `"}`
 	}

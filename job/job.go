@@ -43,12 +43,12 @@ type Job struct {
 	GitHubAPIToken     string         `json:"-"`
 	ID                 string         `json:"id,omitempty"`
 	LogRoute           string         `json:"log_route,omitempty"`
+	InfoRoute          string         `json:"info_route,omitempty"`
 	Logger             *logrus.Logger `json:"-"`
 	Ref                string         `json:"ref,omitempty"`
 	Repo               string         `json:"repo,omitempty"`
 	Status             string         `json:"status"`
 	Workdir            string         `json:"-"`
-	infoRoute          string         `json:"-"`
 	logDir             string         `json:"-"`
 	logFile            *os.File       `json:"-"`
 	clonedRepoLocation string         `json:"-"`
@@ -68,7 +68,7 @@ func Logger(l *logrus.Logger) {
 	logger = l
 }
 
-func (job *Job) setLogRouteHost(req *http.Request) {
+func (job *Job) addHostToRoutes(req *http.Request) {
 	var host string
 
 	if req.Host != "" {
@@ -86,6 +86,10 @@ func (job *Job) setLogRouteHost(req *http.Request) {
 
 	if strings.HasPrefix(job.LogRoute, "/") {
 		job.LogRoute = scheme + "://" + host + job.LogRoute
+	}
+
+	if strings.HasPrefix(job.InfoRoute, "/") {
+		job.InfoRoute = scheme + "://" + host + job.InfoRoute
 	}
 }
 
@@ -113,13 +117,13 @@ func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
 		Ref:            spec.GitRef,
 		Repo:           spec.RepoName,
 		Workdir:        cfg.Workdir,
-		infoRoute:      "/jobs/" + id,
+		InfoRoute:      "/jobs/" + id,
 		LogRoute:       "/jobs/" + id + "/tail?n=" + defaultTail,
 		logDir:         cfg.Workdir + "/" + id,
 		Status:         "created",
 		Created:        time.Now(),
 	}
-	ret.setLogRouteHost(req)
+	ret.addHostToRoutes(req)
 
 	out := io.MultiWriter(os.Stdout)
 
