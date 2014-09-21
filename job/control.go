@@ -3,7 +3,6 @@ package job
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"reflect"
@@ -76,13 +75,10 @@ func Get(params martini.Params, req *http.Request) (int, string) {
 func GetAll(params martini.Params, req *http.Request) (int, string) {
 	var jobArr = []*Job{}
 
-	urlParams := req.URL.Query()
-	fmt.Printf("params: %+v\n", urlParams)
-
 	for _, job := range jobs {
 		var matches = true
 
-		for attr, value := range urlParams {
+		for attr, value := range req.URL.Query() {
 			// `desiredValue` is the string the user wishes the field to match.
 			// If multiple values are provided, the first will be used and the
 			// rest will be ignored
@@ -123,4 +119,13 @@ func GetAll(params martini.Params, req *http.Request) (int, string) {
 	}
 
 	return 200, string(retBytes)
+}
+
+var parameterFieldMapping = map[string]string{
+	"account": "Account",
+	"bobfile": "Bobfile",
+	"id":      "ID",
+	"ref":     "Ref",
+	"repo":    "Repo",
+	"status":  "Status",
 }
