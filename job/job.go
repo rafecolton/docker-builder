@@ -43,12 +43,12 @@ type Job struct {
 	GitHubAPIToken     string         `json:"-"`
 	ID                 string         `json:"id,omitempty"`
 	LogRoute           string         `json:"log_route,omitempty"`
-	InfoRoute          string         `json:"info_route,omitempty"`
 	Logger             *logrus.Logger `json:"-"`
 	Ref                string         `json:"ref,omitempty"`
 	Repo               string         `json:"repo,omitempty"`
 	Status             string         `json:"status"`
 	Workdir            string         `json:"-"`
+	InfoRoute          string         `json:"info_route,omitempty"`
 	logDir             string         `json:"-"`
 	logFile            *os.File       `json:"-"`
 	clonedRepoLocation string         `json:"-"`
