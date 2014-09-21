@@ -1,8 +1,6 @@
 language: go
 matrix:
   fast_finish: true
-  allow_failures:
-    - go: tip
 go:
   - 1.2
   - 1.3
