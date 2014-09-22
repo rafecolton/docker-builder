@@ -25,7 +25,6 @@ var (
 	// TestMode monkeys with certain things for tests so bad things don't happen
 	TestMode bool
 
-	gen    uuid.Generator
 	logger *logrus.Logger
 )
 
@@ -98,8 +97,7 @@ NewJob creates a new job from the config as well as a job spec.  After creating
 the job, calling job.Process() will actually perform the work.
 */
 func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
-	gen = uuid.NewUUIDGenerator(!TestMode)
-	id, err := gen.NextUUID()
+	id, err := genUUID()
 	if err != nil {
 		cfg.Logger.WithField("error", err).Error("error creating uuid")
 	}
@@ -125,26 +123,13 @@ func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
 	}
 	ret.addHostToRoutes(req)
 
-	out := io.MultiWriter(os.Stdout)
-
-	if err = fileutils.MkdirP(ret.logDir, 0755); err != nil {
+	out, file, err := newMultiWriter(ret.logDir)
+	if err != nil {
 		cfg.Logger.WithField("error", err).Error("error creating log dir")
 		id = ""
-	} else {
-		file, err := os.Create(ret.logDir + "/log.log")
-		if err != nil {
-			cfg.Logger.WithField("error", err).Error("error creating log file")
-			id = ""
-		} else {
-			if TestMode {
-				out = file
-			} else {
-				out = io.MultiWriter(os.Stdout, file)
-			}
-			ret.logFile = file
-		}
 	}
 
+	ret.logFile = file
 	ret.Logger = &logrus.Logger{
 		Formatter: cfg.Logger.Formatter,
 		Level:     cfg.Logger.Level,
@@ -160,6 +145,32 @@ func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
 	}
 
 	return ret
+}
+
+func newMultiWriter(logDir string) (io.Writer, *os.File, error) {
+	var out io.Writer
+
+	if err := fileutils.MkdirP(logDir, 0755); err != nil {
+		return nil, nil, err
+	}
+
+	file, err := os.Create(logDir + "/log.log")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if TestMode {
+		out = file
+	} else {
+		out = io.MultiWriter(os.Stdout, file)
+	}
+
+	return out, file, nil
+}
+
+func genUUID() (string, error) {
+	gen := uuid.NewUUIDGenerator(!TestMode)
+	return gen.NextUUID()
 }
 
 func (job *Job) clone() (string, error) {
