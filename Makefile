@@ -67,7 +67,6 @@ gox-build: get $(GOPATH)/bin/gox
 .PHONY: install-ginkgo
 install-ginkgo:
 	go get -u github.com/onsi/ginkgo/ginkgo
-	go get -u github.com/onsi/gomega
 
 .PHONY: test
 test: build fmtpolice ginkgo bats

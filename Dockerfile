@@ -38,7 +38,7 @@ RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts
 
 # install and verify
 RUN touch Makefile
-RUN make build
+RUN make test
 
 EXPOSE 5000
 CMD ["-h"]
