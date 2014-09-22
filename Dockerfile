@@ -4,7 +4,7 @@ MAINTAINER rafael.colton@gmail.com
 ENV DEBIAN_FRONTEND noninteractive
 ENV GOROOT /usr/local/go
 ENV GOPATH /app
-ENV GO_TARBALL go1.3.linux-amd64.tar.gz
+ENV GO_TARBALL go1.3.1.linux-amd64.tar.gz
 ENV LD_LIBRARY_PATH /lib/x86_64-linux-gnu:/usr/local/lib:/usr/lib:/lib
 
 # Fix some issues with APT packages
