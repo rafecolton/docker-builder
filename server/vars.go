@@ -7,6 +7,7 @@ import (
 	"github.com/rafecolton/docker-builder/conf"
 
 	"github.com/codegangsta/cli"
+	"github.com/go-martini/martini"
 )
 
 var apiToken, githubSecret, portString, pwd, travisToken, un string
@@ -15,7 +16,7 @@ var skipPush bool
 var shouldTravis, shouldGitHub bool
 var shouldBasicAuth, shouldTravisAuth, shouldGitHubAuth bool
 
-var basicAuthFunc = func(http.ResponseWriter, *http.Request) {}
+var basicAuthFunc martini.Handler
 var travisAuthFunc = func(http.ResponseWriter, *http.Request) {}
 var githubAuthFunc = func(http.ResponseWriter, *http.Request) {}
 
