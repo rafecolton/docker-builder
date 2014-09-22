@@ -3,7 +3,7 @@ version = 1
 [[container]]
 name = "app"
 Dockerfile = "Dockerfile"
-registry = "rafecolton"
+registry = "quay.io/rafecolton"
 project = "docker-builder"
 tags = ["git:short", "latest"]
 

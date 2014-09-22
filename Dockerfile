@@ -38,8 +38,7 @@ RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts
 
 # install and verify
 RUN touch Makefile
-RUN make test
+RUN make build
 
-EXPOSE 5000
 CMD ["-h"]
 ENTRYPOINT ["/app/bin/docker-builder"]
