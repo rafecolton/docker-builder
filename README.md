@@ -39,26 +39,18 @@ go get github.com/rafecolton/docker-builder
 
 #### From pre-compiled binaries
 
-**TODO**: update this for the new binary-only install
-
 ```bash
 # on Mac OS X
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/0.7.4/docker-builder-0.7.4-darwin-amd64.tar.gz | \
-  tar -xzf - -C /usr/local --strip-components=1
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.8.0/docker-builder-v0.8.0-darwin-amd64 \
+  -o /usr/local/bin/docker-builder && chmod +x /usr/local/bin/docker-builder
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/0.7.4/docker-builder-0.7.4-linux-amd64.tar.gz | \
-  sudo tar -xzf - -C /usr/local --strip-components=1
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.8.0/docker-builder-v0.8.0-linux-amd64 \
+  -o /usr/local/bin/docker-builder && chmod +x /usr/local/bin/docker-builder
 ```
 
-These commands will place `docker-builder` at
-`/usr/local/bin/docker-builder`, so to use `docker-builder`, make sure
-and check that `/usr/local/bin` is in your `$PATH` or change the `-C`
-option.
-
-**NOTE:** You may see some junk output when running `tar -xzf`.  This
-has something to do with the archives being build on Mac OSX.  The
-output is harmless and safe to ignore.
+**NOTE:** Checksums available on the [release
+page](https://github.com/rafecolton/docker-builder/releases/tag/v0.8.0)
 
 #### From source
 
