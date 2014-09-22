@@ -62,7 +62,7 @@ release: binclean gox-build
 .PHONY: gox-build
 gox-build: get $(GOPATH)/bin/gox
 	CGO_ENABLED=0 gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	# TODO: make checksum
+	for file in $$(find ./Release -type f -name 'docker-builder-*') ; do openssl sha256 -out $$file-SHA256SUM $$file ; done
 
 .PHONY: install-ginkgo
 install-ginkgo:
