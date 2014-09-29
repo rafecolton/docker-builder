@@ -2,11 +2,9 @@ package parser
 
 import (
 	"io"
-	"os/exec"
 	"strings"
 
 	"github.com/fsouza/go-dockerclient"
-	"github.com/modcloth/go-fileutils"
 
 	"github.com/rafecolton/docker-builder/dclient"
 )
@@ -45,8 +43,9 @@ type DockerCmd interface {
 
 //BuildCmd is a wrapper for the os/exec call for `docker build`
 type BuildCmd struct {
-	Cmd  *exec.Cmd
-	opts *DockerCmdOpts
+	opts          *DockerCmdOpts
+	buildOpts     docker.BuildImageOptions
+	origBuildOpts []string
 }
 
 //WithOpts sets options required for the BuildCmd
@@ -58,21 +57,11 @@ func (b *BuildCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 //Run is the command that actually calls docker build shell command.  Determine
 //the image ID for the resulting image and return that as well.
 func (b *BuildCmd) Run() (string, error) {
-	cmd := b.Cmd
 	opts := b.opts
+	buildOpts := b.buildOpts
+	buildOpts.OutputStream = opts.Stdout
 
-	cmd.Stdout = opts.Stdout
-	cmd.Stderr = opts.Stderr
-	cmd.Dir = opts.Workdir
-
-	dockerExePath, err := fileutils.Which("docker")
-	if err != nil {
-		return "", err
-	}
-
-	cmd.Path = dockerExePath
-
-	if err := b.Cmd.Run(); err != nil {
+	if err := opts.DockerClient.BuildImage(buildOpts); err != nil {
 		return "", err
 	}
 
@@ -86,7 +75,10 @@ func (b *BuildCmd) Run() (string, error) {
 
 //Message returns the shell command that gets run for docker build commands
 func (b *BuildCmd) Message() string {
-	return strings.Join(b.Cmd.Args, " ")
+	ret := []string{"docker", "build", "-t", b.buildOpts.Name}
+	ret = append(ret, b.origBuildOpts...)
+	ret = append(ret, ".")
+	return strings.Join(ret, " ")
 }
 
 //TagCmd is a wrapper for the docker TagImage functionality
