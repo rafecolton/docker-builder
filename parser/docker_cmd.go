@@ -60,6 +60,7 @@ func (b *BuildCmd) Run() (string, error) {
 	opts := b.opts
 	buildOpts := b.buildOpts
 	buildOpts.OutputStream = opts.Stdout
+	buildOpts.ContextDir = opts.Workdir
 
 	if err := opts.DockerClient.BuildImage(buildOpts); err != nil {
 		return "", err
