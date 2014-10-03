@@ -12,6 +12,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/auth"
+	"github.com/onsi/gocleanup"
 	"github.com/rafecolton/vauth"
 )
 
@@ -37,6 +38,8 @@ func Serve(context *cli.Context) {
 	// set up auth functions
 	if shouldBasicAuth {
 		basicAuthFunc = auth.Basic(un, pwd)
+	} else {
+		basicAuthFunc = func(http.ResponseWriter, *http.Request) {}
 	}
 	if shouldTravisAuth {
 		travisAuthFunc = vauth.TravisCI(travisToken)
@@ -69,6 +72,13 @@ func Serve(context *cli.Context) {
 		r.Post("", webhook.DockerBuild)
 		r.Get("", job.GetAll)
 	}, basicAuthFunc)
+
+	if context.Bool("integration-test-mode") {
+		go func() {
+			time.Sleep(100 * time.Millisecond)
+			gocleanup.Exit(166)
+		}()
+	}
 
 	// start server
 	http.ListenAndServe(portString, server)

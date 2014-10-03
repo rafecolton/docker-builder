@@ -183,6 +183,10 @@ func main() {
 					Name:  "no-github",
 					Usage: "do not include route for GitHub webhook",
 				},
+				cli.BoolFlag{
+					Name:  "integration-test-mode",
+					Usage: "when test mode is provided, the server start, run for 1 second, and then exit 166; used for integration testing",
+				},
 			},
 		},
 	}
