@@ -185,7 +185,7 @@ func main() {
 				},
 				cli.BoolFlag{
 					Name:  "integration-test-mode",
-					Usage: "when test mode is provided, the server start, run for 1 second, and then exit 166; used for integration testing",
+					Usage: "when test mode is provided, the server start, run for 0.1 second, and then exit 166; used for integration testing",
 				},
 			},
 		},
