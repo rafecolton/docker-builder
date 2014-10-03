@@ -19,10 +19,3 @@ func (slice APIImagesSlice) Less(i, j int) bool {
 func (slice APIImagesSlice) Swap(i, j int) {
 	slice[i], slice[j] = slice[j], slice[i]
 }
-
-/*
-FirstID - figure out what this does.
-*/
-func (slice APIImagesSlice) FirstID() string {
-	return slice[0].ID
-}
