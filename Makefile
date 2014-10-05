@@ -23,7 +23,7 @@ BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
 
 # go build args
-GO_TAG_ARGS := -tags netgo
+GO_TAG_ARGS ?= -tags netgo
 
 export GOPATH
 
@@ -68,8 +68,13 @@ gox-build: get $(GOPATH)/bin/gox
 install-ginkgo:
 	go get -u github.com/onsi/ginkgo/ginkgo
 
+.PHONY: .test
+.test: fmtpolice ginkgo bats
+
 .PHONY: test
-test: build fmtpolice ginkgo bats
+test:
+	@GO_TAG_ARGS="-tags netgo -tags integration" $(MAKE) build
+	@$(MAKE) .test
 
 .PHONY: fmtpolice
 fmtpolice: fmt lint
