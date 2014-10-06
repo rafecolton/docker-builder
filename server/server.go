@@ -37,6 +37,8 @@ func Serve(context *cli.Context) {
 	// set up auth functions
 	if shouldBasicAuth {
 		basicAuthFunc = auth.Basic(un, pwd)
+	} else {
+		basicAuthFunc = func(http.ResponseWriter, *http.Request) {}
 	}
 	if shouldTravisAuth {
 		travisAuthFunc = vauth.TravisCI(travisToken)
