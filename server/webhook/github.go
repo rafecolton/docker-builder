@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/rafecolton/docker-builder/job"
 )
@@ -26,6 +27,7 @@ type githubRepository struct {
 type githubPushPayload struct {
 	Repository githubRepository `json:"repository"`
 	CommitSHA  string           `json:"after"`
+	Ref        string           `json:"ref"`
 }
 
 /*
@@ -52,7 +54,7 @@ func Github(w http.ResponseWriter, req *http.Request) (int, string) {
 	spec := &job.Spec{
 		RepoOwner: payload.Repository.Owner.Name,
 		RepoName:  payload.Repository.Name,
-		GitRef:    payload.CommitSHA,
+		GitRef:    strings.TrimPrefix(payload.Ref, "refs/heads/"),
 	}
 
 	return processJobHelper(spec, w, req)

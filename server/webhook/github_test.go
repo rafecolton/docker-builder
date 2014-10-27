@@ -21,6 +21,7 @@ type githubRepo struct {
 
 type githubRequest struct {
 	Commit     string     `json:"after"`
+	Ref        string     `json:"ref"`
 	Repository githubRepo `json:"repository"`
 	Event      string     `json:"-"`
 	RawBody    string     `json:"-"`
@@ -86,8 +87,8 @@ var _ = Describe("Github", func() {
 	Context("when Github request is correct", func() {
 		It("returns a valid spec", func() {
 			req, err := makeGithubRequest(&githubRequest{
-				Event:  "push",
-				Commit: "a427f16faa8e4d63f9fcaa4ec55e80765fd11b04",
+				Event: "push",
+				Ref:   "a427f16faa8e4d63f9fcaa4ec55e80765fd11b04",
 				Repository: githubRepo{
 					Owner: githubOwner{
 						Name: "testuser",
