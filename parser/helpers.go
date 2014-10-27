@@ -32,10 +32,39 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		name := v.Registry + "/" + v.Project
 		initialTag := name + ":" + uuid
 
+		// get docker registry credentials
+		un := v.CfgUn
+		pass := v.CfgPass
+		email := v.CfgEmail
+		if un == "" {
+			un = conf.Config.CfgUn
+		}
+		if pass == "" {
+			pass = conf.Config.CfgPass
+		}
+		if email == "" {
+			email = conf.Config.CfgEmail
+		}
+
 		buildOpts := docker.BuildImageOptions{
 			Name:           initialTag,
 			RmTmpContainer: true,
 			ContextDir:     ".",
+			Auth: docker.AuthConfiguration{
+				Username: un,
+				Password: pass,
+				Email:    email,
+			},
+			AuthConfigs: docker.AuthConfigurations{
+				Configs: map[string]docker.AuthConfiguration{
+					v.Registry: docker.AuthConfiguration{
+						Username:      un,
+						Password:      pass,
+						Email:         email,
+						ServerAddress: v.Registry,
+					},
+				},
+			},
 		}
 
 		for _, opt := range is.DockerBuildOpts {
@@ -51,26 +80,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 				// Maybe so, just document it somewhere (TODO)
 				buildOpts.RmTmpContainer = false
 			}
-		}
-
-		// get docker registry credentials
-		un := v.CfgUn
-		pass := v.CfgPass
-		email := v.CfgEmail
-		if un == "" {
-			un = conf.Config.CfgUn
-		}
-		if pass == "" {
-			pass = conf.Config.CfgPass
-		}
-		if email == "" {
-			email = conf.Config.CfgEmail
-		}
-
-		buildOpts.Auth = docker.AuthConfiguration{
-			Username: un,
-			Password: pass,
-			Email:    email,
 		}
 
 		containerCommands = append(containerCommands, &BuildCmd{
