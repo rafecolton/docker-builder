@@ -27,20 +27,7 @@ var _ = Describe("Setup", func() {
 				Dockerfile: "Dockerfile.base",
 			},
 			SubCommand: []parser.DockerCmd{
-				&parser.BuildCmd{
-					Cmd: &exec.Cmd{
-						Path: "docker",
-						Args: []string{
-							"docker",
-							"build",
-							"-t",
-							"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
-							"--rm",
-							"--no-cache",
-							".",
-						},
-					},
-				},
+				&parser.BuildCmd{},
 				&parser.TagCmd{Tag: "quay.io/modcloth/style-gallery:base"},
 			},
 		}
@@ -50,20 +37,7 @@ var _ = Describe("Setup", func() {
 				Dockerfile: "Dockerfile",
 			},
 			SubCommand: []parser.DockerCmd{
-				&parser.BuildCmd{
-					Cmd: &exec.Cmd{
-						Path: "docker",
-						Args: []string{
-							"docker",
-							"build",
-							"-t",
-							"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
-							"--rm",
-							"--no-cache",
-							".",
-						},
-					},
-				},
+				&parser.BuildCmd{},
 				&parser.TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: branch},
 				&parser.TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: rev},
 				&parser.TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: short},

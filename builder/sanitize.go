@@ -19,6 +19,8 @@ const (
 	// occur because a provided Bobfile path contains symlinks
 	SymlinkSanitizeErrorMessage = "file path must not contain symlinks"
 
+	// DoesNotExistSanitizeErrorMessage is the error message used in cases
+	// where the error results in the requested file not existing
 	DoesNotExistSanitizeErrorMessage = "file requested does not exist"
 )
 
