@@ -135,3 +135,7 @@ func (rtoo *realDockerClient) TagImage(name string, opts docker.TagImageOptions)
 func (rtoo *realDockerClient) PushImage(opts docker.PushImageOptions, auth docker.AuthConfiguration) error {
 	return rtoo.client.PushImage(opts, auth)
 }
+
+func (rtoo *realDockerClient) BuildImage(opts docker.BuildImageOptions) error {
+	return rtoo.client.BuildImage(opts)
+}

@@ -9,6 +9,7 @@ import (
 	"os/exec"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/fsouza/go-dockerclient"
 	"github.com/modcloth/go-fileutils"
 	"github.com/rafecolton/docker-builder/builderfile"
 )
@@ -140,18 +141,28 @@ var _ = Describe("Parse", func() {
 					},
 					SubCommand: []DockerCmd{
 						&BuildCmd{
-							Cmd: &exec.Cmd{
-								Path: "docker",
-								Args: []string{
-									"docker",
-									"build",
-									"-t",
-									"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
-									"--rm",
-									"--no-cache",
-									".",
+							buildOpts: docker.BuildImageOptions{
+								Name:           "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+								NoCache:        true,
+								RmTmpContainer: true,
+								Auth: docker.AuthConfiguration{
+									Username: "foo",
+									Password: "bar",
+									Email:    "baz",
 								},
+								AuthConfigs: docker.AuthConfigurations{
+									Configs: map[string]docker.AuthConfiguration{
+										"quay.io/modcloth": docker.AuthConfiguration{
+											Username:      "foo",
+											Password:      "bar",
+											Email:         "baz",
+											ServerAddress: "quay.io/modcloth",
+										},
+									},
+								},
+								ContextDir: ".",
 							},
+							origBuildOpts: []string{"--rm", "--no-cache"},
 						},
 						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: "base", Force: true},
 					},
@@ -164,18 +175,28 @@ var _ = Describe("Parse", func() {
 					},
 					SubCommand: []DockerCmd{
 						&BuildCmd{
-							Cmd: &exec.Cmd{
-								Path: "docker",
-								Args: []string{
-									"docker",
-									"build",
-									"-t",
-									"quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
-									"--rm",
-									"--no-cache",
-									".",
+							buildOpts: docker.BuildImageOptions{
+								Name:           "quay.io/modcloth/style-gallery:035c4ea0-d73b-5bde-7d6f-c806b04f2ec3",
+								NoCache:        true,
+								RmTmpContainer: true,
+								Auth: docker.AuthConfiguration{
+									Username: "foo",
+									Password: "bar",
+									Email:    "baz",
 								},
+								AuthConfigs: docker.AuthConfigurations{
+									Configs: map[string]docker.AuthConfiguration{
+										"quay.io/modcloth": docker.AuthConfiguration{
+											Username:      "foo",
+											Password:      "bar",
+											Email:         "baz",
+											ServerAddress: "quay.io/modcloth",
+										},
+									},
+								},
+								ContextDir: ".",
 							},
+							origBuildOpts: []string{"--rm", "--no-cache"},
 						},
 						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: branch, Force: true},
 						&TagCmd{Repo: "quay.io/modcloth/style-gallery", Tag: rev, Force: true},

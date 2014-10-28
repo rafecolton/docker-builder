@@ -1,12 +1,6 @@
 package builder
 
 import (
-	"github.com/rafecolton/docker-builder/dclient"
-	"github.com/rafecolton/docker-builder/log"
-	"github.com/rafecolton/docker-builder/parser"
-)
-
-import (
 	"io"
 	"io/ioutil"
 	"os"
@@ -17,6 +11,10 @@ import (
 	"github.com/hishboy/gocommons/lang"
 	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
+
+	"github.com/rafecolton/docker-builder/dclient"
+	"github.com/rafecolton/docker-builder/log"
+	"github.com/rafecolton/docker-builder/parser"
 )
 
 var (
@@ -210,7 +208,7 @@ func (bob *Builder) Setup() Error {
 		}
 	}
 
-	if sanitizedPathToDockerfile, bErr = SanitizeTrustedFilePath(pathToDockerfile); err != nil {
+	if sanitizedPathToDockerfile, bErr = SanitizeTrustedFilePath(pathToDockerfile); bErr != nil {
 		return bErr
 	}
 

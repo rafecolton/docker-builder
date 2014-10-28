@@ -14,6 +14,7 @@ type DockerClient interface {
 	LatestRepoTaggedWithUUID(uuid string) (string, error)
 	TagImage(name string, opts docker.TagImageOptions) error
 	PushImage(opts docker.PushImageOptions, auth docker.AuthConfiguration) error
+	BuildImage(opts docker.BuildImageOptions) error
 }
 
 type realDockerClient struct {
@@ -45,4 +46,8 @@ func (null *nullDockerClient) RemoveImage(name string) error {
 
 func (null *nullDockerClient) LatestRepoTaggedWithUUID(uuid string) (string, error) {
 	return "", nil
+}
+
+func (null *nullDockerClient) BuildImage(opts docker.BuildImageOptions) error {
+	return nil
 }

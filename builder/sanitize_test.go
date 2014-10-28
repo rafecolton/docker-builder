@@ -38,7 +38,7 @@ var _ = Describe("Sanitize Builderfile path", func() {
 			config, _ := NewTrustedFilePath(bogusPath, "..")
 			_, err := SanitizeTrustedFilePath(config)
 			Expect(err).ToNot(BeNil())
-			Expect(err.Error()).To(Equal(InvalidPathSanitizeErrorMessage))
+			Expect(err.Error()).To(Equal(DoesNotExistSanitizeErrorMessage))
 		})
 	})
 

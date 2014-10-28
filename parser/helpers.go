@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"os/exec"
+	"github.com/fsouza/go-dockerclient"
 
 	"github.com/rafecolton/docker-builder/builderfile"
 	"github.com/rafecolton/docker-builder/conf"
@@ -31,16 +31,6 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 
 		name := v.Registry + "/" + v.Project
 		initialTag := name + ":" + uuid
-		buildArgs := []string{"docker", "build", "-t", initialTag}
-		buildArgs = append(buildArgs, is.DockerBuildOpts...)
-		buildArgs = append(buildArgs, ".")
-
-		containerCommands = append(containerCommands, &BuildCmd{
-			Cmd: &exec.Cmd{
-				Path: "docker",
-				Args: buildArgs,
-			},
-		})
 
 		// get docker registry credentials
 		un := v.CfgUn
@@ -55,6 +45,47 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		if email == "" {
 			email = conf.Config.CfgEmail
 		}
+
+		buildOpts := docker.BuildImageOptions{
+			Name:           initialTag,
+			RmTmpContainer: true,
+			ContextDir:     ".",
+			Auth: docker.AuthConfiguration{
+				Username: un,
+				Password: pass,
+				Email:    email,
+			},
+			AuthConfigs: docker.AuthConfigurations{
+				Configs: map[string]docker.AuthConfiguration{
+					v.Registry: docker.AuthConfiguration{
+						Username:      un,
+						Password:      pass,
+						Email:         email,
+						ServerAddress: v.Registry,
+					},
+				},
+			},
+		}
+
+		for _, opt := range is.DockerBuildOpts {
+			switch opt {
+			case "--force-rm":
+				buildOpts.ForceRmTmpContainer = true
+			case "--no-cache":
+				buildOpts.NoCache = true
+			case "-q", "--quiet":
+				buildOpts.SuppressOutput = true
+			case "--no-rm":
+				// Is "--no-rm" this the best way to handle this since default is true?
+				// Maybe so, just document it somewhere (TODO)
+				buildOpts.RmTmpContainer = false
+			}
+		}
+
+		containerCommands = append(containerCommands, &BuildCmd{
+			buildOpts:     buildOpts,
+			origBuildOpts: is.DockerBuildOpts,
+		})
 
 		// ADD TAG COMMANDS
 		for _, t := range v.Tags {

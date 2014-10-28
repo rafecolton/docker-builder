@@ -1,6 +1,7 @@
 package builder
 
 import (
+	"os"
 	"path/filepath"
 	"regexp"
 )
@@ -17,6 +18,10 @@ const (
 	// SymlinkSanitizeErrorMessage is the error message used in errors that
 	// occur because a provided Bobfile path contains symlinks
 	SymlinkSanitizeErrorMessage = "file path must not contain symlinks"
+
+	// DoesNotExistSanitizeErrorMessage is the error message used in cases
+	// where the error results in the requested file not existing
+	DoesNotExistSanitizeErrorMessage = "file requested does not exist"
 )
 
 var dotDotRegex = regexp.MustCompile(`\.\.`)
@@ -45,8 +50,12 @@ func SanitizeTrustedFilePath(trustedFilePath *TrustedFilePath) (*TrustedFilePath
 
 	resolved, err := filepath.EvalSymlinks(abs)
 	if err != nil {
+		msg := InvalidPathSanitizeErrorMessage
+		if os.IsNotExist(err) {
+			msg = DoesNotExistSanitizeErrorMessage
+		}
 		return nil, &SanitizeError{
-			Message:  InvalidPathSanitizeErrorMessage,
+			Message:  msg,
 			error:    err,
 			Filename: file,
 		}
