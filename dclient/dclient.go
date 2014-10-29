@@ -2,7 +2,10 @@ package dclient
 
 import (
 	"fmt"
+	"net"
+	"net/url"
 	"os"
+	"path"
 	"regexp"
 	"sort"
 
@@ -25,18 +28,28 @@ func NewDockerClient(logger *logrus.Logger, shouldBeReal bool) (DockerClient, er
 		}, nil
 	}
 
-	var endpoint string
-
-	defaultHost := os.Getenv("DOCKER_HOST")
-
-	if defaultHost == "" {
-		endpoint = "unix:///var/run/docker.sock"
-	} else {
-		// tcp endpoints cause a panic with this version of the go/docker library
-		endpoint = defaultHost
+	endpoint, err := getEndpoint()
+	if err != nil {
+		return nil, err
 	}
+	fmt.Println(endpoint)
+	tlsVerify := os.Getenv("DOCKER_TLS_VERIFY") != ""
+	certPath := os.Getenv("DOCKER_CERT_PATH")
 
-	dclient, err := docker.NewClient(endpoint)
+	var dclient *docker.Client
+	if tlsVerify {
+		if certPath == "" {
+			return nil, fmt.Errorf("DOCKER_TLS_VERIFY is set, but DOCKER_CERT_PATH is empty")
+		}
+
+		cert := path.Join(certPath, "cert.pem")
+		key := path.Join(certPath, "key.pem")
+		ca := path.Join(certPath, "ca.pem")
+
+		dclient, err = docker.NewTLSClient(endpoint, cert, key, ca)
+	} else {
+		dclient, err = docker.NewClient(endpoint)
+	}
 
 	if err != nil {
 		logger.WithFields(logrus.Fields{
@@ -138,4 +151,33 @@ func (rtoo *realDockerClient) PushImage(opts docker.PushImageOptions, auth docke
 
 func (rtoo *realDockerClient) BuildImage(opts docker.BuildImageOptions) error {
 	return rtoo.client.BuildImage(opts)
+}
+
+// Workaround since DOCKER_HOST typically is tcp:// but we need to vary whether
+// we use HTTP/HTTPS when interacting with the API
+// Can be removed if https://github.com/fsouza/go-dockerclient/issues/173 is
+// resolved
+func getEndpoint() (string, error) {
+	endpoint := os.Getenv("DOCKER_HOST")
+	if endpoint == "" {
+		endpoint = "unix:///var/run/docker.sock"
+	}
+
+	u, err := url.Parse(endpoint)
+	if err != nil {
+		return "", fmt.Errorf("couldn't parse endpoint %s as URL", endpoint)
+	}
+	if u.Scheme == "tcp" {
+		_, port, err := net.SplitHostPort(u.Host)
+		if err != nil {
+			return "", fmt.Errorf("error parsing %s for port", u.Host)
+		}
+
+		if port == "2376" {
+			u.Scheme = "https"
+		} else {
+			u.Scheme = "http"
+		}
+	}
+	return u.String(), nil
 }
