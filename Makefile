@@ -141,4 +141,4 @@ $(GOPATH)/bin/deppy:
 .PHONY: get
 get: $(GOPATH)/bin/deppy
 	go get -t ./...
-	deppy restore
+	$(GOPATH)/bin/deppy restore
