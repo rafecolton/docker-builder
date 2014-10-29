@@ -23,11 +23,6 @@ RUN tar -C /usr/local -xzf $GO_TARBALL
 RUN ln -sv /usr/local/go/bin/* /usr/local/bin
 RUN rm -f $GO_TARBALL
 
-# install docker
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-RUN bash -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-RUN apt-get update -y && apt-get install -y -qq --no-install-recommends lxc-docker
-
 WORKDIR /app/src/github.com/rafecolton/docker-builder
 
 # set up build dir and add project
