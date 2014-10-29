@@ -69,8 +69,8 @@
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
-			"Comment": "0.2.1-299-ga6e72d8",
-			"Rev": "a6e72d87f84a8b9fc1e28c9e66636ab9fe989f13"
+			"Comment": "0.2.1-296-g71d1ae2",
+			"Rev": "71d1ae28d00b36c43105164bd9cad662cd056c7a"
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
