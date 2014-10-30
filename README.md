@@ -54,7 +54,7 @@ curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.9.0/d
 #### From source
 
 To build from source, run `make build`.  You may have to install some
-things first, such as `go`.
+things first, such as `go`
 
 ## Contributing
 
