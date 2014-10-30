@@ -1,7 +1,9 @@
 package webhook
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -35,18 +37,21 @@ func Github(w http.ResponseWriter, req *http.Request) (int, string) {
 	event := req.Header.Get("X-Github-Event")
 	if !githubSupportedEvents[event] {
 		logger.Errorf("Github event type %s is not supported.", event)
-		return 400, "400 bad request"
+		return http.StatusBadRequest, fmt.Sprintf("%d bad request", http.StatusBadRequest)
 	}
 	body, err := ioutil.ReadAll(req.Body)
 	defer req.Body.Close()
+
 	if err != nil {
 		logger.Error(err)
-		return 400, "400 bad request"
+		return http.StatusBadRequest, fmt.Sprintf("%d bad request", http.StatusBadRequest)
 	}
+
+	decoder := json.NewDecoder(bytes.NewReader(body))
 	var payload = &githubPushPayload{}
-	if err = json.Unmarshal([]byte(body), payload); err != nil {
+	if err := decoder.Decode(payload); err != nil {
 		logger.Error(err)
-		return 400, "400 bad request"
+		return http.StatusBadRequest, fmt.Sprintf("%d bad request", http.StatusBadRequest)
 	}
 
 	spec := &job.Spec{
