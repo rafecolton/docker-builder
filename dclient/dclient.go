@@ -176,7 +176,9 @@ func getEndpoint() (*url.URL, error) {
 		}
 
 		// Only reliable way to determine if we should be using HTTPS appears to be via port
-		if port == "2376" {
+		if os.Getenv("DOCKER_HOST_SCHEME") != "" {
+			u.Scheme = os.Getenv("DOCKER_HOST_SCHEME")
+		} else if port == "2376" {
 			u.Scheme = "https"
 		} else {
 			u.Scheme = "http"
