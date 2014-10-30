@@ -135,6 +135,10 @@ $(GOPATH)/bin/gox:
 gopath:
 	@echo  "\$$GOPATH = $(GOPATH)"
 
+$(GOPATH)/bin/deppy:
+	go get github.com/hamfist/deppy
+
 .PHONY: get
-get:
+get: $(GOPATH)/bin/deppy
 	go get -t ./...
+	$(GOPATH)/bin/deppy restore
