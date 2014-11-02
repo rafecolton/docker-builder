@@ -1,10 +1,12 @@
 package tag_test
 
 import (
-	"fmt"
 	. "github.com/rafecolton/docker-builder/parser/tag"
+
+	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"testing"
 
 	"github.com/modcloth/go-fileutils"
@@ -39,6 +41,20 @@ func getBranch() string {
 		fmt.Println(err)
 	}
 	branch := string(branchBytes)[:len(branchBytes)-1]
+	if branch == "HEAD" {
+		branchCmd = exec.Command("git", "branch", "--contains", getSha())
+		branchCmd.Dir = top
+		branchBytes, _ := branchCmd.Output()
+		branches := strings.Split(string(branchBytes), "\n")
+	Loop:
+		for _, branch = range branches {
+			if string(branch[0]) != "*" {
+				branch = strings.Trim(branch, " ")
+				break Loop
+			}
+
+		}
+	}
 	return branch
 }
 
