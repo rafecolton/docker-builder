@@ -74,7 +74,7 @@ install-ginkgo:
 .PHONY: test
 test:
 	@GO_TAG_ARGS="-tags netgo -tags integration" $(MAKE) build
-	@$(MAKE) .test
+	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
 .PHONY: fmtpolice
 fmtpolice: fmt lint

@@ -96,9 +96,9 @@ func (gt *gitTag) Tag() string {
 	switch gt.tag {
 	case "git:branch":
 		return branch
-	case "git:rev":
+	case "git:rev", "git:sha":
 		return rev
-	case "git:short":
+	case "git:short", "git:tag":
 		return short
 	default:
 		return ""
