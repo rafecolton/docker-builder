@@ -2,10 +2,7 @@ package tag
 
 import (
 	"os/exec"
-)
-
-import (
-	"github.com/modcloth/go-fileutils"
+	"strings"
 )
 
 /*
@@ -67,42 +64,61 @@ must be supplied as well.  If any of the conditions are not met, Tag returns
 func (gt *gitTag) Tag() string {
 
 	top := gt.top
-	git, _ := fileutils.Which("git")
-
-	branchCmd := &exec.Cmd{
-		Path: git,
-		Dir:  top,
-		Args: []string{git, "rev-parse", "-q", "--abbrev-ref", "HEAD"},
-	}
-	branchBytes, _ := branchCmd.Output()
-	revCmd := &exec.Cmd{
-		Path: git,
-		Dir:  top,
-		Args: []string{git, "rev-parse", "-q", "HEAD"},
-	}
-	revBytes, _ := revCmd.Output()
-	shortCmd := &exec.Cmd{
-		Path: git,
-		Dir:  top,
-		Args: []string{git, "describe", "--always", "--dirty", "--tags"},
-	}
-	shortBytes, _ := shortCmd.Output()
-
-	// remove trailing newline
-	branch := string(branchBytes)[:len(branchBytes)-1]
-	rev := string(revBytes)[:len(revBytes)-1]
-	short := string(shortBytes)[:len(shortBytes)-1]
+	var gitexe = &gitexe{top: top}
 
 	switch gt.tag {
 	case "git:branch":
-		return branch
+		return gitexe.branch()
 	case "git:rev", "git:sha":
-		return rev
+		return gitexe.sha()
 	case "git:short", "git:tag":
-		return short
+		return gitexe.tag()
 	default:
 		return ""
 	}
+}
+
+type gitexe struct {
+	exe string
+	top string
+}
+
+func (g gitexe) branch() string {
+	var branchCmd = exec.Command("git", "rev-parse", "-q", "--abbrev-ref", "HEAD")
+	branchCmd.Dir = g.top
+	branchBytes, _ := branchCmd.Output()
+	branch := string(branchBytes)[:len(branchBytes)-1]
+	if branch == "HEAD" {
+		branchCmd = exec.Command("git", "branch", "--contains", g.sha())
+		branchCmd.Dir = g.top
+		branchBytes, _ := branchCmd.Output()
+		branches := strings.Split(string(branchBytes)[:len(branchBytes)-1], "\n")
+		for _, branch := range branches {
+			if string(branch[0]) == "*" {
+				continue
+			}
+			return strings.Replace(branch, " ", "", -1)
+		}
+		return branch
+
+	}
+	return branch
+}
+
+func (g gitexe) sha() string {
+	var revCmd = exec.Command("git", "rev-parse", "-q", "HEAD")
+	revCmd.Dir = g.top
+	revBytes, _ := revCmd.Output()
+	rev := string(revBytes)[:len(revBytes)-1]
+	return rev
+}
+
+func (g gitexe) tag() string {
+	var shortCmd = exec.Command("git", "describe", "--always", "--dirty", "--tags")
+	shortCmd.Dir = g.top
+	shortBytes, _ := shortCmd.Output()
+	short := string(shortBytes)[:len(shortBytes)-1]
+	return short
 }
 
 /*
