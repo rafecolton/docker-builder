@@ -55,8 +55,8 @@ func (tag *nullTag) Tag() string {
 }
 
 /*
-Tag, for a special set of macros (currently `git:branch`, `git:rev`,
-& `git:short`) returns git information from the directory in which bob was run.
+Tag, for a special set of macros (currently `git:branch`, `git:sha`,
+& `git:tag`) returns git information from the directory in which bob was run.
 These macros are specified in args["tag"], and to work properly, args["top"]
 must be supplied as well.  If any of the conditions are not met, Tag returns
 "".
@@ -97,7 +97,7 @@ func (g gitexe) branch() string {
 			if string(branch[0]) == "*" {
 				continue
 			}
-			return strings.Replace(branch, " ", "", -1)
+			return strings.Trim(branch, " ")
 		}
 		return branch
 

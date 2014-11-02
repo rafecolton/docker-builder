@@ -38,8 +38,8 @@ dockercfg_email = "baz@example.com"
 project = "my-app"
 tags = [
   "git:branch",
-  "git:rev",
-  "git:short"
+  "git:sha",
+  "git:tag"
 ]
 
 [[container]]
@@ -99,8 +99,8 @@ dockercfg_email = "baz@example.com"
 project = "my-app"
 tags = [
   "git:branch",
-  "git:rev",
-  "git:short"
+  "git:sha",
+  "git:tag"
 ]
 ```
 
@@ -139,8 +139,8 @@ The following macro tags are currently available:
 
 * `git`
     - `git:branch` - the git branch of the app repo (`git rev-parse -q --abbrev-ref HEAD`)
-    - `git:rev` - the full git revision of the app repo (`git rev-parse -q HEAD`)
-    - `git:short` - the shortened version of the app repo rev (`git describe --always --dirty --tags`)
+    - `git:sha` - the full git sha of the app repo (`git rev-parse -q HEAD`)
+    - `git:tag` - the shortened version of the app repo rev (`git describe --always --dirty --tags`)
 
 ## Linting &amp; Building
 

@@ -129,12 +129,12 @@ var _ = Describe("Parse", func() {
 			branchCmd.Dir = top
 			branchBytes, _ := branchCmd.Output()
 			branches := strings.Split(string(branchBytes), "\n")
-		Loop:
 			for _, branch = range branches {
-				if string(branch[0]) != "*" {
-					branch = strings.Trim(branch, " ")
-					break Loop
+				if len(branch) < 1 || string(branch[0]) == "*" {
+					continue
 				}
+				branch = strings.Trim(branch, " ")
+				break
 
 			}
 		}

@@ -186,8 +186,8 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 			Project:    analysis.RepoBasename(),
 			Tags: []string{
 				"git:branch",
-				"git:rev",
-				"git:short",
+				"git:sha",
+				"git:tag",
 				"latest",
 			},
 		}
