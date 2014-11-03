@@ -41,6 +41,8 @@ func init() {
 func main() {
 	app := cli.NewApp()
 	app.Name = "docker-builder"
+	app.Author = "Rafe Colton"
+	app.Email = "rafael.colton@gmail.com"
 	app.Usage = "docker-builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"
 	app.Version = ver.Version + " " + app.Compiled.String()
 	app.Flags = []cli.Flag{
@@ -126,6 +128,25 @@ func main() {
 				cli.BoolFlag{
 					Name:  "force, f",
 					Usage: "when Bobfile is not present or is considered unsafe, instead of erring, perform a default build",
+				},
+			},
+		},
+		{
+			Name:        "enqueue",
+			Usage:       "enqueue [Bobfile] - enqueue a build to the DOCKER_BUILDER_HOST",
+			Description: "Enqueue a build based on what's in the current repo",
+			Action:      enqueue,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name: "host",
+					Value: func() string {
+						if os.Getenv("DOCKER_BUILDER_HOST") != "" {
+							return os.Getenv("DOCKER_BUILDER_HOST")
+
+						}
+						return "http://localhost:5000"
+					}(),
+					Usage: "docker builder server host (can be set in the environment via $DOCKER_BUILDER_HOST)",
 				},
 			},
 		},

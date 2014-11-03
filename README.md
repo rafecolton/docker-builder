@@ -41,11 +41,11 @@ go get github.com/rafecolton/docker-builder
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.9.2/docker-builder-v0.9.2-darwin-amd64 \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0-rc1/docker-builder-v0.10.0-rc1-darwin-amd64 \
   -o /usr/local/bin/docker-builder && chmod +x /usr/local/bin/docker-builder
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.9.2/docker-builder-v0.9.2-linux-amd64 \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0-rc1/docker-builder-v0.10.0-rc1-linux-amd64 \
   -o /usr/local/bin/docker-builder && chmod +x /usr/local/bin/docker-builder
 ```
 
@@ -78,6 +78,34 @@ variable:
 
 ```bash
 export DOCKER_HOST_SCHEME="https"
+```
+
+## Experimental Feature: Enqueue
+
+Docker-builder has an new, experimental command-line feature: `enqueue`
+
+Use `docker-builder enqueue` to push a build for your *current working
+directory* to your Docker build server.  To use locally, run the server
+in one tab and `docker-builder enqueue` in another.  For example:
+
+```bash
+# terminal window 1
+docker-builder serve
+
+# terminal window 2
+docker-builder enqueue
+```
+
+Or, you may push directly to your build server by setting the
+docker-build-server host:
+
+```bash
+# via tne environment
+export DOCKER_BUILDER_HOST="http://username:password@build-server-host.example.com:5000" && \
+  docker-builder enqueue
+
+# via the command line
+docker-builder enqueue --host "http://username:password@build-server-host.example.com:5000"
 ```
 
 ## Contributing
