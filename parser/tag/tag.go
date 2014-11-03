@@ -1,8 +1,7 @@
 package tag
 
 import (
-	"os/exec"
-	"strings"
+	"github.com/rafecolton/docker-builder/git"
 )
 
 /*
@@ -62,63 +61,18 @@ must be supplied as well.  If any of the conditions are not met, Tag returns
 "".
 */
 func (gt *gitTag) Tag() string {
-
-	top := gt.top
-	var gitexe = &gitexe{top: top}
+	var top = gt.top
 
 	switch gt.tag {
 	case "git:branch":
-		return gitexe.branch()
+		return git.Branch(top)
 	case "git:rev", "git:sha":
-		return gitexe.sha()
+		return git.Sha(top)
 	case "git:short", "git:tag":
-		return gitexe.tag()
+		return git.Tag(top)
 	default:
 		return ""
 	}
-}
-
-type gitexe struct {
-	exe string
-	top string
-}
-
-func (g gitexe) branch() string {
-	var branchCmd = exec.Command("git", "rev-parse", "-q", "--abbrev-ref", "HEAD")
-	branchCmd.Dir = g.top
-	branchBytes, _ := branchCmd.Output()
-	branch := string(branchBytes)[:len(branchBytes)-1]
-	if branch == "HEAD" {
-		branchCmd = exec.Command("git", "branch", "--contains", g.sha())
-		branchCmd.Dir = g.top
-		branchBytes, _ := branchCmd.Output()
-		branches := strings.Split(string(branchBytes)[:len(branchBytes)-1], "\n")
-		for _, branch := range branches {
-			if string(branch[0]) == "*" {
-				continue
-			}
-			return strings.Trim(branch, " ")
-		}
-		return branch
-
-	}
-	return branch
-}
-
-func (g gitexe) sha() string {
-	var revCmd = exec.Command("git", "rev-parse", "-q", "HEAD")
-	revCmd.Dir = g.top
-	revBytes, _ := revCmd.Output()
-	rev := string(revBytes)[:len(revBytes)-1]
-	return rev
-}
-
-func (g gitexe) tag() string {
-	var shortCmd = exec.Command("git", "describe", "--always", "--dirty", "--tags")
-	shortCmd.Dir = g.top
-	shortBytes, _ := shortCmd.Output()
-	short := string(shortBytes)[:len(shortBytes)-1]
-	return short
 }
 
 /*
