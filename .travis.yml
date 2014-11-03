@@ -6,7 +6,9 @@ go:
   - 1.3
   - 1.3.1
   - tip
-script: make test
+script:
+- cd /home/travis/goopathsrc/github.com/rafecolton/docker-builder && git fetch
+- make test
 notifications:
   webhooks:
     - https://docker-build-server.modcloth.com/docker-build/travis
