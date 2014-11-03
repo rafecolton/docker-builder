@@ -41,7 +41,6 @@ func enqueue(c *cli.Context) {
 		}
 	}
 
-	//var host = os.Getenv("DOCKER_BUILDER_HOST") + "/jobs"
 	var host = c.String("host") + "/jobs"
 	var body = requestBody(map[string]string{
 		"account": git.RemoteAccount(top),
