@@ -14,7 +14,7 @@ import (
 	"github.com/onsi/gocleanup"
 )
 
-type RequestBody map[string]string
+type requestBody map[string]string
 
 func enqueue(c *cli.Context) {
 	var top = os.Getenv("PWD")
@@ -43,7 +43,7 @@ func enqueue(c *cli.Context) {
 
 	//var host = os.Getenv("DOCKER_BUILDER_HOST") + "/jobs"
 	var host = c.String("host") + "/jobs"
-	var body = RequestBody(map[string]string{
+	var body = requestBody(map[string]string{
 		"account": git.RemoteAccount(top),
 		"repo":    git.Repo(top),
 		"ref":     git.Branch(top),
