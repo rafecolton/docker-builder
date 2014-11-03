@@ -29,13 +29,13 @@ func enqueue(c *cli.Context) {
 	}
 
 	upToDate := git.UpToDate(top)
-	if upToDate != 0 {
+	if upToDate != git.StatusUpToDate {
 		switch upToDate {
-		case 1:
+		case git.StatusNeedToPull:
 			Logger.Warn("CAUTION: need to pull")
-		case 2:
+		case git.StatusNeedToPush:
 			Logger.Warn("CAUTION: need to push")
-		case 3:
+		case git.StatusDiverged:
 			Logger.Error("cannot enqueue, status has diverged from remote")
 			gocleanup.Exit(1)
 		}
