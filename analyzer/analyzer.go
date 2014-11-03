@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-var gitRemoteRegex = regexp.MustCompile("^([^\t\n\f\r ]+)[\t\n\v\f\r ]+(git@github\\.com:|http[s]?:\\/\\/github\\.com\\/)([a-zA-Z0-9]{1}[a-zA-Z0-9-]*)\\/([a-zA-Z0-9_.-]+)\\.git.*$")
+var GitRemoteRegex = regexp.MustCompile("^([^\t\n\f\r ]+)[\t\n\v\f\r ]+(git@github\\.com:|http[s]?:\\/\\/github\\.com\\/)([a-zA-Z0-9]{1}[a-zA-Z0-9-]*)\\/([a-zA-Z0-9_.-]+)\\.git.*$")
 
 /*
 An Analysis offers functions that provide data about a given directory. This is
@@ -213,7 +213,7 @@ func registryFromRemotes(remotes string) string {
 	var ret string
 
 	for _, line := range lines {
-		matches := gitRemoteRegex.FindStringSubmatch(line)
+		matches := GitRemoteRegex.FindStringSubmatch(line)
 		if len(matches) == 5 {
 			ret = matches[3]
 			if matches[1] == "origin" {

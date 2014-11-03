@@ -130,6 +130,25 @@ func main() {
 			},
 		},
 		{
+			Name:        "enqueue",
+			Usage:       "enquque [Bobfile]",
+			Description: "TODO",
+			Action:      enqueue,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name: "host",
+					Value: func() string {
+						if os.Getenv("DOCKER_BUILDER_HOST") != "" {
+							return os.Getenv("DOCKER_BUILDER_HOST")
+
+						}
+						return "http://localhost:5000"
+					}(),
+					Usage: "docker builder server host",
+				},
+			},
+		},
+		{
 			Name:        "lint",
 			Usage:       "lint [file] - validates whether or not your Bobfile is parsable",
 			Description: "Validate whether or not your Bobfile is parsable.",
