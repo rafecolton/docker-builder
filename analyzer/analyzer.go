@@ -14,7 +14,7 @@ import (
 )
 
 // GitRemoteRegex is a regex for pulling account owner from the output of `git remote -v`
-var GitRemoteRegex = regexp.MustCompile("^([^\t\n\f\r ]+)[\t\n\v\f\r ]+(git@github\\.com:|http[s]?:\\/\\/github\\.com\\/)([a-zA-Z0-9]{1}[a-zA-Z0-9-]*)\\/([a-zA-Z0-9_.-]+)\\.git.*$")
+var GitRemoteRegex = regexp.MustCompile(`^([^\t\n\f\r ]+)[\t\n\v\f\r ]+(git@github\.com:|http[s]?:\/\/github\.com\/)([a-zA-Z0-9]{1}[a-zA-Z0-9-]*)\/([a-zA-Z0-9_.-]+)\.git.*$`)
 
 /*
 An Analysis offers functions that provide data about a given directory. This is
