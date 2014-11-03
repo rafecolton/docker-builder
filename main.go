@@ -131,8 +131,8 @@ func main() {
 		},
 		{
 			Name:        "enqueue",
-			Usage:       "enquque [Bobfile]",
-			Description: "TODO",
+			Usage:       "enquque [Bobfile] - enqueue a build to the DOCKER_BUILDER_HOST",
+			Description: "Enqueue a build based on what's in the current repo",
 			Action:      enqueue,
 			Flags: []cli.Flag{
 				cli.StringFlag{
@@ -144,7 +144,7 @@ func main() {
 						}
 						return "http://localhost:5000"
 					}(),
-					Usage: "docker builder server host",
+					Usage: "docker builder server host (can be set in the environment via $DOCKER_BUILDER_HOST)",
 				},
 			},
 		},
