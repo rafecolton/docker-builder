@@ -8,7 +8,7 @@ VERSION_VAR := $(B)/version.VersionString
 BRANCH_VAR := $(B)/version.BranchString
 REPO_VERSION := $(shell git describe --always --dirty --tags)
 REPO_REV := $(shell git rev-parse --sq HEAD)
-REPO_BRANCH := $(shell git rev-parse -q --abbrev-ref HEAD)
+REPO_BRANCH := $(shell git rev-parse -q --abbrev-ref HEAD) # FIXME: will be "HEAD" if not on branch
 GOBUILD_VERSION_ARGS := -ldflags "\
   -X $(REV_VAR) $(REPO_REV) \
   -X $(VERSION_VAR) $(REPO_VERSION) \
@@ -74,7 +74,7 @@ install-ginkgo:
 .PHONY: test
 test:
 	@GO_TAG_ARGS="-tags netgo -tags integration" $(MAKE) build
-	@$(MAKE) .test
+	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
 .PHONY: fmtpolice
 fmtpolice: fmt lint

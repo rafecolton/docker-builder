@@ -1,128 +1,126 @@
-package tag
+package tag_test
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	"testing"
-)
+	. "github.com/rafecolton/docker-builder/parser/tag"
 
-import (
+	"fmt"
 	"os"
 	"os/exec"
-)
+	"strings"
+	"testing"
 
-import (
 	"github.com/modcloth/go-fileutils"
 )
 
-func TestBuilder(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Tag Specs")
+var args = map[string]string{"tag": "foo"}
+
+func Test_StringTagPrintsString(t *testing.T) {
+	var subject = NewTag("default", args)
+	var expected = "foo"
+	var actual = subject.Tag()
+	if actual != expected {
+		t.Error("expected " + expected + ", got " + actual)
+	}
 }
 
-var _ = Describe("String Tag", func() {
-	var (
-		subject Tag
-		args    map[string]string
-	)
+var top = os.Getenv("PWD")
+var git, _ = fileutils.Which("git")
 
-	BeforeEach(func() {
-		args = map[string]string{
-			"tag": "foo",
-		}
-		subject = NewTag("default", args)
-	})
-
-	Context("when providing a string tag", func() {
-		It("prints out the string provided", func() {
-			Expect(subject.Tag()).To(Equal("foo"))
-		})
-	})
-})
-
-var _ = Describe("Git Tag", func() {
-	var (
-		subject Tag
-		branch  string
-		rev     string
-		short   string
-		top     string
-	)
-
-	BeforeEach(func() {
-		top = os.Getenv("PWD")
-		git, _ := fileutils.Which("git")
-		subject = NewTag("git", map[string]string{
-			"top": top,
-			"tag": "foo",
-		})
-
-		// branch
-		branchCmd := &exec.Cmd{
-			Path: git,
-			Dir:  top,
-			Args: []string{git, "rev-parse", "-q", "--abbrev-ref", "HEAD"},
-		}
-
+func getBranch() string {
+	var git, err = fileutils.Which("git")
+	if err != nil {
+		fmt.Println(err)
+	}
+	branchCmd := &exec.Cmd{
+		Path: git,
+		Dir:  top,
+		Args: []string{git, "rev-parse", "-q", "--abbrev-ref", "HEAD"},
+	}
+	branchBytes, err := branchCmd.Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	branch := string(branchBytes)[:len(branchBytes)-1]
+	if branch == "HEAD" {
+		branchCmd = exec.Command("git", "branch", "--contains", getSha())
+		branchCmd.Dir = top
 		branchBytes, _ := branchCmd.Output()
-		branch = string(branchBytes)[:len(branchBytes)-1]
+		branches := strings.Split(string(branchBytes), "\n")
+	Loop:
+		for _, branch = range branches {
+			if string(branch[0]) != "*" {
+				branch = strings.Trim(branch, " ")
+				break Loop
+			}
 
-		// rev
-		revCmd := &exec.Cmd{
-			Path: git,
-			Dir:  top,
-			Args: []string{git, "rev-parse", "-q", "HEAD"},
 		}
-		revBytes, _ := revCmd.Output()
-		rev = string(revBytes)[:len(revBytes)-1]
+	}
+	return branch
+}
 
-		// short
-		shortCmd := &exec.Cmd{
-			Path: git,
-			Dir:  top,
-			Args: []string{git, "describe", "--always", "--dirty", "--tags"},
-		}
-		shortBytes, _ := shortCmd.Output()
-		short = string(shortBytes)[:len(shortBytes)-1]
+func getSha() (sha string) {
+	shaCmd := &exec.Cmd{
+		Path: git,
+		Dir:  top,
+		Args: []string{git, "rev-parse", "-q", "HEAD"},
+	}
+	shaBytes, _ := shaCmd.Output()
+	sha = string(shaBytes)[:len(shaBytes)-1]
+	return
+}
+
+func getTag() (tag string) {
+	tagCmd := &exec.Cmd{
+		Path: git,
+		Dir:  top,
+		Args: []string{git, "describe", "--always", "--dirty", "--tags"},
+	}
+	tagBytes, _ := tagCmd.Output()
+	tag = string(tagBytes)[:len(tagBytes)-1]
+	return
+}
+
+func Test_GitTagBranch(t *testing.T) {
+	var subject = NewTag("git", map[string]string{
+		"tag": "git:branch",
+		"top": top,
 	})
+	var actual = subject.Tag()
+	var expected = getBranch()
+	if actual != expected {
+		t.Error("expected " + expected + ", got " + actual)
+	}
+}
 
-	Context("parsing git macros", func() {
-		It("translates `git:branch` correctly", func() {
-			subject = NewTag("git", map[string]string{
-				"tag": "git:branch",
-				"top": top,
-			})
-			Expect(subject.Tag()).To(Equal(branch))
-		})
-
-		It("translates `git:rev` correctly", func() {
-			subject = NewTag("git", map[string]string{
-				"tag": "git:rev",
-				"top": top,
-			})
-			Expect(subject.Tag()).To(Equal(rev))
-		})
-
-		It("translates `git:short` correctly", func() {
-			subject = NewTag("git", map[string]string{
-				"tag": "git:short",
-				"top": top,
-			})
-			Expect(subject.Tag()).To(Equal(short))
-		})
+func Test_GitTagSha(t *testing.T) {
+	var subject = NewTag("git", map[string]string{
+		"tag": "git:sha",
+		"top": top,
 	})
-})
+	var actual = subject.Tag()
+	var expected = getSha()
+	if actual != expected {
+		t.Error("expected " + expected + ", got " + actual)
+	}
+}
 
-var _ = Describe("Null Tag", func() {
-	var (
-		subject Tag
-	)
-
-	BeforeEach(func() {
-		subject = NewTag("null", nil)
+func Test_GitTagTag(t *testing.T) {
+	var subject = NewTag("git", map[string]string{
+		"tag": "git:tag",
+		"top": top,
 	})
+	var actual = subject.Tag()
+	var expected = getTag()
+	if actual != expected {
+		t.Error("expected " + expected + ", got " + actual)
+	}
+}
 
-	It("prints a pre-determined fixed tag", func() {
-		Expect(subject.Tag()).To(Equal("<TAG>"))
-	})
-})
+func Test_GitTagNull(t *testing.T) {
+	var subject = NewTag("null", nil)
+	var actual = subject.Tag()
+	var expected = "<TAG>"
+	if actual != expected {
+		t.Error("expected " + expected + ", got " + actual)
+	}
+}

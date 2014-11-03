@@ -30,8 +30,8 @@ project = "my-app"
 excluded = ["spec"]
 tags = [
   "git:branch",
-  "git:rev",
-  "git:short"
+  "git:sha",
+  "git:tag"
 ]
 
 [containers.base]
@@ -67,8 +67,8 @@ project = "my-app"
 excluded = ["spec"]
 tags = [
   "git:branch",
-  "git:rev",
-  "git:short"
+  "git:sha",
+  "git:tag"
 ]
 
 [[container]] # <--- this line changed, used to be [containers.base]

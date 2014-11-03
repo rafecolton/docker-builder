@@ -7,6 +7,7 @@ import (
 
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/fsouza/go-dockerclient"
@@ -104,15 +105,6 @@ var _ = Describe("Parse", func() {
 		validFile = top + "/Specs/fixtures/bob.toml"
 		invalidFile = top + "/Specs/fixtures/foodoesnotexist"
 		subject = nil
-		// branch
-		branchCmd := &exec.Cmd{
-			Path: git,
-			Dir:  top,
-			Args: []string{git, "rev-parse", "-q", "--abbrev-ref", "HEAD"},
-		}
-
-		branchBytes, _ := branchCmd.Output()
-		branch = string(branchBytes)[:len(branchBytes)-1]
 
 		// rev
 		revCmd := &exec.Cmd{
@@ -122,6 +114,30 @@ var _ = Describe("Parse", func() {
 		}
 		revBytes, _ := revCmd.Output()
 		rev = string(revBytes)[:len(revBytes)-1]
+
+		// branch
+		branchCmd := &exec.Cmd{
+			Path: git,
+			Dir:  top,
+			Args: []string{git, "rev-parse", "-q", "--abbrev-ref", "HEAD"},
+		}
+
+		branchBytes, _ := branchCmd.Output()
+		branch = string(branchBytes)[:len(branchBytes)-1]
+		if branch == "HEAD" {
+			branchCmd = exec.Command("git", "branch", "--contains", rev)
+			branchCmd.Dir = top
+			branchBytes, _ := branchCmd.Output()
+			branches := strings.Split(string(branchBytes), "\n")
+			for _, branch = range branches {
+				if len(branch) < 1 || string(branch[0]) == "*" {
+					continue
+				}
+				branch = strings.Trim(branch, " ")
+				break
+
+			}
+		}
 
 		// short
 		shortCmd := &exec.Cmd{

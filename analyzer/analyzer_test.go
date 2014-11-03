@@ -42,8 +42,8 @@ var _ = Describe("Analysis Parsing", func() {
 					Project:  "fake-repo",
 					Tags: []string{
 						"git:branch",
-						"git:rev",
-						"git:short",
+						"git:sha",
+						"git:tag",
 						"latest",
 					},
 					Dockerfile: "Dockerfile",
