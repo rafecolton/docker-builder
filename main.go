@@ -41,6 +41,8 @@ func init() {
 func main() {
 	app := cli.NewApp()
 	app.Name = "docker-builder"
+	app.Author = "Rafe Colton"
+	app.Email = "rafael.colton@gmail.com"
 	app.Usage = "docker-builder (a.k.a. \"Bob\") builds Docker images from a friendly config file"
 	app.Version = ver.Version + " " + app.Compiled.String()
 	app.Flags = []cli.Flag{
