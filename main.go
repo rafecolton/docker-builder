@@ -131,7 +131,7 @@ func main() {
 		},
 		{
 			Name:        "enqueue",
-			Usage:       "enquque [Bobfile] - enqueue a build to the DOCKER_BUILDER_HOST",
+			Usage:       "enqueue [Bobfile] - enqueue a build to the DOCKER_BUILDER_HOST",
 			Description: "Enqueue a build based on what's in the current repo",
 			Action:      enqueue,
 			Flags: []cli.Flag{
