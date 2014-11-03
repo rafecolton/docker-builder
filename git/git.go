@@ -38,7 +38,7 @@ func Branch(top string) string {
 		}
 		branches := strings.Split(string(branchBytes)[:len(branchBytes)-1], "\n")
 		for _, branchStr := range branches {
-			if len(branchStr) > 1 || string(branchStr[0]) == "*" {
+			if len(branchStr) < 1 || string(branchStr[0]) == "*" {
 				continue
 			}
 			return strings.Trim(branchStr, " ")
