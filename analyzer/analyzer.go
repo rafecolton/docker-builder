@@ -3,18 +3,14 @@ package analyzer
 import (
 	"github.com/modcloth/go-fileutils"
 	"github.com/rafecolton/docker-builder/builderfile"
+	"github.com/rafecolton/docker-builder/git"
 
 	"errors"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
-	"strings"
 )
-
-// GitRemoteRegex is a regex for pulling account owner from the output of `git remote -v`
-var GitRemoteRegex = regexp.MustCompile(`^([^\t\n\f\r ]+)[\t\n\v\f\r ]+(git@github\.com:|http[s]?:\/\/github\.com\/)([a-zA-Z0-9]{1}[a-zA-Z0-9-]*)\/([a-zA-Z0-9_.-]+)\.git.*$`)
 
 /*
 An Analysis offers functions that provide data about a given directory. This is
@@ -181,7 +177,7 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 		// get registry
 		appContainer = &builderfile.ContainerSection{
 			Name:       "app",
-			Registry:   registryFromRemotes(analysis.GitRemotes()),
+			Registry:   git.AccountFromRemotes(analysis.GitRemotes()),
 			Dockerfile: "Dockerfile",
 			SkipPush:   false,
 			Project:    analysis.RepoBasename(),
@@ -206,22 +202,4 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 	ret.ContainerArr = append(ret.ContainerArr, appContainer)
 
 	return ret, nil
-}
-
-func registryFromRemotes(remotes string) string {
-	lines := strings.Split(remotes, "\n")
-
-	var ret string
-
-	for _, line := range lines {
-		matches := GitRemoteRegex.FindStringSubmatch(line)
-		if len(matches) == 5 {
-			ret = matches[3]
-			if matches[1] == "origin" {
-				break
-			}
-		}
-	}
-
-	return ret
 }
