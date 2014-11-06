@@ -53,6 +53,8 @@ func enqueue(c *cli.Context) {
 		Logger.Errorf("error marshaling body to json: %q", err.Error())
 		gocleanup.Exit(1)
 	}
+	Logger.Debugf("enqueueing request %s", bodyBytes)
+
 	resp, err := http.Post(host, "application/json", bytes.NewReader(bodyBytes))
 	if err != nil {
 		Logger.Errorf("post error: %q", err.Error())
