@@ -4,10 +4,12 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
-
-	"github.com/rafecolton/docker-builder/analyzer"
 )
+
+// GitRemoteRegex is a regex for pulling account owner from the output of `git remote -v`
+var GitRemoteRegex = regexp.MustCompile(`^([^\t\n\f\r ]+)[\t\n\v\f\r ]+(git@github\.com:|http[s]?:\/\/github\.com\/)([a-zA-Z0-9]{1}[a-zA-Z0-9-]*)\/([a-zA-Z0-9_.-]+)(\.git|[^\t\n\f\r ])+.*$`)
 
 /*
 Branch determines the git branch in the repo located at `top`.  Two attempts
@@ -138,20 +140,22 @@ RemoteAccount returns the github account as determined by the output of `git
 remote -v`
 */
 func RemoteAccount(top string) string {
-	cmd := exec.Command("git", "remote", "-v")
-	cmd.Dir = top
-	outBytes, err := cmd.Output()
-	if err != nil {
-		return ""
-	}
-	remotes := string(outBytes)
+	return AccountFromRemotes(Remotes(top))
+}
+
+/*
+AccountFromRemotes produces the (GitHub) account from the output of `git remote
+-v` - this ouput is nominally provided by the Remotes function but may be
+provided otherwise for testing purposes
+*/
+func AccountFromRemotes(remotes string) string {
 	lines := strings.Split(remotes, "\n")
 
 	var ret string
 
 	for _, line := range lines {
-		matches := analyzer.GitRemoteRegex.FindStringSubmatch(line)
-		if len(matches) == 5 {
+		matches := GitRemoteRegex.FindStringSubmatch(line)
+		if len(matches) == 6 {
 			ret = matches[3]
 			if matches[1] == "origin" {
 				break
@@ -160,6 +164,17 @@ func RemoteAccount(top string) string {
 	}
 
 	return ret
+}
+
+// Remotes returns the output of `git remote -v
+func Remotes(top string) string {
+	cmd := exec.Command("git", "remote", "-v")
+	cmd.Dir = top
+	outBytes, err := cmd.Output()
+	if err != nil {
+		return ""
+	}
+	return string(outBytes)
 }
 
 // Repo produces the repo name as determined by the basename of $PWD
