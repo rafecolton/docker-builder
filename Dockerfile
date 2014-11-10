@@ -1,10 +1,12 @@
 FROM ubuntu:14.04
 MAINTAINER rafael.colton@gmail.com
 
+ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 ENV GOROOT /usr/local/go
 ENV GOPATH /app
 ENV GO_TARBALL go1.3.3.linux-amd64.tar.gz
+ENV TARBALL_SHA1_SUM 14068fbe349db34b838853a7878621bbd2b24646
 ENV LD_LIBRARY_PATH /lib/x86_64-linux-gnu:/usr/local/lib:/usr/lib:/lib
 
 # - Fix some issues with APT packages (See https://github.com/dotcloud/docker/issues/1024)
@@ -25,6 +27,7 @@ RUN dpkg-divert --local --rename --add /sbin/initctl && \
     ca-certificates && \
   update-ca-certificates --fresh && \
   curl -sLO https://storage.googleapis.com/golang/$GO_TARBALL && \
+  bash -c "test \"$(openssl sha1 $GO_TARBALL | awk '{print $2}')\" == '$TARBALL_SHA1_SUM'" && \
   tar -C /usr/local -xzf $GO_TARBALL && \
   ln -sv /usr/local/go/bin/* /usr/local/bin && \
   rm -f $GO_TARBALL
