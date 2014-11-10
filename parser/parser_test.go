@@ -127,15 +127,16 @@ var _ = Describe("Parse", func() {
 		if branch == "HEAD" {
 			branchCmd = exec.Command("git", "branch", "--contains", rev)
 			branchCmd.Dir = top
-			branchBytes, _ := branchCmd.Output()
-			branches := strings.Split(string(branchBytes), "\n")
-			for _, branch = range branches {
-				if len(branch) < 1 || string(branch[0]) == "*" {
-					continue
+			branchBytes, err := branchCmd.Output()
+			if err == nil {
+				branches := strings.Split(string(branchBytes), "\n")
+				for _, branchStr := range branches {
+					if len(branchStr) < 1 || string(branchStr[0]) == "*" {
+						continue
+					}
+					branch = strings.Trim(branchStr, " ")
+					break
 				}
-				branch = strings.Trim(branch, " ")
-				break
-
 			}
 		}
 
