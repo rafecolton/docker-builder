@@ -109,8 +109,8 @@
 		},
 		{
 			"ImportPath": "github.com/rafecolton/vauth",
-			"Comment": "v0.1.1",
-			"Rev": "b89e34040982b43a38140aa246583c54cc75542f"
+			"Comment": "v0.1.2",
+			"Rev": "2bc701047e05fd2ed2fa2e35ce029bf6d6b02461"
 		},
 		{
 			"ImportPath": "github.com/wsxiaoys/terminal/color",
