@@ -24,3 +24,5 @@ _testmain.go
 Release/*
 .dockercfg
 .env
+Specs/bin/*
+!Specs/bin/.gitkeep
