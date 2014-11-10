@@ -15,6 +15,23 @@ import (
 	"github.com/rafecolton/vauth"
 )
 
+const (
+	// BuildRoute is the route used to POST docker builds from JSON
+	BuildRoute = "/docker-build"
+
+	// GitHubRoute is the route for GitHub webhooks
+	GitHubRoute = "/docker-build/github"
+
+	// HealthRoute is the route for health checks
+	HealthRoute = "/health"
+
+	// JobRoute is the route for job operations (various routes, see docs for more info)
+	JobRoute = "/jobs"
+
+	// TravisRoute is the route for TravisCI webhooks
+	TravisRoute = "/docker-build/travis"
+)
+
 var logger *logrus.Logger
 var server *martini.ClassicMartini
 var skipLogging = map[string]bool{
@@ -54,18 +71,18 @@ func Serve(context *cli.Context) {
 	server = setupServer()
 
 	if shouldTravis {
-		server.Post("/docker-build/travis", travisAuthFunc, webhook.Travis)
+		server.Post(TravisRoute, travisAuthFunc, webhook.Travis)
 	}
 	if shouldGitHub {
-		server.Post("/docker-build/github", githubAuthFunc, webhook.Github)
+		server.Post(GitHubRoute, githubAuthFunc, webhook.Github)
 	}
 
 	// base routes
-	server.Get("/health", func() (int, string) { return 200, "200 OK" })
-	server.Post("/docker-build", basicAuthFunc, webhook.DockerBuild)
+	server.Get(HealthRoute, func() (int, string) { return 200, "200 OK" })
+	server.Post(BuildRoute, basicAuthFunc, webhook.DockerBuild)
 
 	// job control routes
-	server.Group("/jobs", func(r martini.Router) {
+	server.Group(JobRoute, func(r martini.Router) {
 		r.Get("/:id", job.Get)
 		r.Get("/:id/tail", job.TailN)
 		r.Post("", webhook.DockerBuild)
