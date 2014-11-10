@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -131,8 +130,14 @@ func (enc *Enqueuer) Enqueue() (string, error) {
 		return "", err
 	}
 	reqBody, _ := ioutil.ReadAll(req.Body)
+	req.Body = ioutil.NopCloser(bytes.NewReader(reqBody)) // reset body after reading
 	Logger.Debugf("enqueueing request %s", reqBody)
-	resp, err := http.ReadResponse(bufio.NewReader(nil), req)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
 	defer resp.Body.Close()
 	contentBytes, _ := ioutil.ReadAll(resp.Body)
 	return string(contentBytes), nil
