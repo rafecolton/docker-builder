@@ -1,20 +1,34 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/rafecolton/docker-builder/git"
+	"github.com/rafecolton/docker-builder/server"
 
 	"github.com/codegangsta/cli"
 	"github.com/onsi/gocleanup"
 )
 
-type requestBody map[string]string
+type EnqueueOptions struct {
+	Bobfile string
+	Host    string
+	Top     string
+}
+
+type Enqueuer struct {
+	account string
+	bobfile string
+	host    string
+	ref     string
+	repo    string
+}
 
 func enqueue(c *cli.Context) {
 	var top = os.Getenv("PWD")
@@ -41,26 +55,74 @@ func enqueue(c *cli.Context) {
 		}
 	}
 
-	var host = c.String("host") + "/jobs"
-	var body = requestBody(map[string]string{
-		"account": git.RemoteAccount(top),
-		"repo":    git.Repo(top),
-		"ref":     git.Branch(top),
-		"bobfile": bobfile,
-	})
+	var host = c.String("host")
+	opts := EnqueueOptions{
+		Host:    host,
+		Bobfile: bobfile,
+		Top:     top,
+	}
+	enqueuer := NewEnqueuer(opts)
+	result, err := enqueuer.Enqueue()
+	if err != nil {
+		Logger.Errorf("error enqueueing build: %q", err.Error())
+		gocleanup.Exit(1)
+	}
+	Logger.Debugln(result)
+	gocleanup.Exit(0)
+}
+
+func NewEnqueuer(options EnqueueOptions) *Enqueuer {
+	return &Enqueuer{
+		account: git.RemoteAccount(options.Top),
+		bobfile: options.Bobfile,
+		host:    options.Host,
+		ref:     git.Branch(options.Top),
+		repo:    git.Repo(options.Top),
+	}
+}
+
+func (enc *Enqueuer) BodyBytes() ([]byte, error) {
+	var body = map[string]string{
+		"account": enc.account,
+		"repo":    enc.repo,
+		"ref":     enc.ref,
+		"bobfile": enc.bobfile,
+	}
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
-		Logger.Errorf("error marshaling body to json: %q", err.Error())
-		gocleanup.Exit(1)
+		return nil, err
 	}
-	Logger.Debugf("enqueueing request %s", bodyBytes)
+	return bodyBytes, nil
+}
 
-	resp, err := http.Post(host, "application/json", bytes.NewReader(bodyBytes))
+func (enc *Enqueuer) RequestPath() string {
+	return enc.host + server.BuildRoute
+}
+
+func (enc *Enqueuer) Request() (*http.Request, error) {
+	bodyBytes, err := enc.BodyBytes()
 	if err != nil {
-		Logger.Errorf("post error: %q", err.Error())
-		gocleanup.Exit(1)
+		return nil, err
 	}
+	req, err := http.NewRequest(
+		"POST",
+		enc.RequestPath(),
+		bytes.NewReader(bodyBytes),
+	)
+	req.Header.Add("Content-Length", strconv.Itoa(len(bodyBytes)))
+	req.Header.Add("Content-Type", "application/json")
+	return req, nil
+}
+
+func (enc *Enqueuer) Enqueue() (string, error) {
+	req, err := enc.Request()
+	if err != nil {
+		return "", err
+	}
+	reqBody, _ := ioutil.ReadAll(req.Body)
+	Logger.Debugf("enqueueing request %s", reqBody)
+	resp, err := http.ReadResponse(bufio.NewReader(nil), req)
+	defer resp.Body.Close()
 	contentBytes, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(contentBytes))
-	gocleanup.Exit(0)
+	return string(contentBytes), nil
 }
