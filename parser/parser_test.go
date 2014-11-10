@@ -100,7 +100,7 @@ var _ = Describe("Parse", func() {
 	)
 
 	BeforeEach(func() {
-		top = os.Getenv("PWD")
+		top = os.Getenv("PWD") + "/.."
 		git, _ := fileutils.Which("git")
 		validFile = top + "/Specs/fixtures/bob.toml"
 		invalidFile = top + "/Specs/fixtures/foodoesnotexist"

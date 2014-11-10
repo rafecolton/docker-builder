@@ -17,7 +17,6 @@ GOBUILD_VERSION_ARGS := -ldflags "\
 "
 
 BATS_INSTALL_DIR ?= /usr/local
-GINKGO_PATH ?= "."
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
@@ -64,12 +63,9 @@ gox-build: get $(GOPATH)/bin/gox
 	CGO_ENABLED=0 $(GOPATH)/bin/gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	for file in $$(find ./Release -type f -name 'docker-builder-*') ; do openssl sha256 -out $$file-SHA256SUM $$file ; done
 
-.PHONY: install-ginkgo
-install-ginkgo:
-	go get -u github.com/onsi/ginkgo/ginkgo
-
 .PHONY: .test
-.test: fmtpolice ginkgo bats
+.test: fmtpolice bats
+	go test ./...
 
 .PHONY: test
 test:
@@ -83,16 +79,6 @@ fmtpolice: $(PWD)/Specs/bin/fmtpolice
 $(PWD)/Specs/bin/fmtpolice:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@ && \
 	  chmod +x $@
-
-.PHONY: ginkgo
-ginkgo: install-ginkgo
-	@echo "----------"
-	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
-	  echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r ." && \
-	  $(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r . ; \
-	  else echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH)" && \
-	  $(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
-	  fi
 
 .PHONY: bats
 bats: $(BATS_INSTALL_DIR)/bin/bats

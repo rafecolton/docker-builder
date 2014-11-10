@@ -6,6 +6,7 @@ import (
 
 	"bytes"
 	"net/http"
+	"net/http/httptest"
 	"strconv"
 )
 
@@ -35,6 +36,8 @@ var _ = Describe("DockerBuild", func() {
 
 	Context("when JSON data is invalid", func() {
 		It("returns an error", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeJSONRequest(invalidBody)
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
@@ -48,6 +51,8 @@ var _ = Describe("DockerBuild", func() {
 
 	Context("when JSON data is valid", func() {
 		It("returns a 202", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeJSONRequest(validBody)
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
@@ -58,6 +63,8 @@ var _ = Describe("DockerBuild", func() {
 			Expect(recorder.Body.String()).To(Equal("202 accepted"))
 		})
 		It("returns a 201 if sync == true", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeJSONRequest(validBodySync)
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
