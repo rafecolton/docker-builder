@@ -47,9 +47,9 @@ func getBranch() string {
 		branchBytes, _ := branchCmd.Output()
 		branches := strings.Split(string(branchBytes), "\n")
 	Loop:
-		for _, branch = range branches {
-			if string(branch[0]) != "*" {
-				branch = strings.Trim(branch, " ")
+		for _, branchStr := range branches {
+			if len(branchStr) > 0 && string(branchStr[0]) != "*" {
+				branch = strings.Trim(branchStr, " ")
 				break Loop
 			}
 
