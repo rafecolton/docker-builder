@@ -13,10 +13,17 @@ import (
 )
 
 const (
-	asyncSuccessCode    = 202
-	asyncSuccessMessage = "202 accepted"
-	syncSuccessCode     = 201
-	syncSuccessMessage  = "201 created"
+	// AsyncSuccessCode is the http status code returned for a successful async job
+	AsyncSuccessCode = 202
+
+	// AsyncSuccessCode is the generic message returned for a successful async job
+	AsyncSuccessMessage = "202 accepted"
+
+	// SyncSuccessCode is the http status code returned for a successful synchronous job
+	SyncSuccessCode = 201
+
+	// SyncSuccessCode is the generic message returned for a successful synchronous job
+	SyncSuccessMessage = "201 created"
 )
 
 var logger *logrus.Logger
@@ -43,9 +50,9 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 	// This is meant to allow testing ot the HTTP interactions for the webhooks
 	if testMode {
 		if spec.Sync {
-			return syncSuccessCode, syncSuccessMessage
+			return SyncSuccessCode, SyncSuccessMessage
 		}
-		return asyncSuccessCode, asyncSuccessMessage
+		return AsyncSuccessCode, AsyncSuccessMessage
 	}
 
 	if err := spec.Validate(); err != nil {
@@ -79,7 +86,7 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 			return 417, `{"error": "` + err.Error() + `"}`
 		}
 
-		return syncSuccessCode, string(retBytes)
+		return SyncSuccessCode, string(retBytes)
 	}
 
 	// if async
@@ -90,5 +97,5 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 		return 409, `{"error": "` + err.Error() + `"}`
 	}
 
-	return asyncSuccessCode, string(retBytes)
+	return AsyncSuccessCode, string(retBytes)
 }
