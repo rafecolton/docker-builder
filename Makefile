@@ -77,35 +77,12 @@ test:
 	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
 .PHONY: fmtpolice
-fmtpolice: fmt lint
+fmtpolice: $(PWD)/Specs/bin/fmtpolice
+	./Specs/bin/fmtpolice
 
-.PHONY: fmt
-fmt:
-	@echo "----------"
-	@echo "checking fmt"
-	@set -e ; \
-	  for f in $(shell git ls-files '*.go'); do \
-	  gofmt $$f | diff -u $$f - ; \
-	  done
-
-.PHONY: linter
-linter:
-	go get -u github.com/golang/lint/golint
-
-.PHONY: lint
-lint: linter
-	@echo "----------"
-	@echo "checking lint"
-	@for file in $(shell git ls-files '*.go') ; do \
-	  if [[ "$$($(GOPATH)/bin/golint $$file)" =~ ^[[:blank:]]*$$ ]] ; then \
-	  echo yayyy >/dev/null ; \
-	  else $(MAKE) lintv && exit 1 ; fi \
-	  done
-
-.PHONY: lintv
-lintv:
-	@echo "----------"
-	@for file in $(shell git ls-files '*.go') ; do $(GOPATH)/bin/golint $$file ; done
+$(PWD)/Specs/bin/fmtpolice:
+	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@ && \
+	  chmod +x $@
 
 .PHONY: ginkgo
 ginkgo: install-ginkgo
