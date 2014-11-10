@@ -77,7 +77,7 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 	j := job.NewJob(jobConfig, spec, req)
 
 	// if sync
-	if spec.Sync || job.TestMode {
+	if spec.Sync {
 		if err = j.Process(); err != nil {
 			return 417, `{"error": "` + err.Error() + `"}`
 		}
