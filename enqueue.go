@@ -16,12 +16,15 @@ import (
 	"github.com/onsi/gocleanup"
 )
 
+// EnqueueOptions is a struct for sending options to an Enqueuer
 type EnqueueOptions struct {
 	Bobfile string
 	Host    string
 	Top     string
 }
 
+// Enqueuer is a struct that handles parsing the repo data and making the
+// actual enqueue request for the `docker-builder enqueue` feature
 type Enqueuer struct {
 	account string
 	bobfile string
@@ -71,6 +74,8 @@ func enqueue(c *cli.Context) {
 	gocleanup.Exit(0)
 }
 
+// NewEnqueuer returns an Enqueuer with data populated from the repo
+// information
 func NewEnqueuer(options EnqueueOptions) *Enqueuer {
 	return &Enqueuer{
 		account: git.RemoteAccount(options.Top),
@@ -81,6 +86,7 @@ func NewEnqueuer(options EnqueueOptions) *Enqueuer {
 	}
 }
 
+// BodyBytes returns the byte slice that enc would send in an enqueue request
 func (enc *Enqueuer) BodyBytes() ([]byte, error) {
 	var body = map[string]string{
 		"account": enc.account,
@@ -95,10 +101,13 @@ func (enc *Enqueuer) BodyBytes() ([]byte, error) {
 	return bodyBytes, nil
 }
 
+// RequestPath returns the path to which enqueue requests are sent.  This
+// includes both the host and the route
 func (enc *Enqueuer) RequestPath() string {
 	return enc.host + server.BuildRoute
 }
 
+// Request returns the http request that will be sent for enqueueing
 func (enc *Enqueuer) Request() (*http.Request, error) {
 	bodyBytes, err := enc.BodyBytes()
 	if err != nil {
@@ -114,6 +123,8 @@ func (enc *Enqueuer) Request() (*http.Request, error) {
 	return req, nil
 }
 
+// Enqueue performs an actual http request using the result of Request().
+// Enqueue() should not be called during tests
 func (enc *Enqueuer) Enqueue() (string, error) {
 	req, err := enc.Request()
 	if err != nil {

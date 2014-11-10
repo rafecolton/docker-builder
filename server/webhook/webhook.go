@@ -16,13 +16,13 @@ const (
 	// AsyncSuccessCode is the http status code returned for a successful async job
 	AsyncSuccessCode = 202
 
-	// AsyncSuccessCode is the generic message returned for a successful async job
+	// AsyncSuccessMessage is the generic message returned for a successful async job
 	AsyncSuccessMessage = "202 accepted"
 
 	// SyncSuccessCode is the http status code returned for a successful synchronous job
 	SyncSuccessCode = 201
 
-	// SyncSuccessCode is the generic message returned for a successful synchronous job
+	// SyncSuccessMessage is the generic message returned for a successful synchronous job
 	SyncSuccessMessage = "201 created"
 )
 
