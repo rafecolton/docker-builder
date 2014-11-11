@@ -105,3 +105,8 @@ $(GOPATH)/bin/deppy:
 get: $(GOPATH)/bin/deppy
 	go get -t ./...
 	$(GOPATH)/bin/deppy restore
+
+.PHONY: coverage
+coverage:
+	go get -u golang.org/x/tools/cmd/cover github.com/axw/gocov/gocov github.com/mattn/goveralls
+	goveralls -repotoken $(GOERALLS_REPO_TOKEN)

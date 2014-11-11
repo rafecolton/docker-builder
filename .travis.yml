@@ -3,12 +3,16 @@ sudo: false
 matrix:
   fast_finish: true
 go:
-  - 1.2.2
-  - 1.3.3
-  - tip
-script: make test
+- 1.2.2
+- 1.3.3
+- tip
+script:
+- make test
+- make coverage
 notifications:
   webhooks:
-    - https://docker-build-server.modcloth.com/docker-build/travis
+  - https://docker-build-server.modcloth.com/docker-build/travis
   on_success: always
   on_failure: never
+GOVERALLS_REPO_TOKEN:
+  secure: MsdFv6cFchorwiURaZ8oAToWWDdrkX9eJyvAfdgJVJGmAkGp1WhkklZG7etrNqikvzpz//u+EsFfbfZbmG7LPBJoBa2J4XMvp5Nhi391SJJWg52OLLSAn8k//LQOmkijWpecBbTW+/BbPbspdkCgSNJPv9Z72xf5AR5IcNZrS1A=
