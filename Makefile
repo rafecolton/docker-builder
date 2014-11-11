@@ -16,7 +16,7 @@ GOBUILD_VERSION_ARGS := -ldflags "\
   -w \
 "
 
-BATS_INSTALL_DIR ?= /usr/local
+BATS_INSTALL_DIR ?= $(PWD)/Spec/bats
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
@@ -87,7 +87,7 @@ bats: $(BATS_INSTALL_DIR)/bin/bats
 
 $(BATS_INSTALL_DIR)/bin/bats:
 	git clone https://github.com/sstephenson/bats.git && \
-		(cd bats && $(SUDO) ./install.sh $(BATS_INSTALL_DIR)) && \
+		(cd bats && ./install.sh $(BATS_INSTALL_DIR)) && \
 		rm -rf bats
 
 $(GOPATH)/bin/gox:
