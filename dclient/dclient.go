@@ -123,10 +123,6 @@ func (rtoo *realDockerClient) LatestRepoTaggedWithUUID(uuid string) (string, err
 }
 
 func (rtoo *realDockerClient) sortedImages() ([]docker.APIImages, error) {
-	/*
-		LatestImage - figure out what this does...
-	*/
-	//var images APIImagesSlice
 	images, err := rtoo.client.ListImages(false)
 
 	if err != nil {
@@ -138,7 +134,6 @@ func (rtoo *realDockerClient) sortedImages() ([]docker.APIImages, error) {
 		return nil, err
 	}
 
-	// first is most recent
 	sort.Sort(dockersort.ByCreatedDescending(images))
 
 	return images, nil
