@@ -27,5 +27,4 @@ Release/*
 Specs/bin/*
 !Specs/bin/.gitkeep
 Specs/bats
-!Specs/bin/.gitkeep
 *.coverprofile
