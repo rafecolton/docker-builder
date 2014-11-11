@@ -108,6 +108,7 @@ get: $(GOPATH)/bin/deppy
 
 .PHONY: coverage
 coverage:
-	go get -u golang.org/x/tools/cmd/cover github.com/axw/gocov/gocov github.com/mattn/goveralls
+	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
+	go get -u github.com/axw/gocov/gocov github.com/mattn/goveralls
 	@echo "goveralls -repotoken <redacted>"
 	@goveralls -repotoken $(GOVERALLS_REPO_TOKEN)
