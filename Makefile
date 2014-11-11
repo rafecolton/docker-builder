@@ -16,8 +16,7 @@ GOBUILD_VERSION_ARGS := -ldflags "\
   -w \
 "
 
-BATS_INSTALL_DIR ?= /usr/local
-GINKGO_PATH ?= "."
+BATS_INSTALL_DIR ?= $(PWD)/Specs/bats
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
@@ -64,12 +63,9 @@ gox-build: get $(GOPATH)/bin/gox
 	CGO_ENABLED=0 $(GOPATH)/bin/gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	for file in $$(find ./Release -type f -name 'docker-builder-*') ; do openssl sha256 -out $$file-SHA256SUM $$file ; done
 
-.PHONY: install-ginkgo
-install-ginkgo:
-	go get -u github.com/onsi/ginkgo/ginkgo
-
 .PHONY: .test
-.test: fmtpolice ginkgo bats
+.test: fmtpolice bats
+	go test ./...
 
 .PHONY: test
 test:
@@ -84,16 +80,6 @@ $(PWD)/Specs/bin/fmtpolice:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@ && \
 	  chmod +x $@
 
-.PHONY: ginkgo
-ginkgo: install-ginkgo
-	@echo "----------"
-	@if [[ "$(GINKGO_PATH)" == "." ]] ; then \
-	  echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r ." && \
-	  $(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race -r . ; \
-	  else echo "$(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH)" && \
-	  $(GOPATH)/bin/ginkgo -nodes=10 -noisyPendings -race --v $(GINKGO_PATH) ; \
-	  fi
-
 .PHONY: bats
 bats: $(BATS_INSTALL_DIR)/bin/bats
 	@echo "----------"
@@ -101,7 +87,7 @@ bats: $(BATS_INSTALL_DIR)/bin/bats
 
 $(BATS_INSTALL_DIR)/bin/bats:
 	git clone https://github.com/sstephenson/bats.git && \
-		(cd bats && $(SUDO) ./install.sh $(BATS_INSTALL_DIR)) && \
+		(cd bats && ./install.sh $(BATS_INSTALL_DIR)) && \
 		rm -rf bats
 
 $(GOPATH)/bin/gox:
@@ -119,3 +105,19 @@ $(GOPATH)/bin/deppy:
 get: $(GOPATH)/bin/deppy
 	go get -t ./...
 	$(GOPATH)/bin/deppy restore
+
+$(PWD)/Specs/bin/coverage:
+	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
+	  chmod +x $@
+
+.PHONY: coverage
+coverage: $(PWD)/Specs/bin/coverage
+	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
+	go get -u github.com/axw/gocov/gocov
+	./Specs/bin/coverage
+
+.PHONY: goveralls
+goveralls: coverage
+	go get -u github.com/mattn/goveralls
+	@echo "goveralls -coverprofile=gover.coverprofile -repotoken <redacted>"
+	@goveralls -coverprofile=gover.coverprofile -repotoken $(GOVERALLS_REPO_TOKEN)

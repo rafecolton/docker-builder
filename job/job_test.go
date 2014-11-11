@@ -11,6 +11,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/rafecolton/docker-builder/job"
+
+	"github.com/rafecolton/docker-builder/server/webhook"
 )
 
 type logMessage struct {
@@ -31,7 +33,7 @@ func makeRequest(method, path string, body []byte) (req *http.Request, err error
 
 var (
 	jobID       = "035c4ea0-d73b-5bde-7d6f-c806b04f2ec3"
-	validBody   = `{"account": "foo", "repo": "bar", "ref": "baz"}`
+	validBody   = `{"account": "foo", "repo": "bar", "ref": "baz", "sync": true}`
 	data        = []byte(validBody)
 	recorder2   *httptest.ResponseRecorder
 	job         = &Job{}
@@ -63,7 +65,7 @@ var _ = Describe("POST /jobs", func() {
 		Expect(job.LogRoute).To(Equal(expectedJob.LogRoute))
 		Expect(job.Ref).To(Equal(expectedJob.Ref))
 		Expect(job.Repo).To(Equal(expectedJob.Repo))
-		Expect(recorder.Code).To(Equal(201))
+		Expect(recorder.Code).To(Equal(webhook.SyncSuccessCode))
 	})
 })
 

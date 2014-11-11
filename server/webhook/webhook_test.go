@@ -1,7 +1,6 @@
 package webhook_test
 
 import (
-	"net/http/httptest"
 	"testing"
 
 	. "github.com/onsi/ginkgo"
@@ -13,10 +12,7 @@ import (
 	"github.com/go-martini/martini"
 )
 
-var recorder = httptest.NewRecorder()
-var testServer *martini.ClassicMartini
-
-func init() {
+func newTestServer() (testServer *martini.ClassicMartini) {
 	r := martini.NewRouter()
 	m := martini.New()
 	m.Use(martini.Recovery())
@@ -28,9 +24,11 @@ func init() {
 	testServer.Post("/docker-build/github", Github)
 	testServer.Post("/docker-build/travis", Travis)
 	testServer.Post("/docker-build", DockerBuild)
+	return
+}
 
+func init() {
 	l := &logrus.Logger{Level: logrus.PanicLevel}
-
 	Logger(l)
 }
 

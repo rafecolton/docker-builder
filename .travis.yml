@@ -1,13 +1,19 @@
 language: go
+sudo: false
 matrix:
   fast_finish: true
 go:
-  - 1.2.2
-  - 1.3.3
-  - tip
-script: make test
+- 1.2.2
+- 1.3.3
+- tip
+script:
+- make test
+- make goveralls
 notifications:
   webhooks:
-    - https://docker-build-server.modcloth.com/docker-build/travis
+  - https://docker-build-server.modcloth.com/docker-build/travis
   on_success: always
   on_failure: never
+env:
+  matrix:
+    secure: BWl5TwdzJjgFDV29DvZtmNDwzhEuLx4QxVwgwVjrJmgL1jjzfXfg/AabUEeUq7GsF/2OJbpZjKI1F0DSaMG70BjZqhljiRjplSJZXL49APZ7xd9gTS+xuAfILf4soihMKWbnDUh/5wNMSwCDABhbukiMyIPONYcCTxigbypdZCs=

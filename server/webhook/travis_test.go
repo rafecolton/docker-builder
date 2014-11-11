@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"strconv"
 )
@@ -53,10 +54,10 @@ func makeTravisRequest(options *travisRequest, bodyString string) (*http.Request
 }
 
 var _ = Describe("Travis", func() {
-
-	var ()
 	Context("when travis request is invalid", func() {
 		It("returns an error when status == 1", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeTravisRequest(&travisRequest{
 				Status: 1,
 			}, "")
@@ -70,6 +71,8 @@ var _ = Describe("Travis", func() {
 		})
 
 		It("returns an error when type is pull_request", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeTravisRequest(&travisRequest{
 				Type: "pull_request",
 			}, "")
@@ -84,6 +87,8 @@ var _ = Describe("Travis", func() {
 		})
 
 		It("returns an error when JSON is invalid", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeTravisRequest(nil, `[this is not valid json}`)
 			Expect(err).To(BeNil())
 			Expect(req).ToNot(BeNil())
@@ -97,6 +102,8 @@ var _ = Describe("Travis", func() {
 
 	Context("when travis request is valid", func() {
 		It("returns a valid spec", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeTravisRequest(&travisRequest{
 				Type:   "push",
 				Commit: "a427f16faa8e4d63f9fcaa4ec55e80765fd11b04",

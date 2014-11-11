@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/rafecolton/docker-builder.svg?branch=master)](https://travis-ci.org/rafecolton/docker-builder)
 [![GoDoc](https://godoc.org/github.com/rafecolton/docker-builder?status.png)](https://godoc.org/github.com/rafecolton/docker-builder)
+[![Coverage Status](https://coveralls.io/repos/rafecolton/docker-builder/badge.png)](https://coveralls.io/r/rafecolton/docker-builder)
 
 Bob, the `docker-builder`, builds, tags, and pushes multiple Docker images, all
 from a friendly `Bobfile` config file.

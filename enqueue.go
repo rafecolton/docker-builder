@@ -3,18 +3,34 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/rafecolton/docker-builder/git"
+	"github.com/rafecolton/docker-builder/server"
 
 	"github.com/codegangsta/cli"
 	"github.com/onsi/gocleanup"
 )
 
-type requestBody map[string]string
+// EnqueueOptions is a struct for sending options to an Enqueuer
+type EnqueueOptions struct {
+	Bobfile string
+	Host    string
+	Top     string
+}
+
+// Enqueuer is a struct that handles parsing the repo data and making the
+// actual enqueue request for the `docker-builder enqueue` feature
+type Enqueuer struct {
+	account string
+	bobfile string
+	host    string
+	ref     string
+	repo    string
+}
 
 func enqueue(c *cli.Context) {
 	var top = os.Getenv("PWD")
@@ -41,26 +57,88 @@ func enqueue(c *cli.Context) {
 		}
 	}
 
-	var host = c.String("host") + "/jobs"
-	var body = requestBody(map[string]string{
-		"account": git.RemoteAccount(top),
-		"repo":    git.Repo(top),
-		"ref":     git.Branch(top),
-		"bobfile": bobfile,
-	})
+	var host = c.String("host")
+	opts := EnqueueOptions{
+		Host:    host,
+		Bobfile: bobfile,
+		Top:     top,
+	}
+	enqueuer := NewEnqueuer(opts)
+	result, err := enqueuer.Enqueue()
+	if err != nil {
+		Logger.Errorf("error enqueueing build: %q", err.Error())
+		gocleanup.Exit(1)
+	}
+	Logger.Debugln(result)
+	gocleanup.Exit(0)
+}
+
+// NewEnqueuer returns an Enqueuer with data populated from the repo
+// information
+func NewEnqueuer(options EnqueueOptions) *Enqueuer {
+	return &Enqueuer{
+		account: git.RemoteAccount(options.Top),
+		bobfile: options.Bobfile,
+		host:    options.Host,
+		ref:     git.Branch(options.Top),
+		repo:    git.Repo(options.Top),
+	}
+}
+
+// BodyBytes returns the byte slice that enc would send in an enqueue request
+func (enc *Enqueuer) BodyBytes() ([]byte, error) {
+	var body = map[string]string{
+		"account": enc.account,
+		"repo":    enc.repo,
+		"ref":     enc.ref,
+		"bobfile": enc.bobfile,
+	}
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
-		Logger.Errorf("error marshaling body to json: %q", err.Error())
-		gocleanup.Exit(1)
+		return nil, err
 	}
-	Logger.Debugf("enqueueing request %s", bodyBytes)
+	return bodyBytes, nil
+}
 
-	resp, err := http.Post(host, "application/json", bytes.NewReader(bodyBytes))
+// RequestPath returns the path to which enqueue requests are sent.  This
+// includes both the host and the route
+func (enc *Enqueuer) RequestPath() string {
+	return enc.host + server.BuildRoute
+}
+
+// Request returns the http request that will be sent for enqueueing
+func (enc *Enqueuer) Request() (*http.Request, error) {
+	bodyBytes, err := enc.BodyBytes()
 	if err != nil {
-		Logger.Errorf("post error: %q", err.Error())
-		gocleanup.Exit(1)
+		return nil, err
 	}
+	req, err := http.NewRequest(
+		"POST",
+		enc.RequestPath(),
+		bytes.NewReader(bodyBytes),
+	)
+	req.Header.Add("Content-Length", strconv.Itoa(len(bodyBytes)))
+	req.Header.Add("Content-Type", "application/json")
+	return req, nil
+}
+
+// Enqueue performs an actual http request using the result of Request().
+// Enqueue() should not be called during tests
+func (enc *Enqueuer) Enqueue() (string, error) {
+	req, err := enc.Request()
+	if err != nil {
+		return "", err
+	}
+	reqBody, _ := ioutil.ReadAll(req.Body)
+	req.Body = ioutil.NopCloser(bytes.NewReader(reqBody)) // reset body after reading
+	Logger.Debugf("enqueueing request %s", reqBody)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
 	contentBytes, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(contentBytes))
-	gocleanup.Exit(0)
+	return string(contentBytes), nil
 }

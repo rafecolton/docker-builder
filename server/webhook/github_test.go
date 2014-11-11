@@ -3,12 +3,18 @@ package webhook_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/rafecolton/docker-builder/server/webhook"
 
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"net/http/httptest"
 	"strconv"
 )
+
+func init() {
+	Logger(nil)
+}
 
 type githubOwner struct {
 	Name string `json:"name"`
@@ -58,6 +64,8 @@ func makeGithubRequest(options *githubRequest) (*http.Request, error) {
 var _ = Describe("Github", func() {
 	Context("when github request is unsupported", func() {
 		It("returns an error when event is not push", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeGithubRequest(&githubRequest{
 				Event: "issue",
 			})
@@ -70,6 +78,8 @@ var _ = Describe("Github", func() {
 			Expect(recorder.Body.String()).To(Equal("400 bad request"))
 		})
 		It("returns an error when JSON is invalid", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeGithubRequest(&githubRequest{
 				RawBody: `[this is not valid json}`,
 				Event:   "push",
@@ -85,6 +95,8 @@ var _ = Describe("Github", func() {
 	})
 	Context("when Github request is correct", func() {
 		It("returns a valid spec", func() {
+			var testServer = newTestServer()
+			var recorder = httptest.NewRecorder()
 			req, err := makeGithubRequest(&githubRequest{
 				Event:  "push",
 				Commit: "a427f16faa8e4d63f9fcaa4ec55e80765fd11b04",
