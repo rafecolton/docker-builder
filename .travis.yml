@@ -14,5 +14,6 @@ notifications:
   - https://docker-build-server.modcloth.com/docker-build/travis
   on_success: always
   on_failure: never
-GOVERALLS_REPO_TOKEN:
-  secure: MsdFv6cFchorwiURaZ8oAToWWDdrkX9eJyvAfdgJVJGmAkGp1WhkklZG7etrNqikvzpz//u+EsFfbfZbmG7LPBJoBa2J4XMvp5Nhi391SJJWg52OLLSAn8k//LQOmkijWpecBbTW+/BbPbspdkCgSNJPv9Z72xf5AR5IcNZrS1A=
+env:
+  matrix:
+    secure: BWl5TwdzJjgFDV29DvZtmNDwzhEuLx4QxVwgwVjrJmgL1jjzfXfg/AabUEeUq7GsF/2OJbpZjKI1F0DSaMG70BjZqhljiRjplSJZXL49APZ7xd9gTS+xuAfILf4soihMKWbnDUh/5wNMSwCDABhbukiMyIPONYcCTxigbypdZCs=
