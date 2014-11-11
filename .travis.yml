@@ -15,5 +15,5 @@ notifications:
   on_success: always
   on_failure: never
 env:
-  matrix:
+  global:
     secure: BWl5TwdzJjgFDV29DvZtmNDwzhEuLx4QxVwgwVjrJmgL1jjzfXfg/AabUEeUq7GsF/2OJbpZjKI1F0DSaMG70BjZqhljiRjplSJZXL49APZ7xd9gTS+xuAfILf4soihMKWbnDUh/5wNMSwCDABhbukiMyIPONYcCTxigbypdZCs=
