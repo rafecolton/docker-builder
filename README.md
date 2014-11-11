@@ -42,11 +42,11 @@ go get github.com/rafecolton/docker-builder
 
 ```bash
 # on Mac OS X
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0-rc1/docker-builder-v0.10.0-rc1-darwin-amd64 \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0/docker-builder-v0.10.0-darwin-amd64 \
   -o /usr/local/bin/docker-builder && chmod +x /usr/local/bin/docker-builder
 
 # on Linux, note: you may need sudo
-curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0-rc1/docker-builder-v0.10.0-rc1-linux-amd64 \
+curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0/docker-builder-v0.10.0-linux-amd64 \
   -o /usr/local/bin/docker-builder && chmod +x /usr/local/bin/docker-builder
 ```
 
