@@ -8,7 +8,7 @@ go:
 - tip
 script:
 - make test
-- make coverage
+- make goveralls
 notifications:
   webhooks:
   - https://docker-build-server.modcloth.com/docker-build/travis

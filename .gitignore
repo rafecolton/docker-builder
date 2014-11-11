@@ -26,4 +26,6 @@ Release/*
 .env
 Specs/bin/*
 !Specs/bin/.gitkeep
-Spec/bats
+Specs/bats
+!Specs/bin/.gitkeep
+*.coverprofile

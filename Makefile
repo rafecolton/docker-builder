@@ -16,7 +16,7 @@ GOBUILD_VERSION_ARGS := -ldflags "\
   -w \
 "
 
-BATS_INSTALL_DIR ?= $(PWD)/Spec/bats
+BATS_INSTALL_DIR ?= $(PWD)/Specs/bats
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
@@ -106,9 +106,18 @@ get: $(GOPATH)/bin/deppy
 	go get -t ./...
 	$(GOPATH)/bin/deppy restore
 
+$(PWD)/Specs/bin/coverage:
+	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
+	  chmod +x $@
+
 .PHONY: coverage
-coverage:
+coverage: $(PWD)/Specs/bin/coverage
 	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
-	go get -u github.com/axw/gocov/gocov github.com/mattn/goveralls
-	@echo "goveralls -repotoken <redacted>"
-	@goveralls -repotoken $(GOVERALLS_REPO_TOKEN)
+	go get -u github.com/axw/gocov/gocov
+	./Specs/bin/coverage
+
+.PHONY: goveralls
+goveralls: coverage
+	go get -u github.com/mattn/goveralls
+	@echo "goveralls -coverprofile=gover.coverprofile -repotoken <redacted>"
+	@goveralls -coverprofile=gover.coverprofile -repotoken $(GOVERALLS_REPO_TOKEN)
