@@ -11,6 +11,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/fsouza/go-dockerclient"
+	"github.com/rafecolton/go-dockerclient-sort"
 )
 
 /*
@@ -121,11 +122,11 @@ func (rtoo *realDockerClient) LatestRepoTaggedWithUUID(uuid string) (string, err
 	return "", fmt.Errorf("unable to find image tagged with uuid %q", uuid)
 }
 
-func (rtoo *realDockerClient) sortedImages() (APIImagesSlice, error) {
+func (rtoo *realDockerClient) sortedImages() ([]docker.APIImages, error) {
 	/*
 		LatestImage - figure out what this does...
 	*/
-	var images APIImagesSlice
+	//var images APIImagesSlice
 	images, err := rtoo.client.ListImages(false)
 
 	if err != nil {
@@ -138,7 +139,7 @@ func (rtoo *realDockerClient) sortedImages() (APIImagesSlice, error) {
 	}
 
 	// first is most recent
-	sort.Sort(images)
+	sort.Sort(dockersort.ByCreatedDescending(images))
 
 	return images, nil
 }
