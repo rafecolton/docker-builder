@@ -69,8 +69,8 @@
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
-			"Comment": "0.2.1-317-gaec22e6",
-			"Rev": "aec22e6bee5af0f78651ee49edeeade112ace613"
+			"Comment": "0.2.1-319-g10d10d4",
+			"Rev": "10d10d464f96231c61e16f2d1b7fca3152a7040f"
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
@@ -106,6 +106,10 @@
 		{
 			"ImportPath": "github.com/onsi/gocleanup",
 			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
+			"Rev": "127186d3d0bd6ae0867081a76324e1afe6dbf084"
 		},
 		{
 			"ImportPath": "github.com/rafecolton/vauth",
