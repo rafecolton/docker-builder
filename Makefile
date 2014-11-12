@@ -51,8 +51,12 @@ binclean:
 	touch ./Release/.gitkeep
 
 .PHONY: build
-build: binclean get
+build: binclean get monkey-patch-drone
 	CGO_ENABLED=0 go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
+
+.PHONY: monkey-patch-drone
+monkey-patch-drone:
+	if [[ "$(DRONE)" == "true" ]] && [[ "$(CI)" == "true" ]] ; then rm -f $(GOROOT)/src/pkg/os/error_posix.go ; fi
 
 .PHONY: release
 release: binclean gox-build
