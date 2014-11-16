@@ -1,20 +1,8 @@
 SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
-B := github.com/rafecolton/docker-builder
+B := github.com/artifactory/build-runner
 PACKAGES := ./...
-REV_VAR := $(B)/version.RevString
-VERSION_VAR := $(B)/version.VersionString
-BRANCH_VAR := $(B)/version.BranchString
-REPO_VERSION := $(shell git describe --always --dirty --tags)
-REPO_REV := $(shell git rev-parse --sq HEAD)
-REPO_BRANCH := $(shell git rev-parse -q --abbrev-ref HEAD) # FIXME: will be "HEAD" if not on branch
-GOBUILD_VERSION_ARGS := -ldflags "\
-  -X $(REV_VAR) $(REPO_REV) \
-  -X $(VERSION_VAR) $(REPO_VERSION) \
-  -X $(BRANCH_VAR) $(REPO_BRANCH) \
-  -w \
-"
 
 BATS_INSTALL_DIR ?= $(PWD)/Specs/bats
 
@@ -26,33 +14,9 @@ GO_TAG_ARGS ?= -tags netgo
 
 export GOPATH
 
-.PHONY: all
-all: binclean clean build test
-
-.PHONY: clean
-clean:
-	go clean -i -r $(PACKAGES) || true
-	rm -f $(GOPATH)/bin/docker-builder
-
-.PHONY: quick
-quick: build
-	@echo "----------"
-	@docker-builder --version
-	@echo "----------"
-	@docker-builder --help
-	@echo "----------"
-	@docker-builder
-	@echo "----------"
-
-.PHONY: binclean
-binclean:
-	rm -f $(GOPATH)/bin/docker-builder
-	rm -rf ./Release/*
-	touch ./Release/.gitkeep
-
 .PHONY: build
 build: binclean get monkey-patch-drone
-	CGO_ENABLED=0 go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
+	go install -a $(PACKAGES)
 
 .PHONY: monkey-patch-drone
 monkey-patch-drone:
