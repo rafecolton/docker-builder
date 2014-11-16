@@ -24,48 +24,43 @@
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/archive",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/fileutils",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/ioutils",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
-		},
-		{
-			"ImportPath": "github.com/docker/docker/pkg/log",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/pools",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/promise",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/system",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/tailfile",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar",
-			"Comment": "v1.2.0-715-g04251b3",
-			"Rev": "04251b3e544d82db2dfc140bd27172a7f1876e5e"
+			"Comment": "v1.3.0-561-g61e4b4e",
+			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
