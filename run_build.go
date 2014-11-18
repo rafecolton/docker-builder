@@ -60,6 +60,9 @@ func RunBuild(fileZero *builderfile.Builderfile, contextDir string, channels ...
 	var fileOne *builderfile.Builderfile
 	var err error
 	var logger = logrus.New()
+	var p *parser.Parser
+	var bob *builder.Builder
+
 	logger.Level = logrus.DebugLevel
 
 	if err := envconfig.Process("build_runner", &conf.Config); err != nil {
@@ -85,12 +88,14 @@ func RunBuild(fileZero *builderfile.Builderfile, contextDir string, channels ...
 		return err
 	}
 
-	p := parser.NewParser("", logger)
+	opts := parser.NewParserOptions{ContextDir: contextDir, Logger: logger}
+	p = parser.NewParser(opts)
 
 	instructionSet := p.InstructionSetFromBuilderfileStruct(fileOne)
 	commandSequence := p.CommandSequenceFromInstructionSet(instructionSet)
 
-	bob, err := builder.NewBuilder(logger, true)
+	bobOpts := builder.NewBuilderOptions{ContextDir: contextDir, Logger: logger}
+	bob, err = builder.NewBuilder(bobOpts)
 	if err != nil {
 		return err
 	}

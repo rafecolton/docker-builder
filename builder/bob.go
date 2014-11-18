@@ -3,7 +3,6 @@ package builder
 import (
 	"io"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"regexp"
 
@@ -11,8 +10,8 @@ import (
 	"github.com/hishboy/gocommons/lang"
 	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
+	"github.com/rafecolton/go-dockerclient-quick"
 
-	"github.com/sylphon/build-runner/dclient"
 	"github.com/sylphon/build-runner/log"
 	"github.com/sylphon/build-runner/parser"
 )
@@ -31,7 +30,7 @@ A Builder is the struct that actually does the work of moving files around and
 executing the commands that do the docker build.
 */
 type Builder struct {
-	dockerClient dclient.DockerClient
+	dockerClient *dockerclient.DockerClient
 	*logrus.Logger
 	workdir         string
 	isRegular       bool
@@ -39,6 +38,7 @@ type Builder struct {
 	Stderr          io.Writer
 	Stdout          io.Writer
 	Builderfile     string
+	contextDir      string
 }
 
 /*
@@ -50,17 +50,23 @@ func (bob *Builder) SetNextSubSequence(subSeq *parser.SubSequence) {
 	bob.nextSubSequence = subSeq
 }
 
+type NewBuilderOptions struct {
+	Logger     *logrus.Logger
+	ContextDir string
+}
+
 /*
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
-func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
+func NewBuilder(opts NewBuilderOptions) (*Builder, error) {
+	logger := opts.Logger
 	if logger == nil {
 		logger = logrus.New()
 		logger.Level = logrus.PanicLevel
 	}
 
-	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
+	client, err := dockerclient.NewDockerClient()
 
 	if err != nil {
 		return nil, err
@@ -77,9 +83,10 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 	return &Builder{
 		dockerClient: client,
 		Logger:       logger,
-		isRegular:    shouldBeRegular,
+		isRegular:    true,
 		Stdout:       stdout,
 		Stderr:       stderr,
+		contextDir:   opts.ContextDir,
 	}, nil
 }
 
@@ -127,14 +134,14 @@ func (bob *Builder) BuildCommandSequence(commandSequence *parser.CommandSequence
 }
 
 func (bob *Builder) attemptToDeleteTemporaryUUIDTag(uuid string) {
-	repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(uuid)
+	repoWithTag, err := bob.dockerClient.LatestImageIDByName(uuid)
 	if err != nil {
 		bob.WithField("err", err).Warn("error getting repo taggged with temporary tag")
 	}
 
 	bob.WithField("tag", repoWithTag).Info("deleting temporary tag")
 
-	if err = bob.dockerClient.RemoveImage(repoWithTag); err != nil {
+	if err = bob.dockerClient.Client().RemoveImage(repoWithTag); err != nil {
 		bob.WithField("err", err).Warn("error deleting temporary tag")
 	}
 }
@@ -222,11 +229,7 @@ func (bob *Builder) Setup() Error {
 Repodir is the dir from which we are using files for our docker builds.
 */
 func (bob *Builder) Repodir() string {
-	if !bob.isRegular {
-		repoDir := "Specs/fixtures/repodir"
-		return os.Getenv("PWD") + "/../" + repoDir
-	}
-	return filepath.Dir(bob.Builderfile)
+	return bob.contextDir
 }
 
 /*

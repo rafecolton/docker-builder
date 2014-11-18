@@ -18,16 +18,21 @@ type Parser struct {
 	top           string
 }
 
+type NewParserOptions struct {
+	ContextDir string
+	Logger     *logrus.Logger
+}
+
 /*
 NewParser returns an initialized Parser.  Not currently necessary, as no
 default values are assigned to a new Parser, but useful to have in case we need
 to change this.
 */
-func NewParser(contextDir string, l *logrus.Logger) *Parser {
-	builderfile.Logger(l)
+func NewParser(opts NewParserOptions) *Parser {
+	builderfile.Logger(opts.Logger)
 	return &Parser{
-		Logger:        l,
+		Logger:        opts.Logger,
 		uuidGenerator: uuid.NewUUIDGenerator(),
-		top:           contextDir,
+		top:           opts.ContextDir,
 	}
 }

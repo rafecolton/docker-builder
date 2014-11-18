@@ -5,8 +5,7 @@ import (
 	"strings"
 
 	"github.com/fsouza/go-dockerclient"
-
-	"github.com/sylphon/build-runner/dclient"
+	"github.com/rafecolton/go-dockerclient-quick"
 )
 
 /*
@@ -14,7 +13,7 @@ DockerCmdOpts is an options struct for the options required by the various
 structs that implement the DockerCmd interface
 */
 type DockerCmdOpts struct {
-	DockerClient dclient.DockerClient
+	DockerClient *dockerclient.DockerClient
 	Image        string
 	Workdir      string
 	Stdout       io.Writer
@@ -62,11 +61,11 @@ func (b *BuildCmd) Run() (string, error) {
 	buildOpts.OutputStream = opts.Stdout
 	buildOpts.ContextDir = opts.Workdir
 
-	if err := opts.DockerClient.BuildImage(buildOpts); err != nil {
+	if err := opts.DockerClient.Client().BuildImage(buildOpts); err != nil {
 		return "", err
 	}
 
-	imageID, err := opts.DockerClient.LatestImageTaggedWithUUID(opts.ImageUUID)
+	imageID, err := opts.DockerClient.LatestImageIDByName(opts.ImageUUID)
 	if err != nil {
 		return "", err
 	}
@@ -95,7 +94,7 @@ type TagCmd struct {
 //WithOpts sets options required for the TagCmd
 func (t *TagCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 	t.Image = opts.Image
-	t.TagFunc = opts.DockerClient.TagImage
+	t.TagFunc = opts.DockerClient.Client().TagImage
 	return t
 }
 
@@ -142,7 +141,7 @@ type PushCmd struct {
 //WithOpts sets options required for the PushCmd
 func (p *PushCmd) WithOpts(opts *DockerCmdOpts) DockerCmd {
 	p.OutputStream = opts.Stdout
-	p.PushFunc = opts.DockerClient.PushImage
+	p.PushFunc = opts.DockerClient.Client().PushImage
 	p.skip = opts.SkipPush
 	p.imageID = opts.Image
 	return p
