@@ -1,14 +1,12 @@
 package parser
 
 import (
-	"github.com/rafecolton/docker-builder/builderfile"
-	"github.com/rafecolton/docker-builder/parser/uuid"
-)
-
-import (
 	"path/filepath"
 
 	"github.com/Sirupsen/logrus"
+
+	"github.com/sylphon/build-runner/builderfile"
+	"github.com/sylphon/build-runner/parser/uuid"
 )
 
 /*

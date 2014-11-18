@@ -14,7 +14,7 @@ import (
 
 	"github.com/rafecolton/docker-builder/dclient"
 	"github.com/rafecolton/docker-builder/log"
-	"github.com/rafecolton/docker-builder/parser"
+	"github.com/sylphon/build-runner/parser"
 )
 
 var (
@@ -118,14 +118,14 @@ func (bob *Builder) Build(tfp *TrustedFilePath) Error {
 
 	bob.Builderfile = pathToSanitizedFile
 
-	if err := bob.build(commandSequence); err != nil {
+	if err := bob.BuildCommandSequence(commandSequence); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (bob *Builder) build(commandSequence *parser.CommandSequence) Error {
+func (bob *Builder) BuildCommandSequence(commandSequence *parser.CommandSequence) Error {
 	for _, seq := range commandSequence.Commands {
 		var imageID string
 		var err error

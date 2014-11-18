@@ -15,7 +15,7 @@ GO_TAG_ARGS ?= -tags netgo
 export GOPATH
 
 .PHONY: build
-build: binclean get monkey-patch-drone
+build: get monkey-patch-drone
 	go install -a $(PACKAGES)
 
 .PHONY: monkey-patch-drone

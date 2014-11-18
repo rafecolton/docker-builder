@@ -12,7 +12,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/fsouza/go-dockerclient"
 	"github.com/modcloth/go-fileutils"
-	"github.com/rafecolton/docker-builder/builderfile"
+	"github.com/sylphon/build-runner/builderfile"
 )
 
 func TestBuilder(t *testing.T) {

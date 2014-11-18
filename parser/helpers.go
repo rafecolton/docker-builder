@@ -3,13 +3,13 @@ package parser
 import (
 	"github.com/fsouza/go-dockerclient"
 
-	"github.com/rafecolton/docker-builder/builderfile"
-	"github.com/rafecolton/docker-builder/conf"
-	"github.com/rafecolton/docker-builder/parser/tag"
+	//"github.com/rafecolton/docker-builder/conf"
+	"github.com/sylphon/build-runner/builderfile"
+	"github.com/sylphon/build-runner/parser/tag"
 )
 
 // turns InstructionSet structs into CommandSequence structs
-func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
+func (parser *Parser) CommandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
 	ret := &CommandSequence{
 		Commands: []*SubSequence{},
 	}
@@ -36,15 +36,15 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		un := v.CfgUn
 		pass := v.CfgPass
 		email := v.CfgEmail
-		if un == "" {
-			un = conf.Config.CfgUn
-		}
-		if pass == "" {
-			pass = conf.Config.CfgPass
-		}
-		if email == "" {
-			email = conf.Config.CfgEmail
-		}
+		//if un == "" {
+		//un = conf.Config.CfgUn
+		//}
+		//if pass == "" {
+		//pass = conf.Config.CfgPass
+		//}
+		//if email == "" {
+		//email = conf.Config.CfgEmail
+		//}
 
 		buildOpts := docker.BuildImageOptions{
 			Name:           initialTag,
@@ -185,7 +185,7 @@ func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile
 }
 
 // turns Builderfile structs into InstructionSet structs
-func (parser *Parser) instructionSetFromBuilderfileStruct(file *builderfile.Builderfile) *InstructionSet {
+func (parser *Parser) InstructionSetFromBuilderfileStruct(file *builderfile.Builderfile) *InstructionSet {
 	ret := &InstructionSet{
 		DockerBuildOpts: file.Docker.BuildOpts,
 		DockerTagOpts:   file.Docker.TagOpts,

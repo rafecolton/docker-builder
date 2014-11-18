@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/rafecolton/docker-builder/builderfile"
+	"github.com/sylphon/build-runner/builderfile"
 )
 
 /*

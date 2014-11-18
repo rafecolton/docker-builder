@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/rafecolton/docker-builder/parser/uuid"
+	"github.com/sylphon/build-runner/parser/uuid"
 )
 
 /*

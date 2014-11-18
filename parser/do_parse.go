@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/rafecolton/docker-builder/builderfile"
+	"github.com/sylphon/build-runner/builderfile"
 	"io/ioutil"
 )
 
@@ -74,22 +74,22 @@ func (parser *Parser) structToInstructionSet() (*InstructionSet, Error) {
 		return nil, err
 	}
 
-	return parser.instructionSetFromBuilderfileStruct(file), nil
+	return parser.InstructionSetFromBuilderfileStruct(file), nil
 }
 
 // Step 4 of Parse()
-func (parser *Parser) instructionSetToCommandSequence() (*CommandSequence, Error) {
+func (parser *Parser) InstructionSetToCommandSequence() (*CommandSequence, Error) {
 	is, err := parser.structToInstructionSet()
 	if err != nil {
 		return nil, err
 	}
 
-	return parser.commandSequenceFromInstructionSet(is), nil
+	return parser.CommandSequenceFromInstructionSet(is), nil
 }
 
 // wrapper function for the final step
 func (parser *Parser) finalStep() (interface{}, Error) {
-	return parser.instructionSetToCommandSequence()
+	return parser.InstructionSetToCommandSequence()
 }
 
 /*
