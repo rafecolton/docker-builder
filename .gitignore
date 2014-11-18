@@ -28,3 +28,5 @@ Specs/bin/*
 !Specs/bin/.gitkeep
 Specs/bats
 *.coverprofile
+fmtpolice
+coverage

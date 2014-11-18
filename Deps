@@ -3,11 +3,6 @@
 	"GoVersion": "go1.3.3",
 	"Deps": [
 		{
-			"ImportPath": "github.com/BurntSushi/toml",
-			"Comment": "v0.1.0",
-			"Rev": "2ceedfee35ad3848e49308ab0c9a4f640cfb5fb2"
-		},
-		{
 			"ImportPath": "github.com/Sirupsen/logrus",
 			"Comment": "v0.5.1-18-g89b6d46",
 			"Rev": "89b6d460f0048bd1591d723b483f89b127257dbb"
@@ -57,6 +52,11 @@
 			"Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
 		},
 		{
+			"ImportPath": "github.com/kelseyhightower/envconfig",
+			"Comment": "v1.0.0",
+			"Rev": "0280e33525f5d88edb71638a80b31724153225ba"
+		},
+		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
 			"Rev": "a7a54f3b6086bcd6c70ae0f84cdb3991b015f6b0"
 		},
@@ -67,6 +67,10 @@
 		{
 			"ImportPath": "github.com/onsi/gocleanup",
 			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-dockerclient-quick",
+			"Rev": "11566f7e2d9a5e15bb4ea38e67c2c267fff6b894"
 		},
 		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
