@@ -38,18 +38,17 @@ get: $(GOPATH)/bin/deppy
 	go get -t ./...
 	$(GOPATH)/bin/deppy restore
 
-#$(PWD)/Specs/bin/coverage:
-	#curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
-	  #chmod +x $@
+$(PWD)/coverage:
+	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@
 
-#.PHONY: coverage
-#coverage: $(PWD)/Specs/bin/coverage
-	#go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
-	#go get -u github.com/axw/gocov/gocov
-	#./Specs/bin/coverage
+.PHONY: coverage
+coverage: $(PWD)/coverage
+	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
+	go get -u github.com/axw/gocov/gocov
+	bash coverage
 
-#.PHONY: goveralls
-#goveralls: coverage
-	#go get -u github.com/mattn/goveralls
-	#@echo "goveralls -coverprofile=gover.coverprofile -repotoken <redacted>"
-	#@goveralls -coverprofile=gover.coverprofile -repotoken $(GOVERALLS_REPO_TOKEN)
+.PHONY: goveralls
+goveralls: coverage
+	go get -u github.com/mattn/goveralls
+	@echo "goveralls -coverprofile=gover.coverprofile -repotoken <redacted>"
+	@goveralls -coverprofile=gover.coverprofile -repotoken $(GOVERALLS_REPO_TOKEN)
