@@ -50,6 +50,8 @@ func (bob *Builder) SetNextSubSequence(subSeq *parser.SubSequence) {
 	bob.nextSubSequence = subSeq
 }
 
+// NewBuilderOptions encapsulates all of the options necessary for creating a
+// new builder
 type NewBuilderOptions struct {
 	Logger     *logrus.Logger
 	ContextDir string
@@ -90,6 +92,7 @@ func NewBuilder(opts NewBuilderOptions) (*Builder, error) {
 	}, nil
 }
 
+// BuildCommandSequence performs a build from a parser-generated CommandSequence struct
 func (bob *Builder) BuildCommandSequence(commandSequence *parser.CommandSequence) Error {
 	for _, seq := range commandSequence.Commands {
 		var imageID string

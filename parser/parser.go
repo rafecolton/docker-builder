@@ -18,6 +18,7 @@ type Parser struct {
 	top           string
 }
 
+// NewParserOptions encapsulates all of the options necessary when creating a new parser
 type NewParserOptions struct {
 	ContextDir string
 	Logger     *logrus.Logger

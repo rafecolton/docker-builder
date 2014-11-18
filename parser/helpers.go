@@ -7,7 +7,9 @@ import (
 	"github.com/sylphon/build-runner/parser/tag"
 )
 
-// turns InstructionSet structs into CommandSequence structs
+// CommandSequenceFromInstructionSet turns an InstructionSet struct into a
+// CommandSequence struct - one of the intermediate steps to building, will
+// eventually be made private
 func (parser *Parser) CommandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
 	ret := &CommandSequence{
 		Commands: []*SubSequence{},
@@ -174,7 +176,9 @@ func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile
 	return container
 }
 
-// turns Builderfile structs into InstructionSet structs
+// InstructionSetFromBuilderfileStruct turns a UnitConfig struct into an
+// InstructionSet struct - one of the intermediate steps to building, will
+// eventually be made private
 func (parser *Parser) InstructionSetFromBuilderfileStruct(file *builderfile.UnitConfig) *InstructionSet {
 	ret := &InstructionSet{
 		DockerBuildOpts: file.Docker.BuildOpts,
