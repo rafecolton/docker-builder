@@ -12,8 +12,8 @@ import (
 	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
 
-	"github.com/rafecolton/docker-builder/dclient"
-	"github.com/rafecolton/docker-builder/log"
+	"github.com/sylphon/build-runner/dclient"
+	"github.com/sylphon/build-runner/log"
 	"github.com/sylphon/build-runner/parser"
 )
 

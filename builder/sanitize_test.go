@@ -3,7 +3,7 @@ package builder_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/rafecolton/docker-builder/builder"
+	. "github.com/sylphon/build-runner/builder"
 
 	"path/filepath"
 )

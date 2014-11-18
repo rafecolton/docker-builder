@@ -3,8 +3,8 @@ package parser
 import (
 	"github.com/fsouza/go-dockerclient"
 
-	//"github.com/rafecolton/docker-builder/conf"
 	"github.com/sylphon/build-runner/builderfile"
+	"github.com/sylphon/build-runner/conf"
 	"github.com/sylphon/build-runner/parser/tag"
 )
 
@@ -36,15 +36,15 @@ func (parser *Parser) CommandSequenceFromInstructionSet(is *InstructionSet) *Com
 		un := v.CfgUn
 		pass := v.CfgPass
 		email := v.CfgEmail
-		//if un == "" {
-		//un = conf.Config.CfgUn
-		//}
-		//if pass == "" {
-		//pass = conf.Config.CfgPass
-		//}
-		//if email == "" {
-		//email = conf.Config.CfgEmail
-		//}
+		if un == "" {
+			un = conf.Config.CfgUn
+		}
+		if pass == "" {
+			pass = conf.Config.CfgPass
+		}
+		if email == "" {
+			email = conf.Config.CfgEmail
+		}
 
 		buildOpts := docker.BuildImageOptions{
 			Name:           initialTag,

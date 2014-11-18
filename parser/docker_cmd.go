@@ -6,7 +6,7 @@ import (
 
 	"github.com/fsouza/go-dockerclient"
 
-	"github.com/rafecolton/docker-builder/dclient"
+	"github.com/sylphon/build-runner/dclient"
 )
 
 /*

@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-MAINTAINER rafael.colton@gmail.com
+MAINTAINER Rafe Colton <rafael.colton@gmail.com>
 
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
@@ -32,10 +32,10 @@ RUN dpkg-divert --local --rename --add /sbin/initctl \
   && ln -sv /usr/local/go/bin/* /usr/local/bin \
   && rm -f $GO_TARBALL
 
-WORKDIR /app/src/github.com/rafecolton/docker-builder
+WORKDIR /app/src/github.com/sylphon/build-runner
 
 # set up build dir and add project
-ADD . /app/src/github.com/rafecolton/docker-builder
+ADD . /app/src/github.com/sylphon/build-runner
 
 # - make sure we don't have trouble getting deps from GitHub
 # - touch Makefile to avoid timestamp error message
@@ -47,5 +47,5 @@ RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts \
   && rm -rf $GOPATH/pkg \
   && rm -f $GOPATH/bin/deppy
 
-CMD ["-h"]
-ENTRYPOINT ["/app/bin/docker-builder"]
+#CMD ["-h"]
+#ENTRYPOINT ["/app/bin/build-runner"]

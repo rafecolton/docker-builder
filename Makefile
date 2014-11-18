@@ -4,9 +4,6 @@ DOCKER ?= docker
 B := github.com/artifactory/build-runner
 PACKAGES := ./...
 
-BATS_INSTALL_DIR ?= $(PWD)/Specs/bats
-
-BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
 
 # go build args
@@ -20,51 +17,18 @@ build: get monkey-patch-drone
 
 .PHONY: monkey-patch-drone
 monkey-patch-drone:
-	if [[ "$(DRONE)" == "true" ]] && [[ "$(CI)" == "true" ]] ; then rm -f $(GOROOT)/src/pkg/os/error_posix.go ; fi
-
-.PHONY: release
-release: binclean gox-build
-	open ./Release
-
-.PHONY: gox-build
-gox-build: get $(GOPATH)/bin/gox
-	CGO_ENABLED=0 $(GOPATH)/bin/gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	for file in $$(find ./Release -type f -name 'docker-builder-*') ; do openssl sha256 -out $$file-SHA256SUM $$file ; done
-
-.PHONY: .test
-.test: fmtpolice bats
-	go test ./...
+	@if [[ "$(DRONE)" == "true" ]] && [[ "$(CI)" == "true" ]] ; then rm -f $(GOROOT)/src/pkg/os/error_posix.go ; fi
 
 .PHONY: test
-test:
-	@GO_TAG_ARGS="-tags netgo -tags integration" $(MAKE) build
-	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
+test: fmtpolice
+	go test ./...
 
 .PHONY: fmtpolice
-fmtpolice: $(PWD)/Specs/bin/fmtpolice
-	./Specs/bin/fmtpolice
+fmtpolice: $(PWD)/fmtpolice
+	bash fmtpolice
 
-$(PWD)/Specs/bin/fmtpolice:
-	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@ && \
-	  chmod +x $@
-
-.PHONY: bats
-bats: $(BATS_INSTALL_DIR)/bin/bats
-	@echo "----------"
-	$(BATS_INSTALL_DIR)/bin/bats $(BATS_OUT_FORMAT) $(shell find . -type f -name '*.bats')
-
-$(BATS_INSTALL_DIR)/bin/bats:
-	git clone https://github.com/sstephenson/bats.git && \
-		(cd bats && ./install.sh $(BATS_INSTALL_DIR)) && \
-		rm -rf bats
-
-$(GOPATH)/bin/gox:
-	go get github.com/mitchellh/gox
-	$(GOPATH)/bin/gox -build-toolchain -osarch="linux/amd64 darwin/amd64"
-
-.PHONY: gopath
-gopath:
-	@echo  "\$$GOPATH = $(GOPATH)"
+$(PWD)/fmtpolice:
+	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@
 
 $(GOPATH)/bin/deppy:
 	go get github.com/hamfist/deppy
@@ -74,18 +38,18 @@ get: $(GOPATH)/bin/deppy
 	go get -t ./...
 	$(GOPATH)/bin/deppy restore
 
-$(PWD)/Specs/bin/coverage:
-	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
-	  chmod +x $@
+#$(PWD)/Specs/bin/coverage:
+	#curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
+	  #chmod +x $@
 
-.PHONY: coverage
-coverage: $(PWD)/Specs/bin/coverage
-	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
-	go get -u github.com/axw/gocov/gocov
-	./Specs/bin/coverage
+#.PHONY: coverage
+#coverage: $(PWD)/Specs/bin/coverage
+	#go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
+	#go get -u github.com/axw/gocov/gocov
+	#./Specs/bin/coverage
 
-.PHONY: goveralls
-goveralls: coverage
-	go get -u github.com/mattn/goveralls
-	@echo "goveralls -coverprofile=gover.coverprofile -repotoken <redacted>"
-	@goveralls -coverprofile=gover.coverprofile -repotoken $(GOVERALLS_REPO_TOKEN)
+#.PHONY: goveralls
+#goveralls: coverage
+	#go get -u github.com/mattn/goveralls
+	#@echo "goveralls -coverprofile=gover.coverprofile -repotoken <redacted>"
+	#@goveralls -coverprofile=gover.coverprofile -repotoken $(GOVERALLS_REPO_TOKEN)

@@ -1,6 +1,6 @@
 package conf
 
-// Config is the global config for docker-builder
+// Config is the global config
 var Config Conf
 
 // Conf is used for storing data retrieved from environmental variables.

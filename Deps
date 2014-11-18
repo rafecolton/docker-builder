@@ -69,21 +69,6 @@
 			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
 		},
 		{
-			"ImportPath": "github.com/rafecolton/docker-builder/dclient",
-			"Comment": "v0.10.0-10-gc9a8b79",
-			"Rev": "c9a8b79fc0c2636cc8932ac8213d8a7e32635e53"
-		},
-		{
-			"ImportPath": "github.com/rafecolton/docker-builder/git",
-			"Comment": "v0.10.0-10-gc9a8b79",
-			"Rev": "c9a8b79fc0c2636cc8932ac8213d8a7e32635e53"
-		},
-		{
-			"ImportPath": "github.com/rafecolton/docker-builder/log",
-			"Comment": "v0.10.0-10-gc9a8b79",
-			"Rev": "c9a8b79fc0c2636cc8932ac8213d8a7e32635e53"
-		},
-		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
 			"Rev": "127186d3d0bd6ae0867081a76324e1afe6dbf084"
 		},
