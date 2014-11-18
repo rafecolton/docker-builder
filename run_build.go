@@ -48,7 +48,7 @@ var bf = &builderfile.Builderfile{
 }
 
 func main() {
-	if err := RunBuild(bf, "/Users/r.colton/.gvm/pkgsets/go1.3.3/global/src/github.com/rafecolton/docker-builder"); err != nil {
+	if err := RunBuild(bf, os.Getenv("GOPATH")+"/src/github.com/rafecolton/docker-builder"); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
