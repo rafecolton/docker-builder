@@ -66,63 +66,21 @@ func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
 		return nil, err
 	}
 
+	stdout := log.NewOutWriter(logger, "         %s")
+	stderr := log.NewOutWriter(logger, "         %s")
+
 	if logrus.IsTerminal() {
-		return &Builder{
-			dockerClient: client,
-			Logger:       logger,
-			isRegular:    shouldBeRegular,
-			Stdout:       log.NewOutWriter(logger, "         @{g}%s@{|}"),
-			Stderr:       log.NewOutWriter(logger, "         @{r}%s@{|}"),
-		}, nil
+		stdout = log.NewOutWriter(logger, "         @{g}%s@{|}")
+		stderr = log.NewOutWriter(logger, "         @{r}%s@{|}")
 	}
 
 	return &Builder{
 		dockerClient: client,
 		Logger:       logger,
 		isRegular:    shouldBeRegular,
-		Stdout:       log.NewOutWriter(logger, "         %s"),
-		Stderr:       log.NewOutWriter(logger, "         %s"),
+		Stdout:       stdout,
+		Stderr:       stderr,
 	}, nil
-}
-
-/*
-Build does the building!
-*/
-func (bob *Builder) Build(tfp *TrustedFilePath) Error {
-	// Sanitization of the provided file path happens here because
-	// parser.NewParser calls filepath.Dir(file), which would be problematic
-	// with an unsanitized path.  Additionally, the sanitization happens here
-	// as opposed to parser.Parse because the validations are conceptually
-	// different.  The parser is more concerned with the presence or absence of
-	// the file and its contents but not the file's location.
-	sanitizedFile, bErr := SanitizeTrustedFilePath(tfp)
-	if bErr != nil {
-		//if IsSanitizeInvalidPathError(bErr) {
-		//fmt.Println("IS BOBFILE NOT EXIST")
-		//} else {
-		//fmt.Println("is not bobfile not exist")
-		//}
-		return bErr
-	}
-
-	pathToSanitizedFile := sanitizedFile.Top() + "/" + sanitizedFile.File()
-	par := parser.NewParser(pathToSanitizedFile, bob.Logger)
-
-	commandSequence, pErr := par.Parse()
-	if pErr != nil {
-		return &ParserRelatedError{
-			Message: pErr.Error(),
-			Code:    23,
-		}
-	}
-
-	bob.Builderfile = pathToSanitizedFile
-
-	if err := bob.BuildCommandSequence(commandSequence); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (bob *Builder) BuildCommandSequence(commandSequence *parser.CommandSequence) Error {

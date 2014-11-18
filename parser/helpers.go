@@ -49,7 +49,7 @@ func (parser *Parser) CommandSequenceFromInstructionSet(is *InstructionSet) *Com
 		buildOpts := docker.BuildImageOptions{
 			Name:           initialTag,
 			RmTmpContainer: true,
-			ContextDir:     ".",
+			ContextDir:     parser.top,
 			Auth: docker.AuthConfiguration{
 				Username: un,
 				Password: pass,
