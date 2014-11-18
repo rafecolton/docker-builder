@@ -4,10 +4,8 @@ import (
 	"errors"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/kelseyhightower/envconfig"
 	"github.com/sylphon/build-runner/builder"
 	"github.com/sylphon/build-runner/builderfile"
-	"github.com/sylphon/build-runner/conf"
 	"github.com/sylphon/build-runner/parser"
 )
 
@@ -50,10 +48,6 @@ func RunBuild(unitConfig *builderfile.UnitConfig, contextDir string, channels ..
 	var bob *builder.Builder
 
 	logger.Level = logrus.DebugLevel
-
-	if err := envconfig.Process("build_runner", &conf.Config); err != nil {
-		logger.WithField("err", err).Fatal("envconfig error")
-	}
 
 	if unitConfig == nil {
 		return errors.New("unit config may not be nil")
