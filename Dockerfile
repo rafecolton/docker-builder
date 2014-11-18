@@ -46,6 +46,3 @@ RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts \
   && rm -rf $GOPATH/src \
   && rm -rf $GOPATH/pkg \
   && rm -f $GOPATH/bin/deppy
-
-#CMD ["-h"]
-#ENTRYPOINT ["/app/bin/build-runner"]
