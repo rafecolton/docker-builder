@@ -6,8 +6,10 @@ import (
 	"os"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/sylphon/build-runner/builder"
 	"github.com/sylphon/build-runner/builderfile"
+	"github.com/sylphon/build-runner/conf"
 	"github.com/sylphon/build-runner/parser"
 )
 
@@ -33,14 +35,14 @@ type StatusMsg interface {
 	Error() error // should be checked for non-nil
 }
 
-var bf = &builderfile.Builderfile{
+var example = &builderfile.Builderfile{
 	Version: 1,
 	ContainerArr: []*builderfile.ContainerSection{
 		&builderfile.ContainerSection{
 			Name:       "app",
 			Dockerfile: "Dockerfile",
 			Registry:   "quay.io/rafecolton",
-			Project:    "docker-builder",
+			Project:    "build-runner-test",
 			Tags:       []string{"latest", "git:sha", "git:tag", "git:branch"},
 			SkipPush:   true,
 		},
@@ -48,21 +50,26 @@ var bf = &builderfile.Builderfile{
 }
 
 func main() {
-	if err := RunBuild(bf, os.Getenv("GOPATH")+"/src/github.com/rafecolton/docker-builder"); err != nil {
+	if err := RunBuild(example, os.Getenv("GOPATH")+"/src/github.com/rafecolton/docker-builder"); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 }
 
-/*
-unit_config must include a unique ID that gets returned when reporting status
-*/
 func RunBuild(fileZero *builderfile.Builderfile, contextDir string, channels ...chan interface{}) error {
 	var fileOne *builderfile.Builderfile
 	var err error
 	var logger = logrus.New()
-	//logger.Formatter = &logrus.JSONFormatter{}
 	logger.Level = logrus.DebugLevel
+
+	if err := envconfig.Process("build_runner", &conf.Config); err != nil {
+		logger.WithField("err", err).Fatal("envconfig error")
+	}
+
+	// set default config port
+	if conf.Config.Port == 0 {
+		conf.Config.Port = 5000
+	}
 
 	if fileZero == nil {
 		return errors.New("builderfile may not be nil")
@@ -92,30 +99,5 @@ func RunBuild(fileZero *builderfile.Builderfile, contextDir string, channels ...
 		return buildErr
 	}
 
-	/* TODO:
-	- struct => instruction set => command sequence
-	*/
-
-	/*
-	  docker client
-	  example config:
-	  ---
-	  docker:
-	    build_opts:
-	    - --force-rm
-	    - --no-cache
-
-	*/
-	/*
-	  TODO:
-	  - parse unit config
-	  - validate presence of contextDir
-	  - do teh build
-	  - report logs and status
-	*/
-
 	return nil
-}
-
-func log() {
 }

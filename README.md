@@ -11,3 +11,7 @@ now the core builder library
 
 > Bob, the `docker-builder`, builds, tags, and pushes multiple Docker images, all
   from a friendly `Bobfile` config file.
+
+## TODO
+
+- it works - now, rewrite tests
