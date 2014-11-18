@@ -12,10 +12,10 @@ func Logger(l *logrus.Logger) {
 }
 
 /*
-Builderfile is a struct representation of what is expected to be inside a
-Builderfile.
+UnitConfig is a struct representation of what is expected to be inside a
+Builderfile for a single build/tag/push sequence.
 */
-type Builderfile struct {
+type UnitConfig struct {
 	Version          int                         `toml:"version"`
 	Docker           Docker                      `toml:"docker"`
 	Containers       map[string]ContainerSection `toml:"containers"`
@@ -54,7 +54,7 @@ type ContainerSection struct {
 Clean tidies up the structure of the Builderfile struct slightly by replacing
 some occurrences of nil arrays with empty arrays []string{}.
 */
-func (file *Builderfile) Clean() {
+func (file *UnitConfig) Clean() {
 	if file.Docker.BuildOpts == nil {
 		file.Docker.BuildOpts = []string{}
 	}

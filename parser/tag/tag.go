@@ -1,7 +1,7 @@
 package tag
 
 import (
-	"github.com/rafecolton/docker-builder/git"
+	"github.com/sylphon/build-runner/git"
 )
 
 /*

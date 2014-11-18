@@ -5,14 +5,14 @@ import (
 )
 
 /*
-Convert0to1 converts the deprecated builderfile version 0 to version 1.  It
+Convert0to1 converts the deprecated unitconfig version 0 to version 1.  It
 also prints out a deprecation warning message.
 */
-func Convert0to1(zero *Builderfile) (*Builderfile, error) {
+func Convert0to1(zero *UnitConfig) (*UnitConfig, error) {
 	logger.Warn(versionZeroWarningMessage)
 	time.Sleep(sleepTime * time.Second)
 
-	ret := &Builderfile{
+	ret := &UnitConfig{
 		Version:          1,
 		Docker:           zero.Docker,
 		ContainerGlobals: &ContainerSection{},

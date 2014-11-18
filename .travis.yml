@@ -8,14 +8,11 @@ go:
 - 1.2.2
 - 1.3.3
 - tip
+install:
+- make build
 script:
 - make test
 - make goveralls
-notifications:
-  webhooks:
-  - https://docker-build-server.modcloth.com/docker-build/travis
-  on_success: always
-  on_failure: never
 env:
   global:
-    secure: BWl5TwdzJjgFDV29DvZtmNDwzhEuLx4QxVwgwVjrJmgL1jjzfXfg/AabUEeUq7GsF/2OJbpZjKI1F0DSaMG70BjZqhljiRjplSJZXL49APZ7xd9gTS+xuAfILf4soihMKWbnDUh/5wNMSwCDABhbukiMyIPONYcCTxigbypdZCs=
+    secure: "K5+UHBJZCiEZLCBXSUHj/6rfYjK6PzD1qmXc/qwY7oMJPSGLfgeSJFTni+0KA3hbvSE6c7xJUQ5M4jl9IglZl9jPKivmR+SVlxg7K0TzfwPy0I0PZtPqC4odp4EfdA8k2GSrjAg5FU89Q5fTzmlR2nCUhsictq+atmflgG0jrNo="

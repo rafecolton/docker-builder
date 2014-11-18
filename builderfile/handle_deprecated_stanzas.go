@@ -8,7 +8,7 @@ import (
 // stanzas that would cause a failure.  If no failure would be caused, the
 // error will be nil, but a warning message will be printed out and file will
 // be sanitized to effectively not include the deprecated stanza
-func (file *Builderfile) HandleDeprecatedStanzas() error {
+func (file *UnitConfig) HandleDeprecatedStanzas() error {
 	var includedWarningPrinted bool
 
 	for _, container := range file.ContainerArr {
