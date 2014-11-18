@@ -3,13 +3,14 @@ package parser
 import (
 	"github.com/fsouza/go-dockerclient"
 
-	"github.com/rafecolton/docker-builder/builderfile"
-	"github.com/rafecolton/docker-builder/conf"
-	"github.com/rafecolton/docker-builder/parser/tag"
+	"github.com/sylphon/build-runner/builderfile"
+	"github.com/sylphon/build-runner/parser/tag"
 )
 
-// turns InstructionSet structs into CommandSequence structs
-func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
+// CommandSequenceFromInstructionSet turns an InstructionSet struct into a
+// CommandSequence struct - one of the intermediate steps to building, will
+// eventually be made private
+func (parser *Parser) CommandSequenceFromInstructionSet(is *InstructionSet) *CommandSequence {
 	ret := &CommandSequence{
 		Commands: []*SubSequence{},
 	}
@@ -23,7 +24,7 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		tagCommands = []DockerCmd{}
 		pushCommands = []DockerCmd{}
 
-		// ADD BUILD COMMANDS
+		// ADD BUILD COMMAND
 		uuid, err := parser.NextUUID()
 		if err != nil {
 			return nil
@@ -36,20 +37,11 @@ func (parser *Parser) commandSequenceFromInstructionSet(is *InstructionSet) *Com
 		un := v.CfgUn
 		pass := v.CfgPass
 		email := v.CfgEmail
-		if un == "" {
-			un = conf.Config.CfgUn
-		}
-		if pass == "" {
-			pass = conf.Config.CfgPass
-		}
-		if email == "" {
-			email = conf.Config.CfgEmail
-		}
 
 		buildOpts := docker.BuildImageOptions{
 			Name:           initialTag,
 			RmTmpContainer: true,
-			ContextDir:     ".",
+			ContextDir:     parser.top,
 			Auth: docker.AuthConfiguration{
 				Username: un,
 				Password: pass,
@@ -184,8 +176,10 @@ func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile
 	return container
 }
 
-// turns Builderfile structs into InstructionSet structs
-func (parser *Parser) instructionSetFromBuilderfileStruct(file *builderfile.Builderfile) *InstructionSet {
+// InstructionSetFromBuilderfileStruct turns a UnitConfig struct into an
+// InstructionSet struct - one of the intermediate steps to building, will
+// eventually be made private
+func (parser *Parser) InstructionSetFromBuilderfileStruct(file *builderfile.UnitConfig) *InstructionSet {
 	ret := &InstructionSet{
 		DockerBuildOpts: file.Docker.BuildOpts,
 		DockerTagOpts:   file.Docker.TagOpts,

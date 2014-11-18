@@ -3,7 +3,6 @@ package builder
 import (
 	"io"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"regexp"
 
@@ -11,10 +10,10 @@ import (
 	"github.com/hishboy/gocommons/lang"
 	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
+	"github.com/rafecolton/go-dockerclient-quick"
 
-	"github.com/rafecolton/docker-builder/dclient"
-	"github.com/rafecolton/docker-builder/log"
-	"github.com/rafecolton/docker-builder/parser"
+	"github.com/sylphon/build-runner/log"
+	"github.com/sylphon/build-runner/parser"
 )
 
 var (
@@ -31,7 +30,7 @@ A Builder is the struct that actually does the work of moving files around and
 executing the commands that do the docker build.
 */
 type Builder struct {
-	dockerClient dclient.DockerClient
+	dockerClient *dockerclient.DockerClient
 	*logrus.Logger
 	workdir         string
 	isRegular       bool
@@ -39,6 +38,7 @@ type Builder struct {
 	Stderr          io.Writer
 	Stdout          io.Writer
 	Builderfile     string
+	contextDir      string
 }
 
 /*
@@ -50,82 +50,50 @@ func (bob *Builder) SetNextSubSequence(subSeq *parser.SubSequence) {
 	bob.nextSubSequence = subSeq
 }
 
+// NewBuilderOptions encapsulates all of the options necessary for creating a
+// new builder
+type NewBuilderOptions struct {
+	Logger     *logrus.Logger
+	ContextDir string
+}
+
 /*
 NewBuilder returns an instance of a Builder struct.  The function exists in
 case we want to initialize our Builders with something.
 */
-func NewBuilder(logger *logrus.Logger, shouldBeRegular bool) (*Builder, error) {
+func NewBuilder(opts NewBuilderOptions) (*Builder, error) {
+	logger := opts.Logger
 	if logger == nil {
 		logger = logrus.New()
 		logger.Level = logrus.PanicLevel
 	}
 
-	client, err := dclient.NewDockerClient(logger, shouldBeRegular)
+	client, err := dockerclient.NewDockerClient()
 
 	if err != nil {
 		return nil, err
 	}
 
+	stdout := log.NewOutWriter(logger, "         %s")
+	stderr := log.NewOutWriter(logger, "         %s")
+
 	if logrus.IsTerminal() {
-		return &Builder{
-			dockerClient: client,
-			Logger:       logger,
-			isRegular:    shouldBeRegular,
-			Stdout:       log.NewOutWriter(logger, "         @{g}%s@{|}"),
-			Stderr:       log.NewOutWriter(logger, "         @{r}%s@{|}"),
-		}, nil
+		stdout = log.NewOutWriter(logger, "         @{g}%s@{|}")
+		stderr = log.NewOutWriter(logger, "         @{r}%s@{|}")
 	}
 
 	return &Builder{
 		dockerClient: client,
 		Logger:       logger,
-		isRegular:    shouldBeRegular,
-		Stdout:       log.NewOutWriter(logger, "         %s"),
-		Stderr:       log.NewOutWriter(logger, "         %s"),
+		isRegular:    true,
+		Stdout:       stdout,
+		Stderr:       stderr,
+		contextDir:   opts.ContextDir,
 	}, nil
 }
 
-/*
-Build does the building!
-*/
-func (bob *Builder) Build(tfp *TrustedFilePath) Error {
-	// Sanitization of the provided file path happens here because
-	// parser.NewParser calls filepath.Dir(file), which would be problematic
-	// with an unsanitized path.  Additionally, the sanitization happens here
-	// as opposed to parser.Parse because the validations are conceptually
-	// different.  The parser is more concerned with the presence or absence of
-	// the file and its contents but not the file's location.
-	sanitizedFile, bErr := SanitizeTrustedFilePath(tfp)
-	if bErr != nil {
-		//if IsSanitizeInvalidPathError(bErr) {
-		//fmt.Println("IS BOBFILE NOT EXIST")
-		//} else {
-		//fmt.Println("is not bobfile not exist")
-		//}
-		return bErr
-	}
-
-	pathToSanitizedFile := sanitizedFile.Top() + "/" + sanitizedFile.File()
-	par := parser.NewParser(pathToSanitizedFile, bob.Logger)
-
-	commandSequence, pErr := par.Parse()
-	if pErr != nil {
-		return &ParserRelatedError{
-			Message: pErr.Error(),
-			Code:    23,
-		}
-	}
-
-	bob.Builderfile = pathToSanitizedFile
-
-	if err := bob.build(commandSequence); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (bob *Builder) build(commandSequence *parser.CommandSequence) Error {
+// BuildCommandSequence performs a build from a parser-generated CommandSequence struct
+func (bob *Builder) BuildCommandSequence(commandSequence *parser.CommandSequence) Error {
 	for _, seq := range commandSequence.Commands {
 		var imageID string
 		var err error
@@ -169,14 +137,14 @@ func (bob *Builder) build(commandSequence *parser.CommandSequence) Error {
 }
 
 func (bob *Builder) attemptToDeleteTemporaryUUIDTag(uuid string) {
-	repoWithTag, err := bob.dockerClient.LatestRepoTaggedWithUUID(uuid)
+	repoWithTag, err := bob.dockerClient.LatestImageIDByName(uuid)
 	if err != nil {
 		bob.WithField("err", err).Warn("error getting repo taggged with temporary tag")
 	}
 
 	bob.WithField("tag", repoWithTag).Info("deleting temporary tag")
 
-	if err = bob.dockerClient.RemoveImage(repoWithTag); err != nil {
+	if err = bob.dockerClient.Client().RemoveImage(repoWithTag); err != nil {
 		bob.WithField("err", err).Warn("error deleting temporary tag")
 	}
 }
@@ -264,11 +232,7 @@ func (bob *Builder) Setup() Error {
 Repodir is the dir from which we are using files for our docker builds.
 */
 func (bob *Builder) Repodir() string {
-	if !bob.isRegular {
-		repoDir := "Specs/fixtures/repodir"
-		return os.Getenv("PWD") + "/../" + repoDir
-	}
-	return filepath.Dir(bob.Builderfile)
+	return bob.contextDir
 }
 
 /*
