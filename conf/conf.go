@@ -5,7 +5,6 @@ var Config Conf
 
 // Conf is used for storing data retrieved from environmental variables.
 type Conf struct {
-	Port      int
 	LogLevel  string `envconfig:"LOG_LEVEL"`
 	LogFormat string `envconfig:"LOG_FORMAT"`
 	APIToken  string `envconfig:"API_TOKEN"`

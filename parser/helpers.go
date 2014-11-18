@@ -185,7 +185,7 @@ func mergeGlobals(container, globals *builderfile.ContainerSection) *builderfile
 }
 
 // turns Builderfile structs into InstructionSet structs
-func (parser *Parser) InstructionSetFromBuilderfileStruct(file *builderfile.Builderfile) *InstructionSet {
+func (parser *Parser) InstructionSetFromBuilderfileStruct(file *builderfile.UnitConfig) *InstructionSet {
 	ret := &InstructionSet{
 		DockerBuildOpts: file.Docker.BuildOpts,
 		DockerTagOpts:   file.Docker.TagOpts,
