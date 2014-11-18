@@ -31,7 +31,7 @@ func NewParser(filename string, l *logrus.Logger) *Parser {
 	return &Parser{
 		Logger:        l,
 		filename:      filename,
-		uuidGenerator: uuid.NewUUIDGenerator(true),
+		uuidGenerator: uuid.NewUUIDGenerator(),
 		top:           filepath.Dir(filename),
 	}
 }

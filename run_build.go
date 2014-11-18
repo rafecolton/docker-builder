@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/sylphon/build-runner/builder"
 	"github.com/sylphon/build-runner/builderfile"
 	"github.com/sylphon/build-runner/parser"
@@ -32,9 +33,25 @@ type StatusMsg interface {
 	Error() error // should be checked for non-nil
 }
 
+var bf = &builderfile.Builderfile{
+	Version: 1,
+	ContainerArr: []*builderfile.ContainerSection{
+		&builderfile.ContainerSection{
+			Name:       "app",
+			Dockerfile: "Dockerfile",
+			Registry:   "quay.io/rafecolton",
+			Project:    "docker-builder",
+			Tags:       []string{"latest", "git:sha", "git:tag", "git:branch"},
+			SkipPush:   true,
+		},
+	},
+}
+
 func main() {
-	fmt.Println("GOT HERE")
-	os.Exit(0)
+	if err := RunBuild(bf, "/Users/r.colton/.gvm/pkgsets/go1.3.3/global/src/github.com/rafecolton/docker-builder"); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 /*
@@ -43,6 +60,9 @@ unit_config must include a unique ID that gets returned when reporting status
 func RunBuild(fileZero *builderfile.Builderfile, contextDir string, channels ...chan interface{}) error {
 	var fileOne *builderfile.Builderfile
 	var err error
+	var logger = logrus.New()
+	//logger.Formatter = &logrus.JSONFormatter{}
+	logger.Level = logrus.DebugLevel
 
 	if fileZero == nil {
 		return errors.New("builderfile may not be nil")
@@ -58,12 +78,12 @@ func RunBuild(fileZero *builderfile.Builderfile, contextDir string, channels ...
 		return err
 	}
 
-	p := parser.Parser{}
+	p := parser.NewParser("", logger)
 
 	instructionSet := p.InstructionSetFromBuilderfileStruct(fileOne)
 	commandSequence := p.CommandSequenceFromInstructionSet(instructionSet)
 
-	bob, err := builder.NewBuilder(nil, true)
+	bob, err := builder.NewBuilder(logger, true)
 	if err != nil {
 		return err
 	}

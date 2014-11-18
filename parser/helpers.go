@@ -23,7 +23,7 @@ func (parser *Parser) CommandSequenceFromInstructionSet(is *InstructionSet) *Com
 		tagCommands = []DockerCmd{}
 		pushCommands = []DockerCmd{}
 
-		// ADD BUILD COMMANDS
+		// ADD BUILD COMMAND
 		uuid, err := parser.NextUUID()
 		if err != nil {
 			return nil

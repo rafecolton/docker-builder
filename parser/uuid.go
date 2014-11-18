@@ -14,19 +14,10 @@ func (parser *Parser) NextUUID() (string, error) {
 }
 
 /*
-SeedUUIDGenerator turns this parser's uuidGenerator into a seeded generator.
-All calls to NextUUID() will produce the same uuid after this function is
-called and until RandomizeUUIDGenerator() is called.
-*/
-func (parser *Parser) SeedUUIDGenerator() {
-	parser.uuidGenerator = uuid.NewUUIDGenerator(false)
-}
-
-/*
 RandomizeUUIDGenerator turns this parser's uuidGenerator into a random
 generator.  All calls to NextUUID() will produce a random uuid after this
 function is called and until SeedUUIDGenerator() is called.
 */
 func (parser *Parser) RandomizeUUIDGenerator() {
-	parser.uuidGenerator = uuid.NewUUIDGenerator(true)
+	parser.uuidGenerator = uuid.NewUUIDGenerator()
 }
