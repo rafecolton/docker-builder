@@ -13,6 +13,8 @@ import (
 	gouuid "github.com/nu7hatch/gouuid"
 	"github.com/sylphon/build-runner"
 	"github.com/sylphon/build-runner/unit-config"
+
+	"github.com/rafecolton/docker-builder/conf"
 )
 
 const (
@@ -244,7 +246,15 @@ func (job *Job) build() error {
 		job.Logger.WithField("error", err).Error("issue parsing Bobfile")
 		return err
 	}
-	unitConfig.SkipPush(SkipPush)
+
+	globals := unitconfig.ConfigGlobals{
+		SkipPush: SkipPush,
+		CfgUn:    conf.Config.CfgUn,
+		CfgPass:  conf.Config.CfgPass,
+		CfgEmail: conf.Config.CfgEmail,
+	}
+
+	unitConfig.SetGlobals(globals)
 
 	job.Logger.WithField("file", job.Bobfile).Info("building from file")
 

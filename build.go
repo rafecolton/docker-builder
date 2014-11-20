@@ -29,7 +29,14 @@ func build(c *cli.Context) {
 		exitErr(1, "unable to parse unit config", err)
 	}
 
-	unitConfig.SkipPush(c.Bool("skip-push") || conf.Config.SkipPush)
+	globals := unitconfig.ConfigGlobals{
+		SkipPush: c.Bool("skip-push") || conf.Config.SkipPush,
+		CfgUn:    conf.Config.CfgUn,
+		CfgPass:  conf.Config.CfgPass,
+		CfgEmail: conf.Config.CfgEmail,
+	}
+
+	unitConfig.SetGlobals(globals)
 
 	if err := runner.RunBuild(unitConfig, os.Getenv("PWD")); err != nil {
 		exitErr(1, "unable to build", err)
