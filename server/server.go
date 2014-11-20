@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rafecolton/docker-builder/builder"
 	"github.com/rafecolton/docker-builder/job"
 	"github.com/rafecolton/docker-builder/server/webhook"
 
@@ -47,9 +46,6 @@ func Logger(l *logrus.Logger) {
 func Serve(context *cli.Context) {
 	// set vars
 	setVarsFromContext(context)
-
-	// get "skip-push" option
-	builder.SkipPush = skipPush
 
 	// set up auth functions
 	if shouldBasicAuth {

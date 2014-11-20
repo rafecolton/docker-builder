@@ -73,10 +73,6 @@
 			"Rev": "42b0b68fb383aac4f72331d0bd0948001b9be080"
 		},
 		{
-			"ImportPath": "github.com/hishboy/gocommons/lang",
-			"Rev": "044cf908ddecb539c042e1bfd9b402740a6835bc"
-		},
-		{
 			"ImportPath": "github.com/kelseyhightower/envconfig",
 			"Comment": "v1.0.0",
 			"Rev": "0280e33525f5d88edb71638a80b31724153225ba"
@@ -103,8 +99,16 @@
 			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
 		},
 		{
+			"ImportPath": "github.com/rafecolton/go-dockerclient-quick",
+			"Rev": "9f9d910759c1fdb03518dac33c25435b4cd5ac23"
+		},
+		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
 			"Rev": "127186d3d0bd6ae0867081a76324e1afe6dbf084"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-gitutils",
+			"Rev": "50d1ab234ffa3df05162c8eae4dddef1d907faa8"
 		},
 		{
 			"ImportPath": "github.com/rafecolton/vauth",
@@ -112,8 +116,17 @@
 			"Rev": "2bc701047e05fd2ed2fa2e35ce029bf6d6b02461"
 		},
 		{
+			"ImportPath": "github.com/sylphon/build-runner",
+			"Comment": "v0.10.0-85-ga48599e",
+			"Rev": "a48599e2a303fb8d5fcafc66db827f07e6317ead"
+		},
+		{
 			"ImportPath": "github.com/wsxiaoys/terminal/color",
 			"Rev": "9dcaf1d63119a8ac00eef82270eaef08b6aa2328"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "eca94c41d994ae2215d455ce578ae6e2dc6ee516"
 		}
 	]
 }

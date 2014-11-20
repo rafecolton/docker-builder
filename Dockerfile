@@ -37,15 +37,15 @@ WORKDIR /app/src/github.com/rafecolton/docker-builder
 # set up build dir and add project
 ADD . /app/src/github.com/rafecolton/docker-builder
 
-# - make sure we don't have trouble getting deps from GitHub
-# - touch Makefile to avoid timestamp error message
-# - install
-RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts \
-  && touch Makefile \
-  && make build \
-  && rm -rf $GOPATH/src \
-  && rm -rf $GOPATH/pkg \
-  && rm -f $GOPATH/bin/deppy
+## - make sure we don't have trouble getting deps from GitHub
+## - touch Makefile to avoid timestamp error message
+## - install
+#RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts \
+  #&& touch Makefile \
+  #&& make build \
+  #&& rm -rf $GOPATH/src \
+  #&& rm -rf $GOPATH/pkg \
+  #&& rm -f $GOPATH/bin/deppy
 
-CMD ["-h"]
-ENTRYPOINT ["/app/bin/docker-builder"]
+#CMD ["-h"]
+#ENTRYPOINT ["/app/bin/docker-builder"]

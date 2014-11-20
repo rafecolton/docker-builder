@@ -2,8 +2,8 @@ package analyzer
 
 import (
 	"github.com/modcloth/go-fileutils"
-	"github.com/rafecolton/docker-builder/builderfile"
-	"github.com/rafecolton/docker-builder/git"
+	"github.com/rafecolton/go-gitutils"
+	"github.com/sylphon/build-runner/unit-config"
 
 	"errors"
 	"fmt"
@@ -27,7 +27,7 @@ type Analysis interface {
 ParseAnalysisFromDir is a handy function that combines NewAnalysis with
 ParseAnalysis to make things a little easier.
 */
-func ParseAnalysisFromDir(dir string) (*builderfile.Builderfile, error) {
+func ParseAnalysisFromDir(dir string) (*unitconfig.UnitConfig, error) {
 	if dir == "" {
 		dir = "."
 	}
@@ -158,24 +158,24 @@ ParseAnalysis takes the results of the analysis of a directory and produces a
 Builderfile with some educated guesses.  This is later written to a file named
 "Bobfile" upon running `builder init .`
 */
-func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
+func ParseAnalysis(analysis Analysis) (*unitconfig.UnitConfig, error) {
 	if !analysis.DockerfilePresent() {
 		return nil, errors.New("uh-oh, can't initialize without a Dockerfile")
 	}
 
-	ret := &builderfile.Builderfile{
+	ret := &unitconfig.UnitConfig{
 		Version: 1,
-		Docker: *&builderfile.Docker{
+		Docker: *&unitconfig.Docker{
 			TagOpts: []string{"--force"},
 		},
-		ContainerArr: []*builderfile.ContainerSection{},
+		ContainerArr: []*unitconfig.ContainerSection{},
 	}
 
-	var appContainer *builderfile.ContainerSection
+	var appContainer *unitconfig.ContainerSection
 
 	if analysis.IsGitRepo() {
 		// get registry
-		appContainer = &builderfile.ContainerSection{
+		appContainer = &unitconfig.ContainerSection{
 			Name:       "app",
 			Registry:   git.AccountFromRemotes(analysis.GitRemotes()),
 			Dockerfile: "Dockerfile",
@@ -189,7 +189,7 @@ func ParseAnalysis(analysis Analysis) (*builderfile.Builderfile, error) {
 			},
 		}
 	} else {
-		appContainer = &builderfile.ContainerSection{
+		appContainer = &unitconfig.ContainerSection{
 			Name:       "app",
 			Registry:   "my-registry",
 			Dockerfile: "Dockerfile",

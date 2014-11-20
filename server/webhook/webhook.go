@@ -74,6 +74,7 @@ func processJobHelper(spec *job.Spec, w http.ResponseWriter, req *http.Request) 
 		GitHubAPIToken: apiToken,
 	}
 
+	// TODO: set skip_push
 	j := job.NewJob(jobConfig, spec, req)
 
 	// if sync
