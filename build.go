@@ -6,6 +6,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/rafecolton/docker-builder/conf"
 	"github.com/sylphon/build-runner"
 	"github.com/sylphon/build-runner/unit-config"
 
@@ -28,7 +29,7 @@ func build(c *cli.Context) {
 		exitErr(1, "unable to parse unit config", err)
 	}
 
-	unitConfig.SkipPush(c.Bool("skip-push"))
+	unitConfig.SkipPush(c.Bool("skip-push") || conf.Config.SkipPush)
 
 	if err := runner.RunBuild(unitConfig, os.Getenv("PWD")); err != nil {
 		exitErr(1, "unable to build", err)

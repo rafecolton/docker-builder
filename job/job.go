@@ -25,6 +25,9 @@ var (
 	// TestMode monkeys with certain things for tests so bad things don't happen
 	TestMode bool
 
+	// SkipPush indicates whether or not a global --skip-push directive has been given
+	SkipPush bool
+
 	logger *logrus.Logger
 )
 
@@ -241,9 +244,9 @@ func (job *Job) build() error {
 		job.Logger.WithField("error", err).Error("issue parsing Bobfile")
 		return err
 	}
+	unitConfig.SkipPush(SkipPush)
 
 	job.Logger.WithField("file", job.Bobfile).Info("building from file")
-	// set skip-push
 
 	if err := runner.RunBuild(unitConfig, job.clonedRepoLocation); err != nil {
 		return err
