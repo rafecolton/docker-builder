@@ -97,7 +97,13 @@ NewJob creates a new job from the config as well as a job spec.  After creating
 the job, calling job.Process() will actually perform the work.
 */
 func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
-	idUUID, err := gouuid.NewV4()
+	var idUUID *gouuid.UUID
+	var err error
+	idUUID, err = gouuid.NewV4()
+	if TestMode {
+		idUUID, err = gouuid.NewV5(gouuid.NamespaceURL, []byte("0"))
+	}
+
 	if err != nil {
 		cfg.Logger.WithField("error", err).Error("error creating uuid")
 	}
