@@ -10,6 +10,7 @@ go:
 - tip
 script:
 - make test
+after_success:
 - make goveralls
 notifications:
   webhooks:
