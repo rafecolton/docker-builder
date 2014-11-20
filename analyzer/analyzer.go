@@ -182,10 +182,10 @@ func ParseAnalysis(analysis Analysis) (*unitconfig.UnitConfig, error) {
 			SkipPush:   false,
 			Project:    analysis.RepoBasename(),
 			Tags: []string{
-				"git:branch",
-				"git:sha",
-				"git:tag",
 				"latest",
+				"{{ branch }}",
+				"{{ sha }}",
+				"{{ tag }}",
 			},
 		}
 	} else {

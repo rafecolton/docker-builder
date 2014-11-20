@@ -5,7 +5,7 @@ name = "app"
 Dockerfile = "Dockerfile"
 registry = "quay.io/rafecolton"
 project = "docker-builder"
-tags = ["latest", "git:sha", "git:tag", "git:branch"]
+tags = ["latest", "{{ sha }}", "{{ tag }}", "{{ branch }}"]
 skip_push = true
 
 # vim:ft=toml

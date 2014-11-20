@@ -39,10 +39,10 @@ var _ = Describe("Analysis Parsing", func() {
 					Registry: "rafecolton",
 					Project:  "fake-repo",
 					Tags: []string{
-						"git:branch",
-						"git:sha",
-						"git:tag",
 						"latest",
+						"{{ branch }}",
+						"{{ sha }}",
+						"{{ tag }}",
 					},
 					Dockerfile: "Dockerfile",
 					SkipPush:   false,
