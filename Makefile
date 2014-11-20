@@ -56,7 +56,7 @@ build: binclean get monkey-patch-drone
 
 .PHONY: monkey-patch-drone
 monkey-patch-drone:
-	if [[ "$(DRONE)" == "true" ]] && [[ "$(CI)" == "true" ]] ; then rm -f $(GOROOT)/src/pkg/os/error_posix.go ; fi
+	@if [[ "$(DRONE)" == "true" ]] && [[ "$(CI)" == "true" ]] ; then rm -f $(GOROOT)/src/pkg/os/error_posix.go ; fi
 
 .PHONY: release
 release: binclean gox-build
