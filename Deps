@@ -117,8 +117,8 @@
 		},
 		{
 			"ImportPath": "github.com/sylphon/build-runner",
-			"Comment": "v0.10.0-87-g455d374",
-			"Rev": "455d374ead73c96de50d7d2478e53ae58c32ebec"
+			"Comment": "v0.10.0-88-g8d3fb8c",
+			"Rev": "8d3fb8c2a68a9c1d3c619e7e64861bd90135bf0f"
 		},
 		{
 			"ImportPath": "github.com/wsxiaoys/terminal/color",
