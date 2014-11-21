@@ -125,3 +125,9 @@ goveralls: coverage
 	go get -u github.com/mattn/goveralls
 	@echo "goveralls -coverprofile=gover.coverprofile -repotoken <redacted>"
 	@goveralls -coverprofile=gover.coverprofile -repotoken $(GOVERALLS_REPO_TOKEN)
+
+.PHONY: authors
+authors:
+	@echo "docker-builder authors" > AUTHORS.md
+	@echo -e "======================\n" >> AUTHORS.md
+	echo -e "$$(git log --format='- %aN &lt;%aE&gt;' | sort -u)" >> AUTHORS.md
