@@ -1,11 +1,18 @@
 ---
 version: 1
 
+container_globals:
+  skip_push: true
+
 container:
 - name: app
   Dockerfile: Dockerfile
   registry: quay.io/rafecolton
   project: docker-builder
-  tags: ["{{ tag }}"]
+  tags:
+  - latest
+  - "{{ sha }}"
+  - "{{ tag }}"
+  - "{{ branch }}"
 
 # vim:ft=yaml
