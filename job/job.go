@@ -20,7 +20,7 @@ import (
 const (
 	defaultTail         = "100"
 	defaultBobfile      = "Bobfile"
-	specFixturesRepoDir = "./Specs/fixtures/repodir"
+	specFixturesRepoDir = "./_testing/fixtures/repodir"
 )
 
 var (

@@ -16,7 +16,7 @@ GOBUILD_VERSION_ARGS := -ldflags "\
   -w \
 "
 
-BATS_INSTALL_DIR ?= $(PWD)/Specs/bats
+BATS_INSTALL_DIR ?= $(PWD)/_testing/bats
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
@@ -47,8 +47,8 @@ quick: build
 .PHONY: binclean
 binclean:
 	rm -f $(GOPATH)/bin/docker-builder
-	rm -rf ./Release/*
-	touch ./Release/.gitkeep
+	rm -rf ./_release/*
+	touch ./_release/.gitkeep
 
 .PHONY: build
 build: binclean get monkey-patch-drone
@@ -60,12 +60,12 @@ monkey-patch-drone:
 
 .PHONY: release
 release: binclean gox-build
-	open ./Release
+	open ./_release
 
 .PHONY: gox-build
 gox-build: get $(GOPATH)/bin/gox
-	CGO_ENABLED=0 $(GOPATH)/bin/gox -output="Release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
-	for file in $$(find ./Release -type f -name 'docker-builder-*') ; do openssl sha256 -out $$file-SHA256SUM $$file ; done
+	CGO_ENABLED=0 $(GOPATH)/bin/gox -output="_release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
+	for file in $$(find ./_release -type f -name 'docker-builder-*') ; do openssl sha256 -out $$file-SHA256SUM $$file ; done
 
 .PHONY: .test
 .test: fmtpolice bats
@@ -77,10 +77,10 @@ test:
 	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
 .PHONY: fmtpolice
-fmtpolice: $(PWD)/Specs/bin/fmtpolice
-	./Specs/bin/fmtpolice
+fmtpolice: $(PWD)/_testing/bin/fmtpolice
+	./_testing/bin/fmtpolice
 
-$(PWD)/Specs/bin/fmtpolice:
+$(PWD)/_testing/bin/fmtpolice:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@ && \
 	  chmod +x $@
 
@@ -110,15 +110,15 @@ get: $(GOPATH)/bin/deppy
 	go get -t ./...
 	$(GOPATH)/bin/deppy restore
 
-$(PWD)/Specs/bin/coverage:
+$(PWD)/_testing/bin/coverage:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
 	  chmod +x $@
 
 .PHONY: coverage
-coverage: $(PWD)/Specs/bin/coverage
+coverage: $(PWD)/_testing/bin/coverage
 	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
 	go get -u github.com/axw/gocov/gocov
-	./Specs/bin/coverage
+	./_testing/bin/coverage
 
 .PHONY: goveralls
 goveralls: coverage

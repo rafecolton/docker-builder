@@ -21,10 +21,11 @@ _testmain.go
 
 *.exe
 *.test
-Release/*
+_release/*
+!_release/.gitkeep
 .dockercfg
 .env
-Specs/bin/*
-!Specs/bin/.gitkeep
-Specs/bats
+_testing/bin/*
+!_testing/bin/.gitkeep
+_testing/bats
 *.coverprofile
