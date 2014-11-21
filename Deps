@@ -100,7 +100,7 @@
 		},
 		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-quick",
-			"Rev": "9f9d910759c1fdb03518dac33c25435b4cd5ac23"
+			"Rev": "b681b14d7329fe2c89262d9f3a2e9dd428702524"
 		},
 		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
@@ -117,8 +117,8 @@
 		},
 		{
 			"ImportPath": "github.com/sylphon/builder-core",
-			"Comment": "v0.1.0",
-			"Rev": "7c525b6496b2cfe420f2ed9ee337a0c5bb1796cf"
+			"Comment": "v0.1.1",
+			"Rev": "40a5381ad7873fb8186ad6c224973cd1414575f0"
 		},
 		{
 			"ImportPath": "github.com/wsxiaoys/terminal/color",
