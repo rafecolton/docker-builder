@@ -19,7 +19,7 @@ func build(c *cli.Context) {
 		builderfile = "Bobfile"
 	}
 
-	unitConfig, err := unitconfig.ReadFromFile("./"+builderfile, unitconfig.TOML, unitconfig.YAML, unitconfig.JSON)
+	unitConfig, err := unitconfig.ReadFromFile("./"+builderfile, unitconfig.TOML, unitconfig.YAML)
 	if err != nil {
 		if c.Bool("force") {
 			err = forceBuild()
