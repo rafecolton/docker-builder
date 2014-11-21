@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/rafecolton/docker-builder/conf"
-	"github.com/rafecolton/docker-builder/parser"
 	"github.com/rafecolton/docker-builder/server"
 	"github.com/rafecolton/docker-builder/version"
 
@@ -17,7 +16,6 @@ import (
 )
 
 var ver = version.NewVersion()
-var par *parser.Parser
 
 //Logger is the logger for the docker-builder main
 var Logger *logrus.Logger

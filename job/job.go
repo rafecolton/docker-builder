@@ -7,12 +7,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rafecolton/docker-builder/builder"
-	"github.com/rafecolton/docker-builder/parser/uuid"
-
 	"github.com/Sirupsen/logrus"
 	"github.com/modcloth/go-fileutils"
 	"github.com/modcloth/kamino"
+	gouuid "github.com/nu7hatch/gouuid"
+	"github.com/sylphon/builder-core"
+	"github.com/sylphon/builder-core/unit-config"
+
+	"github.com/rafecolton/docker-builder/conf"
 )
 
 const (
@@ -24,6 +26,9 @@ const (
 var (
 	// TestMode monkeys with certain things for tests so bad things don't happen
 	TestMode bool
+
+	// SkipPush indicates whether or not a global --skip-push directive has been given
+	SkipPush bool
 
 	logger *logrus.Logger
 )
@@ -97,10 +102,17 @@ NewJob creates a new job from the config as well as a job spec.  After creating
 the job, calling job.Process() will actually perform the work.
 */
 func NewJob(cfg *Config, spec *Spec, req *http.Request) *Job {
-	id, err := genUUID()
+	var idUUID *gouuid.UUID
+	var err error
+	idUUID, err = gouuid.NewV4()
+	if TestMode {
+		idUUID, err = gouuid.NewV5(gouuid.NamespaceURL, []byte("0"))
+	}
+
 	if err != nil {
 		cfg.Logger.WithField("error", err).Error("error creating uuid")
 	}
+	id := idUUID.String()
 
 	bobfile := spec.Bobfile
 	if bobfile == "" {
@@ -168,11 +180,6 @@ func newMultiWriter(logDir string) (io.Writer, *os.File, error) {
 	return out, file, nil
 }
 
-func genUUID() (string, error) {
-	gen := uuid.NewUUIDGenerator(!TestMode)
-	return gen.NextUUID()
-}
-
 func (job *Job) clone() (string, error) {
 	job.Logger.WithFields(logrus.Fields{
 		"api_token_present":  job.GitHubAPIToken != "",
@@ -234,21 +241,27 @@ func (job *Job) clone() (string, error) {
 func (job *Job) build() error {
 
 	job.Logger.Debug("attempting to create a builder")
-
-	bob, err := builder.NewBuilder(job.Logger, true)
+	unitConfig, err := unitconfig.ReadFromFile(job.clonedRepoLocation+"/"+job.Bobfile, unitconfig.TOML)
 	if err != nil {
-		job.Logger.WithField("error", err).Error("issue creating a builder")
+		job.Logger.WithField("error", err).Error("issue parsing Bobfile")
 		return err
 	}
+
+	globals := unitconfig.ConfigGlobals{
+		SkipPush: SkipPush,
+		CfgUn:    conf.Config.CfgUn,
+		CfgPass:  conf.Config.CfgPass,
+		CfgEmail: conf.Config.CfgEmail,
+	}
+
+	unitConfig.SetGlobals(globals)
 
 	job.Logger.WithField("file", job.Bobfile).Info("building from file")
 
-	config, err := builder.NewTrustedFilePath(job.Bobfile, job.clonedRepoLocation)
-	if err != nil {
+	if err := runner.RunBuild(unitConfig, job.clonedRepoLocation); err != nil {
 		return err
 	}
-
-	return bob.Build(config)
+	return nil
 }
 
 /*

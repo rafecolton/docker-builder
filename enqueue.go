@@ -6,10 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
-	"github.com/rafecolton/docker-builder/git"
 	"github.com/rafecolton/docker-builder/server"
+	"github.com/rafecolton/go-gitutils"
 
 	"github.com/codegangsta/cli"
 	"github.com/onsi/gocleanup"
@@ -81,7 +82,7 @@ func NewEnqueuer(options EnqueueOptions) *Enqueuer {
 		bobfile: options.Bobfile,
 		host:    options.Host,
 		ref:     git.Branch(options.Top),
-		repo:    git.Repo(options.Top),
+		repo:    filepath.Base(options.Top),
 	}
 }
 

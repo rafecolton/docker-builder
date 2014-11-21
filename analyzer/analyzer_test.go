@@ -5,10 +5,8 @@ import (
 	. "github.com/onsi/gomega"
 	. "github.com/rafecolton/docker-builder/analyzer"
 	"testing"
-)
 
-import (
-	"github.com/rafecolton/docker-builder/builderfile"
+	"github.com/sylphon/builder-core/unit-config"
 )
 
 func TestBuilder(t *testing.T) {
@@ -19,7 +17,7 @@ func TestBuilder(t *testing.T) {
 var _ = Describe("Analysis Parsing", func() {
 	var (
 		subject *SpecRepoAnalysis
-		outfile *builderfile.Builderfile
+		outfile *unitconfig.UnitConfig
 	)
 
 	BeforeEach(func() {
@@ -30,21 +28,21 @@ var _ = Describe("Analysis Parsing", func() {
 			isGitRepo:         true,
 			repoBasename:      "fake-repo",
 		}
-		outfile = &builderfile.Builderfile{
+		outfile = &unitconfig.UnitConfig{
 			Version: 1,
-			Docker: *&builderfile.Docker{
+			Docker: *&unitconfig.Docker{
 				TagOpts: []string{"--force"},
 			},
-			ContainerArr: []*builderfile.ContainerSection{
-				&builderfile.ContainerSection{
+			ContainerArr: []*unitconfig.ContainerSection{
+				&unitconfig.ContainerSection{
 					Name:     "app",
 					Registry: "rafecolton",
 					Project:  "fake-repo",
 					Tags: []string{
-						"git:branch",
-						"git:sha",
-						"git:tag",
 						"latest",
+						"{{ branch }}",
+						"{{ sha }}",
+						"{{ tag }}",
 					},
 					Dockerfile: "Dockerfile",
 					SkipPush:   false,
@@ -76,8 +74,8 @@ var _ = Describe("Analysis Parsing", func() {
 		It("only has `latest` tag and default registry", func() {
 			subject.isGitRepo = false
 			subject.remotes = ""
-			outfile.ContainerArr = []*builderfile.ContainerSection{
-				&builderfile.ContainerSection{
+			outfile.ContainerArr = []*unitconfig.ContainerSection{
+				&unitconfig.ContainerSection{
 					Name:       "app",
 					Registry:   "my-registry",
 					Project:    "fake-repo",

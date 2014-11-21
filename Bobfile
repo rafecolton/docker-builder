@@ -5,6 +5,6 @@ name = "app"
 Dockerfile = "Dockerfile"
 registry = "quay.io/rafecolton"
 project = "docker-builder"
-tags = ["git:tag"]
+tags = ["{{ tag }}"]
 
 # vim:ft=toml

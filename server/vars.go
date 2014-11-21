@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/rafecolton/docker-builder/conf"
+	"github.com/rafecolton/docker-builder/job"
 
 	"github.com/codegangsta/cli"
 	"github.com/go-martini/martini"
@@ -85,4 +86,6 @@ func setVarsFromContext(c *cli.Context) {
 	shouldGitHubAuth = (githubSecret != "")
 
 	/// highest priority
+
+	job.SkipPush = skipPush
 }

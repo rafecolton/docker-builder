@@ -37,9 +37,9 @@ dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"
 project = "my-app"
 tags = [
-  "git:branch",
-  "git:sha",
-  "git:tag"
+  "{{ branch }}",
+  "{{ sha }}",
+  "{{ tag }}"
 ]
 
 [[container]]
@@ -98,9 +98,9 @@ dockercfg_pass = "bar"
 dockercfg_email = "baz@example.com"
 project = "my-app"
 tags = [
-  "git:branch",
-  "git:sha",
-  "git:tag"
+  "{{ branch }}",
+  "{{ sha }}",
+  "{{ tag }}"
 ]
 ```
 
@@ -125,22 +125,15 @@ The following stanzas are available in a `[[container]]` section:
 
 #### The `tags` Stanza
 
-There are two types of tags: "string" tags an "macro" tags.  String tags
-are simply strings to be used as tags.  In the above example, `"base"`
-is a string tag.  **NOTE:** Bob does not do any validation of tags to
-see whether or not they include invalid characters.
+All tags are evaluated using the golang template package.  There are a
+few special functions that may be interpolated in the tag string:
 
-"Macro" tags are like helper functions for tagging.  All macro tags take
-the form of `<type>:<name>`, where type might be the executable used for
-the macro (e.g. `git`) and the name represents the command into which
-the tag will be expanded.
+- `{{ branch }}` - the git branch of the app repo (`git rev-parse -q --abbrev-ref HEAD`)
+- `{{ sha }}` - the full git sha of the app repo (`git rev-parse -q HEAD`)
+- `{{ tag }}` - the shortened version of the app repo rev (`git describe --always --dirty --tags`)
 
-The following macro tags are currently available:
-
-* `git`
-    - `git:branch` - the git branch of the app repo (`git rev-parse -q --abbrev-ref HEAD`)
-    - `git:sha` - the full git sha of the app repo (`git rev-parse -q HEAD`)
-    - `git:tag` - the shortened version of the app repo rev (`git describe --always --dirty --tags`)
+For example, the following tag `myapp-{{ tag }}` might produce the tag
+`myapp-v0.1.0`
 
 ## Linting &amp; Building
 

@@ -9,9 +9,9 @@ import (
 	"github.com/go-martini/martini"
 
 	. "github.com/rafecolton/docker-builder"
-	"github.com/rafecolton/docker-builder/git"
 	"github.com/rafecolton/docker-builder/server"
 	"github.com/rafecolton/docker-builder/server/webhook"
+	"github.com/rafecolton/go-gitutils"
 )
 
 func init() {
