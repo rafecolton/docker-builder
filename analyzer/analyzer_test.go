@@ -6,7 +6,7 @@ import (
 	. "github.com/rafecolton/docker-builder/analyzer"
 	"testing"
 
-	"github.com/sylphon/build-runner/unit-config"
+	"github.com/sylphon/builder-core/unit-config"
 )
 
 func TestBuilder(t *testing.T) {

@@ -11,8 +11,8 @@ import (
 	"github.com/modcloth/go-fileutils"
 	"github.com/modcloth/kamino"
 	gouuid "github.com/nu7hatch/gouuid"
-	"github.com/sylphon/build-runner"
-	"github.com/sylphon/build-runner/unit-config"
+	"github.com/sylphon/builder-core"
+	"github.com/sylphon/builder-core/unit-config"
 
 	"github.com/rafecolton/docker-builder/conf"
 )

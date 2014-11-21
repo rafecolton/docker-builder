@@ -3,7 +3,7 @@ package analyzer
 import (
 	"github.com/modcloth/go-fileutils"
 	"github.com/rafecolton/go-gitutils"
-	"github.com/sylphon/build-runner/unit-config"
+	"github.com/sylphon/builder-core/unit-config"
 
 	"errors"
 	"fmt"

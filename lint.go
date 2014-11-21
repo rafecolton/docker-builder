@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sylphon/build-runner/unit-config"
+	"github.com/sylphon/builder-core/unit-config"
 
 	"github.com/codegangsta/cli"
 	"github.com/onsi/gocleanup"

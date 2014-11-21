@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/rafecolton/docker-builder/conf"
-	"github.com/sylphon/build-runner"
-	"github.com/sylphon/build-runner/unit-config"
+	"github.com/sylphon/builder-core"
+	"github.com/sylphon/builder-core/unit-config"
 
 	"github.com/codegangsta/cli"
 )
