@@ -117,8 +117,8 @@
 		},
 		{
 			"ImportPath": "github.com/sylphon/builder-core",
-			"Comment": "v0.10.0-89-g367b5f8",
-			"Rev": "367b5f857d9bad7634f0d7f33316c7fa9c41bc85"
+			"Comment": "v0.1.0",
+			"Rev": "7c525b6496b2cfe420f2ed9ee337a0c5bb1796cf"
 		},
 		{
 			"ImportPath": "github.com/wsxiaoys/terminal/color",
