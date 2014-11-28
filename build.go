@@ -38,7 +38,7 @@ func build(c *cli.Context) {
 
 	unitConfig.SetGlobals(globals)
 
-	if err := runner.RunBuild(unitConfig, os.Getenv("PWD")); err != nil {
+	if err := runner.RunBuildSynchronously(unitConfig, os.Getenv("PWD")); err != nil {
 		exitErr(1, "unable to build", err)
 	}
 

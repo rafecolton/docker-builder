@@ -258,10 +258,7 @@ func (job *Job) build() error {
 
 	job.Logger.WithField("file", job.Bobfile).Info("building from file")
 
-	if err := runner.RunBuild(unitConfig, job.clonedRepoLocation); err != nil {
-		return err
-	}
-	return nil
+	return runner.RunBuildSynchronously(unitConfig, job.clonedRepoLocation)
 }
 
 /*

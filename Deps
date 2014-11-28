@@ -4,18 +4,18 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/BurntSushi/toml",
-			"Comment": "v0.1.0",
-			"Rev": "2ceedfee35ad3848e49308ab0c9a4f640cfb5fb2"
+			"Comment": "v0.1.0-9-g3883ac1",
+			"Rev": "3883ac1ce943878302255f538fce319d23226223"
 		},
 		{
 			"ImportPath": "github.com/Sirupsen/logrus",
-			"Comment": "v0.5.1-18-g89b6d46",
-			"Rev": "89b6d460f0048bd1591d723b483f89b127257dbb"
+			"Comment": "v0.6.1-10-g6c28e16",
+			"Rev": "6c28e16200e55c2549705ac24ea58976c07f18ac"
 		},
 		{
 			"ImportPath": "github.com/codegangsta/cli",
-			"Comment": "1.2.0-22-g687db20",
-			"Rev": "687db20fc379d1686465a28e9959707cd1acc990"
+			"Comment": "1.2.0-38-g9908e96",
+			"Rev": "9908e96513e5a94de37004098a3974a567f18111"
 		},
 		{
 			"ImportPath": "github.com/codegangsta/inject",
@@ -24,43 +24,48 @@
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/archive",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/fileutils",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/ioutils",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/log",
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/pools",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/promise",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/system",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/tailfile",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar",
-			"Comment": "v1.3.0-561-g61e4b4e",
-			"Rev": "61e4b4e1d015032e6e7ee17658023c4101be3e36"
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
@@ -69,17 +74,17 @@
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
-			"Comment": "v1.0-39-g42b0b68",
-			"Rev": "42b0b68fb383aac4f72331d0bd0948001b9be080"
+			"Comment": "v1.0-66-gc5d72ac",
+			"Rev": "c5d72ac59a90415b10640d48621cdbe2907cc525"
 		},
 		{
 			"ImportPath": "github.com/kelseyhightower/envconfig",
-			"Comment": "v1.0.0",
-			"Rev": "0280e33525f5d88edb71638a80b31724153225ba"
+			"Comment": "v1.0.0-4-g7e6571f",
+			"Rev": "7e6571f118cf0b0ef44f3049cf842e94f9bf210e"
 		},
 		{
 			"ImportPath": "github.com/martini-contrib/auth",
-			"Rev": "7925ee933d02cb66101819126f8b39367994c2b2"
+			"Rev": "a7b827c87c2d3e571c974f1fec378def3f2ea1ed"
 		},
 		{
 			"ImportPath": "github.com/modcloth/go-fileutils",
@@ -100,7 +105,7 @@
 		},
 		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-quick",
-			"Rev": "b681b14d7329fe2c89262d9f3a2e9dd428702524"
+			"Rev": "713f8731d921ca4009b67d83de5350d8b38c66e1"
 		},
 		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
@@ -108,7 +113,7 @@
 		},
 		{
 			"ImportPath": "github.com/rafecolton/go-gitutils",
-			"Rev": "50d1ab234ffa3df05162c8eae4dddef1d907faa8"
+			"Rev": "cb13acb88c72f1e3e37eb88294b402e933ac601f"
 		},
 		{
 			"ImportPath": "github.com/rafecolton/vauth",
@@ -117,12 +122,8 @@
 		},
 		{
 			"ImportPath": "github.com/sylphon/builder-core",
-			"Comment": "v0.1.1",
-			"Rev": "40a5381ad7873fb8186ad6c224973cd1414575f0"
-		},
-		{
-			"ImportPath": "github.com/wsxiaoys/terminal/color",
-			"Rev": "9dcaf1d63119a8ac00eef82270eaef08b6aa2328"
+			"Comment": "v0.2.0",
+			"Rev": "5070332622c9e11ea9f69dae1693e5c344ea7e6d"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
