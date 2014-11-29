@@ -1,7 +1,6 @@
 package analyzer
 
 import (
-	"github.com/modcloth/go-fileutils"
 	"github.com/rafecolton/go-gitutils"
 	"github.com/sylphon/builder-core/unit-config"
 
@@ -17,7 +16,7 @@ An Analysis offers functions that provide data about a given directory. This is
 then used to populate an example Bobfile for `builder init .` commands.
 */
 type Analysis interface {
-	GitRemotes() string
+	RemoteAccount() string
 	DockerfilePresent() bool
 	IsGitRepo() bool
 	RepoBasename() string
@@ -85,39 +84,13 @@ type RepoAnalysis struct {
 	gitRemotesPopulated bool
 }
 
-func (ra *RepoAnalysis) populateGitRemotes() {
-	git, err := fileutils.Which("git")
-	if err != nil {
-		ra.gitRemotes = ""
-	}
-
-	cmd := &exec.Cmd{
-		Path: git,
-		Args: []string{"git", "remote", "-v"},
-		Dir:  ra.repoDir,
-	}
-
-	out, err := cmd.Output()
-	if err != nil {
-		ra.gitRemotes = ""
-	} else {
-		ra.gitRemotes = string(out)
-	}
-
-	ra.gitRemotesPopulated = true
-}
-
 /*
-GitRemotes returns the output of `git remote -v` when run on the directory being
+RemoteAccount returns the output of `git remote -v` when run on the directory being
 analyized.  If the remotes cannot be determined (i.e. if the directory is not a
 git repo), an empty string is returned.
 */
-func (ra *RepoAnalysis) GitRemotes() string {
-	if !ra.gitRemotesPopulated {
-		ra.populateGitRemotes()
-	}
-
-	return ra.gitRemotes
+func (ra *RepoAnalysis) RemoteAccount() string {
+	return git.RemoteAccount(ra.repoDir)
 }
 
 /*
@@ -139,11 +112,9 @@ valid git repo. Validity is determined by whether or not `git remote -v`
 returns a non-zero exit code.
 */
 func (ra *RepoAnalysis) IsGitRepo() bool {
-	if !ra.gitRemotesPopulated {
-		ra.populateGitRemotes()
-	}
-
-	return ra.gitRemotes != ""
+	cmd := exec.Command("git", "rev-parse")
+	cmd.Dir = ra.repoDir
+	return cmd.Run() == nil
 }
 
 /*
@@ -171,32 +142,20 @@ func ParseAnalysis(analysis Analysis) (*unitconfig.UnitConfig, error) {
 		ContainerArr: []*unitconfig.ContainerSection{},
 	}
 
-	var appContainer *unitconfig.ContainerSection
-
+	registry := "my-registry"
+	tags := []string{"latest"}
 	if analysis.IsGitRepo() {
-		// get registry
-		appContainer = &unitconfig.ContainerSection{
-			Name:       "app",
-			Registry:   git.AccountFromRemotes(analysis.GitRemotes()),
-			Dockerfile: "Dockerfile",
-			SkipPush:   false,
-			Project:    analysis.RepoBasename(),
-			Tags: []string{
-				"latest",
-				"{{ branch }}",
-				"{{ sha }}",
-				"{{ tag }}",
-			},
-		}
-	} else {
-		appContainer = &unitconfig.ContainerSection{
-			Name:       "app",
-			Registry:   "my-registry",
-			Dockerfile: "Dockerfile",
-			SkipPush:   false,
-			Project:    analysis.RepoBasename(),
-			Tags:       []string{"latest"},
-		}
+		registry = analysis.RemoteAccount()
+		tags = append(tags, []string{"{{ branch }}", "{{ sha }}", "{{ tag }}"}...)
+	}
+
+	appContainer := &unitconfig.ContainerSection{
+		Name:       "app",
+		Registry:   registry,
+		Dockerfile: "Dockerfile",
+		SkipPush:   false,
+		Project:    analysis.RepoBasename(),
+		Tags:       tags,
 	}
 
 	ret.ContainerArr = append(ret.ContainerArr, appContainer)

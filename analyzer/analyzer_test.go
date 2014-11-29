@@ -10,14 +10,14 @@ import (
 )
 
 type SpecRepoAnalysis struct {
-	remotes           string
+	remoteAccount     string
 	dockerfilePresent bool
 	isGitRepo         bool
 	repoBasename      string
 }
 
-func (sra *SpecRepoAnalysis) GitRemotes() string {
-	return sra.remotes
+func (sra *SpecRepoAnalysis) RemoteAccount() string {
+	return sra.remoteAccount
 }
 
 func (sra *SpecRepoAnalysis) DockerfilePresent() bool {
@@ -45,8 +45,7 @@ var _ = Describe("Analysis Parsing", func() {
 
 	BeforeEach(func() {
 		subject = &SpecRepoAnalysis{
-			remotes: `origin	git@github.com:rafecolton/bob.git (fetch)
-					  origin	git@github.com:rafecolton/bob.git (push)`,
+			remoteAccount:     "rafecolton",
 			dockerfilePresent: true,
 			isGitRepo:         true,
 			repoBasename:      "fake-repo",
@@ -96,7 +95,6 @@ var _ = Describe("Analysis Parsing", func() {
 	Context("when the given directory is not a git repo", func() {
 		It("only has `latest` tag and default registry", func() {
 			subject.isGitRepo = false
-			subject.remotes = ""
 			outfile.ContainerArr = []*unitconfig.ContainerSection{
 				&unitconfig.ContainerSection{
 					Name:       "app",
