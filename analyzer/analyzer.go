@@ -2,7 +2,7 @@ package analyzer
 
 import (
 	"github.com/rafecolton/go-gitutils"
-	"github.com/sylphon/builder-core/unit-config"
+	"github.com/winchman/builder-core/unit-config"
 
 	"errors"
 	"fmt"

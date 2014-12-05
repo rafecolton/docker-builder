@@ -6,7 +6,7 @@ import (
 	. "github.com/rafecolton/docker-builder/analyzer"
 	"testing"
 
-	"github.com/sylphon/builder-core/unit-config"
+	"github.com/winchman/builder-core/unit-config"
 )
 
 type SpecRepoAnalysis struct {

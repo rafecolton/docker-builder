@@ -69,8 +69,8 @@
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
-			"Comment": "0.2.1-319-g10d10d4",
-			"Rev": "10d10d464f96231c61e16f2d1b7fca3152a7040f"
+			"Comment": "0.2.1-321-g335b6a8",
+			"Rev": "335b6a888db6a8e33550c5faeab78017d420abcd"
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
@@ -113,7 +113,7 @@
 		},
 		{
 			"ImportPath": "github.com/rafecolton/go-gitutils",
-			"Rev": "cb13acb88c72f1e3e37eb88294b402e933ac601f"
+			"Rev": "98169906211372ca2fd02e4e8e6c01eec7eed21c"
 		},
 		{
 			"ImportPath": "github.com/rafecolton/vauth",
@@ -121,9 +121,9 @@
 			"Rev": "2bc701047e05fd2ed2fa2e35ce029bf6d6b02461"
 		},
 		{
-			"ImportPath": "github.com/sylphon/builder-core",
-			"Comment": "v0.2.0",
-			"Rev": "5070332622c9e11ea9f69dae1693e5c344ea7e6d"
+			"ImportPath": "github.com/winchman/builder-core",
+			"Comment": "v0.2.0-3-g0db1529",
+			"Rev": "0db1529bd16655e623448587febcce2bd8f59613"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
