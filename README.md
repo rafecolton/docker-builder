@@ -14,18 +14,7 @@ from a friendly `Bobfile` config file.
 * [Docker Builder Server](_docs/advanced-usage.md)
 * [Writing a Bobfile](_docs/writing-a-bobfile.md)
 
-## Quick Start
-
-Steps to quick start:
-
-```bash
-# install docker-builder
-go get github.com/rafecolton/docker-builder
-
-$GOPATH/bin/docker-builder --help
-```
-
-## More Reasonably-Paced Start
+## Getting Started Steps
 0. Install `docker-builder`
 0. Explore the [Writing a Bobfile](_docs/writing-a-bobfile.md) doc
 0. Run`docker-builder --help`
@@ -33,11 +22,10 @@ $GOPATH/bin/docker-builder --help
 
 ### Installing `docker-builder`
 
-#### Easiest
+#### From source
 
-```bash
-go get github.com/rafecolton/docker-builder
-```
+To build from source, run `make build`.  You may have to install some
+things first, such as `go`
 
 #### From pre-compiled binaries
 
@@ -52,11 +40,6 @@ curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0/
 ```
 
 **NOTE:** Checksums available on the [release page](https://github.com/rafecolton/docker-builder/releases)
-
-#### From source
-
-To build from source, run `make build`.  You may have to install some
-things first, such as `go`
 
 ### Using with TLS
 
@@ -82,7 +65,7 @@ variable:
 export DOCKER_HOST_SCHEME="https"
 ```
 
-## Experimental Feature: Enqueue
+## New Command: `docker-builder enqueue`
 
 Docker-builder has an new, experimental command-line feature: `enqueue`
 
