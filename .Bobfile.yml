@@ -14,5 +14,6 @@ container:
   - "{{ sha }}"
   - "{{ tag }}"
   - "{{ branch }}"
+  - 'daily-{{ date "2006-01-02" }}'
 
 # vim:ft=yaml
