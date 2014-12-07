@@ -63,6 +63,11 @@
 			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
 		},
 		{
+			"ImportPath": "github.com/docker/docker/pkg/units",
+			"Comment": "v1.3.2",
+			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+		},
+		{
 			"ImportPath": "github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar",
 			"Comment": "v1.3.2",
 			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
@@ -76,6 +81,11 @@
 			"ImportPath": "github.com/go-martini/martini",
 			"Comment": "v1.0-66-gc5d72ac",
 			"Rev": "c5d72ac59a90415b10640d48621cdbe2907cc525"
+		},
+		{
+			"ImportPath": "github.com/jwilder/docker-squash/libsquash",
+			"Comment": "v0.0.11-3-g271ac02",
+			"Rev": "271ac0292336c8dbb3bbf8dda1803df7fe246b36"
 		},
 		{
 			"ImportPath": "github.com/kelseyhightower/envconfig",
@@ -122,8 +132,8 @@
 		},
 		{
 			"ImportPath": "github.com/winchman/builder-core",
-			"Comment": "v0.2.1",
-			"Rev": "a99fa00a3e5675a4f2d1db72aeb3aa6cc56a3ab8"
+			"Comment": "v0.2.1-1-g8a3c186",
+			"Rev": "8a3c186f392df9bc892fd2ea7582e3c0e3e077d1"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",

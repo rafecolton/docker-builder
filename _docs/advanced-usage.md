@@ -10,6 +10,27 @@ Topics:
 
 ### Running the Server
 
+#### Running In a Container (Mac OS X)
+
+Build the container:
+
+```bash
+docker-builder build --skip-push
+```
+
+Run the container:
+
+```bash
+docker run -p 5000:5000 -ti --net=host \
+  -e DOCKER_HOST="$DOCKER_HOST" \
+  -e DOCKER_TLS_VERIFY=1 \
+  -e DOCKER_CERT_PATH=/root/.boot2docker/certs/boot2docker-vm \
+  -v $HOME/.boot2docker:/root/.boot2docker \
+  quay.io/rafecolton/docker-builder serve
+```
+
+**NOTE:** Make sure you forward the port on VirtualBox
+
 #### Usage
 
 ```bash

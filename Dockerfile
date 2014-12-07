@@ -34,9 +34,15 @@ RUN dpkg-divert --local --rename --add /sbin/initctl \
 
 WORKDIR /app/src/github.com/rafecolton/docker-builder
 
+RUN mkdir -p $GOPATH/src/github.com/docker \
+  && git clone https://github.com/docker/docker $GOPATH/src/github.com/docker/docker
+
 ADD Deps /app/src/github.com/rafecolton/docker-builder/Deps
 RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts \
   && go get github.com/hamfist/deppy \
+  && mkdir -p $GOPATH/src/github.com/jwilder \
+  && git clone https://github.com/rafecolton/docker-squash $GOPATH/src/github.com/jwilder/docker-squash \
+  && (cd $GOPATH/src/github.com/jwilder/docker-squash && git checkout make-squash-a-library) \
   && $GOPATH/bin/deppy restore \
   && rm -f $GOPATH/bin/deppy
 
