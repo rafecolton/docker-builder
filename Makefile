@@ -73,6 +73,7 @@ gox-build: get $(GOPATH)/bin/gox
 
 .PHONY: test
 test:
+	go get -t ./...
 	@GO_TAG_ARGS="-tags netgo -tags integration" $(MAKE) build
 	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
