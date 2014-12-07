@@ -34,6 +34,12 @@ RUN dpkg-divert --local --rename --add /sbin/initctl \
 
 WORKDIR /app/src/github.com/rafecolton/docker-builder
 
+ADD Deps /app/src/github.com/rafecolton/docker-builder/Deps
+RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts \
+  && go get github.com/hamfist/deppy \
+  && $GOPATH/bin/deppy restore \
+  && rm -f $GOPATH/bin/deppy
+
 # set up build dir and add project
 ADD . /app/src/github.com/rafecolton/docker-builder
 

@@ -126,14 +126,34 @@ The following stanzas are available in a `[[container]]` section:
 #### The `tags` Stanza
 
 All tags are evaluated using the golang template package.  There are a
-few special functions that may be interpolated in the tag string:
+few special functions that may be interpolated in the tag string.
 
-- `{{ branch }}` - the git branch of the app repo (`git rev-parse -q --abbrev-ref HEAD`)
-- `{{ sha }}` - the full git sha of the app repo (`git rev-parse -q HEAD`)
-- `{{ tag }}` - the shortened version of the app repo rev (`git describe --always --dirty --tags`)
+##### git-based tags
 
-For example, the following tag `myapp-{{ tag }}` might produce the tag
-`myapp-v0.1.0`
+There are three git-based tags:
+
+  - `{{ branch }}` - the git branch of the app repo (`git rev-parse -q --abbrev-ref HEAD`)
+  - `{{ sha }}` - the full git sha of the app repo (`git rev-parse -q HEAD`)
+  - `{{ tag }}` - the shortened version of the app repo rev (`git describe --always --dirty --tags`)
+    * For example, the following tag `myapp-{{ tag }}` might produce the tag `myapp-v0.1.0`
+
+##### date-based tags
+
+There is one date-based tag:
+
+  - `{{ date "<format>" }}` - today's date (and time), formated as specified by &lt;format&gt;
+
+For example, `daily-{{ date "2006-01-02" }}` might produce the tag `daily-2014-12-07`.
+
+There are a couple of important notes about using date-based tags:
+
+0. The value for &lt;format&gt; must match the [Golang `time` package
+   formatting](http://golang.org/pkg/time/#pkg-constants)
+0. Per the above, the date in the format string must be the following:
+
+    Mon Jan 2 15:04:05 -0700 MST 2006
+
+0. The value for &lt;format&gt; must be a properly quoted string
 
 ## Linting &amp; Building
 

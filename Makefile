@@ -73,6 +73,7 @@ gox-build: get $(GOPATH)/bin/gox
 
 .PHONY: test
 test:
+	go get -t ./...
 	@GO_TAG_ARGS="-tags netgo -tags integration" $(MAKE) build
 	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
@@ -107,7 +108,6 @@ $(GOPATH)/bin/deppy:
 
 .PHONY: get
 get: $(GOPATH)/bin/deppy
-	go get -t ./...
 	$(GOPATH)/bin/deppy restore
 
 $(PWD)/_testing/bin/coverage:
