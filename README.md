@@ -32,8 +32,13 @@ Other useful docs:
 
 #### From source
 
-To build from source, run `make build`.  You may have to install some
-things first, such as `go`
+```
+git clone https://github.com/rafecolton/docker-builder
+cd docker-builder
+make # clean build test
+```
+
+install dependencies as needed
 
 #### From pre-compiled binaries
 
@@ -49,34 +54,10 @@ curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0/
 
 **NOTE:** Checksums available on the [release page](https://github.com/rafecolton/docker-builder/releases)
 
-## New Command: `docker-builder enqueue`
 
-Docker-builder has an new, experimental command-line feature: `enqueue`
+## Subcommands
 
-Use `docker-builder enqueue` to push a build for your *current working
-directory* to your Docker build server.  To use locally, run the server
-in one tab and `docker-builder enqueue` in another.  For example:
+* [`docker-builder enqueue`](_docs/subcommands/enqueue.md) - enqueue a
+  build with your cwd
 
-```bash
-# terminal window 1
-docker-builder serve
-
-# terminal window 2
-docker-builder enqueue
-```
-
-Or, you may push directly to your build server by setting the
-docker-build-server host:
-
-```bash
-# via tne environment
-export DOCKER_BUILDER_HOST="http://username:password@build-server-host.example.com:5000" && \
-  docker-builder enqueue
-
-# via the command line
-docker-builder enqueue --host "http://username:password@build-server-host.example.com:5000"
-```
-
-## Contributing
-
-**Pull requests welcome!**
+[CONTRIBUTING](CONTRIBUTING.md)
