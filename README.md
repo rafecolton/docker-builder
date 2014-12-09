@@ -16,16 +16,12 @@ docker-builder.  For documentation on how to write a Bobfile, visit
 Other useful docs:
 
 * [Original Motivation for Docker Builder](_docs/why.md)
-* [Docker Builder Server](_docs/advanced-usage.md)
-* [Writing a Bobfile](_docs/writing-a-bobfile.md)
-* [Using with TLS (or `boot2docker` on Mac OS X](_docs/using-with-tls.md)
+* [Using with TLS (and `boot2docker` on Mac OS X](_docs/using-with-tls.md)
 
 ## Getting Started
 
 0. Install `docker-builder`
-0. Explore the [Writing a Bobfile](_docs/writing-a-bobfile.md) doc
 0. Run`docker-builder --help`
-0. Run `docker-builder help build`
 
 ### Installing `docker-builder`
 
@@ -53,10 +49,11 @@ curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0/
 
 **NOTE:** Checksums available on the [release page](https://github.com/rafecolton/docker-builder/releases)
 
-
 ## Subcommands
 
 * [`docker-builder enqueue`](_docs/subcommands/enqueue.md) - enqueue a
   build with your cwd
+* [`docker-builder serve`](_docs/subcommands/serve.md) - run
+  docker-builder as an http server, 
 
 [CONTRIBUTING](CONTRIBUTING.md)
