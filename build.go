@@ -11,6 +11,7 @@ import (
 	"github.com/winchman/builder-core/unit-config"
 
 	"github.com/codegangsta/cli"
+	"github.com/onsi/gocleanup"
 )
 
 func build(c *cli.Context) {
@@ -22,11 +23,11 @@ func build(c *cli.Context) {
 	unitConfig, err := unitconfig.ReadFromFile("./"+builderfile, unitconfig.TOML, unitconfig.YAML)
 	if err != nil {
 		if c.Bool("force") {
-			err = forceBuild()
+			if err := forceBuild(); err != nil {
+				Logger.Warn(err.Error())
+			}
 		}
-	}
-	if err != nil {
-		exitErr(1, "unable to parse unit config", err)
+		gocleanup.Exit(0)
 	}
 
 	globals := unitconfig.ConfigGlobals{
