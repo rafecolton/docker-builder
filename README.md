@@ -54,6 +54,7 @@ curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0/
 * [`docker-builder enqueue`](_docs/subcommands/enqueue.md) - enqueue a
   build with your cwd
 * [`docker-builder serve`](_docs/subcommands/serve.md) - run
-  docker-builder as an http server, 
+  docker-builder as an http server 
+* `docker-builder -h/--help/help` - view all subcommands and flags
 
 [CONTRIBUTING](CONTRIBUTING.md)
