@@ -16,7 +16,7 @@ docker-builder.  For documentation on how to write a Bobfile, visit
 Other useful docs:
 
 * [Original Motivation for Docker Builder](_docs/why.md)
-* [Using with TLS (and `boot2docker` on Mac OS X](_docs/using-with-tls.md)
+* [Using with TLS (and `boot2docker` on Mac OS X)](_docs/using-with-tls.md)
 
 ## Getting Started
 
@@ -27,7 +27,7 @@ Other useful docs:
 
 #### From source
 
-```
+```bash
 git clone https://github.com/rafecolton/docker-builder
 cd docker-builder
 make # clean build test
@@ -56,5 +56,7 @@ curl -sL https://github.com/rafecolton/docker-builder/releases/download/v0.10.0/
 * [`docker-builder serve`](_docs/subcommands/serve.md) - run
   docker-builder as an http server 
 * `docker-builder -h/--help/help` - view all subcommands and flags
+
+----
 
 [CONTRIBUTING](CONTRIBUTING.md)
