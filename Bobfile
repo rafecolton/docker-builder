@@ -1,6 +1,9 @@
 ---
 version: 1
 
+docker:
+  tag_opts: ["--force"]
+
 container_globals:
   skip_push: true
 
