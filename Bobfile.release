@@ -1,0 +1,11 @@
+---
+version: 1
+
+container:
+- name: app
+  Dockerfile: Dockerfile
+  registry: quay.io/rafecolton
+  project: docker-builder
+  tags: ["{{ tag }}"]
+
+# vim:ft=yaml

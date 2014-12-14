@@ -24,48 +24,43 @@
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/archive",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/fileutils",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/ioutils",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
-		},
-		{
-			"ImportPath": "github.com/docker/docker/pkg/log",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/pools",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/promise",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/system",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/tailfile",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar",
-			"Comment": "v1.3.2",
-			"Rev": "39fa2faad2f3d6fa5133de4eb740677202f53ef4"
+			"Comment": "v1.4.0",
+			"Rev": "4595d4fb03093acf87b905bebc5ba4964d7c0707"
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
