@@ -32,6 +32,7 @@ func build(c *cli.Context) {
 
 	globals := unitconfig.ConfigGlobals{
 		SkipPush: c.Bool("skip-push") || conf.Config.SkipPush,
+		Squash:   c.Bool("squash") || conf.Config.Squash,
 		CfgUn:    conf.Config.CfgUn,
 		CfgPass:  conf.Config.CfgPass,
 		CfgEmail: conf.Config.CfgEmail,

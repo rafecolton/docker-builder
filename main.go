@@ -108,10 +108,8 @@ func main() {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:        "init",
-			Usage:       "init [dir] - initialize the given directory (default '.') with a Bobfile",
-			Description: "Make educated guesses to fill out a Bobfile given a directory with a Dockerfile",
-			Action:      initialize,
+			Name:  "init",
+			Usage: "init [dir] - initialize the given directory (default '.') with a Bobfile",
 		},
 		{
 			Name:        "build",
@@ -122,6 +120,10 @@ func main() {
 				cli.BoolFlag{
 					Name:  "skip-push",
 					Usage: "override Bobfile behavior and do not push any images (useful for testing)",
+				},
+				cli.BoolFlag{
+					Name:  "squash",
+					Usage: "squash the docker image after building",
 				},
 				cli.BoolFlag{
 					Name:  "force, f",

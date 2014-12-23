@@ -10,6 +10,7 @@ type Conf struct {
 	LogFormat string
 	APIToken  string
 	SkipPush  bool
+	Squash    bool
 
 	// for basic auth
 	Username string

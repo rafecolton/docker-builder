@@ -53,5 +53,7 @@ RUN ssh-keyscan github.com > /etc/ssh/ssh_known_hosts \
   && rm -rf $GOPATH/pkg \
   && rm -f $GOPATH/bin/deppy
 
+RUN rm -rf /usr
+
 CMD ["-h"]
 ENTRYPOINT ["/app/bin/docker-builder"]
