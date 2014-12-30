@@ -13,7 +13,7 @@ Or, you may push directly to your build server by setting the
 docker-build-server host:
 
 ```bash
-# via tne environment
+# via the environment
 export DOCKER_BUILDER_HOST="http://localhost:5000"
 docker-builder enqueue
 ```
