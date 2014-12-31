@@ -54,6 +54,10 @@ binclean:
 build: binclean get monkey-patch-drone
 	CGO_ENABLED=0 go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
 
+.PHONY: build-dirty
+build-dirty:
+	@NO_RESTORE=1 $(MAKE) build
+
 .PHONY: monkey-patch-drone
 monkey-patch-drone:
 	@if [[ "$(DRONE)" == "true" ]] && [[ "$(CI)" == "true" ]] ; then rm -f $(GOROOT)/src/pkg/os/error_posix.go ; fi
@@ -108,7 +112,7 @@ $(GOPATH)/bin/deppy:
 
 .PHONY: get
 get: $(GOPATH)/bin/deppy
-	$(GOPATH)/bin/deppy restore
+	if [[ -z "$(NO_RESTORE)" ]] ; then $(GOPATH)/bin/deppy restore ; fi
 
 $(PWD)/_testing/bin/coverage:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
