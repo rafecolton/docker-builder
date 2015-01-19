@@ -1,3 +1,4 @@
 Bobfile
 .Bobfile.yml
 .Bobfile.toml
+*.tar

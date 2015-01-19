@@ -12,8 +12,13 @@ container:
   Dockerfile: Dockerfile
   registry: quay.io/rafecolton
   project: docker-builder
+  tags: ["latest"]
+- name: squash
+  Dockerfile: Dockerfile.squash
+  registry: quay.io/rafecolton
+  project: docker-builder
+  squash: true
   tags:
-  - latest
   - "{{ sha }}"
   - "{{ tag }}"
   - "{{ branch }}"

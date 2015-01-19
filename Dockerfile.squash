@@ -1,0 +1,3 @@
+FROM quay.io/rafecolton/docker-builder:latest
+
+RUN rm -rf /usr
