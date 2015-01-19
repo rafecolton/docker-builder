@@ -33,9 +33,9 @@ func build(c *cli.Context) {
 	globals := unitconfig.ConfigGlobals{
 		SkipPush: c.Bool("skip-push") || conf.Config.SkipPush,
 		Squash:   c.Bool("squash") || conf.Config.Squash,
-		CfgUn:    conf.Config.CfgUn,
-		CfgPass:  conf.Config.CfgPass,
-		CfgEmail: conf.Config.CfgEmail,
+		CfgUn:    string(conf.Config.CfgUn),
+		CfgPass:  string(conf.Config.CfgPass),
+		CfgEmail: string(conf.Config.CfgEmail),
 	}
 
 	unitConfig.SetGlobals(globals)

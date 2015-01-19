@@ -249,9 +249,9 @@ func (job *Job) build() error {
 
 	globals := unitconfig.ConfigGlobals{
 		SkipPush: SkipPush,
-		CfgUn:    conf.Config.CfgUn,
-		CfgPass:  conf.Config.CfgPass,
-		CfgEmail: conf.Config.CfgEmail,
+		CfgUn:    string(conf.Config.CfgUn),
+		CfgPass:  string(conf.Config.CfgPass),
+		CfgEmail: string(conf.Config.CfgEmail),
 	}
 
 	unitConfig.SetGlobals(globals)

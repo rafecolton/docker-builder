@@ -71,17 +71,17 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "dockercfg-un",
-			Value: conf.Config.CfgUn,
+			Value: conf.Config.CfgUn.String(),
 			Usage: "Docker registry username",
 		},
 		cli.StringFlag{
 			Name:  "dockercfg-pass",
-			Value: conf.Config.CfgPass,
+			Value: conf.Config.CfgPass.String(),
 			Usage: "Docker registry password",
 		},
 		cli.StringFlag{
 			Name:  "dockercfg-email",
-			Value: conf.Config.CfgEmail,
+			Value: conf.Config.CfgEmail.String(),
 			Usage: "Docker registry email",
 		},
 	}
