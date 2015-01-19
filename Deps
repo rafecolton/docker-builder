@@ -117,8 +117,8 @@
 		},
 		{
 			"ImportPath": "github.com/winchman/builder-core",
-			"Comment": "v0.2.2-20-ge1c247d",
-			"Rev": "e1c247d3efbf5296705dc2e5e5741c4e8a494bdf"
+			"Comment": "v0.2.2-21-g230fb9f",
+			"Rev": "230fb9fa852affd56d4077384ebef0e9e01c08f5"
 		},
 		{
 			"ImportPath": "github.com/winchman/libsquash",
