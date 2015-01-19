@@ -241,7 +241,7 @@ func (job *Job) clone() (string, error) {
 func (job *Job) build() error {
 
 	job.Logger.Debug("attempting to create a builder")
-	unitConfig, err := unitconfig.ReadFromFile(job.clonedRepoLocation+"/"+job.Bobfile, unitconfig.TOML)
+	unitConfig, err := unitconfig.ReadFromFile(job.clonedRepoLocation+"/"+job.Bobfile, unitconfig.TOML, unitconfig.YAML)
 	if err != nil {
 		job.Logger.WithField("error", err).Error("issue parsing Bobfile")
 		return err
