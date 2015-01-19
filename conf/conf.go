@@ -9,6 +9,8 @@ import (
 // Config is the global config for docker-builder
 var Config Conf
 
+// Secret is a type that wraps string, causing cli to print out "*" instead of
+// the actual value
 type Secret string
 
 // Conf is used for storing data retrieved from environmental variables.
