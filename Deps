@@ -117,13 +117,13 @@
 		},
 		{
 			"ImportPath": "github.com/winchman/builder-core",
-			"Comment": "v0.2.2-21-g230fb9f",
-			"Rev": "230fb9fa852affd56d4077384ebef0e9e01c08f5"
+			"Comment": "v0.2.2-23-gbcb58b4",
+			"Rev": "bcb58b404510de22a011a95b45e28f7db5667933"
 		},
 		{
 			"ImportPath": "github.com/winchman/libsquash",
-			"Comment": "v0.1.1-34-g786fb10",
-			"Rev": "786fb10eb6af5ff7467485f9463ca85487193e8d"
+			"Comment": "v0.1.1-35-g53a6737",
+			"Rev": "53a6737a753c5baaa657e8d5e5f83cc4459ceec3"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
