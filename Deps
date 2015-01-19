@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/rafecolton/docker-builder",
-	"GoVersion": "go1.3.3",
+	"GoVersion": "go1.4",
 	"Deps": [
 		{
 			"ImportPath": "github.com/BurntSushi/toml",
@@ -117,13 +117,13 @@
 		},
 		{
 			"ImportPath": "github.com/winchman/builder-core",
-			"Comment": "v0.2.2-4-g2c44a1c",
-			"Rev": "2c44a1ce731044bc34d6c35d0dd100b36011bee8"
+			"Comment": "v0.2.2-20-ge1c247d",
+			"Rev": "e1c247d3efbf5296705dc2e5e5741c4e8a494bdf"
 		},
 		{
 			"ImportPath": "github.com/winchman/libsquash",
-			"Comment": "v0.1.1",
-			"Rev": "61ebbb060dde5ee4faed9f3a9e84cf8edc1b6d20"
+			"Comment": "v0.1.1-34-g786fb10",
+			"Rev": "786fb10eb6af5ff7467485f9463ca85487193e8d"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",

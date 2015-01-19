@@ -6,6 +6,13 @@ container:
   Dockerfile: Dockerfile
   registry: quay.io/rafecolton
   project: docker-builder
+  tags: ["latest"]
+  skip_push: true
+- name: app
+  Dockerfile: Dockerfile.squash
+  registry: quay.io/rafecolton
+  project: docker-builder
+  squash: true
   tags: ["{{ tag }}"]
 
 # vim:ft=yaml
