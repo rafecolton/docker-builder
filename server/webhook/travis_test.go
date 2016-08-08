@@ -21,6 +21,7 @@ type travisRequest struct {
 	Type       string     `json:"type"`
 	Status     int        `json:"status"`
 	Commit     string     `json:"commit"`
+	Branch     string     `json:"branch"`
 	Repository travisRepo `json:"repository"`
 }
 

@@ -25,6 +25,7 @@ type travisRepository struct {
 type travisPayload struct {
 	Repository  travisRepository `json:"repository"`
 	CommitSHA   string           `json:"commit"`
+	Branch      string           `json:"branch"`
 	BuildStatus int              `json:"status"`
 	BuildType   string           `json:"type"`
 }
@@ -60,7 +61,7 @@ func Travis(w http.ResponseWriter, req *http.Request) (int, string) {
 	spec := &job.Spec{
 		RepoOwner: payload.Repository.Owner,
 		RepoName:  payload.Repository.Name,
-		GitRef:    payload.CommitSHA,
+		GitRef:    payload.Branch,
 	}
 
 	return processJobHelper(spec, w, req)
