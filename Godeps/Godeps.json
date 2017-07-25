@@ -1,0 +1,127 @@
+{
+	"ImportPath": "github.com/rafecolton/docker-builder",
+	"GoVersion": "go1.8.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/BurntSushi/toml",
+			"Comment": "v0.1.0-21-g056c9bc",
+			"Rev": "056c9bc7be7190eaa7715723883caffa5f8fa3e4"
+		},
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.8.7-49-gcdaedc6",
+			"Rev": "cdaedc68f2894175ac2b3221869685602c759e71"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/cli",
+			"Comment": "1.2.0-179-g0302d39",
+			"Rev": "0302d3914d2a6ad61404584cdae6e6dbc9c03599"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/inject",
+			"Comment": "v1.0-rc1-10-g33e0aa1",
+			"Rev": "33e0aa1cb7c019ccc3fbe049a8262a6403d30504"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/archive",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/fileutils",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/idtools",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/ioutils",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/pools",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/promise",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/system",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/tailfile",
+			"Comment": "v1.4.1-8204-gee3e07d",
+			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+		},
+		{
+			"ImportPath": "github.com/fsouza/go-dockerclient",
+			"Rev": "dc4295a98977ab5b1983051bc169b784c4b423df"
+		},
+		{
+			"ImportPath": "github.com/go-martini/martini",
+			"Comment": "v1.0-169-g15a4762",
+			"Rev": "15a47622d6a9b3e6a1eaca2681e4850f612471ea"
+		},
+		{
+			"ImportPath": "github.com/kelseyhightower/envconfig",
+			"Comment": "v1.3.0-6-g70f0258",
+			"Rev": "70f0258d44cbaa3b6a2581d82f58da01a38e4de4"
+		},
+		{
+			"ImportPath": "github.com/martini-contrib/auth",
+			"Rev": "fa62c19b7ae87da370242054c8beb11af31d327f"
+		},
+		{
+			"ImportPath": "github.com/modcloth/go-fileutils",
+			"Rev": "f2bf9a2a685355797adbdd7f1d9191ad32f76115"
+		},
+		{
+			"ImportPath": "github.com/modcloth/kamino",
+			"Comment": "v0.1.2-22-g10e9b9e",
+			"Rev": "10e9b9ebe46eab203257945b7a17090d3fe03540"
+		},
+		{
+			"ImportPath": "github.com/nu7hatch/gouuid",
+			"Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
+		},
+		{
+			"ImportPath": "github.com/onsi/gocleanup",
+			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-dockerclient-quick",
+			"Rev": "ebab26ac4bc48eaffb7a57f64bf723ff960c2d96"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
+			"Rev": "127186d3d0bd6ae0867081a76324e1afe6dbf084"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-gitutils",
+			"Rev": "98169906211372ca2fd02e4e8e6c01eec7eed21c"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/vauth",
+			"Comment": "v0.1.2",
+			"Rev": "2bc701047e05fd2ed2fa2e35ce029bf6d6b02461"
+		},
+		{
+			"ImportPath": "github.com/winchman/builder-core",
+			"Comment": "v0.2.2-1-g30f3fe0",
+			"Rev": "30f3fe0d2ed4ca797668a09d2b3995459913bfaa"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "f7716cbe52baa25d2e9b0d0da546fcf909fc16b4"
+		}
+	]
+}

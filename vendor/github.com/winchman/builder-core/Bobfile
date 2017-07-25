@@ -1,0 +1,10 @@
+version = 1
+
+[[container]]
+name = "app"
+Dockerfile = "Dockerfile"
+registry = "quay.io/rafecolton"
+project = "builder-core"
+tags = ["git:tag"]
+
+# vim:ft=toml

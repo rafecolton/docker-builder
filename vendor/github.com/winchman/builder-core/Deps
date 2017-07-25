@@ -1,0 +1,84 @@
+{
+	"ImportPath": "github.com/winchman/builder-core",
+	"GoVersion": "go1.3.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/BurntSushi/toml",
+			"Comment": "v0.1.0-9-g3883ac1",
+			"Rev": "3883ac1ce943878302255f538fce319d23226223"
+		},
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.6.2-10-g51fe59a",
+			"Rev": "51fe59aca108dc5680109e7b2051cbdcfa5a253c"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/archive",
+			"Comment": "v1.4.1-115-g502a1a4",
+			"Rev": "502a1a4e1a36cfcdd88139b0b35723e86d6198cf"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/fileutils",
+			"Comment": "v1.4.1-115-g502a1a4",
+			"Rev": "502a1a4e1a36cfcdd88139b0b35723e86d6198cf"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/ioutils",
+			"Comment": "v1.4.1-115-g502a1a4",
+			"Rev": "502a1a4e1a36cfcdd88139b0b35723e86d6198cf"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/pools",
+			"Comment": "v1.4.1-115-g502a1a4",
+			"Rev": "502a1a4e1a36cfcdd88139b0b35723e86d6198cf"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/promise",
+			"Comment": "v1.4.1-115-g502a1a4",
+			"Rev": "502a1a4e1a36cfcdd88139b0b35723e86d6198cf"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/system",
+			"Comment": "v1.4.1-115-g502a1a4",
+			"Rev": "502a1a4e1a36cfcdd88139b0b35723e86d6198cf"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar",
+			"Comment": "v1.4.1-115-g502a1a4",
+			"Rev": "502a1a4e1a36cfcdd88139b0b35723e86d6198cf"
+		},
+		{
+			"ImportPath": "github.com/fsouza/go-dockerclient",
+			"Comment": "0.2.1-336-g77d44de",
+			"Rev": "77d44de354d4cb20ad5b03a9e118dc203e59095b"
+		},
+		{
+			"ImportPath": "github.com/modcloth/go-fileutils",
+			"Rev": "f2bf9a2a685355797adbdd7f1d9191ad32f76115"
+		},
+		{
+			"ImportPath": "github.com/nu7hatch/gouuid",
+			"Rev": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
+		},
+		{
+			"ImportPath": "github.com/onsi/gocleanup",
+			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-dockerclient-quick",
+			"Rev": "ebab26ac4bc48eaffb7a57f64bf723ff960c2d96"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-dockerclient-sort",
+			"Rev": "127186d3d0bd6ae0867081a76324e1afe6dbf084"
+		},
+		{
+			"ImportPath": "github.com/rafecolton/go-gitutils",
+			"Rev": "98169906211372ca2fd02e4e8e6c01eec7eed21c"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "d466437aa4adc35830964cffc5b5f262c63ddcb4"
+		}
+	]
+}

@@ -1,0 +1,22 @@
+language: go
+go:
+- 1.2.2
+- 1.3.3
+- tip
+env:
+  matrix:
+  - GOARCH=amd64
+  - GOARCH=386
+  global:
+    secure: c7vypIwUrULhJEOWAgczDgayp/Z9zwuOmtOT36IrPrkCwNPq/0OmfKQHRqrl79XGYVhLcNlmIkILSFqfxxlFIOeIJ7WX0fRn9lOfJ10wNsJNE7DOPs1fhdTWqaNCoFd4mV9rQ8sQX6/JoLMAL8U69ni8an94uvwGExf0zre8g4M=
+install:
+- go get -d ./...
+- curl -sLOf https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice && chmod +x fmtpolice
+- curl -sLOf https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage && chmod +x coverage
+- go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
+- go get -u github.com/axw/gocov/gocov github.com/mattn/goveralls
+script:
+- go test ./...
+- ./fmtpolice
+- ./coverage
+- ${GOPATH%%:*}/bin/goveralls -coverprofile=gover.coverprofile -repotoken $GOVERALLS_TOKEN

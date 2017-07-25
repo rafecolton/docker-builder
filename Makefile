@@ -103,12 +103,16 @@ $(GOPATH)/bin/gox:
 gopath:
 	@echo  "\$$GOPATH = $(GOPATH)"
 
-$(GOPATH)/bin/deppy:
-	go get github.com/hamfist/deppy
+$(GOPATH)/bin/godep:
+	go get github.com/tools/godep
 
 .PHONY: get
-get: $(GOPATH)/bin/deppy
-	$(GOPATH)/bin/deppy restore
+get: $(GOPATH)/bin/godep
+	$(GOPATH)/bin/godep restore
+
+.PHONY: save
+save: $(GOPATH)/bin/godep
+	godep save
 
 $(PWD)/_testing/bin/coverage:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
