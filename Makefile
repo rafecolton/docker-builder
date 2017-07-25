@@ -10,9 +10,9 @@ REPO_VERSION := $(shell git describe --always --dirty --tags)
 REPO_REV := $(shell git rev-parse --sq HEAD)
 REPO_BRANCH := $(shell git rev-parse -q --abbrev-ref HEAD) # FIXME: will be "HEAD" if not on branch
 GOBUILD_VERSION_ARGS := -ldflags "\
-  -X $(REV_VAR) $(REPO_REV) \
-  -X $(VERSION_VAR) $(REPO_VERSION) \
-  -X $(BRANCH_VAR) $(REPO_BRANCH) \
+  -X $(REV_VAR)=$(REPO_REV) \
+  -X $(VERSION_VAR)=$(REPO_VERSION) \
+  -X $(BRANCH_VAR)=$(REPO_BRANCH) \
   -w \
 "
 
