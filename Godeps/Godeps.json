@@ -24,38 +24,38 @@
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/fileutils",
-			"Comment": "v1.4.1-8204-gee3e07d",
-			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/idtools",
-			"Comment": "v1.4.1-8204-gee3e07d",
-			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/ioutils",
-			"Comment": "v1.4.1-8204-gee3e07d",
-			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/pools",
-			"Comment": "v1.4.1-8204-gee3e07d",
-			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/promise",
-			"Comment": "v1.4.1-8204-gee3e07d",
-			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/system",
-			"Comment": "v1.4.1-8204-gee3e07d",
-			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/tailfile",
-			"Comment": "v1.4.1-8204-gee3e07d",
-			"Rev": "ee3e07d3593f97466df6fc11c19f91c1aee76dd4"
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
