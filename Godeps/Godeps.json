@@ -38,6 +38,11 @@
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
+			"ImportPath": "github.com/docker/docker/pkg/mount",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
 			"ImportPath": "github.com/docker/docker/pkg/pools",
 			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
@@ -103,6 +108,16 @@
 			"Rev": "5951cf5f36e10d1a57c8eb36606c2724d89440a7"
 		},
 		{
+			"ImportPath": "github.com/opencontainers/runc/libcontainer/user",
+			"Comment": "v1.0.0-rc3-159-g5951cf5",
+			"Rev": "5951cf5f36e10d1a57c8eb36606c2724d89440a7"
+		},
+		{
+			"ImportPath": "github.com/pkg/errors",
+			"Comment": "v0.8.0-5-gc605e28",
+			"Rev": "c605e284fe17294bda444b34710735b29d1a9d90"
+		},
+		{
 			"ImportPath": "github.com/rafecolton/go-dockerclient-quick",
 			"Rev": "ebab26ac4bc48eaffb7a57f64bf723ff960c2d96"
 		},
@@ -123,6 +138,10 @@
 			"ImportPath": "github.com/winchman/builder-core",
 			"Comment": "v0.2.2-2-g5f7bbf8",
 			"Rev": "5f7bbf87eb3f041adf06d26dbb0fa0684ed570cd"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "195180cfebf7362bd243a52477697895128c8777"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
