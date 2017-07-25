@@ -7,7 +7,7 @@ import (
 	"regexp"
 
 	l "github.com/Sirupsen/logrus"
-	"github.com/docker/docker/pkg/archive"
+	"github.com/moby/moby/pkg/archive"
 	"github.com/modcloth/go-fileutils"
 	"github.com/onsi/gocleanup"
 	"github.com/rafecolton/go-dockerclient-quick"
@@ -223,8 +223,8 @@ func (bob *Builder) setup() error {
 
 	contextDir := pathToDockerfile.Top()
 	tarStream, err := archive.TarWithOptions(contextDir, &archive.TarOptions{
-		Compression: archive.Uncompressed,
-		Excludes:    []string{"Dockerfile"},
+		Compression:     archive.Uncompressed,
+		ExcludePatterns: []string{"Dockerfile"},
 	})
 	if err != nil {
 		return err

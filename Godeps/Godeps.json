@@ -116,8 +116,8 @@
 		},
 		{
 			"ImportPath": "github.com/winchman/builder-core",
-			"Comment": "v0.2.2-1-g30f3fe0",
-			"Rev": "30f3fe0d2ed4ca797668a09d2b3995459913bfaa"
+			"Comment": "v0.2.2-2-g5f7bbf8",
+			"Rev": "5f7bbf87eb3f041adf06d26dbb0fa0684ed570cd"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
