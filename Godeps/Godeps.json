@@ -8,6 +8,10 @@
 			"Rev": "056c9bc7be7190eaa7715723883caffa5f8fa3e4"
 		},
 		{
+			"ImportPath": "github.com/Nvveen/Gotty",
+			"Rev": "cd527374f1e5bff4938207604a14f2e38a9cf512"
+		},
+		{
 			"ImportPath": "github.com/Sirupsen/logrus",
 			"Comment": "v0.8.7-49-gcdaedc6",
 			"Rev": "cdaedc68f2894175ac2b3221869685602c759e71"
@@ -23,7 +27,27 @@
 			"Rev": "33e0aa1cb7c019ccc3fbe049a8262a6403d30504"
 		},
 		{
+			"ImportPath": "github.com/docker/docker/api/types",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/opts",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/archive",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
 			"ImportPath": "github.com/docker/docker/pkg/fileutils",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/homedir",
 			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
@@ -34,6 +58,16 @@
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/ioutils",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/jsonlog",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/jsonmessage",
 			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
@@ -53,6 +87,11 @@
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
+			"ImportPath": "github.com/docker/docker/pkg/stdcopy",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
 			"ImportPath": "github.com/docker/docker/pkg/system",
 			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
@@ -63,13 +102,37 @@
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
+			"ImportPath": "github.com/docker/docker/pkg/term",
+			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
+			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
+		},
+		{
+			"ImportPath": "github.com/docker/go-connections/nat",
+			"Comment": "v0.2.1-30-g3ede32e",
+			"Rev": "3ede32e2033de7505e6500d6c868c2b9ed9f169d"
+		},
+		{
+			"ImportPath": "github.com/docker/go-units",
+			"Comment": "v0.3.1-12-g0dadbb0",
+			"Rev": "0dadbb0345b35ec7ef35e228dabb8de89a65bf52"
+		},
+		{
 			"ImportPath": "github.com/fsouza/go-dockerclient",
-			"Rev": "dc4295a98977ab5b1983051bc169b784c4b423df"
+			"Rev": "e991fbef2be0da8fb99e1cf882acb7eef5f3c1f2"
 		},
 		{
 			"ImportPath": "github.com/go-martini/martini",
 			"Comment": "v1.0-169-g15a4762",
 			"Rev": "15a47622d6a9b3e6a1eaca2681e4850f612471ea"
+		},
+		{
+			"ImportPath": "github.com/gogo/protobuf/proto",
+			"Comment": "v0.4-28-g7b6c639",
+			"Rev": "7b6c6391c4ff245962047fc1e2c6e08b1cdfa0e8"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/go-cleanhttp",
+			"Rev": "3573b8b52aa7b37b9358d966a898feb387f62437"
 		},
 		{
 			"ImportPath": "github.com/kelseyhightower/envconfig",
@@ -101,6 +164,16 @@
 		{
 			"ImportPath": "github.com/onsi/gocleanup",
 			"Rev": "c1a5478700b50f357e84d5991f5566a1826c4cf5"
+		},
+		{
+			"ImportPath": "github.com/opencontainers/go-digest",
+			"Comment": "v1.0.0-rc0-6-g279bed9",
+			"Rev": "279bed98673dd5bef374d3b6e4b09e2af76183bf"
+		},
+		{
+			"ImportPath": "github.com/opencontainers/image-spec/specs-go",
+			"Comment": "v1.0.0-4-gef2b9a1",
+			"Rev": "ef2b9a1d696677abd664a0879758d2b115b1ded3"
 		},
 		{
 			"ImportPath": "github.com/opencontainers/runc/libcontainer/system",
