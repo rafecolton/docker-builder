@@ -262,8 +262,8 @@
 		},
 		{
 			"ImportPath": "github.com/winchman/builder-core",
-			"Comment": "v0.2.2-2-g5f7bbf8",
-			"Rev": "5f7bbf87eb3f041adf06d26dbb0fa0684ed570cd"
+			"Comment": "v0.2.2-3-g79bf5d1",
+			"Rev": "79bf5d150337d9e1ee860bb3a9aa34dedb118345"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",

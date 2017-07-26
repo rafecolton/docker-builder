@@ -8,7 +8,7 @@ import (
 )
 
 func lint(c *cli.Context) {
-	_, err := unitconfig.ReadFromFile("./"+c.Args().First(), unitconfig.TOML)
+	_, err := unitconfig.ReadFromFile("./" + c.Args().First())
 	if err != nil {
 		Logger.Error(err)
 		gocleanup.Exit(1)

@@ -36,6 +36,9 @@ const (
 // extension as described in the documentation for the UnitConfigEncoding
 // constants.  If no encoding can be inferred, TOML will be used as the default.
 func ReadFromFile(path string, encodings ...Encoding) (*UnitConfig, error) {
+	if len(encodings) == 0 {
+		encodings = []Encoding{TOML, JSON, YAML}
+	}
 	// check file
 	if path == "" {
 		return nil, errors.New("no file path provided")
