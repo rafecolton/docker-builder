@@ -20,8 +20,8 @@
 		},
 		{
 			"ImportPath": "github.com/Sirupsen/logrus",
-			"Comment": "1.0.2-18-g8d4f6a9",
-			"Rev": "8d4f6a97d3fe8725a31e3185c7a877a5e1dc6f09"
+			"Comment": "1.0.2-25-g259b4b7",
+			"Rev": "259b4b7f450a330ee03d88f0d704c2cc7964cf9e"
 		},
 		{
 			"ImportPath": "github.com/codegangsta/cli",
@@ -159,6 +159,10 @@
 		},
 		{
 			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "0a4f71a498b7c4812f64969510bcb4eca251e33a"
+		},
+		{
+			"ImportPath": "github.com/golang/protobuf/ptypes/any",
 			"Rev": "0a4f71a498b7c4812f64969510bcb4eca251e33a"
 		},
 		{
