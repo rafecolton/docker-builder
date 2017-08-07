@@ -12,10 +12,9 @@ script:
 after_success:
 - make goveralls
 notifications:
-  webhooks:
-  - https://docker-build-server.modcloth.com/docker-build/travis
-  on_success: always
-  on_failure: never
+  email:
+    on_success: change
+    on_failure: change
 env:
   global:
     - secure: BWl5TwdzJjgFDV29DvZtmNDwzhEuLx4QxVwgwVjrJmgL1jjzfXfg/AabUEeUq7GsF/2OJbpZjKI1F0DSaMG70BjZqhljiRjplSJZXL49APZ7xd9gTS+xuAfILf4soihMKWbnDUh/5wNMSwCDABhbukiMyIPONYcCTxigbypdZCs=
