@@ -1,7 +1,7 @@
 # Welcome to Bob!
 
 [![Build Status](https://travis-ci.org/rafecolton/docker-builder.svg?branch=master)](https://travis-ci.org/rafecolton/docker-builder)
-[![GoDoc](https://godoc.org/github.com/rafecolton/docker-builder?status.png)](https://godoc.org/github.com/rafecolton/docker-builder)
+[![GoDoc](https://godoc.org/github.com/rafecolton/docker-builder?status.svg)](https://godoc.org/github.com/rafecolton/docker-builder)
 [![Go Report Card](https://goreportcard.com/badge/rafecolton/docker-builder)](https://goreportcard.com/report/rafecolton/docker-builder)
 [![Coverage Status](https://coveralls.io/repos/github/rafecolton/docker-builder/badge.svg?branch=master)](https://coveralls.io/github/rafecolton/docker-builder?branch=master)
 
