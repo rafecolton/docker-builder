@@ -15,6 +15,11 @@
 			"Rev": "056c9bc7be7190eaa7715723883caffa5f8fa3e4"
 		},
 		{
+			"ImportPath": "github.com/Microsoft/go-winio",
+			"Comment": "v0.4.4-7-g7843996",
+			"Rev": "78439966b38d69bf38227fbf57ac8a6fee70f69a"
+		},
+		{
 			"ImportPath": "github.com/Nvveen/Gotty",
 			"Rev": "cd527374f1e5bff4938207604a14f2e38a9cf512"
 		},
@@ -261,6 +266,11 @@
 			"Rev": "2bc701047e05fd2ed2fa2e35ce029bf6d6b02461"
 		},
 		{
+			"ImportPath": "github.com/sirupsen/logrus",
+			"Comment": "1.0.2-25-g259b4b7",
+			"Rev": "259b4b7f450a330ee03d88f0d704c2cc7964cf9e"
+		},
+		{
 			"ImportPath": "github.com/winchman/builder-core",
 			"Comment": "v0.2.2-3-g79bf5d1",
 			"Rev": "79bf5d150337d9e1ee860bb3a9aa34dedb118345"
@@ -275,6 +285,10 @@
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "14ac33bf8474b62c65cae263af2e4d3b543cc699"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/windows",
 			"Rev": "14ac33bf8474b62c65cae263af2e4d3b543cc699"
 		},
 		{
