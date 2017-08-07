@@ -2,7 +2,7 @@ SHELL := /bin/bash
 SUDO ?= sudo
 DOCKER ?= docker
 B := github.com/rafecolton/docker-builder
-PACKAGES := ./...
+PACKAGES := $(B)
 REV_VAR := $(B)/version.RevString
 VERSION_VAR := $(B)/version.VersionString
 BRANCH_VAR := $(B)/version.BranchString
@@ -69,11 +69,10 @@ gox-build: get $(GOPATH)/bin/gox
 
 .PHONY: .test
 .test: fmtpolice bats
-	go test ./...
+	go test $$(go list ./... | grep -v /vendor/)
 
 .PHONY: test
 test:
-	go get -t ./...
 	@GO_TAG_ARGS="-tags netgo -tags integration" $(MAKE) build
 	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
