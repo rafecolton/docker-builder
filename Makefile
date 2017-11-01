@@ -63,7 +63,7 @@ release: binclean gox-build
 	open ./_release
 
 .PHONY: gox-build
-gox-build: get $(GOPATH)/bin/gox
+gox-build: $(GOPATH)/bin/gox
 	CGO_ENABLED=0 $(GOPATH)/bin/gox -output="_release/docker-builder-$(REPO_VERSION)-{{ .OS }}-{{ .Arch }}" -osarch="darwin/amd64 linux/amd64" $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(B)
 	for file in $$(find ./_release -type f -name 'docker-builder-*') ; do openssl sha256 -out $$file-SHA256SUM $$file ; done
 
@@ -104,10 +104,6 @@ gopath:
 
 $(GOPATH)/bin/godep:
 	go get github.com/tools/godep
-
-.PHONY: get
-get: $(GOPATH)/bin/godep
-	$(GOPATH)/bin/godep restore
 
 .PHONY: save
 save: $(GOPATH)/bin/godep

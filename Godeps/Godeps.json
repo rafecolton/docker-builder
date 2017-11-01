@@ -1,23 +1,14 @@
 {
 	"ImportPath": "github.com/rafecolton/docker-builder",
-	"GoVersion": "go1.8.3",
+	"GoVersion": "go1.9",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
 		{
-			"ImportPath": "github.com/Azure/go-ansiterm",
-			"Rev": "19f72df4d05d31cbe1c56bfc8045c96babff6c7e"
-		},
-		{
 			"ImportPath": "github.com/BurntSushi/toml",
 			"Comment": "v0.1.0-21-g056c9bc",
 			"Rev": "056c9bc7be7190eaa7715723883caffa5f8fa3e4"
-		},
-		{
-			"ImportPath": "github.com/Microsoft/go-winio",
-			"Comment": "v0.4.4-7-g7843996",
-			"Rev": "78439966b38d69bf38227fbf57ac8a6fee70f69a"
 		},
 		{
 			"ImportPath": "github.com/Nvveen/Gotty",
@@ -94,22 +85,12 @@
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
-			"ImportPath": "github.com/docker/docker/pkg/progress",
-			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
-			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
-		},
-		{
 			"ImportPath": "github.com/docker/docker/pkg/promise",
 			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
 		{
 			"ImportPath": "github.com/docker/docker/pkg/stdcopy",
-			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
-			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
-		},
-		{
-			"ImportPath": "github.com/docker/docker/pkg/streamformatter",
 			"Comment": "docs-v1.12.0-rc4-2016-07-15-7356-g92b3dcb",
 			"Rev": "92b3dcb601381348c12ad7f99e865991bf908eea"
 		},
@@ -151,32 +132,6 @@
 			"ImportPath": "github.com/gogo/protobuf/proto",
 			"Comment": "v0.4-28-g7b6c639",
 			"Rev": "7b6c6391c4ff245962047fc1e2c6e08b1cdfa0e8"
-		},
-		{
-			"ImportPath": "github.com/gogo/protobuf/sortkeys",
-			"Comment": "v0.4-28-g7b6c639",
-			"Rev": "7b6c6391c4ff245962047fc1e2c6e08b1cdfa0e8"
-		},
-		{
-			"ImportPath": "github.com/gogo/protobuf/types",
-			"Comment": "v0.4-28-g7b6c639",
-			"Rev": "7b6c6391c4ff245962047fc1e2c6e08b1cdfa0e8"
-		},
-		{
-			"ImportPath": "github.com/golang/protobuf/proto",
-			"Rev": "0a4f71a498b7c4812f64969510bcb4eca251e33a"
-		},
-		{
-			"ImportPath": "github.com/golang/protobuf/ptypes/any",
-			"Rev": "0a4f71a498b7c4812f64969510bcb4eca251e33a"
-		},
-		{
-			"ImportPath": "github.com/gorilla/context",
-			"Rev": "1c83b3eabd45b6d76072b66b746c20815fb2872d"
-		},
-		{
-			"ImportPath": "github.com/gorilla/mux",
-			"Rev": "ad4d7a5882b961e07e2626045eb995c022ac6664"
 		},
 		{
 			"ImportPath": "github.com/hashicorp/go-cleanhttp",
@@ -266,11 +221,6 @@
 			"Rev": "2bc701047e05fd2ed2fa2e35ce029bf6d6b02461"
 		},
 		{
-			"ImportPath": "github.com/sirupsen/logrus",
-			"Comment": "1.0.2-25-g259b4b7",
-			"Rev": "259b4b7f450a330ee03d88f0d704c2cc7964cf9e"
-		},
-		{
 			"ImportPath": "github.com/winchman/builder-core",
 			"Comment": "v0.2.2-3-g79bf5d1",
 			"Rev": "79bf5d150337d9e1ee860bb3a9aa34dedb118345"
@@ -288,23 +238,11 @@
 			"Rev": "14ac33bf8474b62c65cae263af2e4d3b543cc699"
 		},
 		{
-			"ImportPath": "golang.org/x/sys/windows",
-			"Rev": "14ac33bf8474b62c65cae263af2e4d3b543cc699"
-		},
-		{
 			"ImportPath": "golang.org/x/text/encoding",
 			"Rev": "836efe42bb4aa16aaa17b9c155d8813d336ed720"
 		},
 		{
-			"ImportPath": "golang.org/x/text/internal/tag",
-			"Rev": "836efe42bb4aa16aaa17b9c155d8813d336ed720"
-		},
-		{
 			"ImportPath": "golang.org/x/text/internal/utf8internal",
-			"Rev": "836efe42bb4aa16aaa17b9c155d8813d336ed720"
-		},
-		{
-			"ImportPath": "golang.org/x/text/language",
 			"Rev": "836efe42bb4aa16aaa17b9c155d8813d336ed720"
 		},
 		{
@@ -314,10 +252,6 @@
 		{
 			"ImportPath": "golang.org/x/text/transform",
 			"Rev": "836efe42bb4aa16aaa17b9c155d8813d336ed720"
-		},
-		{
-			"ImportPath": "golang.org/x/time/rate",
-			"Rev": "8be79e1e0910c292df4e79c241bb7e8f7e725959"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
