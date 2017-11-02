@@ -51,7 +51,7 @@ binclean:
 	touch ./_release/.gitkeep
 
 .PHONY: build
-build: binclean get monkey-patch-drone
+build: binclean monkey-patch-drone
 	CGO_ENABLED=0 go install -a $(GOBUILD_VERSION_ARGS) $(GO_TAG_ARGS) $(PACKAGES)
 
 .PHONY: monkey-patch-drone
