@@ -36,7 +36,7 @@ require (
 	github.com/rafecolton/vauth v0.1.2
 	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/winchman/builder-core v0.2.3-0.20170726143510-79bf5d150337
-	golang.org/x/net v0.0.0-20151130200627-195180cfebf7 // indirect
-	golang.org/x/text v0.0.0-20170714085652-836efe42bb4a // indirect
+	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
+	golang.org/x/tools v0.0.0-20200329025819-fd4102a86c65 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
