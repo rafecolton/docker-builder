@@ -77,8 +77,11 @@ test:
 	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
 .PHONY: fmtpolice
-fmtpolice: $(PWD)/_testing/bin/fmtpolice
+fmtpolice: $(PWD)/_testing/bin/fmtpolice $(GOPATH)/bin/golint
 	./_testing/bin/fmtpolice
+
+$(GOPATH)/bin/golint
+	go get -u golang.org/x/lint/golint
 
 $(PWD)/_testing/bin/fmtpolice:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@ && \
