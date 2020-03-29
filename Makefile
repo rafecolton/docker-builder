@@ -111,8 +111,8 @@ $(PWD)/_testing/bin/coverage:
 
 .PHONY: coverage
 coverage: $(PWD)/_testing/bin/coverage
-	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
-	go get -u github.com/axw/gocov/gocov
+	GO11MODULE=off go get -u code.google.com/p/go.tools/cmd/cover || GO11MODULE=off go get -u golang.org/x/tools/cmd/cover
+	GO11MODULE=off go get -u github.com/axw/gocov/gocov
 	./_testing/bin/coverage
 
 .PHONY: goveralls
