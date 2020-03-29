@@ -80,7 +80,7 @@ test:
 fmtpolice: $(PWD)/_testing/bin/fmtpolice $(GOPATH)/bin/golint
 	./_testing/bin/fmtpolice
 
-$(GOPATH)/bin/golint
+$(GOPATH)/bin/golint:
 	go get -u golang.org/x/lint/golint
 
 $(PWD)/_testing/bin/fmtpolice:
