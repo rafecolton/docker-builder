@@ -5,8 +5,7 @@ matrix:
   allow_failures:
     - go: tip
 go:
-- 1.8.3
-- tip
+- 1.14.1
 script:
 - make test
 after_success:

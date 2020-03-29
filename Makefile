@@ -20,11 +20,13 @@ BATS_INSTALL_DIR ?= $(PWD)/_testing/bats
 
 BATS_OUT_FORMAT=$(shell bash -c "echo $${CI+--tap}")
 GOPATH := $(shell echo $${GOPATH%%:*})
+GO111MODULE := off
 
 # go build args
 GO_TAG_ARGS ?= -tags netgo
 
 export GOPATH
+export GO111MODULE
 
 .PHONY: all
 all: binclean clean build test
@@ -77,8 +79,11 @@ test:
 	@DOCKER_BUILDER_TEST_MODE=1 $(MAKE) .test
 
 .PHONY: fmtpolice
-fmtpolice: $(PWD)/_testing/bin/fmtpolice
+fmtpolice: $(PWD)/_testing/bin/fmtpolice $(GOPATH)/bin/golint
 	./_testing/bin/fmtpolice
+
+$(GOPATH)/bin/golint:
+	go get -u golang.org/x/lint/golint
 
 $(PWD)/_testing/bin/fmtpolice:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/fmtpolice -o $@ && \
@@ -102,20 +107,13 @@ $(GOPATH)/bin/gox:
 gopath:
 	@echo  "\$$GOPATH = $(GOPATH)"
 
-$(GOPATH)/bin/godep:
-	go get github.com/tools/godep
-
-.PHONY: save
-save: $(GOPATH)/bin/godep
-	godep save
-
 $(PWD)/_testing/bin/coverage:
 	curl -sL https://raw.githubusercontent.com/rafecolton/fmtpolice/master/coverage -o $@ && \
 	  chmod +x $@
 
 .PHONY: coverage
 coverage: $(PWD)/_testing/bin/coverage
-	go get -u code.google.com/p/go.tools/cmd/cover || go get -u golang.org/x/tools/cmd/cover
+	go get -u golang.org/x/tools/cmd/cover
 	go get -u github.com/axw/gocov/gocov
 	./_testing/bin/coverage
 

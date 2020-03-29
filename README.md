@@ -21,8 +21,8 @@ Other useful docs:
 
 ## Getting Started
 
-0. Install `docker-builder`
-0. Run`docker-builder --help`
+1. Install `docker-builder`
+1. Run`docker-builder --help`
 
 ### Installing `docker-builder`
 
@@ -31,6 +31,8 @@ Other useful docs:
 ```bash
 git clone https://github.com/rafecolton/docker-builder
 cd docker-builder
+go get ./...
+go get -u golang.org/x/lint/golint
 make # clean build test
 ```
 
