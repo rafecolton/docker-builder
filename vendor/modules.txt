@@ -1,0 +1,190 @@
+# github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78
+## explicit
+github.com/Azure/go-ansiterm
+github.com/Azure/go-ansiterm/winterm
+# github.com/BurntSushi/toml v0.1.1-0.20150501104042-056c9bc7be71
+## explicit
+github.com/BurntSushi/toml
+# github.com/Microsoft/go-winio v0.4.14
+## explicit
+github.com/Microsoft/go-winio
+github.com/Microsoft/go-winio/pkg/guid
+# github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5
+## explicit
+github.com/Nvveen/Gotty
+# github.com/Sirupsen/logrus v1.0.2-0.20170726124705-259b4b7f450a
+## explicit
+github.com/Sirupsen/logrus
+# github.com/codegangsta/cli v1.11.1-0.20151120215642-0302d3914d2a
+## explicit
+github.com/codegangsta/cli
+# github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0
+## explicit
+github.com/codegangsta/inject
+# github.com/docker/docker v1.4.2-0.20170724225022-92b3dcb60138
+## explicit
+github.com/docker/docker/api/types
+github.com/docker/docker/api/types/blkiodev
+github.com/docker/docker/api/types/container
+github.com/docker/docker/api/types/filters
+github.com/docker/docker/api/types/mount
+github.com/docker/docker/api/types/network
+github.com/docker/docker/api/types/registry
+github.com/docker/docker/api/types/strslice
+github.com/docker/docker/api/types/swarm
+github.com/docker/docker/api/types/swarm/runtime
+github.com/docker/docker/api/types/versions
+github.com/docker/docker/opts
+github.com/docker/docker/pkg/archive
+github.com/docker/docker/pkg/fileutils
+github.com/docker/docker/pkg/homedir
+github.com/docker/docker/pkg/idtools
+github.com/docker/docker/pkg/ioutils
+github.com/docker/docker/pkg/jsonlog
+github.com/docker/docker/pkg/jsonmessage
+github.com/docker/docker/pkg/longpath
+github.com/docker/docker/pkg/mount
+github.com/docker/docker/pkg/pools
+github.com/docker/docker/pkg/promise
+github.com/docker/docker/pkg/stdcopy
+github.com/docker/docker/pkg/system
+github.com/docker/docker/pkg/tailfile
+github.com/docker/docker/pkg/term
+github.com/docker/docker/pkg/term/windows
+# github.com/docker/go-connections v0.3.0
+## explicit
+github.com/docker/go-connections/nat
+# github.com/docker/go-units v0.3.2
+## explicit
+github.com/docker/go-units
+# github.com/fsouza/go-dockerclient v0.0.0-20170725183713-e991fbef2be0
+## explicit
+github.com/fsouza/go-dockerclient
+# github.com/go-martini/martini v0.0.0-20151114142712-15a47622d6a9
+## explicit
+github.com/go-martini/martini
+# github.com/gogo/protobuf v0.0.0-20170720144805-7b6c6391c4ff
+## explicit
+github.com/gogo/protobuf/proto
+# github.com/golang/protobuf v1.3.5
+## explicit
+# github.com/hashicorp/go-cleanhttp v0.0.0-20170211013415-3573b8b52aa7
+## explicit
+github.com/hashicorp/go-cleanhttp
+# github.com/kelseyhightower/envconfig v1.3.1-0.20170523190722-70f0258d44cb
+## explicit
+github.com/kelseyhightower/envconfig
+# github.com/martini-contrib/auth v0.0.0-20150219114609-fa62c19b7ae8
+## explicit
+github.com/martini-contrib/auth
+# github.com/moby/moby v1.4.2-0.20170724225022-92b3dcb60138
+## explicit
+github.com/moby/moby/pkg/archive
+# github.com/modcloth/go-fileutils v0.0.0-20141210061911-f2bf9a2a6853
+## explicit
+github.com/modcloth/go-fileutils
+# github.com/modcloth/kamino v0.1.3-0.20141121051143-10e9b9ebe46e
+## explicit
+github.com/modcloth/kamino
+# github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
+## explicit
+github.com/nu7hatch/gouuid
+# github.com/onsi/ginkgo v1.4.1-0.20170725030731-8382b23d18db
+## explicit
+github.com/onsi/ginkgo
+github.com/onsi/ginkgo/config
+github.com/onsi/ginkgo/internal/codelocation
+github.com/onsi/ginkgo/internal/containernode
+github.com/onsi/ginkgo/internal/failer
+github.com/onsi/ginkgo/internal/leafnodes
+github.com/onsi/ginkgo/internal/remote
+github.com/onsi/ginkgo/internal/spec
+github.com/onsi/ginkgo/internal/spec_iterator
+github.com/onsi/ginkgo/internal/specrunner
+github.com/onsi/ginkgo/internal/suite
+github.com/onsi/ginkgo/internal/testingtproxy
+github.com/onsi/ginkgo/internal/writer
+github.com/onsi/ginkgo/reporters
+github.com/onsi/ginkgo/reporters/stenographer
+github.com/onsi/ginkgo/reporters/stenographer/support/go-colorable
+github.com/onsi/ginkgo/reporters/stenographer/support/go-isatty
+github.com/onsi/ginkgo/types
+# github.com/onsi/gocleanup v0.0.0-20140331211545-c1a5478700b5
+## explicit
+github.com/onsi/gocleanup
+# github.com/onsi/gomega v1.2.0
+## explicit
+github.com/onsi/gomega
+github.com/onsi/gomega/format
+github.com/onsi/gomega/internal/assertion
+github.com/onsi/gomega/internal/asyncassertion
+github.com/onsi/gomega/internal/oraclematcher
+github.com/onsi/gomega/internal/testingtsupport
+github.com/onsi/gomega/matchers
+github.com/onsi/gomega/matchers/support/goraph/bipartitegraph
+github.com/onsi/gomega/matchers/support/goraph/edge
+github.com/onsi/gomega/matchers/support/goraph/node
+github.com/onsi/gomega/matchers/support/goraph/util
+github.com/onsi/gomega/types
+# github.com/opencontainers/go-digest v1.0.0-rc1
+## explicit
+github.com/opencontainers/go-digest
+# github.com/opencontainers/image-spec v1.0.1-0.20170720143143-ef2b9a1d6966
+## explicit
+github.com/opencontainers/image-spec/specs-go
+github.com/opencontainers/image-spec/specs-go/v1
+# github.com/opencontainers/runc v1.0.0-rc3.0.20170725134754-5951cf5f36e1
+## explicit
+github.com/opencontainers/runc/libcontainer/system
+github.com/opencontainers/runc/libcontainer/user
+# github.com/pkg/errors v0.8.1
+github.com/pkg/errors
+# github.com/rafecolton/go-dockerclient-quick v0.0.0-20141218223604-ebab26ac4bc4
+## explicit
+github.com/rafecolton/go-dockerclient-quick
+# github.com/rafecolton/go-dockerclient-sort v0.0.0-20141111135947-127186d3d0bd
+## explicit
+github.com/rafecolton/go-dockerclient-sort
+# github.com/rafecolton/go-gitutils v0.0.0-20141203024321-981699062113
+## explicit
+github.com/rafecolton/go-gitutils
+# github.com/rafecolton/vauth v0.1.2
+## explicit
+github.com/rafecolton/vauth
+# github.com/stretchr/testify v1.5.1
+## explicit
+# github.com/winchman/builder-core v0.2.3-0.20170726143510-79bf5d150337
+## explicit
+github.com/winchman/builder-core
+github.com/winchman/builder-core/builder
+github.com/winchman/builder-core/communication
+github.com/winchman/builder-core/filecheck
+github.com/winchman/builder-core/parser
+github.com/winchman/builder-core/unit-config
+# golang.org/x/net v0.0.0-20151130200627-195180cfebf7
+## explicit
+golang.org/x/net/context
+golang.org/x/net/context/ctxhttp
+golang.org/x/net/html
+golang.org/x/net/html/atom
+golang.org/x/net/html/charset
+# golang.org/x/sys v0.0.0-20190507160741-ecd444e8653b
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# golang.org/x/text v0.0.0-20170714085652-836efe42bb4a
+## explicit
+golang.org/x/text/encoding
+golang.org/x/text/encoding/charmap
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/encoding/japanese
+golang.org/x/text/encoding/korean
+golang.org/x/text/encoding/simplifiedchinese
+golang.org/x/text/encoding/traditionalchinese
+golang.org/x/text/encoding/unicode
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/runes
+golang.org/x/text/transform
+# gopkg.in/yaml.v2 v2.2.8
+## explicit
+gopkg.in/yaml.v2
