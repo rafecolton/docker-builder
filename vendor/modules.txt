@@ -2,7 +2,7 @@
 ## explicit
 github.com/Azure/go-ansiterm
 github.com/Azure/go-ansiterm/winterm
-# github.com/BurntSushi/toml v0.1.1-0.20150501104042-056c9bc7be71
+# github.com/BurntSushi/toml v0.3.1
 ## explicit
 github.com/BurntSushi/toml
 # github.com/Microsoft/go-winio v0.4.14
@@ -54,8 +54,7 @@ github.com/docker/docker/pkg/term/windows
 # github.com/docker/go-connections v0.3.0
 ## explicit
 github.com/docker/go-connections/nat
-# github.com/docker/go-units v0.3.2
-## explicit
+# github.com/docker/go-units v0.4.0
 github.com/docker/go-units
 # github.com/fsouza/go-dockerclient v0.0.0-20170725183713-e991fbef2be0
 ## explicit
@@ -66,8 +65,6 @@ github.com/go-martini/martini
 # github.com/gogo/protobuf v0.0.0-20170720144805-7b6c6391c4ff
 ## explicit
 github.com/gogo/protobuf/proto
-# github.com/golang/protobuf v1.3.5
-## explicit
 # github.com/hashicorp/go-cleanhttp v0.0.0-20170211013415-3573b8b52aa7
 ## explicit
 github.com/hashicorp/go-cleanhttp
@@ -133,7 +130,7 @@ github.com/opencontainers/go-digest
 ## explicit
 github.com/opencontainers/image-spec/specs-go
 github.com/opencontainers/image-spec/specs-go/v1
-# github.com/opencontainers/runc v1.0.0-rc3.0.20170725134754-5951cf5f36e1
+# github.com/opencontainers/runc v1.1.2
 ## explicit
 github.com/opencontainers/runc/libcontainer/system
 github.com/opencontainers/runc/libcontainer/user
@@ -161,18 +158,17 @@ github.com/winchman/builder-core/communication
 github.com/winchman/builder-core/filecheck
 github.com/winchman/builder-core/parser
 github.com/winchman/builder-core/unit-config
-# golang.org/x/lint v0.0.0-20200302205851-738671d3881b
-## explicit
-# golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
+# golang.org/x/net v0.0.0-20201224014010-6772e930b67b
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
-# golang.org/x/sys v0.0.0-20190507160741-ecd444e8653b
+# golang.org/x/sys v0.0.0-20211116061358-0a5406a5449c
+golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/text v0.3.0
+# golang.org/x/text v0.3.3
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -183,13 +179,13 @@ golang.org/x/text/encoding/korean
 golang.org/x/text/encoding/simplifiedchinese
 golang.org/x/text/encoding/traditionalchinese
 golang.org/x/text/encoding/unicode
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
 golang.org/x/text/internal/utf8internal
 golang.org/x/text/language
 golang.org/x/text/runes
 golang.org/x/text/transform
-# golang.org/x/tools v0.0.0-20200329025819-fd4102a86c65
-## explicit
 # gopkg.in/yaml.v2 v2.2.8
 ## explicit
 gopkg.in/yaml.v2
