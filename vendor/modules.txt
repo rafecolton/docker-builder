@@ -129,7 +129,7 @@ github.com/onsi/gomega/types
 # github.com/opencontainers/go-digest v1.0.0-rc1
 ## explicit
 github.com/opencontainers/go-digest
-# github.com/opencontainers/image-spec v1.0.1-0.20170720143143-ef2b9a1d6966
+# github.com/opencontainers/image-spec v1.0.2
 ## explicit
 github.com/opencontainers/image-spec/specs-go
 github.com/opencontainers/image-spec/specs-go/v1
@@ -161,9 +161,8 @@ github.com/winchman/builder-core/communication
 github.com/winchman/builder-core/filecheck
 github.com/winchman/builder-core/parser
 github.com/winchman/builder-core/unit-config
-# golang.org/x/lint v0.0.0-20200302205851-738671d3881b
-## explicit
 # golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
+## explicit
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/html
@@ -188,8 +187,6 @@ golang.org/x/text/internal/utf8internal
 golang.org/x/text/language
 golang.org/x/text/runes
 golang.org/x/text/transform
-# golang.org/x/tools v0.0.0-20200329025819-fd4102a86c65
-## explicit
 # gopkg.in/yaml.v2 v2.2.8
 ## explicit
 gopkg.in/yaml.v2

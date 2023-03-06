@@ -28,7 +28,7 @@ require (
 	github.com/onsi/gocleanup v0.0.0-20140331211545-c1a5478700b5
 	github.com/onsi/gomega v1.2.0
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
-	github.com/opencontainers/image-spec v1.0.1-0.20170720143143-ef2b9a1d6966 // indirect
+	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/opencontainers/runc v1.0.0-rc3.0.20170725134754-5951cf5f36e1 // indirect
 	github.com/rafecolton/go-dockerclient-quick v0.0.0-20141218223604-ebab26ac4bc4 // indirect
 	github.com/rafecolton/go-dockerclient-sort v0.0.0-20141111135947-127186d3d0bd // indirect
@@ -36,7 +36,6 @@ require (
 	github.com/rafecolton/vauth v0.1.2
 	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/winchman/builder-core v0.2.3-0.20170726143510-79bf5d150337
-	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/tools v0.0.0-20200329025819-fd4102a86c65 // indirect
+	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
