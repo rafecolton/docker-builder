@@ -15,7 +15,7 @@ require (
 	github.com/docker/go-units v0.3.2 // indirect
 	github.com/fsouza/go-dockerclient v0.0.0-20170725183713-e991fbef2be0 // indirect
 	github.com/go-martini/martini v0.0.0-20151114142712-15a47622d6a9
-	github.com/gogo/protobuf v0.0.0-20170720144805-7b6c6391c4ff // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.3.5 // indirect
 	github.com/hashicorp/go-cleanhttp v0.0.0-20170211013415-3573b8b52aa7 // indirect
 	github.com/kelseyhightower/envconfig v1.3.1-0.20170523190722-70f0258d44cb
@@ -36,7 +36,5 @@ require (
 	github.com/rafecolton/vauth v0.1.2
 	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/winchman/builder-core v0.2.3-0.20170726143510-79bf5d150337
-	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/tools v0.0.0-20200329025819-fd4102a86c65 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
