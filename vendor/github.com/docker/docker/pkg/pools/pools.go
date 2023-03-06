@@ -7,7 +7,7 @@
 //
 // Utility functions which operate on pools should be added to this
 // package to allow them to be reused.
-package pools
+package pools // import "github.com/docker/docker/pkg/pools"
 
 import (
 	"bufio"
@@ -72,6 +72,7 @@ func (bp *bufferPool) Get() []byte {
 }
 
 func (bp *bufferPool) Put(b []byte) {
+	//nolint:staticcheck // TODO changing this to a pointer makes tests fail. Investigate if we should change or not (otherwise remove this TODO)
 	bp.pool.Put(b)
 }
 
